@@ -45,4 +45,5 @@ public class BabyInfoActivity extends AppCompatActivity {
 				MODE_PRIVATE);
 		sp.edit().putBoolean(DotsActivity.DISPLAY_ONCE_KEY, false).apply();
 	}
+	
 }
