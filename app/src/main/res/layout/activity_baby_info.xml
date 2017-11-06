@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="@color/colorPrimaryDark"
+	tools:context="com.repina.anastasia.momandbaby.BabyInfoActivity">
+
+	<TextView
+		android:id="@+id/textView"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignParentEnd="true"
+		android:layout_alignParentLeft="true"
+		android:layout_alignParentRight="true"
+		android:layout_alignParentStart="true"
+		android:layout_alignParentTop="true"
+		android:layout_marginLeft="@dimen/main_margin"
+		android:layout_marginRight="@dimen/main_margin"
+		android:layout_marginTop="@dimen/main_margin"
+		android:text="Введите данные ребенка"
+		android:textAlignment="center"
+		android:textColor="@color/colorText"
+		android:textSize="@dimen/text_size"
+		android:textStyle="bold" />
+
+	<EditText
+		android:id="@+id/editText"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignEnd="@+id/textView"
+		android:layout_alignLeft="@+id/textView"
+		android:layout_alignRight="@+id/textView"
+		android:layout_alignStart="@+id/textView"
+		android:layout_below="@+id/textView"
+		android:layout_marginTop="@dimen/margin_prev_top"
+		android:ems="10"
+		android:inputType="textPersonName"
+		android:text="Имя"
+		android:textSize="@dimen/text_size" />
+
+	<LinearLayout
+		android:id="@+id/linearLayout"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_below="@+id/editText"
+		android:layout_marginTop="@dimen/margin_prev_top"
+		android:orientation="horizontal"
+		android:layout_alignLeft="@+id/editText"
+		android:layout_alignStart="@+id/editText"
+		android:layout_alignRight="@+id/editText"
+		android:layout_alignEnd="@+id/editText">
+
+		<RadioButton
+			android:id="@+id/radioButton3"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:text="Девочка" />
+
+		<RadioButton
+			android:id="@+id/radioButton4"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:text="Мальчик" />
+	</LinearLayout>
+
+	<CalendarView
+		android:id="@+id/calendarView2"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_below="@+id/textView6"
+		android:layout_alignLeft="@+id/textView6"
+		android:layout_alignStart="@+id/textView6"
+		android:layout_alignRight="@+id/textView6"
+		android:layout_alignEnd="@+id/textView6" />
+
+	<TextView
+		android:id="@+id/textView6"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignLeft="@+id/linearLayout"
+		android:layout_alignStart="@+id/linearLayout"
+		android:layout_below="@+id/linearLayout"
+		android:layout_marginTop="12dp"
+		android:text="Дата рождения"
+		android:layout_alignRight="@+id/linearLayout"
+		android:layout_alignEnd="@+id/linearLayout"
+		android:textAlignment="center"
+		android:textColor="@color/colorText"
+		android:textSize="@dimen/text_size"
+		android:textStyle="bold"/>
+
+	<Button
+		android:id="@+id/clear_shared_prefs_button"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignParentBottom="true"
+		android:layout_centerHorizontal="true"
+		android:text="Clear shared prefs" />
+
+
+</RelativeLayout>
