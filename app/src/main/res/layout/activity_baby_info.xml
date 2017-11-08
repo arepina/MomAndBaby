@@ -5,7 +5,7 @@
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	android:background="@color/colorPrimary"
-	tools:context="com.repina.anastasia.momandbaby.BabyInfoActivity">
+	tools:context="com.repina.anastasia.momandbaby.Activity.BabyInfoActivity">
 
 	<TextView
 		android:id="@+id/textView"

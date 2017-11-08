@@ -1,7 +1,9 @@
-package com.repina.anastasia.momandbaby;
+package com.repina.anastasia.momandbaby.Activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.repina.anastasia.momandbaby.R;
 
 public class MiBandActivity extends AppCompatActivity {
 

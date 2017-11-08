@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-package com.repina.anastasia.momandbaby;
+package com.repina.anastasia.momandbaby.Activity;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+
+import com.repina.anastasia.momandbaby.R;
 
 public class BabyInfoActivity extends AppCompatActivity {
 	@Override

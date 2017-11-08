@@ -1,4 +1,4 @@
-package com.repina.anastasia.momandbaby;
+package com.repina.anastasia.momandbaby.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;

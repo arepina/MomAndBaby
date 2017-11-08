@@ -14,22 +14,20 @@
  * limitations under the License.
  */
 
-package com.repina.anastasia.momandbaby;
+package com.repina.anastasia.momandbaby.Activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
-import com.matthewtamlin.android_utilities_library.helpers.BitmapEfficiencyHelper;
-import com.matthewtamlin.android_utilities_library.helpers.ScreenSizeHelper;
 import com.matthewtamlin.sliding_intro_screen_library.background.BackgroundManager;
 import com.matthewtamlin.sliding_intro_screen_library.background.ColorBlender;
 import com.matthewtamlin.sliding_intro_screen_library.buttons.IntroButton;
 import com.matthewtamlin.sliding_intro_screen_library.core.IntroActivity;
 import com.matthewtamlin.sliding_intro_screen_library.pages.ParallaxPage;
 import com.matthewtamlin.sliding_intro_screen_library.transformers.MultiViewParallaxTransformer;
+import com.repina.anastasia.momandbaby.R;
 
 import java.util.ArrayList;
 import java.util.Collection;
