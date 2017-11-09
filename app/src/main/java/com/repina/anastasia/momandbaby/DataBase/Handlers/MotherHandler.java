@@ -1,4 +1,4 @@
-package com.repina.anastasia.momandbaby.DataBase;
+package com.repina.anastasia.momandbaby.DataBase.Handlers;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -21,13 +21,12 @@ public class MotherHandler extends DatabaseHandler {
     @Override
     public void add(Object ob) {
         SQLiteDatabase db = this.getWritableDatabase();
-        Mother m = (Mother)ob;
+        Mother m = (Mother) ob;
         ContentValues values = formContentValues(m);
         db.insert(TABLE_MOTHER, null, values);
     }
 
-    private Mother parseFromCursor(Cursor c)
-    {
+    private Mother parseFromCursor(Cursor c) {
         int id = c.getInt((c.getColumnIndex(KEY_ID)));
         String date = c.getString((c.getColumnIndex(KEY_DATE)));
         double sleepLength = c.getDouble((c.getColumnIndex(KEY_SLEEP_DURATION)));
@@ -43,8 +42,7 @@ public class MotherHandler extends DatabaseHandler {
         return new Mother(id, parsedDate, sleepLength, steps, calories, weight);
     }
 
-    private ContentValues formContentValues(Mother m)
-    {
+    private ContentValues formContentValues(Mother m) {
         ContentValues values = new ContentValues();
         values.put(KEY_DATE, m.getDate());
         values.put(KEY_SLEEP_DURATION, m.getSleepLength());
@@ -83,17 +81,11 @@ public class MotherHandler extends DatabaseHandler {
 
     @Override
     public int update(int id, Object ob) {
-        Mother m = (Mother)ob;
+        Mother m = (Mother) ob;
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = formContentValues(m);
         // updating row
         return db.update(TABLE_MOTHER, values, KEY_ID + " = ?",
-                new String[] { String.valueOf(m.getId()) });
-    }
-
-    @Override
-    public void delete(int id) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_MOTHER, KEY_ID + " = ?", new String[] { String.valueOf(id) });
+                new String[]{String.valueOf(m.getId())});
     }
 }

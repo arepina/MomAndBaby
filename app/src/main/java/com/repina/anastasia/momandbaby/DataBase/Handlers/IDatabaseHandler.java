@@ -1,4 +1,4 @@
-package com.repina.anastasia.momandbaby.DataBase;
+package com.repina.anastasia.momandbaby.DataBase.Handlers;
 
 import java.util.List;
 
@@ -8,6 +8,6 @@ interface IDatabaseHandler {
     List<Object> getAll();
     int getSize(String table_name);
     int update(int id, Object ob);
-    void delete(int id);
+    void delete(String table_name, int id);
     void deleteAll(String table_name);
 }

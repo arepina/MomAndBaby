@@ -1,20 +1,22 @@
 package com.repina.anastasia.momandbaby.DataBase.DataBaseClasses;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class User {
     private int id;
+    private Date date;
     private String name;
-    private Date dateOfBirth;
     private String gender;
     private String bandCode;
     private String bandStatus;
 
-    User(int id, String name, Date dateOfBirth, String gender, String bandCode, String bandStatus)
+    public User(int id, String name, Date date, String gender, String bandCode, String bandStatus)
     {
         this.id = id;
         this.name = name;
-        this.dateOfBirth = dateOfBirth;
+        this.date = date;
         this.gender = gender;
         this.bandCode = bandCode;
         this.bandStatus = bandStatus;
@@ -36,12 +38,14 @@ public class User {
         this.name = name;
     }
 
-    public Date getDateOfBirth() {
-        return dateOfBirth;
+    public String getDate() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(
+                "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        return dateFormat.format(date);
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
+    public void setDate(Date dateOfBirth) {
+        this.date = dateOfBirth;
     }
 
     public String getGender() {

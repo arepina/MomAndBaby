@@ -1,4 +1,4 @@
-package com.repina.anastasia.momandbaby.DataBase;
+package com.repina.anastasia.momandbaby.DataBase.Handlers;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -9,7 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 
-public abstract class DatabaseHandler extends SQLiteOpenHelper implements IDatabaseHandler {
+abstract class DatabaseHandler extends SQLiteOpenHelper implements IDatabaseHandler {
 
     // Database Version
     private static final int DATABASE_VERSION = 1;
@@ -38,7 +38,6 @@ public abstract class DatabaseHandler extends SQLiteOpenHelper implements IDatab
 
     // USERS Table - column names
     static final String KEY_NAME = "name";
-    static final String KEY_DATE_OF_BIRTH = "date_of_birth";
     static final String KEY_GENDER = "gender";
     static final String KEY_BAND_CODE = "band_code";
     static final String KEY_BAND_STATUS = "band_status";
@@ -74,7 +73,7 @@ public abstract class DatabaseHandler extends SQLiteOpenHelper implements IDatab
     // TABLE_USERS create statement
     private static final String CREATE_TABLE_USERS = "CREATE TABLE IF NOT EXISTS "
             + TABLE_USERS + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_NAME
-            + " TEXT," + KEY_DATE_OF_BIRTH + " DATETIME," + KEY_GENDER
+            + " TEXT," + KEY_DATE + " DATETIME," + KEY_GENDER
             + " TEXT," + KEY_BAND_CODE + " TEXT," + KEY_BAND_STATUS + " TEXT" + ")";
 
     // TABLE_MOTHER create statement
@@ -177,5 +176,11 @@ public abstract class DatabaseHandler extends SQLiteOpenHelper implements IDatab
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(table_name, null, null);
         db.close();
+    }
+
+    @Override
+    public void delete(String table_name, int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(table_name, KEY_ID + " = ?", new String[] { String.valueOf(id) });
     }
 }
