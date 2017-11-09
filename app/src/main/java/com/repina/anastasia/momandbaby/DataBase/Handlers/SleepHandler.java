@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.repina.anastasia.momandbaby.Activity.Helper;
 import com.repina.anastasia.momandbaby.DataBase.DataBaseClasses.Sleep;
 
 import java.text.ParseException;
@@ -19,11 +20,11 @@ public class SleepHandler extends DatabaseHandler {
     }
 
     @Override
-    public void add(Object ob) {
+    public long add(Object ob) {
         SQLiteDatabase db = this.getWritableDatabase();
         Sleep s = (Sleep) ob;
         ContentValues values = formContentValues(s);
-        db.insert(TABLE_SLEEP, null, values);
+        return db.insert(TABLE_SLEEP, null, values);
     }
 
     private Sleep parseFromCursor(Cursor c) {
@@ -32,7 +33,7 @@ public class SleepHandler extends DatabaseHandler {
         double sleepDuration = c.getDouble((c.getColumnIndex(KEY_SLEEP_DURATION)));
         Date parsedDate = null;
         try {
-            parsedDate = dateFormat.parse(date);
+            parsedDate = Helper.dateFormat.parse(date);
         } catch (ParseException e) {
             e.printStackTrace();
         }

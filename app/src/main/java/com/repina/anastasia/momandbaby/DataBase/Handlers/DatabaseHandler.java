@@ -9,7 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 
-abstract class DatabaseHandler extends SQLiteOpenHelper implements IDatabaseHandler {
+public abstract class DatabaseHandler extends SQLiteOpenHelper implements IDatabaseHandler {
 
     // Database Version
     private static final int DATABASE_VERSION = 1;
@@ -122,9 +122,6 @@ abstract class DatabaseHandler extends SQLiteOpenHelper implements IDatabaseHand
     private static final String CREATE_TABLE_STOOL = "CREATE TABLE IF NOT EXISTS "
             + TABLE_STOOL + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_DATE
             + " DATETIME," + KEY_ABUNDANCE + " INTEGER" + ")";
-
-    SimpleDateFormat dateFormat = new SimpleDateFormat(
-            "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

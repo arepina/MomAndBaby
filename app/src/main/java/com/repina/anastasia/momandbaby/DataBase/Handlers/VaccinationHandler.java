@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.repina.anastasia.momandbaby.Activity.Helper;
 import com.repina.anastasia.momandbaby.DataBase.DataBaseClasses.Vaccination;
 
 import java.text.ParseException;
@@ -20,11 +21,11 @@ public class VaccinationHandler extends DatabaseHandler {
     }
 
     @Override
-    public void add(Object ob) {
+    public long add(Object ob) {
         SQLiteDatabase db = this.getWritableDatabase();
         Vaccination v = (Vaccination) ob;
         ContentValues values = formContentValues(v);
-        db.insert(TABLE_VACCINATION, null, values);
+        return db.insert(TABLE_VACCINATION, null, values);
     }
 
     private Vaccination parseFromCursor(Cursor c) {
@@ -34,7 +35,7 @@ public class VaccinationHandler extends DatabaseHandler {
         String note = c.getString((c.getColumnIndex(KEY_NOTE)));
         Date parsedDate = null;
         try {
-            parsedDate = dateFormat.parse(date);
+            parsedDate = Helper.dateFormat.parse(date);
         } catch (ParseException e) {
             e.printStackTrace();
         }

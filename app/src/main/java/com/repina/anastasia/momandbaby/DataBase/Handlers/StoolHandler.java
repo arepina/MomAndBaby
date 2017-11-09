@@ -6,51 +6,51 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.repina.anastasia.momandbaby.Activity.Helper;
-import com.repina.anastasia.momandbaby.DataBase.DataBaseClasses.Outdoor;
+import com.repina.anastasia.momandbaby.DataBase.DataBaseClasses.Stool;
 
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class OutdoorHandler extends DatabaseHandler {
+public class StoolHandler  extends DatabaseHandler {
 
-    public OutdoorHandler(Context context) {
+    public StoolHandler(Context context) {
         super(context);
     }
 
     @Override
     public long add(Object ob) {
         SQLiteDatabase db = this.getWritableDatabase();
-        Outdoor o = (Outdoor) ob;
-        ContentValues values = formContentValues(o);
-        return db.insert(TABLE_OUTDOOR, null, values);
+        Stool s = (Stool) ob;
+        ContentValues values = formContentValues(s);
+        return db.insert(TABLE_STOOL, null, values);
     }
 
-    private Outdoor parseFromCursor(Cursor c) {
+    private Stool parseFromCursor(Cursor c) {
         int id = c.getInt((c.getColumnIndex(KEY_ID)));
         String date = c.getString((c.getColumnIndex(KEY_DATE)));
-        double outdoorLength = c.getDouble((c.getColumnIndex(KEY_OUTDOOR_LENGTH)));
+        int abundance = c.getInt((c.getColumnIndex(KEY_ABUNDANCE)));
         Date parsedDate = null;
         try {
             parsedDate = Helper.dateFormat.parse(date);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return new Outdoor(id, parsedDate, outdoorLength);
+        return new Stool(id, parsedDate, abundance);
     }
 
-    private ContentValues formContentValues(Outdoor o) {
+    private ContentValues formContentValues(Stool s) {
         ContentValues values = new ContentValues();
-        values.put(KEY_DATE, o.getDate());
-        values.put(KEY_OUTDOOR_LENGTH, o.getOutdoorLength());
+        values.put(KEY_DATE, s.getDate());
+        values.put(KEY_SLEEP_DURATION, s.getAbundance());
         return values;
     }
 
     @Override
     public Object getObject(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
-        String selectQuery = "SELECT  * FROM " + TABLE_OUTDOOR + " WHERE " + KEY_ID + " = " + id;
+        String selectQuery = "SELECT  * FROM " + TABLE_STOOL + " WHERE " + KEY_ID + " = " + id;
         Cursor c = db.rawQuery(selectQuery, null);
         if (c != null)
             c.moveToFirst();
@@ -59,28 +59,28 @@ public class OutdoorHandler extends DatabaseHandler {
 
     @Override
     public List<Object> getAll() {
-        List<Object> outdoorRecords = new ArrayList<>();
-        String selectQuery = "SELECT  * FROM " + TABLE_OUTDOOR;
+        List<Object> sleepRecords = new ArrayList<>();
+        String selectQuery = "SELECT  * FROM " + TABLE_STOOL;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
         // looping through all rows and adding to list
         if (c.moveToFirst()) {
             do {
-                Outdoor record = parseFromCursor(c);
-                outdoorRecords.add(record);
+                Stool record = parseFromCursor(c);
+                sleepRecords.add(record);
             } while (c.moveToNext());
         }
 
-        return outdoorRecords;
+        return sleepRecords;
     }
 
     @Override
     public int update(int id, Object ob) {
-        Outdoor o = (Outdoor) ob;
+        Stool s = (Stool) ob;
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = formContentValues(o);
+        ContentValues values = formContentValues(s);
         // updating row
-        return db.update(TABLE_OUTDOOR, values, KEY_ID + " = ?",
-                new String[]{String.valueOf(o.getId())});
+        return db.update(TABLE_STOOL, values, KEY_ID + " = ?",
+                new String[]{String.valueOf(s.getId())});
     }
 }

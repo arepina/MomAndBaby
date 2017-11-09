@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.repina.anastasia.momandbaby.Activity.Helper;
 import com.repina.anastasia.momandbaby.DataBase.DataBaseClasses.User;
 
 import java.text.ParseException;
@@ -20,11 +21,11 @@ public class UserHandler extends DatabaseHandler {
     }
 
     @Override
-    public void add(Object ob) {
+    public long add(Object ob) {
         SQLiteDatabase db = this.getWritableDatabase();
         User u = (User) ob;
         ContentValues values = formContentValues(u);
-        db.insert(TABLE_USERS, null, values);
+        return db.insert(TABLE_USERS, null, values);
     }
 
     private User parseFromCursor(Cursor c) {
@@ -36,7 +37,7 @@ public class UserHandler extends DatabaseHandler {
         String bandStatus = c.getString((c.getColumnIndex(KEY_BAND_STATUS)));
         Date parsedDate = null;
         try {
-            parsedDate = dateFormat.parse(dateOfBirth);
+            parsedDate = Helper.dateFormat.parse(dateOfBirth);
         } catch (ParseException e) {
             e.printStackTrace();
         }

@@ -26,7 +26,7 @@
 		android:textStyle="bold" />
 
 	<EditText
-		android:id="@+id/editText"
+		android:id="@+id/name"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_alignEnd="@+id/textView"
@@ -44,24 +44,24 @@
 		android:id="@+id/radioGroup"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_alignEnd="@+id/editText"
-		android:layout_alignLeft="@+id/editText"
-		android:layout_alignRight="@+id/editText"
-		android:layout_alignStart="@+id/editText"
-		android:layout_below="@+id/editText"
+		android:layout_alignEnd="@+id/name"
+		android:layout_alignLeft="@+id/name"
+		android:layout_alignRight="@+id/name"
+		android:layout_alignStart="@+id/name"
+		android:layout_below="@+id/name"
 		android:layout_marginTop="@dimen/margin_prev_top"
 		android:layout_weight="1"
 		android:orientation="horizontal">
 
 		<RadioButton
-			android:id="@+id/radioButton3"
+			android:id="@+id/girl"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
 			android:text="@string/girl" />
 
 		<RadioButton
-			android:id="@+id/radioButton4"
+			android:id="@+id/boy"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
@@ -69,7 +69,7 @@
 	</RadioGroup>
 
 	<CalendarView
-		android:id="@+id/calendarView2"
+		android:id="@+id/calendar"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_alignEnd="@+id/textView6"
@@ -101,10 +101,10 @@
 		android:layout_alignParentBottom="true"
 		android:background="@android:color/transparent"
 		android:text="@string/next"
-		android:layout_alignLeft="@+id/calendarView2"
-		android:layout_alignStart="@+id/calendarView2"
-		android:layout_alignRight="@+id/calendarView2"
-		android:layout_alignEnd="@+id/calendarView2" />
+		android:layout_alignLeft="@+id/calendar"
+		android:layout_alignStart="@+id/calendar"
+		android:layout_alignRight="@+id/calendar"
+		android:layout_alignEnd="@+id/calendar" />
 
 
 </RelativeLayout>

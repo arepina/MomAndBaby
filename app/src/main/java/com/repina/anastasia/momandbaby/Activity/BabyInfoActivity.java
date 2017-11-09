@@ -1,42 +1,57 @@
-/*
- * Copyright 2016 Matthew Tamlin
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.repina.anastasia.momandbaby.Activity;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
+import android.widget.CalendarView;
+import android.widget.EditText;
+import android.widget.RadioButton;
 
+import com.repina.anastasia.momandbaby.DataBase.Handlers.DatabaseHandler;
+import com.repina.anastasia.momandbaby.DataBase.Handlers.UserHandler;
 import com.repina.anastasia.momandbaby.R;
 
+import java.util.Calendar;
+
 public class BabyInfoActivity extends AppCompatActivity {
+
+	private String formattedDate;
+
 	@Override
-	@SuppressWarnings("ConstantConditions")
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_baby_info);
 
-		// When pressed, allow the introduction screen to show again
-		findViewById(R.id.clear_shared_prefs_button).setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					allowIntroductionToShowAgain();
-				}
-			});
+		final CalendarView calendarView = (CalendarView) findViewById(R.id.calendar);
+
+		final Calendar calendar = Calendar.getInstance();
+
+		Button next = (Button)findViewById(R.id.nextButton);
+		next.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				DatabaseHandler handler = new UserHandler(getApplicationContext());
+				String name = ((EditText)findViewById(R.id.name)).getText().toString();
+				String gender;
+				if(((RadioButton)findViewById(R.id.girl)).isChecked())
+					gender = "girl";
+				else
+					gender = "boy";
+				//String bandCode;
+				//String bandStatus;
+			}
+		});
+
+		calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+			@Override
+			public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
+				calendar.set(year, month, dayOfMonth);
+				long selectedDateInMillis = calendar.getTimeInMillis();
+				formattedDate = Helper.dateFormat.format(selectedDateInMillis);
+			}
+		});
 	}
 
 	/**

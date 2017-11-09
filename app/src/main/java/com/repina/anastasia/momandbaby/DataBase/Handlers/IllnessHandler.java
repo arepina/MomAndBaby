@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.repina.anastasia.momandbaby.Activity.Helper;
 import com.repina.anastasia.momandbaby.DataBase.DataBaseClasses.Illness;
 
 import java.text.ParseException;
@@ -20,11 +21,11 @@ public class IllnessHandler  extends DatabaseHandler{
     }
 
     @Override
-    public void add(Object ob) {
+    public long add(Object ob) {
         SQLiteDatabase db = this.getWritableDatabase();
         Illness il = (Illness)ob;
         ContentValues values = formContentValues(il);
-        db.insert(TABLE_ILLNESS, null, values);
+        return db.insert(TABLE_ILLNESS, null, values);
     }
 
     private Illness parseFromCursor(Cursor c)
@@ -36,7 +37,7 @@ public class IllnessHandler  extends DatabaseHandler{
         double temperature = c.getDouble((c.getColumnIndex(KEY_TEMPERATURE)));
         Date parsedDate = null;
         try {
-            parsedDate = dateFormat.parse(date);
+            parsedDate = Helper.dateFormat.parse(date);
         } catch (ParseException e) {
             e.printStackTrace();
         }

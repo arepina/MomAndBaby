@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.repina.anastasia.momandbaby.Activity.Helper;
 import com.repina.anastasia.momandbaby.DataBase.DataBaseClasses.Food;
 
 import java.text.ParseException;
@@ -19,11 +20,11 @@ public class FoodHandler extends DatabaseHandler{
     }
 
     @Override
-    public void add(Object ob) {
+    public long add(Object ob) {
         SQLiteDatabase db = this.getWritableDatabase();
         Food f = (Food)ob;
         ContentValues values = formContentValues(f);
-        db.insert(TABLE_FOOD, null, values);
+        return db.insert(TABLE_FOOD, null, values);
     }
 
     private Food parseFromCursor(Cursor c)
@@ -33,7 +34,7 @@ public class FoodHandler extends DatabaseHandler{
         String note = c.getString(((c.getColumnIndex(KEY_NOTE))));
         Date parsedDate = null;
         try {
-            parsedDate = dateFormat.parse(date);
+            parsedDate = Helper.dateFormat.parse(date);
         } catch (ParseException e) {
             e.printStackTrace();
         }

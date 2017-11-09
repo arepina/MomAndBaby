@@ -3,7 +3,7 @@ package com.repina.anastasia.momandbaby.DataBase.Handlers;
 import java.util.List;
 
 interface IDatabaseHandler {
-    void add(Object ob);
+    long add(Object ob);
     Object getObject(int id);
     List<Object> getAll();
     int getSize(String table_name);
