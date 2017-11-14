@@ -5,24 +5,24 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class Vaccination {
-    private int id;
+public class Vaccination  {
+    private String id;
     private Date date;
     private String vaccinationName;
     private String note;
 
-    public Vaccination(int id, Date date, String vaccinationName, String note) {
+    public Vaccination(String id, Date date, String vaccinationName, String note) {
         this.id = id;
         this.date = date;
         this.vaccinationName = vaccinationName;
         this.note = note;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

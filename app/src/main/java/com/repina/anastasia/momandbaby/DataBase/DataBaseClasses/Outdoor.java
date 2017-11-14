@@ -1,26 +1,25 @@
 package com.repina.anastasia.momandbaby.DataBase.DataBaseClasses;
 
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class Outdoor {
-    private int id;
+public class Outdoor  {
+    private String id;
     private Date date;
     private double outdoorLength;
 
-    public Outdoor(int id, Date date, double outdoorLength) {
+    public Outdoor(String id, Date date, double outdoorLength) {
         this.id = id;
         this.date = date;
         this.outdoorLength = outdoorLength;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

@@ -1,18 +1,19 @@
 package com.repina.anastasia.momandbaby.DataBase.DataBaseClasses;
 
 
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class Baby {
-    private int id;
+public class Baby  {
+    private String id;
     private Date date;
     private double weight;
     private double height;
     private String note;
 
-    public Baby(int id, Date date, double weight, double height, String note) {
+    public Baby(String id, Date date, double weight, double height, String note) {
         this.id = id;
         this.date = date;
         this.weight = weight;
@@ -20,11 +21,11 @@ public class Baby {
         this.note = note;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

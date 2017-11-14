@@ -6,21 +6,21 @@ import java.util.Date;
 import java.util.Locale;
 
 public class Sleep {
-    private int id;
+    private String id;
     private Date date;
     private double sleepDuration;
 
-    public Sleep(int id, Date date, double sleepDuration) {
+    public Sleep(String id, Date date, double sleepDuration) {
         this.id = id;
         this.date = date;
         this.sleepDuration = sleepDuration;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

@@ -4,15 +4,16 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class User {
-    private int id;
+public class User  {
+    private String id;
     private Date date;
     private String name;
     private String gender;
     private String bandCode;
     private String bandStatus;
+    private int momID;
 
-    public User(int id, String name, Date date, String gender, String bandCode, String bandStatus)
+    public User(String id, String name, Date date, String gender, String bandCode, String bandStatus, int momID)
     {
         this.id = id;
         this.name = name;
@@ -20,13 +21,22 @@ public class User {
         this.gender = gender;
         this.bandCode = bandCode;
         this.bandStatus = bandStatus;
+        this.momID = momID;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setMomID(int momID) {
+        this.momID = momID;
+    }
+
+    public int getMomID() {
+        return momID;
+    }
+
+    public void setId(String id) {
         this.id = id;
     }
 

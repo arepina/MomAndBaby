@@ -35,13 +35,14 @@ public class UserHandler extends DatabaseHandler {
         String gender = c.getString((c.getColumnIndex(KEY_GENDER)));
         String bandCode = c.getString((c.getColumnIndex(KEY_BAND_CODE)));
         String bandStatus = c.getString((c.getColumnIndex(KEY_BAND_STATUS)));
+        int momId = c.getInt((c.getColumnIndex(KEY_MOM_ID)));
         Date parsedDate = null;
         try {
             parsedDate = Helper.dateFormat.parse(dateOfBirth);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return new User(id, name, parsedDate, gender, bandCode, bandStatus);
+        return new User(id, name, parsedDate, gender, bandCode, bandStatus, momId);
     }
 
     private ContentValues formContentValues(User u) {
@@ -51,6 +52,7 @@ public class UserHandler extends DatabaseHandler {
         values.put(KEY_GENDER, u.getGender());
         values.put(KEY_BAND_CODE, u.getBandCode());
         values.put(KEY_BAND_STATUS, u.getBandStatus());
+        values.put(KEY_MOM_ID, u.getMomID());
         return values;
     }
 

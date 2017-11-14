@@ -31,6 +31,7 @@ public abstract class DatabaseHandler extends SQLiteOpenHelper implements IDatab
 
     // Common column names
     static final String KEY_ID = "id";
+    static final String KEY_MOM_ID = "mom_id";
     static final String KEY_DATE = "date";
     static final String KEY_SLEEP_DURATION = "sleep_duration";
     static final String KEY_WEIGHT = "weight";
@@ -74,7 +75,7 @@ public abstract class DatabaseHandler extends SQLiteOpenHelper implements IDatab
     private static final String CREATE_TABLE_USERS = "CREATE TABLE IF NOT EXISTS "
             + TABLE_USERS + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_NAME
             + " TEXT," + KEY_DATE + " DATETIME," + KEY_GENDER
-            + " TEXT," + KEY_BAND_CODE + " TEXT," + KEY_BAND_STATUS + " TEXT" + ")";
+            + " TEXT," + KEY_BAND_CODE + " TEXT," + KEY_BAND_STATUS + " TEXT," + KEY_MOM_ID + " INTEGER" + ")";
 
     // TABLE_MOTHER create statement
     private static final String CREATE_TABLE_MOTHER = "CREATE TABLE IF NOT EXISTS "

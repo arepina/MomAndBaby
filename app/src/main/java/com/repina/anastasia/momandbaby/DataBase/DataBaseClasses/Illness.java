@@ -5,14 +5,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class Illness {
-    private int id;
+public class Illness  {
+    private String id;
     private Date date;
     private String symptomes;
     private String pills;
     private double temperature;
 
-    public Illness(int id, Date date, String symptomes, String pills, double temperature) {
+    public Illness(String id, Date date, String symptomes, String pills, double temperature) {
         this.id = id;
         this.date = date;
         this.symptomes = symptomes;
@@ -20,11 +20,11 @@ public class Illness {
         this.temperature = temperature;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

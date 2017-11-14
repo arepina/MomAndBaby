@@ -5,21 +5,21 @@ import java.util.Date;
 import java.util.Locale;
 
 public class Food {
-    private int id;
+    private String id;
     private Date date;
     private String note;
 
-    public Food(int id, Date date, String note) {
+    public Food(String id, Date date, String note) {
         this.id = id;
         this.date = date;
         this.note = note;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

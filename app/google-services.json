@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "254111121614",
+    "firebase_url": "https://momandbaby-repina.firebaseio.com",
+    "project_id": "momandbaby-repina",
+    "storage_bucket": "momandbaby-repina.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:254111121614:android:16208de852f6402d",
+        "android_client_info": {
+          "package_name": "com.repina.anastasia.momandbaby"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "254111121614-pv72peb32q48e6ov60on8osd5mseivuo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.repina.anastasia.momandbaby",
+            "certificate_hash": "d35d1ba20c1eb90c4824bbd185a650e35ca15ed4"
+          }
+        },
+        {
+          "client_id": "254111121614-4a0vm5sc833ridfms57m0tougr56uoha.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGFST4e0ZcJ_qmuJ0ZU8Kp2HD7Mxqojyw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "254111121614-4a0vm5sc833ridfms57m0tougr56uoha.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

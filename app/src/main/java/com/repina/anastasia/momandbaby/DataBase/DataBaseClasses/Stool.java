@@ -4,22 +4,22 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class Stool {
-    private int id;
+public class Stool  {
+    private String id;
     private Date date;
     private int abundance;
 
-    public Stool(int id, Date date, int abundance) {
+    public Stool(String id, Date date, int abundance) {
         this.id = id;
         this.date = date;
         this.abundance = abundance;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

@@ -5,23 +5,23 @@ import java.util.Date;
 import java.util.Locale;
 
 public class Teeth {
-    private int id;
+    private String id;
     private Date date;
     private int teethNum;
     private String note;
 
-    public Teeth(int id, Date date, int teethNum, String note) {
+    public Teeth(String id, Date date, int teethNum, String note) {
         this.id = id;
         this.date = date;
         this.teethNum = teethNum;
         this.note = note;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
