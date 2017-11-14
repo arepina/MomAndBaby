@@ -2,6 +2,8 @@ package com.repina.anastasia.momandbaby.Activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
@@ -36,14 +38,13 @@ public class DotsActivity extends IntroActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		setTheme(R.style.NoActionBar);
 		super.onCreate(savedInstanceState);
 		// Skip to the next Activity if the user has previously completed the introduction
-		if (introductionCompletedPreviously()) {
+		/*if (introductionCompletedPreviously()) {
 			final Intent nextActivity = new Intent(this, BabyInfoActivity.class);
 			startActivity(nextActivity);
-		}
-		hideStatusBar();
+			finish();
+		}*/
 		configureTransformer();
 		configureBackground();
 	}
@@ -56,8 +57,13 @@ public class DotsActivity extends IntroActivity {
 		// This variable holds the pages while they are being created
 		final ArrayList<Fragment> pages = new ArrayList<>();
 		// Create as many pages as there are background colors
-		for (int i = 0; i < BACKGROUND_COLORS.length; i++) {
+		for (int BACKGROUND_COLOR : BACKGROUND_COLORS) {
 			final ParallaxPage newPage = ParallaxPage.newInstance();
+			int resourceId = R.drawable.common_full_open_on_phone;
+			Bitmap mBitmap = BitmapFactory.decodeResource(getResources(), resourceId);
+			//newPage.setBackImage(mBitmap);
+			newPage.setFrontImage(mBitmap);
+			newPage.setText("dlwldkledfmfmdkfkdfkdfkdkfmdf");
 			pages.add(newPage);
 		}
 		return pages;

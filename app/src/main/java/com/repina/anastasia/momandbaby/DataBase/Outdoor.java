@@ -1,19 +1,18 @@
-package com.repina.anastasia.momandbaby.DataBase.DataBaseClasses;
-
+package com.repina.anastasia.momandbaby.DataBase;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class Sleep {
+public class Outdoor  {
     private String id;
     private Date date;
-    private double sleepDuration;
+    private double outdoorLength;
 
-    public Sleep(String id, Date date, double sleepDuration) {
+    public Outdoor(String id, Date date, double outdoorLength) {
         this.id = id;
         this.date = date;
-        this.sleepDuration = sleepDuration;
+        this.outdoorLength = outdoorLength;
     }
 
     public String getId() {
@@ -34,11 +33,11 @@ public class Sleep {
         this.date = date;
     }
 
-    public double getSleepDuration() {
-        return sleepDuration;
+    public double getOutdoorLength() {
+        return outdoorLength;
     }
 
-    public void setSleepDuration(double sleepDuration) {
-        this.sleepDuration = sleepDuration;
+    public void setOutdoorLength(double outdoorLength) {
+        this.outdoorLength = outdoorLength;
     }
 }

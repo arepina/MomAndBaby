@@ -1,23 +1,19 @@
-package com.repina.anastasia.momandbaby.DataBase.DataBaseClasses;
-
-
+package com.repina.anastasia.momandbaby.DataBase;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class Baby  {
+public class Teeth {
     private String id;
     private Date date;
-    private double weight;
-    private double height;
+    private int teethNum;
     private String note;
 
-    public Baby(String id, Date date, double weight, double height, String note) {
+    public Teeth(String id, Date date, int teethNum, String note) {
         this.id = id;
         this.date = date;
-        this.weight = weight;
-        this.height = height;
+        this.teethNum = teethNum;
         this.note = note;
     }
 
@@ -39,20 +35,12 @@ public class Baby  {
         this.date = date;
     }
 
-    public double getWeight() {
-        return weight;
+    public int getTeethNum() {
+        return teethNum;
     }
 
-    public void setWeight(double weight) {
-        this.weight = weight;
-    }
-
-    public double getHeight() {
-        return height;
-    }
-
-    public void setHeight(double height) {
-        this.height = height;
+    public void setTeethNum(int teethNum) {
+        this.teethNum = teethNum;
     }
 
     public String getNote() {

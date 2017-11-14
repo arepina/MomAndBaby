@@ -1,21 +1,29 @@
-package com.repina.anastasia.momandbaby.DataBase.DataBaseClasses;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+package com.repina.anastasia.momandbaby.DataBase;
 
 public class User  {
     private String id;
-    private Date date;
+    private String date;
     private String name;
     private String gender;
     private String bandCode;
     private String bandStatus;
-    private int momID;
+    private String momID;
 
-    public User(String id, String name, Date date, String gender, String bandCode, String bandStatus, int momID)
+    public User(){}
+
+    public User(String id, String name, String date, String gender, String bandCode, String bandStatus, String momID)
     {
         this.id = id;
+        this.name = name;
+        this.date = date;
+        this.gender = gender;
+        this.bandCode = bandCode;
+        this.bandStatus = bandStatus;
+        this.momID = momID;
+    }
+
+    public User(String name, String date, String gender, String bandCode, String bandStatus, String momID)
+    {
         this.name = name;
         this.date = date;
         this.gender = gender;
@@ -28,11 +36,11 @@ public class User  {
         return id;
     }
 
-    public void setMomID(int momID) {
+    public void setMomID(String momID) {
         this.momID = momID;
     }
 
-    public int getMomID() {
+    public String getMomID() {
         return momID;
     }
 
@@ -49,12 +57,10 @@ public class User  {
     }
 
     public String getDate() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(
-                "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        return dateFormat.format(date);
+        return date;
     }
 
-    public void setDate(Date dateOfBirth) {
+    public void setDate(String dateOfBirth) {
         this.date = dateOfBirth;
     }
 

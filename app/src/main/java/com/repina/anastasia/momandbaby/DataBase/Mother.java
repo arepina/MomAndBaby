@@ -1,4 +1,4 @@
-package com.repina.anastasia.momandbaby.DataBase.DataBaseClasses;
+package com.repina.anastasia.momandbaby.DataBase;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

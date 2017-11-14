@@ -1,20 +1,18 @@
-package com.repina.anastasia.momandbaby.DataBase.DataBaseClasses;
+package com.repina.anastasia.momandbaby.DataBase;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class Teeth {
+public class Stool  {
     private String id;
     private Date date;
-    private int teethNum;
-    private String note;
+    private int abundance;
 
-    public Teeth(String id, Date date, int teethNum, String note) {
+    public Stool(String id, Date date, int abundance) {
         this.id = id;
         this.date = date;
-        this.teethNum = teethNum;
-        this.note = note;
+        this.abundance = abundance;
     }
 
     public String getId() {
@@ -35,19 +33,11 @@ public class Teeth {
         this.date = date;
     }
 
-    public int getTeethNum() {
-        return teethNum;
+    public int getAbundance() {
+        return abundance;
     }
 
-    public void setTeethNum(int teethNum) {
-        this.teethNum = teethNum;
-    }
-
-    public String getNote() {
-        return note;
-    }
-
-    public void setNote(String note) {
-        this.note = note;
+    public void setAbundance(int abundance) {
+        this.abundance = abundance;
     }
 }

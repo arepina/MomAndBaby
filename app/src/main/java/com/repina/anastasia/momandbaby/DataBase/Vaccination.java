@@ -1,17 +1,20 @@
-package com.repina.anastasia.momandbaby.DataBase.DataBaseClasses;
+package com.repina.anastasia.momandbaby.DataBase;
+
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class Food {
+public class Vaccination  {
     private String id;
     private Date date;
+    private String vaccinationName;
     private String note;
 
-    public Food(String id, Date date, String note) {
+    public Vaccination(String id, Date date, String vaccinationName, String note) {
         this.id = id;
         this.date = date;
+        this.vaccinationName = vaccinationName;
         this.note = note;
     }
 
@@ -31,6 +34,14 @@ public class Food {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public String getVaccinationName() {
+        return vaccinationName;
+    }
+
+    public void setVaccinationName(String vaccinationName) {
+        this.vaccinationName = vaccinationName;
     }
 
     public String getNote() {
