@@ -1,43 +1,37 @@
 package com.repina.anastasia.momandbaby.DataBase;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
 public class Stool  {
-    private String id;
-    private Date date;
-    private int abundance;
+    private String babyId;
+    private String date;
+    private int howMuch;
 
-    public Stool(String id, Date date, int abundance) {
-        this.id = id;
+    public Stool(String babyId, String date, int howMuch) {
+        this.babyId = babyId;
         this.date = date;
-        this.abundance = abundance;
+        this.howMuch = howMuch;
     }
 
-    public String getId() {
-        return id;
+    public String getBabyId() {
+        return babyId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setBabyId(String babyId) {
+        this.babyId = babyId;
     }
 
     public String getDate() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(
-                "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        return dateFormat.format(date);
+        return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
-    public int getAbundance() {
-        return abundance;
+    public int getHowMuch() {
+        return howMuch;
     }
 
-    public void setAbundance(int abundance) {
-        this.abundance = abundance;
+    public void setHowMuch(int howMuch) {
+        this.howMuch = howMuch;
     }
 }

@@ -1,51 +1,31 @@
 package com.repina.anastasia.momandbaby.DataBase;
 
 public class User  {
-    private String id;
-    private String date;
+    private String email;
+    private String password;
     private String name;
-    private String gender;
-    private String bandCode;
-    private String bandStatus;
-    private String momID;
 
-    public User(){}
-
-    public User(String id, String name, String date, String gender, String bandCode, String bandStatus, String momID)
+    public User(String email, String password, String name)
     {
-        this.id = id;
+        this.email = email;
         this.name = name;
-        this.date = date;
-        this.gender = gender;
-        this.bandCode = bandCode;
-        this.bandStatus = bandStatus;
-        this.momID = momID;
+        this.password = password;
     }
 
-    public User(String name, String date, String gender, String bandCode, String bandStatus, String momID)
-    {
-        this.name = name;
-        this.date = date;
-        this.gender = gender;
-        this.bandCode = bandCode;
-        this.bandStatus = bandStatus;
-        this.momID = momID;
+    public String getEmail() {
+        return email;
     }
 
-    public String getId() {
-        return id;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public void setMomID(String momID) {
-        this.momID = momID;
+    public String getPassword() {
+        return password;
     }
 
-    public String getMomID() {
-        return momID;
-    }
-
-    public void setId(String id) {
-        this.id = id;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getName() {
@@ -54,37 +34,5 @@ public class User  {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String dateOfBirth) {
-        this.date = dateOfBirth;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public String getBandCode() {
-        return bandCode;
-    }
-
-    public void setBandCode(String bandCode) {
-        this.bandCode = bandCode;
-    }
-
-    public String getBandStatus() {
-        return bandStatus;
-    }
-
-    public void setBandStatus(String bandStatus) {
-        this.bandStatus = bandStatus;
     }
 }

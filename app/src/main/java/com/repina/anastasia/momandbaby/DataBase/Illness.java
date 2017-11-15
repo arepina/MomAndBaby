@@ -1,40 +1,34 @@
 package com.repina.anastasia.momandbaby.DataBase;
 
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
 public class Illness  {
-    private String id;
-    private Date date;
+    private String babyId;
+    private String date;
     private String symptomes;
     private String pills;
     private double temperature;
 
-    public Illness(String id, Date date, String symptomes, String pills, double temperature) {
-        this.id = id;
+    public Illness(String babyId, String date, String symptomes, String pills, double temperature) {
+        this.babyId = babyId;
         this.date = date;
         this.symptomes = symptomes;
         this.pills = pills;
         this.temperature = temperature;
     }
 
-    public String getId() {
-        return id;
+    public String getBabyId() {
+        return babyId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setBabyId(String babyId) {
+        this.babyId = babyId;
     }
 
     public String getDate() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(
-                "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        return dateFormat.format(date);
+        return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

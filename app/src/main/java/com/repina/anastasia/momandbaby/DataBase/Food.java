@@ -1,35 +1,31 @@
 package com.repina.anastasia.momandbaby.DataBase;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
 public class Food {
-    private String id;
-    private Date date;
+    private String babyId;
+    private String date;
     private String note;
+    private int howMuch;
 
-    public Food(String id, Date date, String note) {
-        this.id = id;
+    public Food(String babyId, String date, String note, int howMuch) {
+        this.babyId = babyId;
         this.date = date;
         this.note = note;
+        this.howMuch = howMuch;
     }
 
-    public String getId() {
-        return id;
+    public String getBabyId() {
+        return babyId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setBabyId(String babyId) {
+        this.babyId = babyId;
     }
 
     public String getDate() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(
-                "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        return dateFormat.format(date);
+        return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
@@ -39,5 +35,13 @@ public class Food {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public int getHowMuch() {
+        return howMuch;
+    }
+
+    public void setHowMuch(int howMuch) {
+        this.howMuch = howMuch;
     }
 }

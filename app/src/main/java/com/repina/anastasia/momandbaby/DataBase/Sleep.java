@@ -1,44 +1,38 @@
 package com.repina.anastasia.momandbaby.DataBase;
 
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
 public class Sleep {
-    private String id;
-    private Date date;
-    private double sleepDuration;
+    private String babyId;
+    private String date;
+    private double length;
 
-    public Sleep(String id, Date date, double sleepDuration) {
-        this.id = id;
+    public Sleep(String babyId, String date, double length) {
+        this.babyId = babyId;
         this.date = date;
-        this.sleepDuration = sleepDuration;
+        this.length = length;
     }
 
-    public String getId() {
-        return id;
+    public String getBabyId() {
+        return babyId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setBabyId(String babyId) {
+        this.babyId = babyId;
     }
 
     public String getDate() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(
-                "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        return dateFormat.format(date);
+        return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
-    public double getSleepDuration() {
-        return sleepDuration;
+    public double getLength() {
+        return length;
     }
 
-    public void setSleepDuration(double sleepDuration) {
-        this.sleepDuration = sleepDuration;
+    public void setLength(double length) {
+        this.length = length;
     }
 }

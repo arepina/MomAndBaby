@@ -1,37 +1,32 @@
 package com.repina.anastasia.momandbaby.DataBase;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 public class Teeth {
-    private String id;
-    private Date date;
+    private String babyId;
+    private String date;
     private int teethNum;
     private String note;
 
-    public Teeth(String id, Date date, int teethNum, String note) {
-        this.id = id;
+    public Teeth(String babyId, String date, int teethNum, String note) {
+        this.babyId = babyId;
         this.date = date;
         this.teethNum = teethNum;
         this.note = note;
     }
 
-    public String getId() {
-        return id;
+    public String getBabyId() {
+        return babyId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setBabyId(String babyId) {
+        this.babyId = babyId;
     }
 
     public String getDate() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(
-                "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        return dateFormat.format(date);
+        return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

@@ -1,65 +1,47 @@
 package com.repina.anastasia.momandbaby.DataBase;
 
-
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
 public class Baby  {
-    private String id;
-    private Date date;
-    private double weight;
-    private double height;
-    private String note;
+    private String momId;
+    private String birthDay;
+    private String gender;
+    private String name;
 
-    public Baby(String id, Date date, double weight, double height, String note) {
-        this.id = id;
-        this.date = date;
-        this.weight = weight;
-        this.height = height;
-        this.note = note;
+    public Baby(String momId, String birthDay, String name, String gender) {
+        this.momId = momId;
+        this.birthDay = birthDay;
+        this.gender = gender;
+        this.name = name;
     }
 
-    public String getId() {
-        return id;
+    public String getMomId() {
+        return momId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setMomId(String momId) {
+        this.momId = momId;
     }
 
-    public String getDate() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(
-                "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        return dateFormat.format(date);
+    public String getBirthDay() {
+        return birthDay;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setBirthDay(String birthDay) {
+        this.birthDay = birthDay;
     }
 
-    public double getWeight() {
-        return weight;
+    public String getGender() {
+        return gender;
     }
 
-    public void setWeight(double weight) {
-        this.weight = weight;
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
-    public double getHeight() {
-        return height;
+    public String getName() {
+        return name;
     }
 
-    public void setHeight(double height) {
-        this.height = height;
-    }
-
-    public String getNote() {
-        return note;
-    }
-
-    public void setNote(String note) {
-        this.note = note;
+    public void setName(String note) {
+        this.name = note;
     }
 }
