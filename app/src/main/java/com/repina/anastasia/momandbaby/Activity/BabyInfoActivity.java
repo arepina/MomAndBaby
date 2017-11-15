@@ -48,14 +48,10 @@ public class BabyInfoActivity extends AppCompatActivity {
 					gender = "girl";
 				else
 					gender = "boy";
-				//todo bandCode, bandStatus, momID
-				String bandCode = "none";
-				String bandStatus = "not connected";
-				String momID = "none";
 
 				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getCurrentLocale(getApplicationContext()));
 				String date = dateFormat.format(calendar.getTime());
-				User user = new User(name, date, gender, bandCode, bandStatus, momID);
+				User user = new User(name, date, gender);
 				DatabaseReference databaseReference = database.getReference().child("USERS");
 				databaseReference.push().setValue(user);
 				String key = databaseReference.getKey();

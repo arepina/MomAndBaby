@@ -8,4 +8,10 @@
     <string name="name">Имя</string>
     <string name="enter_the_data">Введите данные ребенка</string>
     <string name="next">Продолжить</string>
+    <string name="login">Войти</string>
+    <string name="dont_have_account">Еще нет аккаунта? Зарегистрируйтесь</string>
+    <string name="password">Пароль</string>
+    <string name="e_mail">E-mail</string>
+    <string name="already_registered">Уже регистрировались? Войти</string>
+    <string name="create_account">Создать аккаунт</string>
 </resources>
