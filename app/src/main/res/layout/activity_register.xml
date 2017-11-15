@@ -11,21 +11,23 @@
         android:orientation="vertical"
         android:paddingLeft="24dp"
         android:paddingRight="24dp"
-        android:paddingTop="56dp">
+        android:paddingTop="56dp"
+        android:weightSum="1">
 
         <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="72dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="24dp"
-            android:src="@drawable/ic_launcher" />
+            android:layout_weight="0.25"
+            android:src="@mipmap/ic_launcher" />
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
-            android:textColorHint="@color/colorPrimary">
+            android:textColorHint="@color/colorPrimaryDark">
 
             <EditText
                 android:id="@+id/input_name"
@@ -33,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/name"
                 android:inputType="textCapWords"
-                android:textColor="@color/colorPrimary" />
+                android:textColor="@color/colorPrimaryDark" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -41,7 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
-            android:textColorHint="@color/colorPrimary">
+            android:textColorHint="@color/colorPrimaryDark">
 
             <EditText
                 android:id="@+id/input_email"
@@ -49,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/e_mail"
                 android:inputType="textEmailAddress"
-                android:textColor="@color/colorPrimary"/>
+                android:textColor="@color/colorPrimaryDark"/>
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -57,7 +59,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
-            android:textColorHint="@color/colorPrimary">
+            android:textColorHint="@color/colorPrimaryDark">
 
             <EditText
                 android:id="@+id/input_password"
@@ -65,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/password"
                 android:inputType="textPassword"
-                android:textColor="@color/colorPrimary"/>
+                android:textColor="@color/colorPrimaryDark"/>
         </android.support.design.widget.TextInputLayout>
 
         <android.support.v7.widget.AppCompatButton
@@ -85,7 +87,7 @@
             android:layout_marginBottom="24dp"
             android:gravity="center"
             android:text="@string/already_registered"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/colorPrimaryDark"
             android:textSize="16dip" />
 
     </LinearLayout>
