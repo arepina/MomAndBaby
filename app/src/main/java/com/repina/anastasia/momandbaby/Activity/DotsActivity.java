@@ -40,11 +40,11 @@ public class DotsActivity extends IntroActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Skip to the next Activity if the user has previously completed the introduction
-        /*if (introductionCompletedPreviously()) {
-			final Intent nextActivity = new Intent(this, BabyInfoActivity.class);
+        if (introductionCompletedPreviously()) {
+			final Intent nextActivity = new Intent(this, TabsActivity.class);
 			startActivity(nextActivity);
 			finish();
-		}*/
+		}
         configureTransformer();
         configureBackground();
     }

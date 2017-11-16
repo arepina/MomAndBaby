@@ -83,7 +83,9 @@ public class BabyInfoActivity extends AppCompatActivity {
 			public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
 				calendar.set(year, month, dayOfMonth);
 				long selectedDateInMillis = calendar.getTimeInMillis();
-				formattedDate = Helper.dateFormat.format(selectedDateInMillis);
+				SimpleDateFormat dateFormat = new SimpleDateFormat(
+						"yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault());
+				formattedDate = dateFormat.format(selectedDateInMillis);
 			}
 		});
 	}

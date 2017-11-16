@@ -23,7 +23,7 @@
         <activity android:name=".Activity.DotsActivity" />
         <activity android:name=".Activity.BabyInfoActivity" />
         <activity android:name=".Activity.MiBandActivity" />
-        <activity android:name=".Activity.MainPageActivity" />
+        <activity android:name=".Activity.TabsActivity" />
         <activity android:name=".Activity.SignupActivity" />
         <activity android:name=".Activity.RegisterActivity"></activity>
     </application>
