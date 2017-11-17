@@ -19,10 +19,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class DotsActivity extends IntroActivity {
-    /**
-     * Colors to use for the blended background: blue, pink, purple.
-     */
-    private static final int[] BACKGROUND_COLORS = {0xff304FFE, 0xffcc0066, 0xff9900ff};
+    
+    private static final int[] BACKGROUND_COLORS = { 0xffC75163, 0xffFFD15D, 0xffC75163,};
 
     /**
      * Name of the shared preferences which hold a key for preventing the intro screen from
@@ -40,11 +38,11 @@ public class DotsActivity extends IntroActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Skip to the next Activity if the user has previously completed the introduction
-        if (introductionCompletedPreviously()) {
-			final Intent nextActivity = new Intent(this, TabsActivity.class);
+       /* if (introductionCompletedPreviously()) {
+			Intent nextActivity = new Intent(this, TabsActivity.class);
 			startActivity(nextActivity);
 			finish();
-		}
+		}*/
         configureTransformer();
         configureBackground();
     }
@@ -54,28 +52,26 @@ public class DotsActivity extends IntroActivity {
      */
     @Override
     protected Collection<Fragment> generatePages(Bundle savedInstanceState) {
+
+
         // This variable holds the pages while they are being created
         ArrayList<Fragment> pages = new ArrayList<>();
-
         ParallaxPage newPage = ParallaxPage.newInstance();
-        int resourceId = R.mipmap.mother;
+        int resourceId = R.drawable.mother;
         Bitmap mBitmap = BitmapFactory.decodeResource(getResources(), resourceId);
         newPage.setFrontImage(mBitmap);
-        newPage.setText("Следите за своим здоровьем");
         pages.add(newPage);
 
         newPage = ParallaxPage.newInstance();
-        resourceId = R.mipmap.baby;
+        resourceId = R.drawable.baby;
         mBitmap = BitmapFactory.decodeResource(getResources(), resourceId);
         newPage.setFrontImage(mBitmap);
-        newPage.setText("Следите за здоровьем Вашего малыша");
         pages.add(newPage);
 
         newPage = ParallaxPage.newInstance();
-        resourceId = R.mipmap.graphic;
+        resourceId = R.drawable.analytics;
         mBitmap = BitmapFactory.decodeResource(getResources(), resourceId);
         newPage.setFrontImage(mBitmap);
-        newPage.setText("Наглядная визуальная аналитика");
         pages.add(newPage);
 
         return pages;

@@ -16,4 +16,5 @@
         android:text="@string/name"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
+
 </LinearLayout>

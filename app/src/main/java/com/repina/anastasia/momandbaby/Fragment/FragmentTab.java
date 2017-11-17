@@ -1,4 +1,4 @@
-package com.repina.anastasia.momandbaby.Activity;
+package com.repina.anastasia.momandbaby.Fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

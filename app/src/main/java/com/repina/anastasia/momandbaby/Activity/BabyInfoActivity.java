@@ -40,7 +40,7 @@ public class BabyInfoActivity extends AppCompatActivity {
 			public void onClick(View v) {
 				//todo check for not entered data
 				FirebaseConnection connection = new FirebaseConnection();
-				final FirebaseDatabase database = connection.getDatabase();
+				FirebaseDatabase database = connection.getDatabase();
 
 				String name = ((EditText)findViewById(R.id.name)).getText().toString();
 				String gender;

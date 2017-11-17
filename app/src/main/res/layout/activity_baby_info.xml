@@ -104,6 +104,7 @@
 		android:layout_alignParentBottom="true"
 		android:layout_alignRight="@+id/calendar"
 		android:layout_alignStart="@+id/calendar"
+		android:layout_marginBottom="5dp"
 		android:background="@color/colorPrimaryDark"
 		android:text="@string/next" />
 
