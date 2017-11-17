@@ -9,11 +9,10 @@ import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.RadioButton;
 
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.repina.anastasia.momandbaby.DataBase.User;
-import com.repina.anastasia.momandbaby.FirebaseConnection;
-import com.repina.anastasia.momandbaby.Locale;
+import com.repina.anastasia.momandbaby.DataBase.Baby;
+import com.repina.anastasia.momandbaby.Classes.FirebaseConnection;
+import com.repina.anastasia.momandbaby.Classes.Locale;
 import com.repina.anastasia.momandbaby.R;
 
 import java.text.SimpleDateFormat;
@@ -39,6 +38,8 @@ public class BabyInfoActivity extends AppCompatActivity {
 			@Override
 			public void onClick(View v) {
 				//todo check for not entered data
+				//todo get mom id from shared
+				String momId = "";
 				FirebaseConnection connection = new FirebaseConnection();
 				FirebaseDatabase database = connection.getDatabase();
 
@@ -51,10 +52,10 @@ public class BabyInfoActivity extends AppCompatActivity {
 
 				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getCurrentLocale(getApplicationContext()));
 				String date = dateFormat.format(calendar.getTime());
-				User user = new User(name, date, gender);
-				DatabaseReference databaseReference = database.getReference().child("USERS");
-				databaseReference.push().setValue(user);
-				String key = databaseReference.getKey();
+				Baby baby = new Baby(momId, name, date, gender);
+				//DatabaseReference databaseReference = database.getReference().child("USERS");
+				//databaseReference.push().setValue(baby);
+				//String key = databaseReference.getKey();
 
 				/*ValueEventListener valueEventListener = new ValueEventListener()
 				{

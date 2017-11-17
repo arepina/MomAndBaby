@@ -6,6 +6,9 @@ public class Metrics {
     private double height;
     private String date;
 
+    public Metrics() {
+    }
+
     public Metrics(String babyId, double weight, double height, String date) {
         this.babyId = babyId;
         this.weight = weight;

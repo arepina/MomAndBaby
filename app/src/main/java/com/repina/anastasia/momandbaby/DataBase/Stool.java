@@ -5,6 +5,9 @@ public class Stool  {
     private String date;
     private int howMuch;
 
+    public Stool() {
+    }
+
     public Stool(String babyId, String date, int howMuch) {
         this.babyId = babyId;
         this.date = date;

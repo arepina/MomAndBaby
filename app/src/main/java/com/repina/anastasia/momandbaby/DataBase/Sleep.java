@@ -6,6 +6,9 @@ public class Sleep {
     private String date;
     private double length;
 
+    public Sleep() {
+    }
+
     public Sleep(String babyId, String date, double length) {
         this.babyId = babyId;
         this.date = date;

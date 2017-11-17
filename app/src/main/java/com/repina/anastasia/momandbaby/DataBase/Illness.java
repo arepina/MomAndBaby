@@ -8,6 +8,9 @@ public class Illness  {
     private String pills;
     private double temperature;
 
+    public Illness() {
+    }
+
     public Illness(String babyId, String date, String symptomes, String pills, double temperature) {
         this.babyId = babyId;
         this.date = date;

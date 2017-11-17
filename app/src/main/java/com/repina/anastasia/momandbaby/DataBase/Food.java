@@ -6,6 +6,9 @@ public class Food {
     private String note;
     private int howMuch;
 
+    public Food() {
+    }
+
     public Food(String babyId, String date, String note, int howMuch) {
         this.babyId = babyId;
         this.date = date;

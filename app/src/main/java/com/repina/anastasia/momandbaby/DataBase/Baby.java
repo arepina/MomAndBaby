@@ -6,6 +6,9 @@ public class Baby  {
     private String gender;
     private String name;
 
+    public Baby() {
+    }
+
     public Baby(String momId, String birthDay, String name, String gender) {
         this.momId = momId;
         this.birthDay = birthDay;

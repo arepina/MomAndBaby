@@ -19,11 +19,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class DotsActivity extends IntroActivity {
-    
+
     private static final int[] BACKGROUND_COLORS = { 0xffC75163, 0xffFFD15D, 0xffC75163,};
 
     /**
-     * Name of the shared preferences which hold a key for preventing the intro screen from
+     * Name of the shared preferences which holds a key for preventing the intro screen from
      * displaying again once completed.
      */
     public static final String DISPLAY_ONCE_PREFS = "display_only_once_spfile";
@@ -38,11 +38,12 @@ public class DotsActivity extends IntroActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Skip to the next Activity if the user has previously completed the introduction
-       /* if (introductionCompletedPreviously()) {
-			Intent nextActivity = new Intent(this, TabsActivity.class);
+        if (introductionCompletedPreviously()) {
+            //todo check if mom id in shared, so we can go to tabs page
+			Intent nextActivity = new Intent(this, SignupActivity.class);
 			startActivity(nextActivity);
 			finish();
-		}*/
+		}
         configureTransformer();
         configureBackground();
     }
@@ -52,8 +53,6 @@ public class DotsActivity extends IntroActivity {
      */
     @Override
     protected Collection<Fragment> generatePages(Bundle savedInstanceState) {
-
-
         // This variable holds the pages while they are being created
         ArrayList<Fragment> pages = new ArrayList<>();
         ParallaxPage newPage = ParallaxPage.newInstance();
@@ -87,10 +86,10 @@ public class DotsActivity extends IntroActivity {
 		 * checking the status of the flag when the activity starts, the introduction screen can
 		 * be skipped if it has previously been completed.
 		 */
-        final SharedPreferences sp = getSharedPreferences(DISPLAY_ONCE_PREFS, MODE_PRIVATE);
-        final SharedPreferences.Editor pendingEdits = sp.edit().putBoolean(DISPLAY_ONCE_KEY, true);
+        SharedPreferences sp = getSharedPreferences(DISPLAY_ONCE_PREFS, MODE_PRIVATE);
+        SharedPreferences.Editor pendingEdits = sp.edit().putBoolean(DISPLAY_ONCE_KEY, true);
         // Define the next activity intent and create the Behaviour to use for the final button
-        final Intent nextActivity = new Intent(this, BabyInfoActivity.class);
+        Intent nextActivity = new Intent(this, BabyInfoActivity.class);
         return new IntroButton.ProgressToNextActivity(nextActivity, pendingEdits);
     }
 
@@ -99,18 +98,18 @@ public class DotsActivity extends IntroActivity {
      * previously.
      */
     private boolean introductionCompletedPreviously() {
-        final SharedPreferences sp = getSharedPreferences(DISPLAY_ONCE_PREFS, MODE_PRIVATE);
+        SharedPreferences sp = getSharedPreferences(DISPLAY_ONCE_PREFS, MODE_PRIVATE);
         return sp.getBoolean(DISPLAY_ONCE_KEY, false);
     }
 
     private void configureTransformer() {
-        final MultiViewParallaxTransformer transformer = new MultiViewParallaxTransformer();
+        MultiViewParallaxTransformer transformer = new MultiViewParallaxTransformer();
         transformer.withParallaxView(R.id.page_fragment_imageHolderFront, 1.2f);
         setPageTransformer(false, transformer);
     }
 
     private void configureBackground() {
-        final BackgroundManager backgroundManager = new ColorBlender(BACKGROUND_COLORS);
+        BackgroundManager backgroundManager = new ColorBlender(BACKGROUND_COLORS);
         setBackgroundManager(backgroundManager);
     }
 }

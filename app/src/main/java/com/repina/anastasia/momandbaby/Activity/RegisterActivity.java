@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.google.firebase.database.FirebaseDatabase;
 import com.repina.anastasia.momandbaby.DataBase.User;
-import com.repina.anastasia.momandbaby.FirebaseConnection;
+import com.repina.anastasia.momandbaby.Classes.FirebaseConnection;
 import com.repina.anastasia.momandbaby.R;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -24,6 +24,7 @@ public class RegisterActivity extends AppCompatActivity {
         signUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //todo check for correctness
                 String email = ((EditText)findViewById(R.id.input_email)).getText().toString();
                 String password = ((EditText)findViewById(R.id.input_password)).getText().toString();
                 String name = ((EditText)findViewById(R.id.input_name)).getText().toString();

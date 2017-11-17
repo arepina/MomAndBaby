@@ -7,6 +7,8 @@ public class Teeth {
     private int teethNum;
     private String note;
 
+    public Teeth(){}
+
     public Teeth(String babyId, String date, int teethNum, String note) {
         this.babyId = babyId;
         this.date = date;

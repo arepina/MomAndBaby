@@ -5,6 +5,9 @@ public class Outdoor  {
     private String date;
     private double length;
 
+    public Outdoor() {
+    }
+
     public Outdoor(String babyId, String date, double length) {
         this.babyId = babyId;
         this.date = date;

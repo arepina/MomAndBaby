@@ -7,6 +7,9 @@ public class Band {
     private int goal;
     private String momId;
 
+    public Band() {
+    }
+
     public Band(String status, String code, int goal, String momId) {
         this.status = status;
         this.code = code;

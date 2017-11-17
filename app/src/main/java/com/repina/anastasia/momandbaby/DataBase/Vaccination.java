@@ -7,6 +7,8 @@ public class Vaccination  {
     private String vaccinationName;
     private String note;
 
+    public Vaccination(){}
+
     public Vaccination(String babyId, String date, String vaccinationName, String note) {
         this.babyId = babyId;
         this.date = date;

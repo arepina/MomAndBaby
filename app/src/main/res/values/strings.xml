@@ -14,4 +14,8 @@
     <string name="e_mail">E-mail</string>
     <string name="already_registered">Уже регистрировались? Войти</string>
     <string name="create_account">Создать аккаунт</string>
+    <string name="error">Упс… Произошла ошибка, попробуйте повторить попытку</string>
+    <string name="wrong_password">Введ неверный пароль</string>
+    <string name="enter_email_and_password">Требуется ввести email и пароль для входа в аккаунт</string>
+    <string name="internet">Для работы приложения требуется наличие соединения с интернетом!</string>
 </resources>

@@ -9,6 +9,9 @@ public class BandData {
     private int calories;
     private double sleepHours;
 
+    public BandData() {
+    }
+
     public BandData(String momId, String bandCode, String date, double steps, int calories, double sleepHours) {
         this.momId = momId;
         this.bandCode = bandCode;
