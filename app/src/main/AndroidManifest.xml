@@ -25,7 +25,8 @@
         <activity android:name=".Activity.MiBandActivity" />
         <activity android:name=".Activity.TabsActivity" />
         <activity android:name=".Activity.SignupActivity" />
-        <activity android:name=".Activity.RegisterActivity"></activity>
+        <activity android:name=".Activity.RegisterActivity" />
+        <activity android:name=".NewActivity"></activity>
     </application>
 
 </manifest>

@@ -3,4 +3,5 @@
     <dimen name="main_margin">10dp</dimen>
     <dimen name="text_size">18sp</dimen>
     <dimen name="margin_prev_top">25dp</dimen>
+    <dimen name="fab_margin">20dp</dimen>
 </resources>

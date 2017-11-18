@@ -37,7 +37,8 @@ public class ConnectionDetector {
     public static boolean isConnected(Context context) {
         ConnectionDetector cd = new ConnectionDetector(context.getApplicationContext());
         Boolean isInternetPresent = cd.ConnectingToInternet();
-        showToast(context);
+        if(!isInternetPresent)
+            showToast(context);
         return isInternetPresent;
     }
 

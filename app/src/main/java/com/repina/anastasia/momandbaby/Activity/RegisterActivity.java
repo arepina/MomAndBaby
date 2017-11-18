@@ -1,6 +1,7 @@
 package com.repina.anastasia.momandbaby.Activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -8,10 +9,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.repina.anastasia.momandbaby.Classes.ConnectionDetector;
+import com.repina.anastasia.momandbaby.Classes.ToastShow;
+import com.repina.anastasia.momandbaby.DataBase.DatabaseNames;
 import com.repina.anastasia.momandbaby.DataBase.User;
 import com.repina.anastasia.momandbaby.Classes.FirebaseConnection;
 import com.repina.anastasia.momandbaby.R;
+import com.repina.anastasia.momandbaby.Classes.SharedConstants;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -24,15 +33,38 @@ public class RegisterActivity extends AppCompatActivity {
         signUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //todo check for correctness
-                String email = ((EditText)findViewById(R.id.input_email)).getText().toString();
-                String password = ((EditText)findViewById(R.id.input_password)).getText().toString();
-                String name = ((EditText)findViewById(R.id.input_name)).getText().toString();
-                FirebaseConnection connection = new FirebaseConnection();
-                FirebaseDatabase database = connection.getDatabase();
-                User user = new User(email, password, name);
-                //todo Firebase signUp
-                //todo go to mibandactivity
+                if(ConnectionDetector.isConnected(getApplicationContext())) {//check if internet is working
+
+                    String email = ((EditText) findViewById(R.id.input_email)).getText().toString();
+                    String password = ((EditText) findViewById(R.id.input_password)).getText().toString();
+                    String name = ((EditText) findViewById(R.id.input_name)).getText().toString();
+                    if (isValidEmailAddress(email)) {
+                        if (password.length() >= 6) {
+                            if (name.length() >= 0) {
+                                FirebaseConnection connection = new FirebaseConnection();
+                                FirebaseDatabase database = connection.getDatabase();
+                                User user = new User(email, password, name);
+
+                                DatabaseReference databaseReference = database.getReference().child(DatabaseNames.USER);
+                                databaseReference.push().setValue(user);
+                                String momId = databaseReference.getKey();
+
+                                SharedPreferences sp = getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sp.edit();
+                                editor.putString(SharedConstants.MOM_ID_KEY, momId);
+                                editor.putString(SharedConstants.MOM_NAME_KEY, name);
+                                editor.apply();
+
+                                Intent nextActivity = new Intent(getApplicationContext(), BabyInfoActivity.class);
+                                startActivity(nextActivity);
+                                finish();
+                            } else
+                                ToastShow.show(getApplicationContext(), R.string.invalid_name);
+                        } else
+                            ToastShow.show(getApplicationContext(), R.string.invalid_password);
+                    } else
+                        ToastShow.show(getApplicationContext(), R.string.invalid_email);
+                }
             }
         });
 
@@ -45,5 +77,12 @@ public class RegisterActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    public static boolean isValidEmailAddress(String email) {
+        String regex = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
     }
 }

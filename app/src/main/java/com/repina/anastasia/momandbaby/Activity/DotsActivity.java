@@ -13,6 +13,7 @@ import com.matthewtamlin.sliding_intro_screen_library.buttons.IntroButton;
 import com.matthewtamlin.sliding_intro_screen_library.core.IntroActivity;
 import com.matthewtamlin.sliding_intro_screen_library.pages.ParallaxPage;
 import com.matthewtamlin.sliding_intro_screen_library.transformers.MultiViewParallaxTransformer;
+import com.repina.anastasia.momandbaby.Classes.SharedConstants;
 import com.repina.anastasia.momandbaby.R;
 
 import java.util.ArrayList;
@@ -20,30 +21,25 @@ import java.util.Collection;
 
 public class DotsActivity extends IntroActivity {
 
-    private static final int[] BACKGROUND_COLORS = { 0xffC75163, 0xffFFD15D, 0xffC75163,};
-
-    /**
-     * Name of the shared preferences which holds a key for preventing the intro screen from
-     * displaying again once completed.
-     */
-    public static final String DISPLAY_ONCE_PREFS = "display_only_once_spfile";
-
-    /**
-     * Key to use in {@code DISPLAY_ONCE_PREFS} to prevent the intro screen from displaying again
-     * once completed.
-     */
-    public static final String DISPLAY_ONCE_KEY = "display_only_once_spkey";
+    private static final int[] BACKGROUND_COLORS = {0xffC75163, 0xffFFD15D, 0xffC75163,};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Skip to the next Activity if the user has previously completed the introduction
+        // Skip to the next activity if the user has previously completed the introduction
         if (introductionCompletedPreviously()) {
-            //todo check if mom id in shared, so we can go to tabs page
-			Intent nextActivity = new Intent(this, SignupActivity.class);
-			startActivity(nextActivity);
-			finish();
-		}
+            SharedPreferences sp = getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
+            String momId = sp.getString(SharedConstants.MOM_ID_KEY, "");
+            if (momId.length() != 0) {// User have already registered, go to main page
+                Intent nextActivity = new Intent(this, TabsActivity.class);
+                startActivity(nextActivity);
+                finish();
+            } else {// User does not have an account
+                Intent nextActivity = new Intent(this, SignupActivity.class);
+                startActivity(nextActivity);
+                finish();
+            }
+        }
         configureTransformer();
         configureBackground();
     }
@@ -81,15 +77,15 @@ public class DotsActivity extends IntroActivity {
      */
     @Override
     protected IntroButton.Behaviour generateFinalButtonBehaviour() {
-		/* The pending changes to the shared preferences editor will be applied when the
+        /* The pending changes to the shared preferences editor will be applied when the
 		 * introduction is successfully completed. By setting a flag in the pending edits and
 		 * checking the status of the flag when the activity starts, the introduction screen can
 		 * be skipped if it has previously been completed.
 		 */
-        SharedPreferences sp = getSharedPreferences(DISPLAY_ONCE_PREFS, MODE_PRIVATE);
-        SharedPreferences.Editor pendingEdits = sp.edit().putBoolean(DISPLAY_ONCE_KEY, true);
+        SharedPreferences sp = getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
+        SharedPreferences.Editor pendingEdits = sp.edit().putBoolean(SharedConstants.DISPLAY_ONCE_KEY, true);
         // Define the next activity intent and create the Behaviour to use for the final button
-        Intent nextActivity = new Intent(this, BabyInfoActivity.class);
+        Intent nextActivity = new Intent(this, SignupActivity.class);
         return new IntroButton.ProgressToNextActivity(nextActivity, pendingEdits);
     }
 
@@ -98,8 +94,8 @@ public class DotsActivity extends IntroActivity {
      * previously.
      */
     private boolean introductionCompletedPreviously() {
-        SharedPreferences sp = getSharedPreferences(DISPLAY_ONCE_PREFS, MODE_PRIVATE);
-        return sp.getBoolean(DISPLAY_ONCE_KEY, false);
+        SharedPreferences sp = getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
+        return sp.getBoolean(SharedConstants.DISPLAY_ONCE_KEY, false);
     }
 
     private void configureTransformer() {
