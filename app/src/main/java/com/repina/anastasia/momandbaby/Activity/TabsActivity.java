@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.TabHost;
 
 import com.repina.anastasia.momandbaby.Fragment.FragmentTab;
-import com.repina.anastasia.momandbaby.NewActivity;
 import com.repina.anastasia.momandbaby.R;
 
 public class TabsActivity extends FragmentActivity {

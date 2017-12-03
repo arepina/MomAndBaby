@@ -29,4 +29,14 @@
         <item>Калории</item>
         <item>Сон</item>
     </string-array>
+
+    <string-array name="parameters">
+        <item>Рост</item>
+        <item>Вес</item>
+    </string-array>
+
+    <string-array name="parameters_images">
+        <item>height.png</item>
+        <item>weight.png</item>
+    </string-array>
 </resources>
