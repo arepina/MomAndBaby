@@ -21,4 +21,12 @@
     <string name="invalid_email">Требуется ввести корректный email</string>
     <string name="invalid_password">Требуется ввести корректный пароль, длина которого не менее 6</string>
     <string name="invalid_name">Требуется ввести корректное имя</string>
+    <string name="mom_health">Аналитика данных здоровья мамы</string>
+    <string name="baby_health">Аналитика данных здоровья ребенка</string>
+
+    <string-array name="characteristics">
+        <item>Шаги</item>
+        <item>Калории</item>
+        <item>Сон</item>
+    </string-array>
 </resources>

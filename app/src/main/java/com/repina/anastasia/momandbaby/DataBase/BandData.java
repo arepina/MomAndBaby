@@ -5,14 +5,14 @@ public class BandData {
     private String momId;
     private String bandCode;
     private String date;
-    private double steps;
+    private int steps;
     private int calories;
     private double sleepHours;
 
     public BandData() {
     }
 
-    public BandData(String momId, String bandCode, String date, double steps, int calories, double sleepHours) {
+    public BandData(String momId, String bandCode, String date, int steps, int calories, double sleepHours) {
         this.momId = momId;
         this.bandCode = bandCode;
         this.date = date;
@@ -45,11 +45,11 @@ public class BandData {
         this.date = date;
     }
 
-    public double getSteps() {
+    public int getSteps() {
         return steps;
     }
 
-    public void setSteps(double steps) {
+    public void setSteps(int steps) {
         this.steps = steps;
     }
 

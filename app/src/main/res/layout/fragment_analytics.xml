@@ -1,12 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
     android:orientation="vertical">
 
-    <RatingBar
-        android:id="@+id/ratingBar"
+    <android.support.v7.widget.CardView
+        android:layout_weight="0.5"
+        android:id="@+id/momAnalytics"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-</LinearLayout>
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/cardview_margin"
+        android:layout_marginStart="@dimen/cardview_margin"
+        android:layout_marginTop="@dimen/cardview_margin"
+        android:layout_marginBottom="@dimen/cardview_margin"
+        card_view:cardBackgroundColor="@color/colorAccent"
+        card_view:cardCornerRadius="@dimen/card_corner_radius"
+        card_view:cardElevation="@dimen/card_elevation">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="5dp"
+                android:layout_weight="0.8"
+                android:src="@drawable/mother_icon" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/cardview_textview_height"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="0.2"
+                android:text="@string/mom_health"
+                android:textAlignment="center"
+                android:textColor="@color/colorTextDark" />
+
+        </TableLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:layout_weight="0.5"
+        android:id="@+id/babyAnalytics"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/cardview_margin"
+        android:layout_marginStart="@dimen/cardview_margin"
+        android:layout_marginTop="@dimen/cardview_margin"
+        android:layout_marginBottom="@dimen/cardview_margin"
+        card_view:cardBackgroundColor="@color/colorAccent"
+        card_view:cardCornerRadius="15dp"
+        card_view:cardElevation="15dp">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/cardImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="5dp"
+                android:layout_weight="0.8"
+                android:src="@drawable/baby_icon" />
+
+            <TextView
+                android:id="@+id/cardName"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/cardview_textview_height"
+                android:layout_weight="0.2"
+                android:text="@string/baby_health"
+                android:textAlignment="center"
+                android:textColor="@color/colorTextDark" />
+
+        </TableLayout>
+
+    </android.support.v7.widget.CardView>
+
+</TableLayout>

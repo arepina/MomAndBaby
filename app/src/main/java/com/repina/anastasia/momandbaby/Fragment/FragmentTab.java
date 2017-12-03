@@ -1,12 +1,16 @@
 package com.repina.anastasia.momandbaby.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.repina.anastasia.momandbaby.Activity.ChartActivity;
+import com.repina.anastasia.momandbaby.Activity.MiBandActivity;
 import com.repina.anastasia.momandbaby.R;
 
 
@@ -23,7 +27,7 @@ public class FragmentTab extends Fragment {
         View v;
         switch (this.getTag()) {
             case "Analytics": {
-                v = inflater.inflate(R.layout.fragment_analytics, container, false);
+                v = initAnalytics(inflater, container);
                 break;
             }
             case "Baby": {
@@ -43,6 +47,35 @@ public class FragmentTab extends Fragment {
                 break;
             }
         }
+
+        return v;
+    }
+
+    private View initAnalytics(LayoutInflater inflater, ViewGroup container)
+    {
+        View v = inflater.inflate(R.layout.fragment_analytics, container, false);
+        CardView cardViewMom = (CardView)v.findViewById(R.id.momAnalytics);
+        cardViewMom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent nextActivity = new Intent(v.getContext(), ChartActivity.class);
+                nextActivity.putExtra("Type", "Mom");
+                //todo send bandCode in Extras here
+                startActivity(nextActivity);
+            }
+        });
+
+        CardView cardViewBaby = (CardView)v.findViewById(R.id.babyAnalytics);
+        cardViewBaby.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent nextActivity = new Intent(v.getContext(), ChartActivity.class);
+                nextActivity.putExtra("Type", "Baby");
+                //todo send bandCode in Extras here
+                startActivity(nextActivity);
+            }
+        });
+
         return v;
     }
 }
