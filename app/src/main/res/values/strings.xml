@@ -33,10 +33,13 @@
     <string-array name="parameters">
         <item>Рост</item>
         <item>Вес</item>
+        <item>Стул</item>
+        <item>Зубы</item>
+        <item>Прививки</item>
+        <item>Болезни</item>
+        <item>Питание</item>
+        <item>Прогулки</item>
+        <item>Сон</item>
     </string-array>
 
-    <string-array name="parameters_images">
-        <item>height.png</item>
-        <item>weight.png</item>
-    </string-array>
 </resources>
