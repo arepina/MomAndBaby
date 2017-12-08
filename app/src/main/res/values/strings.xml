@@ -23,6 +23,8 @@
     <string name="invalid_name">Требуется ввести корректное имя</string>
     <string name="mom_health">Аналитика данных здоровья мамы</string>
     <string name="baby_health">Аналитика данных здоровья ребенка</string>
+    <string name="today">Сегодняшняя активность</string>
+    <string name="sync_band">Синхронизировать браслет</string>
 
     <string-array name="characteristics">
         <item>Шаги</item>

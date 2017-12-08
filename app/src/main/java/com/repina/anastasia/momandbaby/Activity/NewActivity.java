@@ -1,8 +1,9 @@
 package com.repina.anastasia.momandbaby.Activity;
 
-import android.support.v7.app.AppCompatActivity;
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
@@ -10,7 +11,7 @@ import android.widget.Toast;
 import com.repina.anastasia.momandbaby.Classes.CustomGrid;
 import com.repina.anastasia.momandbaby.R;
 
-public class NewActivity extends AppCompatActivity {
+public class NewActivity extends Activity {
 
     int[] imageId = {
             R.mipmap.height,
@@ -27,7 +28,10 @@ public class NewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_new);
+
+        this.setFinishOnTouchOutside(false);
 
         final String[] features = getResources().getStringArray(R.array.parameters);
         CustomGrid adapter = new CustomGrid(NewActivity.this, features, imageId);
