@@ -1,11 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
-    tools:context="com.repina.anastasia.momandbaby.Activity.MiBandActivity">
+    android:background="@color/colorPrimary">
 
     <ProgressBar
         android:id="@+id/loading"
@@ -15,42 +11,78 @@
         android:layout_centerVertical="true" />
 
     <LinearLayout
-        android:visibility="gone"
-        android:orientation="vertical"
+        android:id="@+id/textHolder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="32dp" >
+        android:layout_marginTop="32dp"
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <TextView
-            android:id="@+id/steps"
+            android:id="@+id/text_steps"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-light"
             android:gravity="center"
-            android:textSize="40sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-light"
-            android:gravity="center"
-            android:text="@string/steps" />
-
-        <TextView
-            android:id="@+id/battery_level"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-light"
-            android:gravity="center"
-            android:textSize="30sp" />
+            android:textColor="@color/colorText"
+            android:textSize="@dimen/text_size"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-light"
             android:gravity="center"
-            android:text="@string/battery" />
+            android:text="@string/steps"
+            android:textColor="@color/colorText"
+            android:textSize="@dimen/text_size" />
+
+        <TextView
+            android:id="@+id/text_battery_level"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/colorText"
+            android:textSize="@dimen/text_size"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/battery"
+            android:textColor="@color/colorText"
+            android:textSize="@dimen/text_size" />
+
+        <TextView
+            android:id="@+id/text_sleep"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/colorText"
+            android:textSize="@dimen/text_size"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/colorText"
+            android:textSize="@dimen/text_size"
+            android:text="@string/sleep" />
+
+        <TextView
+            android:id="@+id/text_band_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/colorText"
+            android:textSize="@dimen/text_size" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/colorText"
+            android:textSize="@dimen/text_size"
+            android:text="@string/band_code" />
     </LinearLayout>
+
 </RelativeLayout>

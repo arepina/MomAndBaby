@@ -35,7 +35,7 @@ public class FragmentTab extends Fragment {
                 break;
             }
             case "Mom": {
-                v = inflater.inflate(R.layout.fragment_mom, container, false);
+                v = initMom(inflater, container);
                 break;
             }
             case "Settings": {
@@ -51,10 +51,9 @@ public class FragmentTab extends Fragment {
         return v;
     }
 
-    private View initAnalytics(LayoutInflater inflater, ViewGroup container)
-    {
+    private View initAnalytics(LayoutInflater inflater, ViewGroup container) {
         View v = inflater.inflate(R.layout.fragment_analytics, container, false);
-        CardView cardViewMom = (CardView)v.findViewById(R.id.momAnalytics);
+        CardView cardViewMom = (CardView) v.findViewById(R.id.momAnalytics);
         cardViewMom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,12 +64,35 @@ public class FragmentTab extends Fragment {
             }
         });
 
-        CardView cardViewBaby = (CardView)v.findViewById(R.id.babyAnalytics);
+        CardView cardViewBaby = (CardView) v.findViewById(R.id.babyAnalytics);
         cardViewBaby.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent nextActivity = new Intent(v.getContext(), ChartActivity.class);
                 nextActivity.putExtra("Type", "Baby");
+                //todo send bandCode in Extras here
+                startActivity(nextActivity);
+            }
+        });
+
+        return v;
+    }
+
+    private View initMom(LayoutInflater inflater, ViewGroup container) {
+        View v = inflater.inflate(R.layout.fragment_mom, container, false);
+        CardView cardViewToday = (CardView) v.findViewById(R.id.momToday);
+        cardViewToday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //todo
+            }
+        });
+
+        CardView cardViewMiBand = (CardView) v.findViewById(R.id.bandSync);
+        cardViewMiBand.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent nextActivity = new Intent(v.getContext(), MiBandActivity.class);
                 //todo send bandCode in Extras here
                 startActivity(nextActivity);
             }

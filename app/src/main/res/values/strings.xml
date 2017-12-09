@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name">MomAndBaby</string>
-    <string name="steps">шагов сегодня</string>
-    <string name="battery">заряд батареи</string>
+    <string name="steps">Шагов сегодня</string>
+    <string name="battery">Заряд батареи</string>
+    <string name="band_code">Код браслета</string>
+    <string name="sleep">Часов сна</string>
     <string name="birthday">Дата рождения</string>
     <string name="girl">Девочка</string>
     <string name="boy">Мальчик</string>
