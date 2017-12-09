@@ -29,6 +29,12 @@
     <string name="sync_band">Синхронизировать браслет</string>
     <string name="yesterday">Назад</string>
     <string name="tomorrow">Вперед</string>
+    <string name="exit">Выйти из аккаунта</string>
+    <string name="app_info">О приложении</string>
+    <string name="contact_developer">Связаться с разработчиком</string>
+    <string name="rate_us">Оценить</string>
+    <string name="soon">Ссылка скоро заработает!</string>
+    <string name="my_email">prostorepa@yandex.ru</string>
 
     <string-array name="characteristics">
         <item>Шаги</item>
