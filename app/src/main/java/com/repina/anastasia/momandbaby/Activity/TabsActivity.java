@@ -41,14 +41,7 @@ public class TabsActivity extends FragmentActivity {
         setTabIcon(mTabHost, 2, R.mipmap.mother); //for Tab 3
         setTabIcon(mTabHost, 3, R.mipmap.settings); //for Tab 4
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.floatingActionButton);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), NewActivity.class);
-                startActivity(intent);
-            }
-        });
+        mTabHost.setCurrentTab(1);
     }
 
     public void setTabIcon(TabHost tabHost, int tabIndex, int iconResource) {

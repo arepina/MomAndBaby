@@ -2,6 +2,7 @@ package com.repina.anastasia.momandbaby.Fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.repina.anastasia.momandbaby.Activity.ChartActivity;
 import com.repina.anastasia.momandbaby.Activity.MiBandActivity;
+import com.repina.anastasia.momandbaby.Activity.NewActivity;
 import com.repina.anastasia.momandbaby.R;
 
 
@@ -31,7 +33,7 @@ public class FragmentTab extends Fragment {
                 break;
             }
             case "Baby": {
-                v = inflater.inflate(R.layout.fragment_baby, container, false);
+                v = initBaby(inflater, container);
                 break;
             }
             case "Mom": {
@@ -53,6 +55,7 @@ public class FragmentTab extends Fragment {
 
     private View initAnalytics(LayoutInflater inflater, ViewGroup container) {
         View v = inflater.inflate(R.layout.fragment_analytics, container, false);
+
         CardView cardViewMom = (CardView) v.findViewById(R.id.momAnalytics);
         cardViewMom.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,24 +82,38 @@ public class FragmentTab extends Fragment {
     }
 
     private View initMom(LayoutInflater inflater, ViewGroup container) {
-        View v = inflater.inflate(R.layout.fragment_mom, container, false);
-        CardView cardViewToday = (CardView) v.findViewById(R.id.momToday);
-        cardViewToday.setOnClickListener(new View.OnClickListener() {
+        final View v = inflater.inflate(R.layout.fragment_mom, container, false);
+
+        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.floatingActionButton);
+        fab.setImageResource(R.drawable.band_dark);
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                //todo
+            public void onClick(View view) {
+                Intent intent = new Intent(v.getContext(), MiBandActivity.class);
+                startActivity(intent);
             }
         });
 
-        CardView cardViewMiBand = (CardView) v.findViewById(R.id.bandSync);
-        cardViewMiBand.setOnClickListener(new View.OnClickListener() {
+        //todo
+
+        return v;
+    }
+
+    private View initBaby(LayoutInflater inflater, ViewGroup container) {
+        final View v = inflater.inflate(R.layout.fragment_baby, container, false);
+
+        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.floatingActionButton);
+        fab.setImageResource(R.mipmap.plus);
+
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Intent nextActivity = new Intent(v.getContext(), MiBandActivity.class);
-                //todo send bandCode in Extras here
-                startActivity(nextActivity);
+            public void onClick(View view) {
+                Intent intent = new Intent(v.getContext(), NewActivity.class);
+                startActivity(intent);
             }
         });
+
+        //todo
 
         return v;
     }

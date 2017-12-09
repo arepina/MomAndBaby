@@ -27,6 +27,8 @@
     <string name="baby_health">Аналитика данных здоровья ребенка</string>
     <string name="today">Сегодняшняя активность</string>
     <string name="sync_band">Синхронизировать браслет</string>
+    <string name="yesterday">Назад</string>
+    <string name="tomorrow">Вперед</string>
 
     <string-array name="characteristics">
         <item>Шаги</item>
