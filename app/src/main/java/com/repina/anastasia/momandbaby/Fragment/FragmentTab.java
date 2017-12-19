@@ -11,11 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.repina.anastasia.momandbaby.Activity.ChartActivity;
-import com.repina.anastasia.momandbaby.Activity.MiBandActivity;
+import com.repina.anastasia.momandbaby.Activity.GoogleFitActivity;
 import com.repina.anastasia.momandbaby.Activity.NewActivity;
 import com.repina.anastasia.momandbaby.Activity.SignupActivity;
 import com.repina.anastasia.momandbaby.Classes.SharedConstants;
@@ -170,7 +168,7 @@ public class FragmentTab extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(v.getContext(), MiBandActivity.class);
+                Intent intent = new Intent(v.getContext(), GoogleFitActivity.class);
                 startActivity(intent);
             }
         });

@@ -42,8 +42,8 @@ public class SignupActivity extends AppCompatActivity {
                         return;
                     }
 
-                    FirebaseConnection connection = new FirebaseConnection();
-                    FirebaseDatabase database = connection.getDatabase();
+                    FirebaseDatabase database = FirebaseConnection.getDatabase();
+
                     User user = new User(email, password);
                     final DatabaseReference databaseReference = database.getReference().child(DatabaseNames.USER);
 

@@ -50,8 +50,7 @@ public class BabyInfoActivity extends AppCompatActivity {
 
 				// Check the values for correctness
 				if(name.length() > 0) {
-					FirebaseConnection connection = new FirebaseConnection();
-					FirebaseDatabase database = connection.getDatabase();
+					FirebaseDatabase database = FirebaseConnection.getDatabase();
 
 					Baby baby = new Baby(momId, name, formattedDate, gender);
 
@@ -65,7 +64,7 @@ public class BabyInfoActivity extends AppCompatActivity {
 					editor.putString(SharedConstants.BABY_GENDER_KEY, gender);
 					editor.apply();
 
-					Intent nextActivity = new Intent(getApplicationContext(), MiBandActivity.class);
+					Intent nextActivity = new Intent(getApplicationContext(), TabsActivity.class);
 					startActivity(nextActivity);
 					finish();
 				}

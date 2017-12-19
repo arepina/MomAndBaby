@@ -41,8 +41,8 @@ public class RegisterActivity extends AppCompatActivity {
                     if (isValidEmailAddress(email)) {
                         if (password.length() >= 6) {
                             if (name.length() >= 0) {
-                                FirebaseConnection connection = new FirebaseConnection();
-                                FirebaseDatabase database = connection.getDatabase();
+                                FirebaseDatabase database = FirebaseConnection.getDatabase();
+
                                 User user = new User(email, password, name);
 
                                 DatabaseReference databaseReference = database.getReference().child(DatabaseNames.USER);
