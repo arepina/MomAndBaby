@@ -21,7 +21,7 @@ public class NewDataActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_data);
         String data = getIntent().getExtras().getString("data");
-        Button addData = (Button)findViewById(R.id.addData);
+        Button addData = (Button) findViewById(R.id.addData);
         addData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -41,73 +41,69 @@ public class NewDataActivity extends AppCompatActivity {
         EditText dataValue3 = (EditText) findViewById(R.id.dataValue3);
         LinearLayout rateData = (LinearLayout) findViewById(R.id.rateData);
         Spinner vaccinationsData = (Spinner) findViewById(R.id.vaccinationsData);
-        switch (data) {
-            case "height": {
-                dataName1.setText(getString(R.string.add_new_data) + getString(R.string.height));
-                dataName1.setVisibility(View.VISIBLE);
-                dataValue1.setVisibility(View.VISIBLE);
-                break;
-            }
-            case "weight": {
-                dataName1.setText(getString(R.string.add_new_data) + getString(R.string.weight));
-                dataName1.setVisibility(View.VISIBLE);
-                dataValue1.setVisibility(View.VISIBLE);
-                break;
-            }
-            case "diapers": {
-                dataName2.setText(getString(R.string.rateValue) + getString(R.string.diapers));
-                dataName2.setVisibility(View.VISIBLE);
-                dataValue2.setVisibility(View.VISIBLE);
-                rateData.setVisibility(View.VISIBLE);
-                break;
-            }
-            case "tooth": {
-                //todo
-                break;
-            }
-            case "vaccination": {
-                dataName1.setText(getString(R.string.vaccination));
-                dataName1.setVisibility(View.VISIBLE);
-                ArrayAdapter<?> adapter = ArrayAdapter.createFromResource(this, R.array.vaccinations, android.R.layout.simple_spinner_item);
-                vaccinationsData.setAdapter(adapter);
-                vaccinationsData.setSelection(0);
-                vaccinationsData.setVisibility(View.VISIBLE);
-                dataName2.setText(getString(R.string.add_vaccination));
-                dataName2.setVisibility(View.VISIBLE);
-                dataValue2.setVisibility(View.VISIBLE);
-                break;
-            }
-            case "illness": {
-                dataName1.setText(getString(R.string.add_new_data) + getString(R.string.temperature));
-                dataName1.setVisibility(View.VISIBLE);
-                dataValue1.setVisibility(View.VISIBLE);
-                dataName2.setText(getString(R.string.add_symptomes));
-                dataName2.setVisibility(View.VISIBLE);
-                dataValue2.setVisibility(View.VISIBLE);
-                dataName3.setText(getString(R.string.add_pills));
-                dataName3.setVisibility(View.VISIBLE);
-                dataValue3.setVisibility(View.VISIBLE);
-                break;
-            }
-            case "food": {
-                dataName2.setText(getString(R.string.rateValue) + getString(R.string.food));
-                dataName2.setVisibility(View.VISIBLE);
-                dataValue2.setVisibility(View.VISIBLE);
-                rateData.setVisibility(View.VISIBLE);
-                break;
-            }
-            case "outdoor": {
-                dataName1.setText(getString(R.string.add_new_data) + getString(R.string.outdoor_duration));
-                dataName1.setVisibility(View.VISIBLE);
-                dataValue1.setVisibility(View.VISIBLE);
-                break;
-            }
-            case "sleep": {
-                dataName1.setText(getString(R.string.add_new_data) + getString(R.string.sleep_duration));
-                dataName1.setVisibility(View.VISIBLE);
-                dataValue1.setVisibility(View.VISIBLE);
-                break;
-            }
+        String[] features = getResources().getStringArray(R.array.parameters);
+        if (data.equals(features[0])) {
+            dataName1.setText(getString(R.string.add_new_data) + " " + getString(R.string.height));
+            dataName1.setVisibility(View.VISIBLE);
+            dataValue1.setVisibility(View.VISIBLE);
+        }
+        if (data.equals(features[1])) {
+            dataName1.setText(getString(R.string.add_new_data) + " " + getString(R.string.weight));
+            dataName1.setVisibility(View.VISIBLE);
+            dataValue1.setVisibility(View.VISIBLE);
+
+        }
+        if (data.equals(features[2])) {
+            dataName2.setText(getString(R.string.rateValue) + " " + getString(R.string.diapers));
+            dataName2.setVisibility(View.VISIBLE);
+            rateData.setVisibility(View.VISIBLE);
+            dataName3.setText(R.string.Comment);
+            dataName3.setVisibility(View.VISIBLE);
+            dataValue3.setVisibility(View.VISIBLE);
+        }
+        if (data.equals(features[3])) {
+            //todo
+        }
+        if (data.equals(features[4])) {
+            dataName1.setText(getString(R.string.vaccination));
+            dataName1.setVisibility(View.VISIBLE);
+            ArrayAdapter<?> adapter = ArrayAdapter.createFromResource(this, R.array.vaccinations, android.R.layout.simple_spinner_item);
+            vaccinationsData.setAdapter(adapter);
+            vaccinationsData.setSelection(0);
+            vaccinationsData.setVisibility(View.VISIBLE);
+            dataName2.setText(getString(R.string.add_vaccination));
+            dataName2.setVisibility(View.VISIBLE);
+            dataValue2.setVisibility(View.VISIBLE);
+        }
+        if (data.equals(features[5])) {
+            dataName1.setText(getString(R.string.add_new_data) + " " + getString(R.string.temperature));
+            dataName1.setVisibility(View.VISIBLE);
+            dataValue1.setVisibility(View.VISIBLE);
+            dataName2.setText(getString(R.string.add_symptomes));
+            dataName2.setVisibility(View.VISIBLE);
+            dataValue2.setVisibility(View.VISIBLE);
+            dataName3.setText(getString(R.string.add_pills));
+            dataName3.setVisibility(View.VISIBLE);
+            dataValue3.setVisibility(View.VISIBLE);
+        }
+        if (data.equals(features[6])) {
+            dataName2.setText(getString(R.string.rateValue) + getString(R.string.food));
+            dataName2.setVisibility(View.VISIBLE);
+            rateData.setVisibility(View.VISIBLE);
+            dataName3.setText(R.string.Comment);
+            dataName3.setVisibility(View.VISIBLE);
+            dataValue3.setVisibility(View.VISIBLE);
+        }
+        if (data.equals(features[7])) {
+            dataName1.setText(getString(R.string.add_new_data) + " " + getString(R.string.outdoor_duration));
+            dataName1.setVisibility(View.VISIBLE);
+            dataValue1.setVisibility(View.VISIBLE);
+        }
+        if (data.equals(features[8])) {
+            dataName1.setText(getString(R.string.add_new_data) + " " + getString(R.string.sleep_duration));
+            dataName1.setVisibility(View.VISIBLE);
+            dataValue1.setVisibility(View.VISIBLE);
         }
     }
 }
+

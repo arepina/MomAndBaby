@@ -41,7 +41,6 @@ public class NewActivity extends Activity {
         grid.setAdapter(adapter);
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                Toast.makeText(NewActivity.this, "You Clicked at " + features[position], Toast.LENGTH_SHORT).show();
                 Intent nextActivity = new Intent(getApplicationContext(), NewDataActivity.class);
                 nextActivity.putExtra("data", features[position]);
                 startActivity(nextActivity);

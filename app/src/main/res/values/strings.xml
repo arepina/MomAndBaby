@@ -32,23 +32,24 @@
     <string name="soon">Ссылка скоро заработает!</string>
     <string name="my_email">prostorepa@yandex.ru</string>
     <string name="add_new_data">Введите новое значение</string>
-    <string name="height"> роста малыша</string>
-    <string name="weight"> веса малыша</string>
+    <string name="height">роста малыша</string>
+    <string name="weight">веса малыша</string>
     <string name="rateValue">Оцените</string>
     <string name="diapers"> стул малыша</string>
     <string name="food">, как малыш покушал</string>
     <string name="choose_date">Выберите дату</string>
-    <string name="temperature"> температуры></string>
+    <string name="temperature"> температуры</string>
     <string name="add_symptomes">Укажите симптомы</string>
     <string name="add_pills">Укажите лекарства</string>
-    <string name="outdoor_duration"> продолжительности прогулки</string>
-    <string name="sleep_duration"> продолжительности сна</string>
+    <string name="outdoor_duration">продолжительности прогулки</string>
+    <string name="sleep_duration">продолжительности сна</string>
     <string name="add_vaccination">Введите описание реакции малыша на прививку</string>
     <string name="vaccination">Выберите прививку из списка</string>
     <string name="add">Добавить</string>
     <string name="send_report_mom">Отправить отчет о здоровье мамы на почту</string>
     <string name="send_report_baby">Отправить отчет о здоровье малыша на почту</string>
     <string name="app_description">Приложение разработано Репиной А.А. в рамках выполнения дипломной работы. Научный руководитель Ахметсафина Р.З. Комментарии, пожелания и предложения привествуются!</string>
+    <string name="Comment">Комментарий</string>
 
     <string-array name="characteristics">
         <item>Шаги</item>
