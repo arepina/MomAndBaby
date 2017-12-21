@@ -1,16 +1,18 @@
 package com.repina.anastasia.momandbaby.DataBase;
 
-public class Stool  {
+public class Stool {
     private String babyId;
     private String date;
+    private String note;
     private int howMuch;
 
     public Stool() {
     }
 
-    public Stool(String babyId, String date, int howMuch) {
+    public Stool(String babyId, String date, String note, int howMuch) {
         this.babyId = babyId;
         this.date = date;
+        this.note = note;
         this.howMuch = howMuch;
     }
 
@@ -36,5 +38,13 @@ public class Stool  {
 
     public void setHowMuch(int howMuch) {
         this.howMuch = howMuch;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 }

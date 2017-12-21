@@ -14,8 +14,26 @@
         android:text="@string/app_info" />
 
     <Button
-        android:id="@+id/feedback"
+        android:id="@+id/send_report_mom"
         android:layout_below="@+id/appInfo"
+        android:layout_marginTop="@dimen/main_margin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
+        android:text="@string/send_report_mom" />
+
+    <Button
+        android:id="@+id/send_report_baby"
+        android:layout_below="@+id/send_report_mom"
+        android:layout_marginTop="@dimen/main_margin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
+        android:text="@string/send_report_baby" />
+
+    <Button
+        android:id="@+id/feedback"
+        android:layout_below="@+id/send_report_baby"
         android:layout_marginTop="@dimen/main_margin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

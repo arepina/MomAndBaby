@@ -1,9 +1,5 @@
 <resources>
     <string name="app_name">MomAndBaby</string>
-    <string name="steps">Шагов сегодня</string>
-    <string name="battery">Заряд батареи</string>
-    <string name="band_code">Код браслета</string>
-    <string name="sleep">Часов сна</string>
     <string name="birthday">Дата рождения</string>
     <string name="girl">Девочка</string>
     <string name="boy">Мальчик</string>
@@ -35,6 +31,24 @@
     <string name="rate_us">Оценить</string>
     <string name="soon">Ссылка скоро заработает!</string>
     <string name="my_email">prostorepa@yandex.ru</string>
+    <string name="add_new_data">Введите новое значение</string>
+    <string name="height"> роста малыша</string>
+    <string name="weight"> веса малыша</string>
+    <string name="rateValue">Оцените</string>
+    <string name="diapers"> стул малыша</string>
+    <string name="food">, как малыш покушал</string>
+    <string name="choose_date">Выберите дату</string>
+    <string name="temperature"> температуры></string>
+    <string name="add_symptomes">Укажите симптомы</string>
+    <string name="add_pills">Укажите лекарства</string>
+    <string name="outdoor_duration"> продолжительности прогулки</string>
+    <string name="sleep_duration"> продолжительности сна</string>
+    <string name="add_vaccination">Введите описание реакции малыша на прививку</string>
+    <string name="vaccination">Выберите прививку из списка</string>
+    <string name="add">Добавить</string>
+    <string name="send_report_mom">Отправить отчет о здоровье мамы на почту</string>
+    <string name="send_report_baby">Отправить отчет о здоровье малыша на почту</string>
+    <string name="app_description">Приложение разработано Репиной А.А. в рамках выполнения дипломной работы. Научный руководитель Ахметсафина Р.З. Комментарии, пожелания и предложения привествуются!</string>
 
     <string-array name="characteristics">
         <item>Шаги</item>
@@ -53,5 +67,14 @@
         <item>Прогулки</item>
         <item>Сон</item>
     </string-array>
+
+    <string-array name="vaccinations">
+        <item>Прививка от кори</item>
+        <item>Привика от гриппа</item>
+        <item>Прививка от краснухи</item>
+        <item>Прививка от ветрянки</item>
+        <item>Прививка от вредности</item>
+    </string-array>
+
 
 </resources>

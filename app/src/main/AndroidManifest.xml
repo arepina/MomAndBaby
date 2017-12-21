@@ -26,8 +26,12 @@
         <activity android:name=".Activity.TabsActivity" />
         <activity android:name=".Activity.SignupActivity" />
         <activity android:name=".Activity.RegisterActivity" />
-        <activity android:name=".Activity.NewActivity" android:theme="@android:style/Theme.Dialog"/>
-        <activity android:name=".Activity.ChartActivity"/>
+        <activity
+            android:name=".Activity.NewActivity"
+            android:theme="@android:style/Theme.Dialog" />
+        <activity android:name=".Activity.ChartActivity" />
+        <activity android:name=".Activity.NewDataActivity" />
+        <activity android:name=".Activity.AppInfoActivity"></activity>
     </application>
 
 </manifest>

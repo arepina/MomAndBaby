@@ -1,6 +1,7 @@
 package com.repina.anastasia.momandbaby.Activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -41,6 +42,9 @@ public class NewActivity extends Activity {
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 Toast.makeText(NewActivity.this, "You Clicked at " + features[position], Toast.LENGTH_SHORT).show();
+                Intent nextActivity = new Intent(getApplicationContext(), NewDataActivity.class);
+                nextActivity.putExtra("data", features[position]);
+                startActivity(nextActivity);
             }
         });
 

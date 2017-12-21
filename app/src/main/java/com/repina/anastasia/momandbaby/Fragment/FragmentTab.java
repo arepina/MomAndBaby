@@ -16,6 +16,7 @@ import com.repina.anastasia.momandbaby.Activity.ChartActivity;
 import com.repina.anastasia.momandbaby.Activity.GoogleFitActivity;
 import com.repina.anastasia.momandbaby.Activity.NewActivity;
 import com.repina.anastasia.momandbaby.Activity.SignupActivity;
+import com.repina.anastasia.momandbaby.Activity.AppInfoActivity;
 import com.repina.anastasia.momandbaby.Classes.SharedConstants;
 import com.repina.anastasia.momandbaby.Classes.ToastShow;
 import com.repina.anastasia.momandbaby.R;
@@ -118,6 +119,23 @@ public class FragmentTab extends Fragment {
 
         Button appInfo = (Button) v.findViewById(R.id.appInfo);
         appInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent nextActivity = new Intent(v.getContext(), AppInfoActivity.class);
+                startActivity(nextActivity);
+            }
+        });
+
+        Button sendReportBaby = (Button) v.findViewById(R.id.send_report_baby);
+        sendReportBaby.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //todo
+            }
+        });
+
+        Button sendReportMom = (Button) v.findViewById(R.id.send_report_mom);
+        sendReportMom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //todo

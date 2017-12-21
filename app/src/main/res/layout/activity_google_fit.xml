@@ -16,22 +16,4 @@
         android:layout_height="wrap_content"
         android:text="View today's steps"/>
 
-    <Button
-        android:id="@+id/btn_add_steps"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Add step data for today" />
-
-    <Button
-        android:id="@+id/btn_update_steps"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Update step data for yesterday" />
-
-    <Button
-        android:id="@+id/btn_delete_steps"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Delete step data for yesterday" />
-
 </LinearLayout>

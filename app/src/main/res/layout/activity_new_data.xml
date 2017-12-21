@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:visibility="gone"
+        android:text="@string/choose_date"
+        android:textAlignment="center"
+        android:textSize="@dimen/text_size"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:ems="10"
+        android:inputType="text"
+        android:textSize="@dimen/text_size" />
+
+    <TextView
+        android:id="@+id/dataName1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:visibility="gone"
+        android:textAlignment="center"
+        android:textSize="@dimen/text_size"
+        android:textStyle="bold" />
+
+    <Spinner
+        android:id="@+id/vaccinationsData"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/dataValue1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:ems="10"
+        android:inputType="text"
+        android:textSize="@dimen/text_size" />
+
+    <TextView
+        android:id="@+id/dataName2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:visibility="gone"
+        android:textAlignment="center"
+        android:textSize="@dimen/text_size"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/dataValue2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:ems="10"
+        android:lines="5"
+        android:inputType="text"
+        android:textSize="@dimen/text_size" />
+
+    <TextView
+        android:id="@+id/dataName3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:visibility="gone"
+        android:textAlignment="center"
+        android:textSize="@dimen/text_size"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/dataValue3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:ems="10"
+        android:lines="5"
+        android:inputType="text"
+        android:textSize="@dimen/text_size" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/rateData"
+        android:visibility="gone"
+        android:layout_marginLeft="@dimen/main_margin"
+        android:layout_marginRight="@dimen/main_margin"
+        android:layout_marginTop="@dimen/main_margin"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/worse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorPrimaryDark"
+            android:text="1" />
+
+        <Button
+            android:id="@+id/bad"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorAccent"
+            android:text="2"
+            android:textColor="@color/colorTextDark" />
+
+        <Button
+            android:id="@+id/nothingSpecial"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorPrimaryDark"
+            android:text="3" />
+
+        <Button
+            android:id="@+id/good"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorAccent"
+            android:text="4"
+            android:textColor="@color/colorTextDark" />
+
+        <Button
+            android:id="@+id/perfect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorPrimaryDark"
+            android:text="5" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/addData"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/add" />
+</LinearLayout>
