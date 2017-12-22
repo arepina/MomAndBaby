@@ -62,9 +62,6 @@ public class NewDataActivity extends AppCompatActivity {
             dataValue3.setVisibility(View.VISIBLE);
         }
         if (data.equals(features[3])) {
-            //todo
-        }
-        if (data.equals(features[4])) {
             dataName1.setText(getString(R.string.vaccination));
             dataName1.setVisibility(View.VISIBLE);
             ArrayAdapter<?> adapter = ArrayAdapter.createFromResource(this, R.array.vaccinations, android.R.layout.simple_spinner_item);
@@ -75,7 +72,7 @@ public class NewDataActivity extends AppCompatActivity {
             dataName2.setVisibility(View.VISIBLE);
             dataValue2.setVisibility(View.VISIBLE);
         }
-        if (data.equals(features[5])) {
+        if (data.equals(features[4])) {
             dataName1.setText(getString(R.string.add_new_data) + " " + getString(R.string.temperature));
             dataName1.setVisibility(View.VISIBLE);
             dataValue1.setVisibility(View.VISIBLE);
@@ -86,7 +83,7 @@ public class NewDataActivity extends AppCompatActivity {
             dataName3.setVisibility(View.VISIBLE);
             dataValue3.setVisibility(View.VISIBLE);
         }
-        if (data.equals(features[6])) {
+        if (data.equals(features[5])) {
             dataName2.setText(getString(R.string.rateValue) + getString(R.string.food));
             dataName2.setVisibility(View.VISIBLE);
             rateData.setVisibility(View.VISIBLE);
@@ -94,12 +91,12 @@ public class NewDataActivity extends AppCompatActivity {
             dataName3.setVisibility(View.VISIBLE);
             dataValue3.setVisibility(View.VISIBLE);
         }
-        if (data.equals(features[7])) {
+        if (data.equals(features[6])) {
             dataName1.setText(getString(R.string.add_new_data) + " " + getString(R.string.outdoor_duration));
             dataName1.setVisibility(View.VISIBLE);
             dataValue1.setVisibility(View.VISIBLE);
         }
-        if (data.equals(features[8])) {
+        if (data.equals(features[7])) {
             dataName1.setText(getString(R.string.add_new_data) + " " + getString(R.string.sleep_duration));
             dataName1.setVisibility(View.VISIBLE);
             dataValue1.setVisibility(View.VISIBLE);

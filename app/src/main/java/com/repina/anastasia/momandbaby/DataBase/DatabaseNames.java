@@ -11,7 +11,6 @@ public class DatabaseNames {
     public static final String METRICS = "METRICS";
     public static final String OUTDOOR = "OUTDOOR";
     public static final String SLEEP = "SLEEP";
-    public static final String TEETH = "TEETH";
     public static final String STOOL = "STOOL";
     public static final String VACCINATION = "VACCINATION";
 }

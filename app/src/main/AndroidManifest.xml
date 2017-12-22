@@ -27,7 +27,7 @@
         <activity android:name=".Activity.SignupActivity" />
         <activity android:name=".Activity.RegisterActivity" />
         <activity
-            android:name=".Activity.NewActivity"
+            android:name=".Activity.ChooseNewActivity"
             android:theme="@android:style/Theme.Dialog" />
         <activity android:name=".Activity.ChartActivity" />
         <activity android:name=".Activity.NewDataActivity" />

@@ -7,18 +7,16 @@ import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.Toast;
 
 import com.repina.anastasia.momandbaby.Classes.CustomGrid;
 import com.repina.anastasia.momandbaby.R;
 
-public class NewActivity extends Activity {
+public class ChooseNewActivity extends Activity {
 
     int[] imageId = {
             R.mipmap.height,
             R.mipmap.weight,
             R.mipmap.diapers,
-            R.mipmap.tooth,
             R.mipmap.vaccination,
             R.mipmap.illness,
             R.mipmap.food,
@@ -35,7 +33,7 @@ public class NewActivity extends Activity {
         this.setFinishOnTouchOutside(false);
 
         final String[] features = getResources().getStringArray(R.array.parameters);
-        CustomGrid adapter = new CustomGrid(NewActivity.this, features, imageId);
+        CustomGrid adapter = new CustomGrid(ChooseNewActivity.this, features, imageId);
 
         GridView grid = (GridView)findViewById(R.id.gridView);
         grid.setAdapter(adapter);
