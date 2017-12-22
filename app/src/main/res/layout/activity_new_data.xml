@@ -30,6 +30,7 @@
         android:ems="10"
         android:inputType="date"
         android:textSize="@dimen/text_size"
+        android:textAlignment="center"
         android:textColor="@color/colorText"
         android:layout_below="@+id/dateName" />
 
@@ -71,6 +72,7 @@
         android:ems="10"
         android:inputType="text"
         android:textSize="@dimen/text_size"
+        android:textAlignment="center"
         android:textColor="@color/colorText"
         android:visibility="gone" />
 
@@ -101,6 +103,7 @@
         android:minLines="4"
         android:maxLines="4"
         android:lines="4"
+        android:textAlignment="center"
         android:textSize="@dimen/text_size"
         android:textColor="@color/colorText"
         android:visibility="gone" />
@@ -182,6 +185,7 @@
         android:minLines="4"
         android:maxLines="4"
         android:lines="4"
+        android:textAlignment="center"
         android:textSize="@dimen/text_size"
         android:textColor="@color/colorText"
         android:visibility="gone" />
