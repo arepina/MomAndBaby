@@ -11,20 +11,28 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ListView;
 
 import com.repina.anastasia.momandbaby.Activity.ChartActivity;
 import com.repina.anastasia.momandbaby.Activity.GoogleFitActivity;
 import com.repina.anastasia.momandbaby.Activity.ChooseFeatureActivity;
 import com.repina.anastasia.momandbaby.Activity.SignupActivity;
 import com.repina.anastasia.momandbaby.Activity.AppInfoActivity;
+import com.repina.anastasia.momandbaby.Adapters.ItemArrayAdapter;
+import com.repina.anastasia.momandbaby.Classes.FirebaseData;
 import com.repina.anastasia.momandbaby.Classes.SharedConstants;
 import com.repina.anastasia.momandbaby.Classes.ToastShow;
 import com.repina.anastasia.momandbaby.R;
+
+import java.util.ArrayList;
 
 import static android.content.Context.MODE_PRIVATE;
 
 
 public class FragmentTab extends Fragment {
+
+    private ItemArrayAdapter babyArrayAdapter;
+    private ItemArrayAdapter momArrayAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -35,6 +43,16 @@ public class FragmentTab extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v;
+
+        babyArrayAdapter = new ItemArrayAdapter(getContext(), R.layout.custom_row);
+        momArrayAdapter = new ItemArrayAdapter(getContext(), R.layout.custom_row);
+
+        ListView listViewBaby = (ListView) getActivity().findViewById(R.id.listViewBaby);
+        listViewBaby.setAdapter(babyArrayAdapter);
+
+        ListView listViewMom = (ListView) getActivity().findViewById(R.id.listViewMom);
+        listViewMom.setAdapter(momArrayAdapter);
+
         switch (this.getTag()) {
             case "Analytics": {
                 v = initAnalytics(inflater, container);
@@ -157,7 +175,6 @@ public class FragmentTab extends Fragment {
             public void onClick(View v) {
                 Intent nextActivity = new Intent(v.getContext(), ChartActivity.class);
                 nextActivity.putExtra("Type", "Mom");
-                //todo send bandCode in Extras here
                 startActivity(nextActivity);
             }
         });
@@ -168,7 +185,6 @@ public class FragmentTab extends Fragment {
             public void onClick(View v) {
                 Intent nextActivity = new Intent(v.getContext(), ChartActivity.class);
                 nextActivity.putExtra("Type", "Baby");
-                //todo send bandCode in Extras here
                 startActivity(nextActivity);
             }
         });
@@ -191,7 +207,8 @@ public class FragmentTab extends Fragment {
             }
         });
 
-        //todo
+        ArrayList<String[]> itemList = FirebaseData.getTodayMom();// Load today add's from Firebase for mom
+        FirebaseData.addValues(itemList, momArrayAdapter, getActivity().getResources());
 
         return v;
     }
@@ -211,8 +228,10 @@ public class FragmentTab extends Fragment {
             }
         });
 
-        //todo
+        ArrayList<String[]> itemList = FirebaseData.getTodayBaby();// Load today add's from Firebase for baby
+        FirebaseData.addValues(itemList, babyArrayAdapter, getActivity().getResources());
 
         return v;
     }
+
 }

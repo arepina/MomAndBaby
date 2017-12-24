@@ -9,7 +9,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -49,7 +48,7 @@ public class NewDataActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_data);
+        setContentView(R.layout.activity_add_feature);
         data = getIntent().getExtras().getString("data");
         features = getResources().getStringArray(R.array.parameters);
 
@@ -59,12 +58,13 @@ public class NewDataActivity extends AppCompatActivity {
         ratingBar = (RatingBar) findViewById(R.id.ratingBar);
         vaccinationsData = (Spinner) findViewById(R.id.vaccinationsData);
 
+        final Calendar dateAndTime = Calendar.getInstance();
+
         date = (EditText) findViewById(R.id.date);
+        date.setText(getFormattedDate(dateAndTime));
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Calendar dateAndTime = Calendar.getInstance();
-
                 new DatePickerDialog(NewDataActivity.this, R.style.Theme_AppCompat_DayNight_Dialog,
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
@@ -72,11 +72,7 @@ public class NewDataActivity extends AppCompatActivity {
                                 dateAndTime.set(Calendar.YEAR, year);
                                 dateAndTime.set(Calendar.MONTH, monthOfYear);
                                 dateAndTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                                SimpleDateFormat sd = new SimpleDateFormat(
-                                        "yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault());
-                                final Date startDate = dateAndTime.getTime();
-                                String formattedDate = sd.format(startDate);
-                                date.setText(formattedDate);
+                                date.setText(getFormattedDate(dateAndTime));
                             }
                         }, dateAndTime.get(Calendar.YEAR), dateAndTime.get(Calendar.MONTH), dateAndTime.get(Calendar.DAY_OF_MONTH)).show();
             }
@@ -87,11 +83,19 @@ public class NewDataActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 addNewValueToFirebase();
-                finish();
+                finish();//back to choosing
             }
         });
 
         changeLayout(data);
+    }
+
+    private String getFormattedDate(Calendar dateAndTime)
+    {
+        SimpleDateFormat sd = new SimpleDateFormat(
+                "yyyy-MM-dd", java.util.Locale.getDefault());
+        final Date startDate = dateAndTime.getTime();
+        return sd.format(startDate);
     }
 
     private void addNewValueToFirebase() {

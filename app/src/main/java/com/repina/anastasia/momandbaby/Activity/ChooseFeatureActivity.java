@@ -8,6 +8,7 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
+import com.repina.anastasia.momandbaby.Classes.ConnectionDetector;
 import com.repina.anastasia.momandbaby.Classes.CustomGrid;
 import com.repina.anastasia.momandbaby.R;
 
@@ -39,9 +40,12 @@ public class ChooseFeatureActivity extends Activity {
         grid.setAdapter(adapter);
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                Intent nextActivity = new Intent(getApplicationContext(), NewDataActivity.class);
-                nextActivity.putExtra("data", features[position]);
-                startActivity(nextActivity);
+                if(ConnectionDetector.isConnected(getApplicationContext())) {
+                    Intent nextActivity = new Intent(getApplicationContext(), NewDataActivity.class);
+                    nextActivity.putExtra("data", features[position]);
+                    startActivity(nextActivity);
+                    finish();//back to main screen
+                }
             }
         });
 

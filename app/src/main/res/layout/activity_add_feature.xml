@@ -57,7 +57,6 @@
         android:layout_marginLeft="@dimen/main_margin"
         android:layout_marginRight="@dimen/main_margin"
         android:popupBackground="@color/colorPrimaryDark"
-        android:background="@color/colorPrimaryDark"
         android:textColor="@color/colorText"
         android:visibility="gone" />
 
