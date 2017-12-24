@@ -108,66 +108,21 @@
         android:textColor="@color/colorText"
         android:visibility="gone" />
 
-    <LinearLayout
-        android:id="@+id/rateData"
+    <RatingBar
+        android:id="@+id/ratingBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/dataValue2"
         android:layout_marginTop="@dimen/main_margin"
         android:layout_marginLeft="@dimen/main_margin"
         android:layout_marginRight="@dimen/main_margin"
-        android:orientation="horizontal"
-        android:visibility="gone">
-
-        <Button
-            android:id="@+id/worse"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/colorPrimaryDark"
-            android:text="1" />
-
-        <Button
-            android:id="@+id/bad"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/colorAccent"
-            android:text="2"
-            android:textColor="@color/colorTextDark" />
-
-        <Button
-            android:id="@+id/nothingSpecial"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/colorPrimaryDark"
-            android:text="3" />
-
-        <Button
-            android:id="@+id/good"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/colorAccent"
-            android:text="4"
-            android:textColor="@color/colorTextDark" />
-
-        <Button
-            android:id="@+id/perfect"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/colorPrimaryDark"
-            android:text="5" />
-
-    </LinearLayout>
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/dataName3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/rateData"
+        android:layout_below="@+id/ratingBar"
         android:layout_marginTop="@dimen/main_margin"
         android:textAlignment="center"
         android:textSize="@dimen/text_size"
@@ -198,4 +153,6 @@
         android:text="@string/add"
         android:textColor="@color/colorText"
         android:layout_alignParentBottom="true" />
+
+
 </RelativeLayout>

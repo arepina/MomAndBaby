@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -41,6 +42,8 @@ public class NewDataActivity extends AppCompatActivity {
     private EditText dataValue1;
     private EditText dataValue2;
     private EditText dataValue3;
+    private RatingBar ratingBar;
+    private Spinner vaccinationsData;
 
 
     @Override
@@ -53,6 +56,8 @@ public class NewDataActivity extends AppCompatActivity {
         dataValue1 = (EditText) findViewById(R.id.dataValue1);
         dataValue2 = (EditText) findViewById(R.id.dataValue2);
         dataValue3 = (EditText) findViewById(R.id.dataValue3);
+        ratingBar = (RatingBar) findViewById(R.id.ratingBar);
+        vaccinationsData = (Spinner) findViewById(R.id.vaccinationsData);
 
         date = (EditText) findViewById(R.id.date);
         date.setOnClickListener(new View.OnClickListener() {
@@ -94,43 +99,50 @@ public class NewDataActivity extends AppCompatActivity {
         DatabaseReference databaseReference;
         SharedPreferences sp = getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
         String babyId = sp.getString(SharedConstants.BABY_ID_KEY, null);
+        String currentDate = date.getText().toString();
         if (data.equals(features[0])) {
-            Metrics m = new Metrics(babyId, 0, Double.parseDouble(dataValue1.getText().toString()), date.getText().toString()); // no weight
+            Metrics m = new Metrics(babyId, 0, Double.parseDouble(dataValue1.getText().toString()), currentDate); // no weight
             databaseReference = database.getReference().child(DatabaseNames.METRICS);
             databaseReference.push().setValue(m);
         }
         if (data.equals(features[1])) {
-            Metrics m = new Metrics(babyId, Double.parseDouble(dataValue1.getText().toString()), 0, date.getText().toString()); // no height
+            Metrics m = new Metrics(babyId, Double.parseDouble(dataValue1.getText().toString()), 0, currentDate); // no height
             databaseReference = database.getReference().child(DatabaseNames.METRICS);
             databaseReference.push().setValue(m);
         }
         if (data.equals(features[2])) {
-            Stool s = new Stool();
+            Stool s = new Stool(babyId, currentDate, dataValue3.getText().toString(), ratingBar.getNumStars());
             databaseReference = database.getReference().child(DatabaseNames.STOOL);
             databaseReference.push().setValue(s);
         }
         if (data.equals(features[3])) {
-            Vaccination v = new Vaccination();
+            String vaccinationName = vaccinationsData.getSelectedItem().toString();
+            Vaccination v = new Vaccination(babyId, currentDate, vaccinationName, dataValue2.getText().toString());
             databaseReference = database.getReference().child(DatabaseNames.VACCINATION);
             databaseReference.push().setValue(v);
         }
         if (data.equals(features[4])) {
-            Illness i = new Illness();
+            String symptoms = dataValue2.getText().toString();
+            String pills = dataValue3.getText().toString();
+            double temperature = Double.parseDouble(dataValue1.getText().toString());
+            Illness i = new Illness(babyId, currentDate,symptoms, pills, temperature);
             databaseReference = database.getReference().child(DatabaseNames.ILLNESS);
             databaseReference.push().setValue(i);
         }
         if (data.equals(features[5])) {
-            Food f = new Food();
+            Food f = new Food(babyId, currentDate, dataValue3.getText().toString(), ratingBar.getNumStars());
             databaseReference = database.getReference().child(DatabaseNames.FOOD);
             databaseReference.push().setValue(f);
         }
         if (data.equals(features[6])) {
-            Outdoor o = new Outdoor();
+            double length = Double.parseDouble(dataValue1.getText().toString());
+            Outdoor o = new Outdoor(babyId, currentDate, length);
             databaseReference = database.getReference().child(DatabaseNames.OUTDOOR);
             databaseReference.push().setValue(o);
         }
         if (data.equals(features[7])) {
-            Sleep s = new Sleep();
+            double length = Double.parseDouble(dataValue1.getText().toString());
+            Sleep s = new Sleep(babyId, currentDate, length);
             databaseReference = database.getReference().child(DatabaseNames.SLEEP);
             databaseReference.push().setValue(s);
         }
@@ -140,8 +152,6 @@ public class NewDataActivity extends AppCompatActivity {
         TextView dataName1 = (TextView) findViewById(R.id.dataName1);
         TextView dataName2 = (TextView) findViewById(R.id.dataName2);
         TextView dataName3 = (TextView) findViewById(R.id.dataName3);
-        LinearLayout rateData = (LinearLayout) findViewById(R.id.rateData);
-        Spinner vaccinationsData = (Spinner) findViewById(R.id.vaccinationsData);
         if (data.equals(features[0])) {
             dataName1.setText(getString(R.string.add_new_data) + " " + getString(R.string.height));
             dataName1.setVisibility(View.VISIBLE);
@@ -155,7 +165,7 @@ public class NewDataActivity extends AppCompatActivity {
         if (data.equals(features[2])) {
             dataName2.setText(getString(R.string.rateValue) + " " + getString(R.string.diapers));
             dataName2.setVisibility(View.VISIBLE);
-            rateData.setVisibility(View.VISIBLE);
+            ratingBar.setVisibility(View.VISIBLE);
             dataName3.setText(R.string.Comment);
             dataName3.setVisibility(View.VISIBLE);
             dataValue3.setVisibility(View.VISIBLE);
@@ -185,7 +195,7 @@ public class NewDataActivity extends AppCompatActivity {
         if (data.equals(features[5])) {
             dataName2.setText(getString(R.string.rateValue) + getString(R.string.food));
             dataName2.setVisibility(View.VISIBLE);
-            rateData.setVisibility(View.VISIBLE);
+            ratingBar.setVisibility(View.VISIBLE);
             dataName3.setText(R.string.Comment);
             dataName3.setVisibility(View.VISIBLE);
             dataValue3.setVisibility(View.VISIBLE);

@@ -11,7 +11,7 @@ import android.widget.GridView;
 import com.repina.anastasia.momandbaby.Classes.CustomGrid;
 import com.repina.anastasia.momandbaby.R;
 
-public class ChooseNewActivity extends Activity {
+public class ChooseFeatureActivity extends Activity {
 
     int[] imageId = {
             R.mipmap.height,
@@ -28,12 +28,12 @@ public class ChooseNewActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_new);
+        setContentView(R.layout.activity_choose_feature);
 
         this.setFinishOnTouchOutside(false);
 
         final String[] features = getResources().getStringArray(R.array.parameters);
-        CustomGrid adapter = new CustomGrid(ChooseNewActivity.this, features, imageId);
+        CustomGrid adapter = new CustomGrid(ChooseFeatureActivity.this, features, imageId);
 
         GridView grid = (GridView)findViewById(R.id.gridView);
         grid.setAdapter(adapter);
