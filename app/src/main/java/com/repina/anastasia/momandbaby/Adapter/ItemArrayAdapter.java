@@ -1,4 +1,4 @@
-package com.repina.anastasia.momandbaby.Adapters;
+package com.repina.anastasia.momandbaby.Adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;

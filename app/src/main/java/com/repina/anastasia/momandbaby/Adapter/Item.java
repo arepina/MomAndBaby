@@ -1,4 +1,4 @@
-package com.repina.anastasia.momandbaby.Adapters;
+package com.repina.anastasia.momandbaby.Adapter;
 
 
 public class Item {

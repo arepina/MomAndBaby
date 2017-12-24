@@ -18,7 +18,7 @@ import com.repina.anastasia.momandbaby.Activity.GoogleFitActivity;
 import com.repina.anastasia.momandbaby.Activity.ChooseFeatureActivity;
 import com.repina.anastasia.momandbaby.Activity.SignupActivity;
 import com.repina.anastasia.momandbaby.Activity.AppInfoActivity;
-import com.repina.anastasia.momandbaby.Adapters.ItemArrayAdapter;
+import com.repina.anastasia.momandbaby.Adapter.ItemArrayAdapter;
 import com.repina.anastasia.momandbaby.Classes.FirebaseData;
 import com.repina.anastasia.momandbaby.Classes.SharedConstants;
 import com.repina.anastasia.momandbaby.Classes.ToastShow;

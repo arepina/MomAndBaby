@@ -27,12 +27,11 @@ import com.repina.anastasia.momandbaby.DataBase.Stool;
 import com.repina.anastasia.momandbaby.DataBase.Vaccination;
 import com.repina.anastasia.momandbaby.R;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
+import static com.repina.anastasia.momandbaby.Classes.FormattedDate.getFormattedDate;
 
-public class NewDataActivity extends AppCompatActivity {
+public class NewFeatureActivity extends AppCompatActivity {
 
     private String[] features;
     private String data;
@@ -65,7 +64,7 @@ public class NewDataActivity extends AppCompatActivity {
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(NewDataActivity.this, R.style.Theme_AppCompat_DayNight_Dialog,
+                new DatePickerDialog(NewFeatureActivity.this, R.style.Theme_AppCompat_DayNight_Dialog,
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -88,14 +87,6 @@ public class NewDataActivity extends AppCompatActivity {
         });
 
         changeLayout(data);
-    }
-
-    private String getFormattedDate(Calendar dateAndTime)
-    {
-        SimpleDateFormat sd = new SimpleDateFormat(
-                "yyyy-MM-dd", java.util.Locale.getDefault());
-        final Date startDate = dateAndTime.getTime();
-        return sd.format(startDate);
     }
 
     private void addNewValueToFirebase() {

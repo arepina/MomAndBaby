@@ -41,7 +41,7 @@ public class ChooseFeatureActivity extends Activity {
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 if(ConnectionDetector.isConnected(getApplicationContext())) {
-                    Intent nextActivity = new Intent(getApplicationContext(), NewDataActivity.class);
+                    Intent nextActivity = new Intent(getApplicationContext(), NewFeatureActivity.class);
                     nextActivity.putExtra("data", features[position]);
                     startActivity(nextActivity);
                     finish();//back to main screen

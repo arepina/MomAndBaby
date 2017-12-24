@@ -30,7 +30,7 @@
             android:name=".Activity.ChooseFeatureActivity"
             android:theme="@android:style/Theme.Dialog" />
         <activity android:name=".Activity.ChartActivity" />
-        <activity android:name=".Activity.NewDataActivity" />
+        <activity android:name=".Activity.NewFeatureActivity" />
         <activity android:name=".Activity.AppInfoActivity"></activity>
     </application>
 
