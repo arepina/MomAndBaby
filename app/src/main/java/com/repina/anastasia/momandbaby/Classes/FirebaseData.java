@@ -10,11 +10,11 @@ import java.util.ArrayList;
 public class FirebaseData {
 
     public static ArrayList<String[]> getTodayBaby() {
-        return null;
+        return new ArrayList<>();
     }
 
     public static ArrayList<String[]> getTodayMom() {
-        return null;
+        return new ArrayList<>();
     }
 
     public static void addValues(ArrayList<String[]> itemList, ItemArrayAdapter adapter, Resources resources) {

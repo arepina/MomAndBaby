@@ -31,9 +31,6 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class FragmentTab extends Fragment {
 
-    private ItemArrayAdapter babyArrayAdapter;
-    private ItemArrayAdapter momArrayAdapter;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,14 +41,6 @@ public class FragmentTab extends Fragment {
                              Bundle savedInstanceState) {
         View v;
 
-        babyArrayAdapter = new ItemArrayAdapter(getContext(), R.layout.custom_row);
-        momArrayAdapter = new ItemArrayAdapter(getContext(), R.layout.custom_row);
-
-        ListView listViewBaby = (ListView) getActivity().findViewById(R.id.listViewBaby);
-        listViewBaby.setAdapter(babyArrayAdapter);
-
-        ListView listViewMom = (ListView) getActivity().findViewById(R.id.listViewMom);
-        listViewMom.setAdapter(momArrayAdapter);
 
         switch (this.getTag()) {
             case "Analytics": {
@@ -207,8 +196,12 @@ public class FragmentTab extends Fragment {
             }
         });
 
+
+        ListView listViewMom = (ListView) v.findViewById(R.id.listViewMom);
+        ItemArrayAdapter momArrayAdapter = new ItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row);
         ArrayList<String[]> itemList = FirebaseData.getTodayMom();// Load today add's from Firebase for mom
         FirebaseData.addValues(itemList, momArrayAdapter, getActivity().getResources());
+        listViewMom.setAdapter(momArrayAdapter);
 
         return v;
     }
@@ -228,8 +221,11 @@ public class FragmentTab extends Fragment {
             }
         });
 
+        ListView listViewBaby = (ListView) v.findViewById(R.id.listViewBaby);
+        ItemArrayAdapter babyArrayAdapter = new ItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row);
         ArrayList<String[]> itemList = FirebaseData.getTodayBaby();// Load today add's from Firebase for baby
         FirebaseData.addValues(itemList, babyArrayAdapter, getActivity().getResources());
+        listViewBaby.setAdapter(babyArrayAdapter);
 
         return v;
     }
