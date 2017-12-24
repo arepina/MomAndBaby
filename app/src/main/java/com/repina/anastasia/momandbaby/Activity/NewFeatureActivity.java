@@ -29,12 +29,15 @@ import com.repina.anastasia.momandbaby.R;
 
 import java.util.Calendar;
 
-import static com.repina.anastasia.momandbaby.Classes.FormattedDate.getFormattedDate;
+import static com.repina.anastasia.momandbaby.Classes.FormattedDate.getFormattedDateWithTime;
+import static com.repina.anastasia.momandbaby.Classes.FormattedDate.getFormattedDateWithoutTime;
 
 public class NewFeatureActivity extends AppCompatActivity {
 
     private String[] features;
-    private String data;
+    private String featureName;
+
+    private String fullDate;
 
     private EditText date;
     private EditText dataValue1;
@@ -48,7 +51,7 @@ public class NewFeatureActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_feature);
-        data = getIntent().getExtras().getString("data");
+        featureName = getIntent().getExtras().getString("data");
         features = getResources().getStringArray(R.array.parameters);
 
         dataValue1 = (EditText) findViewById(R.id.dataValue1);
@@ -60,7 +63,8 @@ public class NewFeatureActivity extends AppCompatActivity {
         final Calendar dateAndTime = Calendar.getInstance();
 
         date = (EditText) findViewById(R.id.date);
-        date.setText(getFormattedDate(dateAndTime));
+        date.setText(getFormattedDateWithoutTime(dateAndTime));
+        fullDate = getFormattedDateWithTime(dateAndTime);
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,7 +75,8 @@ public class NewFeatureActivity extends AppCompatActivity {
                                 dateAndTime.set(Calendar.YEAR, year);
                                 dateAndTime.set(Calendar.MONTH, monthOfYear);
                                 dateAndTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                                date.setText(getFormattedDate(dateAndTime));
+                                date.setText(getFormattedDateWithoutTime(dateAndTime));
+                                fullDate = getFormattedDateWithTime(dateAndTime);
                             }
                         }, dateAndTime.get(Calendar.YEAR), dateAndTime.get(Calendar.MONTH), dateAndTime.get(Calendar.DAY_OF_MONTH)).show();
             }
@@ -86,7 +91,7 @@ public class NewFeatureActivity extends AppCompatActivity {
             }
         });
 
-        changeLayout(data);
+        changeLayout(featureName);
     }
 
     private void addNewValueToFirebase() {
@@ -94,29 +99,29 @@ public class NewFeatureActivity extends AppCompatActivity {
         DatabaseReference databaseReference;
         SharedPreferences sp = getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
         String babyId = sp.getString(SharedConstants.BABY_ID_KEY, null);
-        String currentDate = date.getText().toString();
-        if (data.equals(features[0])) {
+        String currentDate = fullDate;
+        if (featureName.equals(features[0])) {
             Metrics m = new Metrics(babyId, 0, Double.parseDouble(dataValue1.getText().toString()), currentDate); // no weight
             databaseReference = database.getReference().child(DatabaseNames.METRICS);
             databaseReference.push().setValue(m);
         }
-        if (data.equals(features[1])) {
+        if (featureName.equals(features[1])) {
             Metrics m = new Metrics(babyId, Double.parseDouble(dataValue1.getText().toString()), 0, currentDate); // no height
             databaseReference = database.getReference().child(DatabaseNames.METRICS);
             databaseReference.push().setValue(m);
         }
-        if (data.equals(features[2])) {
+        if (featureName.equals(features[2])) {
             Stool s = new Stool(babyId, currentDate, dataValue3.getText().toString(), ratingBar.getNumStars());
             databaseReference = database.getReference().child(DatabaseNames.STOOL);
             databaseReference.push().setValue(s);
         }
-        if (data.equals(features[3])) {
+        if (featureName.equals(features[3])) {
             String vaccinationName = vaccinationsData.getSelectedItem().toString();
             Vaccination v = new Vaccination(babyId, currentDate, vaccinationName, dataValue2.getText().toString());
             databaseReference = database.getReference().child(DatabaseNames.VACCINATION);
             databaseReference.push().setValue(v);
         }
-        if (data.equals(features[4])) {
+        if (featureName.equals(features[4])) {
             String symptoms = dataValue2.getText().toString();
             String pills = dataValue3.getText().toString();
             double temperature = Double.parseDouble(dataValue1.getText().toString());
@@ -124,18 +129,18 @@ public class NewFeatureActivity extends AppCompatActivity {
             databaseReference = database.getReference().child(DatabaseNames.ILLNESS);
             databaseReference.push().setValue(i);
         }
-        if (data.equals(features[5])) {
+        if (featureName.equals(features[5])) {
             Food f = new Food(babyId, currentDate, dataValue3.getText().toString(), ratingBar.getNumStars());
             databaseReference = database.getReference().child(DatabaseNames.FOOD);
             databaseReference.push().setValue(f);
         }
-        if (data.equals(features[6])) {
+        if (featureName.equals(features[6])) {
             double length = Double.parseDouble(dataValue1.getText().toString());
             Outdoor o = new Outdoor(babyId, currentDate, length);
             databaseReference = database.getReference().child(DatabaseNames.OUTDOOR);
             databaseReference.push().setValue(o);
         }
-        if (data.equals(features[7])) {
+        if (featureName.equals(features[7])) {
             double length = Double.parseDouble(dataValue1.getText().toString());
             Sleep s = new Sleep(babyId, currentDate, length);
             databaseReference = database.getReference().child(DatabaseNames.SLEEP);

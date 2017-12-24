@@ -48,7 +48,8 @@ public class DotsActivity extends IntroActivity {
      * Generate the pages displayed in this activity.
      */
     @Override
-    protected Collection<Fragment> generatePages(Bundle savedInstanceState) {
+    protected Collection<Fragment> generatePages(Bundle savedInstanceState) throws OutOfMemoryError {
+        //todo https://stackoverflow.com/questions/41070856/getting-a-fatal-exception-main-java-lang-outofmemoryerror
         // This variable holds the pages while they are being created
         ArrayList<Fragment> pages = new ArrayList<>();
         ParallaxPage newPage = ParallaxPage.newInstance();

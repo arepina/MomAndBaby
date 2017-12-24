@@ -20,7 +20,9 @@
         android:id="@+id/itemDesc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/itemImg"
         android:layout_centerVertical="true"
-        android:paddingTop="@dimen/main_padding"/>
+        android:layout_toRightOf="@+id/itemImg"
+        android:gravity="center_vertical"
+        android:paddingTop="@dimen/main_padding"
+        android:textColor="@color/colorTextDark" />
 </RelativeLayout>

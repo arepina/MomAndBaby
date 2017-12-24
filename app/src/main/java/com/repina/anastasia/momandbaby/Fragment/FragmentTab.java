@@ -18,6 +18,7 @@ import com.repina.anastasia.momandbaby.Activity.GoogleFitActivity;
 import com.repina.anastasia.momandbaby.Activity.ChooseFeatureActivity;
 import com.repina.anastasia.momandbaby.Activity.SignupActivity;
 import com.repina.anastasia.momandbaby.Activity.AppInfoActivity;
+import com.repina.anastasia.momandbaby.Adapter.Item;
 import com.repina.anastasia.momandbaby.Adapter.ItemArrayAdapter;
 import com.repina.anastasia.momandbaby.Classes.FirebaseData;
 import com.repina.anastasia.momandbaby.Classes.SharedConstants;
@@ -199,8 +200,7 @@ public class FragmentTab extends Fragment {
 
         ListView listViewMom = (ListView) v.findViewById(R.id.listViewMom);
         ItemArrayAdapter momArrayAdapter = new ItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row);
-        ArrayList<String[]> itemList = FirebaseData.getTodayMom();// Load today add's from Firebase for mom
-        FirebaseData.addValues(itemList, momArrayAdapter, getActivity().getResources());
+        FirebaseData.updateTodayMom();// Load today add's from Firebase for mom
         listViewMom.setAdapter(momArrayAdapter);
 
         return v;
@@ -223,8 +223,7 @@ public class FragmentTab extends Fragment {
 
         ListView listViewBaby = (ListView) v.findViewById(R.id.listViewBaby);
         ItemArrayAdapter babyArrayAdapter = new ItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row);
-        ArrayList<String[]> itemList = FirebaseData.getTodayBaby();// Load today add's from Firebase for baby
-        FirebaseData.addValues(itemList, babyArrayAdapter, getActivity().getResources());
+        FirebaseData.updateTodayBaby(getActivity().getResources(), babyArrayAdapter);// Load today add's from Firebase for baby
         listViewBaby.setAdapter(babyArrayAdapter);
 
         return v;

@@ -9,15 +9,17 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.repina.anastasia.momandbaby.Adapter.Item;
 import com.repina.anastasia.momandbaby.Adapter.ItemArrayAdapter;
+import com.repina.anastasia.momandbaby.DataBase.DatabaseNames;
+import com.repina.anastasia.momandbaby.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 public class FirebaseData {
 
-    public static ArrayList<String[]> getTodayBaby() {
-
-        ArrayList<String[]> today = new ArrayList<>();
+    public static void updateTodayBaby(final Resources resources, final ItemArrayAdapter adapter) {
 
         FirebaseDatabase database = FirebaseConnection.getDatabase();
 
@@ -29,9 +31,25 @@ public class FirebaseData {
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+                        ArrayList<Item> today = new ArrayList<>();
                         if (dataSnapshot.exists()) {
-                            DataSnapshot snapshot = dataSnapshot.getChildren().iterator().next();
-                            //todo add today data to today array list
+                            for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+                                if (!singleSnapshot.getKey().equals(DatabaseNames.USER)
+                                        & !singleSnapshot.getKey().equals(DatabaseNames.BAND)
+                                        & !singleSnapshot.getKey().equals(DatabaseNames.BANDDATA)) {
+                                    HashMap<String, HashMap<String, String>> items =
+                                            (HashMap<String, HashMap<String, String>>) singleSnapshot.getValue();
+                                    for (Map.Entry<String, HashMap<String, String>> entry : items.entrySet()) {
+                                        HashMap<String, String> value = entry.getValue();
+                                        String date = value.get("date");
+                                        if (date.substring(0, 10).equals(FormattedDate.getFormattedDateWithoutTime(dateAndTime))) {
+                                            int imageId = getImageId(singleSnapshot.getKey(), resources);
+                                            Item it = new Item(imageId, date.substring(10, date.length()));
+                                            adapter.add(it);
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
 
@@ -39,23 +57,28 @@ public class FirebaseData {
                     public void onCancelled(DatabaseError databaseError) {
                     }
                 });
-
-        return today;
     }
 
-    public static ArrayList<String[]> getTodayMom() {
+    public static ArrayList<Item> updateTodayMom() {
         return new ArrayList<>();
     }
 
-    public static void addValues(ArrayList<String[]> itemList, ItemArrayAdapter adapter, Resources resources) {
-        for (String[] itemData : itemList) {
-            String itemImg = itemData[0];
-            String itemDesc = itemData[1];
-            int itemImgResId = resources.getIdentifier(itemImg, "drawable", "com.repina.anastasia.momandbaby");
-
-            Item item = new Item(itemImgResId, itemDesc);
-            adapter.add(item);
-        }
+    private static int getImageId(String name, Resources resources) {
+        //todo think about height and weight icon
+        if (name.equals(DatabaseNames.METRICS))
+            return R.mipmap.height;
+        if (name.equals(DatabaseNames.STOOL))
+            return R.mipmap.diapers;
+        if (name.equals(DatabaseNames.VACCINATION))
+            return R.mipmap.vaccination;
+        if (name.equals(DatabaseNames.ILLNESS))
+            return R.mipmap.illness;
+        if (name.equals(DatabaseNames.FOOD))
+            return R.mipmap.food;
+        if (name.equals(DatabaseNames.OUTDOOR))
+            return R.mipmap.outdoor;
+        if (name.equals(DatabaseNames.SLEEP))
+            return R.mipmap.sleep;
+        return -1;
     }
-
 }
