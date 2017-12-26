@@ -41,16 +41,6 @@
         android:text="@string/contact_developer" />
 
     <Button
-        android:id="@+id/rate"
-        android:layout_below="@+id/feedback"
-        android:layout_marginTop="@dimen/main_margin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
-        android:text="@string/rate_us" />
-
-
-    <Button
         android:id="@+id/exit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

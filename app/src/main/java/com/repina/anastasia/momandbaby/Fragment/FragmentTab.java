@@ -12,25 +12,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.repina.anastasia.momandbaby.Activity.ChartActivity;
 import com.repina.anastasia.momandbaby.Activity.GoogleFitActivity;
 import com.repina.anastasia.momandbaby.Activity.ChooseFeatureActivity;
 import com.repina.anastasia.momandbaby.Activity.SignupActivity;
 import com.repina.anastasia.momandbaby.Activity.AppInfoActivity;
-import com.repina.anastasia.momandbaby.Adapter.Item;
 import com.repina.anastasia.momandbaby.Adapter.ItemArrayAdapter;
 import com.repina.anastasia.momandbaby.Classes.FirebaseData;
+import com.repina.anastasia.momandbaby.Classes.FormattedDate;
 import com.repina.anastasia.momandbaby.Classes.SharedConstants;
 import com.repina.anastasia.momandbaby.Classes.ToastShow;
 import com.repina.anastasia.momandbaby.R;
 
-import java.util.ArrayList;
+import java.util.Calendar;
 
 import static android.content.Context.MODE_PRIVATE;
 
 
 public class FragmentTab extends Fragment {
+
+    private Calendar calendar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,6 +45,7 @@ public class FragmentTab extends Fragment {
                              Bundle savedInstanceState) {
         View v;
 
+        calendar = Calendar.getInstance();
 
         switch (this.getTag()) {
             case "Analytics": {
@@ -104,27 +108,7 @@ public class FragmentTab extends Fragment {
                 startActivity(intent);
             }
         });
-
-        Button rate = (Button) v.findViewById(R.id.rate);
-        rate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ToastShow.show(v.getContext(), R.string.soon);
-                //Try Google play
-               /* Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse("market://details?id=com.cubeactive.qnotelistfree"));
-                if (!MyStartActivity(intent)) {
-                    //Market (Google play) app seems not installed, let's try to open a webbrowser
-                    intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.cubeactive.qnotelistfree"));
-                    if (!MyStartActivity(intent)) {
-                        //Well if this also fails, we have run out of options, inform the user.
-                        Toast.makeText(getApplicationContext(), "Could not open Android market, please install the market app.", Toast.LENGTH_SHORT).show();
-                    }
-                }*/
-                //TODO: add link to google play
-            }
-        });
-
+        
         Button appInfo = (Button) v.findViewById(R.id.appInfo);
         appInfo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -197,11 +181,29 @@ public class FragmentTab extends Fragment {
             }
         });
 
-
         ListView listViewMom = (ListView) v.findViewById(R.id.listViewMom);
         ItemArrayAdapter momArrayAdapter = new ItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row);
         FirebaseData.updateTodayMom();// Load today add's from Firebase for mom
         listViewMom.setAdapter(momArrayAdapter);
+
+        final TextView headerDate = (TextView)v.findViewById(R.id.headerMom);
+        headerDate.setText(R.string.today);
+
+        TextView yesterday = (TextView)v.findViewById(R.id.yesterdayMom);
+        yesterday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goYesterday(headerDate);
+            }
+        });
+
+        TextView tomorrow = (TextView)v.findViewById(R.id.tomorrowMom);
+        tomorrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goTomorrow(headerDate);
+            }
+        });
 
         return v;
     }
@@ -226,7 +228,52 @@ public class FragmentTab extends Fragment {
         FirebaseData.updateTodayBaby(getActivity().getResources(), babyArrayAdapter);// Load today add's from Firebase for baby
         listViewBaby.setAdapter(babyArrayAdapter);
 
+        final TextView headerDate = (TextView)v.findViewById(R.id.headerBaby);
+        headerDate.setText(R.string.today);
+
+        TextView yesterday = (TextView)v.findViewById(R.id.yesterdayBaby);
+        yesterday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               goYesterday(headerDate);
+            }
+        });
+
+        TextView tomorrow = (TextView)v.findViewById(R.id.tomorrowBaby);
+        tomorrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goTomorrow(headerDate);
+            }
+        });
+
         return v;
+    }
+
+    private void goYesterday(TextView headerDate)
+    {
+        calendar.add(Calendar.DAY_OF_MONTH, -1);
+        Calendar today = Calendar.getInstance();
+        if (calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR)
+                && calendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR))
+            headerDate.setText(R.string.today);
+        else {
+            String date = FormattedDate.getFormattedDateWithoutTime(calendar);
+            headerDate.setText(date);
+        }
+    }
+
+    private void goTomorrow(TextView headerDate)
+    {
+        calendar.add(Calendar.DAY_OF_MONTH, 1);
+        Calendar today = Calendar.getInstance();
+        if (calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR)
+                && calendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR))
+            headerDate.setText(R.string.today);
+        else {
+            String date = FormattedDate.getFormattedDateWithoutTime(calendar);
+            headerDate.setText(date);
+        }
     }
 
 }
