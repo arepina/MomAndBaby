@@ -33,6 +33,11 @@ public class SharedConstants {
      */
     public static final String BABY_GENDER_KEY = "baby_gender_spkey";
 
+    /**
+     * Key to use in {@code APP_PREFS} to find baby' birthday
+     */
+    public static final String BABY_BIRTHDAY = "baby_birthday_spkey";
+
 
     /**
      * Key to use in {@code APP_PREFS} to prevent the intro screen from displaying again

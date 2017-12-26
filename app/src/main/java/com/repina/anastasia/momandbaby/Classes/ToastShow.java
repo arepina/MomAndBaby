@@ -15,4 +15,12 @@ public class ToastShow {
         if (textView != null) textView.setGravity(Gravity.CENTER);
         toast.show();
     }
+
+    public static void show(Context context, String text)
+    {
+        Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
+        TextView textView = (TextView) toast.getView().findViewById(android.R.id.message);
+        if (textView != null) textView.setGravity(Gravity.CENTER);
+        toast.show();
+    }
 }

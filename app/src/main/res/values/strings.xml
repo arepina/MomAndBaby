@@ -50,6 +50,9 @@
     <string name="send_report_baby">Отправить отчет о здоровье малыша на почту</string>
     <string name="app_description">Приложение разработано Репиной А.А. в рамках выполнения дипломной работы. Научный руководитель Ахметсафина Р.З. Комментарии, пожелания и предложения привествуются!</string>
     <string name="Comment">Комментарий</string>
+    <string name="happy_birthday">С днем рождения,</string>
+    <string name="mr">дорогой</string>
+    <string name="mrs">дорогая</string>
 
     <string-array name="characteristics">
         <item>Шаги</item>

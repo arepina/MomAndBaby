@@ -12,26 +12,22 @@ import com.repina.anastasia.momandbaby.Adapter.ItemArrayAdapter;
 import com.repina.anastasia.momandbaby.DataBase.DatabaseNames;
 import com.repina.anastasia.momandbaby.R;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
 public class FirebaseData {
 
-    public static void updateTodayBaby(final Resources resources, final ItemArrayAdapter adapter) {
+    public static void getBabyStats(final ItemArrayAdapter adapter, final Calendar dateAndTime) {
 
         FirebaseDatabase database = FirebaseConnection.getDatabase();
 
         final DatabaseReference databaseReference = database.getReference();
 
-        final Calendar dateAndTime = Calendar.getInstance();
-
         databaseReference
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        ArrayList<Item> today = new ArrayList<>();
                         if (dataSnapshot.exists()) {
                             for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
                                 if (!singleSnapshot.getKey().equals(DatabaseNames.USER)
@@ -42,8 +38,9 @@ public class FirebaseData {
                                     for (Map.Entry<String, HashMap<String, String>> entry : items.entrySet()) {
                                         HashMap<String, String> value = entry.getValue();
                                         String date = value.get("date");
+                                        //todo check babyID
                                         if (date.substring(0, 10).equals(FormattedDate.getFormattedDateWithoutTime(dateAndTime))) {
-                                            int imageId = getImageId(singleSnapshot.getKey(), resources);
+                                            int imageId = getImageId(singleSnapshot.getKey());
                                             Item it = new Item(imageId, date.substring(10, date.length()));
                                             adapter.add(it);
                                         }
@@ -59,11 +56,43 @@ public class FirebaseData {
                 });
     }
 
-    public static ArrayList<Item> updateTodayMom() {
-        return new ArrayList<>();
+    public static void getMomStats(final ItemArrayAdapter adapter, final Calendar dateAndTime) {
+
+        FirebaseDatabase database = FirebaseConnection.getDatabase();
+
+        final DatabaseReference databaseReference = database.getReference();
+
+        databaseReference
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+                                if (singleSnapshot.getKey().equals(DatabaseNames.BANDDATA)) {
+                                    HashMap<String, HashMap<String, String>> items =
+                                            (HashMap<String, HashMap<String, String>>) singleSnapshot.getValue();
+                                    for (Map.Entry<String, HashMap<String, String>> entry : items.entrySet()) {
+                                        HashMap<String, String> value = entry.getValue();
+                                        String date = value.get("date");
+                                        //todo check momID
+                                        if (date.substring(0, 10).equals(FormattedDate.getFormattedDateWithoutTime(dateAndTime))) {
+                                            int imageId = getImageId(singleSnapshot.getKey());
+                                            Item it = new Item(imageId, date.substring(10, date.length()));
+                                            adapter.add(it);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
     }
 
-    private static int getImageId(String name, Resources resources) {
+    private static int getImageId(String name) {
         //todo think about height and weight icon
         if (name.equals(DatabaseNames.METRICS))
             return R.mipmap.height;

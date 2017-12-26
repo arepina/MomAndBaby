@@ -23,7 +23,6 @@ import com.repina.anastasia.momandbaby.Adapter.ItemArrayAdapter;
 import com.repina.anastasia.momandbaby.Classes.FirebaseData;
 import com.repina.anastasia.momandbaby.Classes.FormattedDate;
 import com.repina.anastasia.momandbaby.Classes.SharedConstants;
-import com.repina.anastasia.momandbaby.Classes.ToastShow;
 import com.repina.anastasia.momandbaby.R;
 
 import java.util.Calendar;
@@ -108,7 +107,7 @@ public class FragmentTab extends Fragment {
                 startActivity(intent);
             }
         });
-        
+
         Button appInfo = (Button) v.findViewById(R.id.appInfo);
         appInfo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -182,8 +181,8 @@ public class FragmentTab extends Fragment {
         });
 
         ListView listViewMom = (ListView) v.findViewById(R.id.listViewMom);
-        ItemArrayAdapter momArrayAdapter = new ItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row);
-        FirebaseData.updateTodayMom();// Load today add's from Firebase for mom
+        final ItemArrayAdapter momArrayAdapter = new ItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row);
+        FirebaseData.getMomStats(momArrayAdapter, calendar);// Load today add's from Firebase for mom
         listViewMom.setAdapter(momArrayAdapter);
 
         final TextView headerDate = (TextView)v.findViewById(R.id.headerMom);
@@ -194,6 +193,7 @@ public class FragmentTab extends Fragment {
             @Override
             public void onClick(View v) {
                 goYesterday(headerDate);
+                FirebaseData.getMomStats(momArrayAdapter, calendar);
             }
         });
 
@@ -202,6 +202,7 @@ public class FragmentTab extends Fragment {
             @Override
             public void onClick(View v) {
                 goTomorrow(headerDate);
+                FirebaseData.getMomStats(momArrayAdapter, calendar);
             }
         });
 
@@ -224,8 +225,8 @@ public class FragmentTab extends Fragment {
         });
 
         ListView listViewBaby = (ListView) v.findViewById(R.id.listViewBaby);
-        ItemArrayAdapter babyArrayAdapter = new ItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row);
-        FirebaseData.updateTodayBaby(getActivity().getResources(), babyArrayAdapter);// Load today add's from Firebase for baby
+        final ItemArrayAdapter babyArrayAdapter = new ItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row);
+        FirebaseData.getBabyStats(babyArrayAdapter, calendar);// Load today add's from Firebase for baby
         listViewBaby.setAdapter(babyArrayAdapter);
 
         final TextView headerDate = (TextView)v.findViewById(R.id.headerBaby);
@@ -236,6 +237,7 @@ public class FragmentTab extends Fragment {
             @Override
             public void onClick(View v) {
                goYesterday(headerDate);
+                FirebaseData.getBabyStats(babyArrayAdapter, calendar);
             }
         });
 
@@ -244,6 +246,7 @@ public class FragmentTab extends Fragment {
             @Override
             public void onClick(View v) {
                 goTomorrow(headerDate);
+                FirebaseData.getBabyStats(babyArrayAdapter, calendar);
             }
         });
 
