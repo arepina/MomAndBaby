@@ -1,11 +1,14 @@
 package com.repina.anastasia.momandbaby.Fragment;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,9 +25,13 @@ import com.repina.anastasia.momandbaby.Activity.AppInfoActivity;
 import com.repina.anastasia.momandbaby.Adapter.ItemArrayAdapter;
 import com.repina.anastasia.momandbaby.Classes.FirebaseData;
 import com.repina.anastasia.momandbaby.Classes.FormattedDate;
+import com.repina.anastasia.momandbaby.Classes.SendEmail;
 import com.repina.anastasia.momandbaby.Classes.SharedConstants;
 import com.repina.anastasia.momandbaby.R;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Calendar;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -121,7 +128,34 @@ public class FragmentTab extends Fragment {
         sendReportBaby.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //todo
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+                builder.setTitle(R.string.choose_period);
+
+                builder.setPositiveButton(R.string.for_day, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        SendEmail.sendEmail(getContext(), 0);
+                    }
+                });
+
+                builder.setNegativeButton(R.string.for_week, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        SendEmail.sendEmail(getContext(), 1);
+                    }
+                });
+
+                builder.setNeutralButton(R.string.for_month, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        SendEmail.sendEmail(getContext(), 2);
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
             }
         });
 
@@ -185,10 +219,10 @@ public class FragmentTab extends Fragment {
         FirebaseData.getMomStats(momArrayAdapter, calendar);// Load today add's from Firebase for mom
         listViewMom.setAdapter(momArrayAdapter);
 
-        final TextView headerDate = (TextView)v.findViewById(R.id.headerMom);
+        final TextView headerDate = (TextView) v.findViewById(R.id.headerMom);
         headerDate.setText(R.string.today);
 
-        TextView yesterday = (TextView)v.findViewById(R.id.yesterdayMom);
+        TextView yesterday = (TextView) v.findViewById(R.id.yesterdayMom);
         yesterday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -197,7 +231,7 @@ public class FragmentTab extends Fragment {
             }
         });
 
-        TextView tomorrow = (TextView)v.findViewById(R.id.tomorrowMom);
+        TextView tomorrow = (TextView) v.findViewById(R.id.tomorrowMom);
         tomorrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -212,6 +246,11 @@ public class FragmentTab extends Fragment {
     private View initBaby(LayoutInflater inflater, ViewGroup container) {
         final View v = inflater.inflate(R.layout.fragment_baby, container, false);
 
+        ListView listViewBaby = (ListView) v.findViewById(R.id.listViewBaby);
+        final ItemArrayAdapter babyArrayAdapter = new ItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row);
+        FirebaseData.getBabyStats(babyArrayAdapter, calendar, getContext());// Load today add's from Firebase for baby
+        listViewBaby.setAdapter(babyArrayAdapter);
+
         FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.floatingActionButton);
         fab.setVisibility(View.VISIBLE);
         fab.setImageResource(R.mipmap.plus);
@@ -221,40 +260,35 @@ public class FragmentTab extends Fragment {
             public void onClick(View view) {
                 Intent intent = new Intent(v.getContext(), ChooseFeatureActivity.class);
                 startActivity(intent);
+                FirebaseData.getBabyStats(babyArrayAdapter, calendar, getContext());
             }
         });
 
-        ListView listViewBaby = (ListView) v.findViewById(R.id.listViewBaby);
-        final ItemArrayAdapter babyArrayAdapter = new ItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row);
-        FirebaseData.getBabyStats(babyArrayAdapter, calendar);// Load today add's from Firebase for baby
-        listViewBaby.setAdapter(babyArrayAdapter);
-
-        final TextView headerDate = (TextView)v.findViewById(R.id.headerBaby);
+        final TextView headerDate = (TextView) v.findViewById(R.id.headerBaby);
         headerDate.setText(R.string.today);
 
-        TextView yesterday = (TextView)v.findViewById(R.id.yesterdayBaby);
+        TextView yesterday = (TextView) v.findViewById(R.id.yesterdayBaby);
         yesterday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               goYesterday(headerDate);
-                FirebaseData.getBabyStats(babyArrayAdapter, calendar);
+                goYesterday(headerDate);
+                FirebaseData.getBabyStats(babyArrayAdapter, calendar, getContext());
             }
         });
 
-        TextView tomorrow = (TextView)v.findViewById(R.id.tomorrowBaby);
+        TextView tomorrow = (TextView) v.findViewById(R.id.tomorrowBaby);
         tomorrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 goTomorrow(headerDate);
-                FirebaseData.getBabyStats(babyArrayAdapter, calendar);
+                FirebaseData.getBabyStats(babyArrayAdapter, calendar, getContext());
             }
         });
 
         return v;
     }
 
-    private void goYesterday(TextView headerDate)
-    {
+    private void goYesterday(TextView headerDate) {
         calendar.add(Calendar.DAY_OF_MONTH, -1);
         Calendar today = Calendar.getInstance();
         if (calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR)
@@ -266,8 +300,7 @@ public class FragmentTab extends Fragment {
         }
     }
 
-    private void goTomorrow(TextView headerDate)
-    {
+    private void goTomorrow(TextView headerDate) {
         calendar.add(Calendar.DAY_OF_MONTH, 1);
         Calendar today = Calendar.getInstance();
         if (calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR)

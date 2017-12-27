@@ -37,7 +37,7 @@
 		android:layout_marginTop="@dimen/margin_prev_top"
 		android:ems="10"
 		android:inputType="textPersonName"
-		android:text="@string/name"
+		android:hint="@string/name"
 		android:textSize="@dimen/text_size" />
 
 	<RadioGroup

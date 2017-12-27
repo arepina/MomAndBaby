@@ -51,13 +51,15 @@ public class BabyInfoActivity extends AppCompatActivity {
 
                 // Check the values for correctness
                 if (name.length() > 0) {
-                    FirebaseDatabase database = FirebaseConnection.getDatabase();
+                    FirebaseConnection connection = new FirebaseConnection();
+                    FirebaseDatabase database = connection.getDatabase();
 
                     Baby baby = new Baby(momId, name, formattedDate, gender);
 
                     DatabaseReference databaseReference = database.getReference().child(DatabaseNames.BABY);
-                    databaseReference.push().setValue(baby);
-                    String babyId = databaseReference.getKey();
+
+                    String babyId = databaseReference.push().getKey();
+                    databaseReference.child(momId).setValue(baby);
 
                     SharedPreferences.Editor editor = sp.edit();
                     editor.putString(SharedConstants.BABY_ID_KEY, babyId);
@@ -82,15 +84,6 @@ public class BabyInfoActivity extends AppCompatActivity {
                 formattedDate = FormattedDate.getFormattedDateWithoutTime(calendar);
             }
         });
-    }
-
-    /**
-     * Clears the shared preferences flag which prevents the introduction from being shown twice.
-     */
-    private void allowIntroductionToShowAgain() {
-        //todo Delete or change later
-        final SharedPreferences sp = getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
-        sp.edit().putBoolean(SharedConstants.DISPLAY_ONCE_KEY, false).apply();
     }
 
 }

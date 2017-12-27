@@ -95,10 +95,11 @@ public class NewFeatureActivity extends AppCompatActivity {
     }
 
     private void addNewValueToFirebase() {
-        FirebaseDatabase database = FirebaseConnection.getDatabase();
+        FirebaseConnection connection = new FirebaseConnection();
+        FirebaseDatabase database = connection.getDatabase();
         DatabaseReference databaseReference;
         SharedPreferences sp = getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
-        String babyId = sp.getString(SharedConstants.BABY_ID_KEY, null);
+        String babyId = sp.getString(SharedConstants.BABY_ID_KEY, "");
         String currentDate = fullDate;
         if (featureName.equals(features[0])) {
             Metrics m = new Metrics(babyId, 0, Double.parseDouble(dataValue1.getText().toString()), currentDate); // no weight

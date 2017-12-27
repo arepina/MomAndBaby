@@ -26,30 +26,39 @@ public class TabsActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tabs);
 
-        FragmentTabHost mTabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
-        mTabHost.setup(this, getSupportFragmentManager(), android.R.id.tabcontent);
+        SharedPreferences sp = getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
+        String babyID = sp.getString(SharedConstants.BABY_ID_KEY, "");
 
-        mTabHost.addTab(
-                mTabHost.newTabSpec("Analytics").setIndicator("", null),
-                FragmentTab.class, null);
-        mTabHost.addTab(
-                mTabHost.newTabSpec("Baby").setIndicator("", null),
-                FragmentTab.class, null);
-        mTabHost.addTab(
-                mTabHost.newTabSpec("Mom").setIndicator("", null),
-                FragmentTab.class, null);
-        mTabHost.addTab(
-                mTabHost.newTabSpec("Settings").setIndicator("", null),
-                FragmentTab.class, null);
+        if (babyID.length() == 0) {
+            Intent nextActivity = new Intent(this, BabyInfoActivity.class);
+            startActivity(nextActivity);
+            finish();
+        } else {
+            FragmentTabHost mTabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
+            mTabHost.setup(this, getSupportFragmentManager(), android.R.id.tabcontent);
 
-        setTabIcon(mTabHost, 0, R.mipmap.analytics); //for Tab 1
-        setTabIcon(mTabHost, 1, R.mipmap.baby); //for Tab 2
-        setTabIcon(mTabHost, 2, R.mipmap.mother); //for Tab 3
-        setTabIcon(mTabHost, 3, R.mipmap.settings); //for Tab 4
+            mTabHost.addTab(
+                    mTabHost.newTabSpec("Analytics").setIndicator("", null),
+                    FragmentTab.class, null);
+            mTabHost.addTab(
+                    mTabHost.newTabSpec("Baby").setIndicator("", null),
+                    FragmentTab.class, null);
+            mTabHost.addTab(
+                    mTabHost.newTabSpec("Mom").setIndicator("", null),
+                    FragmentTab.class, null);
+            mTabHost.addTab(
+                    mTabHost.newTabSpec("Settings").setIndicator("", null),
+                    FragmentTab.class, null);
 
-        mTabHost.setCurrentTab(1);
+            setTabIcon(mTabHost, 0, R.mipmap.analytics); //for Tab 1
+            setTabIcon(mTabHost, 1, R.mipmap.baby); //for Tab 2
+            setTabIcon(mTabHost, 2, R.mipmap.mother); //for Tab 3
+            setTabIcon(mTabHost, 3, R.mipmap.settings); //for Tab 4
 
-        checkForBirthday();
+            mTabHost.setCurrentTab(1);
+
+            checkForBirthday();
+        }
     }
 
     private void setTabIcon(TabHost tabHost, int tabIndex, int iconResource) {
@@ -58,13 +67,12 @@ public class TabsActivity extends FragmentActivity {
         tabImageView.setImageResource(iconResource);
     }
 
-    private void checkForBirthday()
-    {
+    private void checkForBirthday() {
         SharedPreferences sp = getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
         String birthday = sp.getString(SharedConstants.BABY_BIRTHDAY, "");
         Calendar today = Calendar.getInstance();
         String formattedTodayDate = FormattedDate.getFormattedDateWithoutTime(today);
-        if(birthday.equals(formattedTodayDate)) {
+        if (birthday.equals(formattedTodayDate)) {
             String birthdayText = getResources().getString(R.string.happy_birthday);
             String name = sp.getString(SharedConstants.BABY_NAME_KEY, "");
             String gender = sp.getString(SharedConstants.BABY_GENDER_KEY, "");

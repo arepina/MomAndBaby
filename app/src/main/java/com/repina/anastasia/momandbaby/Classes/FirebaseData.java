@@ -1,5 +1,7 @@
 package com.repina.anastasia.momandbaby.Classes;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 
 import com.google.firebase.database.DataSnapshot;
@@ -16,13 +18,19 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class FirebaseData {
 
-    public static void getBabyStats(final ItemArrayAdapter adapter, final Calendar dateAndTime) {
+    public static void getBabyStats(final ItemArrayAdapter adapter, final Calendar dateAndTime, Context context) {
 
-        FirebaseDatabase database = FirebaseConnection.getDatabase();
+        FirebaseConnection connection = new FirebaseConnection();
+        FirebaseDatabase database = connection.getDatabase();
 
         final DatabaseReference databaseReference = database.getReference();
+
+        SharedPreferences sp = context.getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
+        final String babyID = sp.getString(SharedConstants.BABY_ID_KEY, "");
 
         databaseReference
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -32,14 +40,15 @@ public class FirebaseData {
                             for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
                                 if (!singleSnapshot.getKey().equals(DatabaseNames.USER)
                                         & !singleSnapshot.getKey().equals(DatabaseNames.BAND)
-                                        & !singleSnapshot.getKey().equals(DatabaseNames.BANDDATA)) {
+                                        & !singleSnapshot.getKey().equals(DatabaseNames.BANDDATA)
+                                        & !singleSnapshot.getKey().equals(DatabaseNames.BABY)) {
                                     HashMap<String, HashMap<String, String>> items =
                                             (HashMap<String, HashMap<String, String>>) singleSnapshot.getValue();
                                     for (Map.Entry<String, HashMap<String, String>> entry : items.entrySet()) {
                                         HashMap<String, String> value = entry.getValue();
                                         String date = value.get("date");
-                                        //todo check babyID
-                                        if (date.substring(0, 10).equals(FormattedDate.getFormattedDateWithoutTime(dateAndTime))) {
+                                        if (date.substring(0, 10).equals(FormattedDate.getFormattedDateWithoutTime(dateAndTime))
+                                                & value.get("babyId").equals(babyID)) {
                                             int imageId = getImageId(singleSnapshot.getKey());
                                             Item it = new Item(imageId, date.substring(10, date.length()));
                                             adapter.add(it);
@@ -58,7 +67,8 @@ public class FirebaseData {
 
     public static void getMomStats(final ItemArrayAdapter adapter, final Calendar dateAndTime) {
 
-        FirebaseDatabase database = FirebaseConnection.getDatabase();
+        FirebaseConnection connection = new FirebaseConnection();
+        FirebaseDatabase database = connection.getDatabase();
 
         final DatabaseReference databaseReference = database.getReference();
 

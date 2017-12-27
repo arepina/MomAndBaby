@@ -4,11 +4,14 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class FirebaseConnection {
 
-    private static FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private FirebaseDatabase database;
 
-    private FirebaseConnection() {}
+    public FirebaseConnection()
+    {
+        database = FirebaseDatabase.getInstance();
+    }
 
-    public static FirebaseDatabase getDatabase() {
+    public FirebaseDatabase getDatabase() {
         return database;
     }
 }

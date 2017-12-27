@@ -53,6 +53,10 @@
     <string name="happy_birthday">С днем рождения,</string>
     <string name="mr">дорогой</string>
     <string name="mrs">дорогая</string>
+    <string name="choose_period">Выберите период для отчета</string>
+    <string name="for_day">За день</string>
+    <string name="for_week">За неделю</string>
+    <string name="for_month">За месяц</string>
 
     <string-array name="characteristics">
         <item>Шаги</item>

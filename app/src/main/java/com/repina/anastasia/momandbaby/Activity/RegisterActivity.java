@@ -41,13 +41,16 @@ public class RegisterActivity extends AppCompatActivity {
                     if (isValidEmailAddress(email)) {
                         if (password.length() >= 6) {
                             if (name.length() >= 0) {
-                                FirebaseDatabase database = FirebaseConnection.getDatabase();
+                                //todo check if the email is not already in use
+                                FirebaseConnection connection = new FirebaseConnection();
+                                FirebaseDatabase database = connection.getDatabase();
 
                                 User user = new User(email, password, name);
 
                                 DatabaseReference databaseReference = database.getReference().child(DatabaseNames.USER);
-                                databaseReference.push().setValue(user);
-                                String momId = databaseReference.getKey();
+
+                                String momId = databaseReference.push().getKey();
+                                databaseReference.child(momId).setValue(user);
 
                                 SharedPreferences sp = getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
                                 SharedPreferences.Editor editor = sp.edit();
