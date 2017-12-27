@@ -29,6 +29,10 @@ public class ItemArrayAdapter extends ArrayAdapter<Item> {
         super(context, textViewResourceId);
     }
 
+    public void clear() {
+        itemList.clear();
+    }
+
     @Override
     public void add(Item object) {
         itemList.add(object);

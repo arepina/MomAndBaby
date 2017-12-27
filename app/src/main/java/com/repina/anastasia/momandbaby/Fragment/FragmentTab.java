@@ -246,7 +246,7 @@ public class FragmentTab extends Fragment {
     private View initBaby(LayoutInflater inflater, ViewGroup container) {
         final View v = inflater.inflate(R.layout.fragment_baby, container, false);
 
-        ListView listViewBaby = (ListView) v.findViewById(R.id.listViewBaby);
+        final ListView listViewBaby = (ListView) v.findViewById(R.id.listViewBaby);
         final ItemArrayAdapter babyArrayAdapter = new ItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row);
         FirebaseData.getBabyStats(babyArrayAdapter, calendar, getContext());// Load today add's from Firebase for baby
         listViewBaby.setAdapter(babyArrayAdapter);
@@ -271,8 +271,10 @@ public class FragmentTab extends Fragment {
         yesterday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                babyArrayAdapter.clear();
                 goYesterday(headerDate);
                 FirebaseData.getBabyStats(babyArrayAdapter, calendar, getContext());
+                listViewBaby.setAdapter(babyArrayAdapter);
             }
         });
 
@@ -280,8 +282,10 @@ public class FragmentTab extends Fragment {
         tomorrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                babyArrayAdapter.clear();
                 goTomorrow(headerDate);
                 FirebaseData.getBabyStats(babyArrayAdapter, calendar, getContext());
+                listViewBaby.setAdapter(babyArrayAdapter);
             }
         });
 
