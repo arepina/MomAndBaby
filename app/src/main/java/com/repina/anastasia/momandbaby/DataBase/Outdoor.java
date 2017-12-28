@@ -1,6 +1,8 @@
 package com.repina.anastasia.momandbaby.DataBase;
 
-public class Outdoor  {
+import com.repina.anastasia.momandbaby.R;
+
+public class Outdoor {
     private String babyId;
     private String date;
     private double length;
@@ -36,5 +38,10 @@ public class Outdoor  {
 
     public void setLength(double length) {
         this.length = length;
+    }
+
+    @Override
+    public String toString() {
+        return "Прогулки " + date + " " + R.string.outdoor + " " + length;
     }
 }

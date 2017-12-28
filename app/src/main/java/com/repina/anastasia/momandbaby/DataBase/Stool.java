@@ -1,5 +1,7 @@
 package com.repina.anastasia.momandbaby.DataBase;
 
+import com.repina.anastasia.momandbaby.R;
+
 public class Stool {
     private String babyId;
     private String date;
@@ -46,5 +48,10 @@ public class Stool {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    @Override
+    public String toString() {
+        return "Стул " + date + " " + R.string.сomment + " " + note + " " + R.string.rate_feature + " " + howMuch;
     }
 }

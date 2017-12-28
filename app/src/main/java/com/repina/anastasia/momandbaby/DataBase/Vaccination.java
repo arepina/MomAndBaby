@@ -1,6 +1,8 @@
 package com.repina.anastasia.momandbaby.DataBase;
 
 
+import com.repina.anastasia.momandbaby.R;
+
 public class Vaccination  {
     private String babyId;
     private String date;
@@ -46,5 +48,10 @@ public class Vaccination  {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    @Override
+    public String toString() {
+        return "Прививки " + date + " " + R.string.сomment + " " + note + " " + R.string.vaccination_name + " " + vaccinationName;
     }
 }

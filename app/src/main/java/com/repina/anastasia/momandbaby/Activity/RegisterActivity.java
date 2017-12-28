@@ -56,6 +56,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 SharedPreferences.Editor editor = sp.edit();
                                 editor.putString(SharedConstants.MOM_ID_KEY, momId);
                                 editor.putString(SharedConstants.MOM_NAME_KEY, name);
+                                editor.putString(SharedConstants.MOM_EMAIL, email);
                                 editor.apply();
 
                                 Intent nextActivity = new Intent(getApplicationContext(), BabyInfoActivity.class);

@@ -1,5 +1,7 @@
 package com.repina.anastasia.momandbaby.DataBase;
 
+import com.repina.anastasia.momandbaby.R;
+
 public class Food {
     private String babyId;
     private String date;
@@ -46,5 +48,10 @@ public class Food {
 
     public void setHowMuch(int howMuch) {
         this.howMuch = howMuch;
+    }
+
+    @Override
+    public String toString() {
+        return "Питание " + date + " " + R.string.сomment + " " + note + " " + R.string.rate_feature + " " + howMuch;
     }
 }

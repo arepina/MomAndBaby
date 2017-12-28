@@ -63,7 +63,8 @@ public class SignupActivity extends AppCompatActivity {
                                             SharedPreferences.Editor editor = sp.edit();
                                             editor.putString(SharedConstants.MOM_ID_KEY, momId);
                                             editor.putString(SharedConstants.MOM_NAME_KEY, name);
-                                            //todo add baby key
+                                            editor.putString(SharedConstants.MOM_EMAIL, email);
+                                            //todo add baby key ????
                                             editor.apply();
 
                                             Intent nextActivity = new Intent(getApplicationContext(), TabsActivity.class);

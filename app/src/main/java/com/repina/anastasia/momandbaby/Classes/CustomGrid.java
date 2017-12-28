@@ -10,12 +10,12 @@ import android.widget.TextView;
 
 import com.repina.anastasia.momandbaby.R;
 
-public class CustomGrid extends BaseAdapter{
+public class CustomGrid extends BaseAdapter {
     private Context mContext;
     private final String[] web;
     private final int[] Imageid;
 
-    public CustomGrid(Context c,String[] web,int[] Imageid ) {
+    public CustomGrid(Context c, String[] web, int[] Imageid) {
         mContext = c;
         this.Imageid = Imageid;
         this.web = web;
@@ -46,7 +46,7 @@ public class CustomGrid extends BaseAdapter{
             grid = new View(mContext);
             grid = inflater.inflate(R.layout.grid_single, null);
             TextView textView = (TextView) grid.findViewById(R.id.grid_text);
-            ImageView imageView = (ImageView)grid.findViewById(R.id.grid_image);
+            ImageView imageView = (ImageView) grid.findViewById(R.id.grid_image);
             textView.setText(web[position]);
             imageView.setImageResource(Imageid[position]);
         } else {

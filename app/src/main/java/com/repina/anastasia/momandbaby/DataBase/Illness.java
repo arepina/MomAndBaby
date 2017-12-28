@@ -1,6 +1,8 @@
 package com.repina.anastasia.momandbaby.DataBase;
 
 
+import com.repina.anastasia.momandbaby.R;
+
 public class Illness  {
     private String babyId;
     private String date;
@@ -57,5 +59,10 @@ public class Illness  {
 
     public void setTemperature(double temperature) {
         this.temperature = temperature;
+    }
+
+    @Override
+    public String toString() {
+        return "Болезни " + date + " " + R.string.sympthomes + " " + symptomes + " " + R.string.pills + " " + pills + " " + R.string.temperature_value;
     }
 }

@@ -1,7 +1,6 @@
 package com.repina.anastasia.momandbaby.Activity;
 
 import android.app.DatePickerDialog;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -169,7 +168,7 @@ public class NewFeatureActivity extends AppCompatActivity {
             dataName2.setText(getString(R.string.rateValue) + " " + getString(R.string.diapers));
             dataName2.setVisibility(View.VISIBLE);
             ratingBar.setVisibility(View.VISIBLE);
-            dataName3.setText(R.string.Comment);
+            dataName3.setText(R.string.сomment);
             dataName3.setVisibility(View.VISIBLE);
             dataValue3.setVisibility(View.VISIBLE);
         }
@@ -199,7 +198,7 @@ public class NewFeatureActivity extends AppCompatActivity {
             dataName2.setText(getString(R.string.rateValue) + getString(R.string.food));
             dataName2.setVisibility(View.VISIBLE);
             ratingBar.setVisibility(View.VISIBLE);
-            dataName3.setText(R.string.Comment);
+            dataName3.setText(R.string.сomment);
             dataName3.setVisibility(View.VISIBLE);
             dataValue3.setVisibility(View.VISIBLE);
         }

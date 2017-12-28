@@ -22,7 +22,7 @@ public class ItemArrayAdapter extends ArrayAdapter<Item> {
 
     private static class ItemViewHolder {
         ImageView itemImg;
-        TextView itemDesc;
+        TextView itemDesc;//todo add the whole desc of feature using overriden to string methods
     }
 
     public ItemArrayAdapter(Context context, int textViewResourceId) {

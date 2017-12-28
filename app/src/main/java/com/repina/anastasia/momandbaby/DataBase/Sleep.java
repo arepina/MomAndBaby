@@ -1,6 +1,8 @@
 package com.repina.anastasia.momandbaby.DataBase;
 
 
+import com.repina.anastasia.momandbaby.R;
+
 public class Sleep {
     private String babyId;
     private String date;
@@ -37,5 +39,10 @@ public class Sleep {
 
     public void setLength(double length) {
         this.length = length;
+    }
+
+    @Override
+    public String toString() {
+        return "Сон " + date + " " + R.string.sleep + " " + length;
     }
 }

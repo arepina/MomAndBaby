@@ -3,6 +3,7 @@ package com.repina.anastasia.momandbaby.Classes;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.renderscript.Sampler;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -14,7 +15,9 @@ import com.repina.anastasia.momandbaby.Adapter.ItemArrayAdapter;
 import com.repina.anastasia.momandbaby.DataBase.DatabaseNames;
 import com.repina.anastasia.momandbaby.R;
 
+import java.text.ParseException;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -66,50 +69,7 @@ public class FirebaseData {
     }
 
     public static void getMomStats(final ItemArrayAdapter adapter, final Calendar dateAndTime) {
-
-        FirebaseConnection connection = new FirebaseConnection();
-        FirebaseDatabase database = connection.getDatabase();
-
-        final DatabaseReference databaseReference = database.getReference();
-
-        databaseReference
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists()) {
-                            for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
-                                if (singleSnapshot.getKey().equals(DatabaseNames.BANDDATA)) {
-                                    HashMap<String, HashMap<String, String>> items =
-                                            (HashMap<String, HashMap<String, String>>) singleSnapshot.getValue();
-                                    for (Map.Entry<String, HashMap<String, String>> entry : items.entrySet()) {
-                                        HashMap<String, String> value = entry.getValue();
-                                        String date = value.get("date");
-                                        //todo check momID
-                                        if (date.substring(0, 10).equals(FormattedDate.getFormattedDateWithoutTime(dateAndTime))) {
-                                            int imageId = getImageId(singleSnapshot.getKey());
-                                            Item it = new Item(imageId, date.substring(10, date.length()));
-                                            adapter.add(it);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                    }
-                });
-    }
-
-    static String getBabyStats(String start, String end, Context context) {
-
-        return "";
-    }
-
-    static String getMomStats(String start, String end, Context context) {
-
-        return "";
+        //todo
     }
 
     private static int getImageId(String name) {

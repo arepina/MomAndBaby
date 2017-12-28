@@ -19,6 +19,11 @@ public class SharedConstants {
     public static final String MOM_NAME_KEY = "mom_name_spkey";
 
     /**
+     * Key to use in {@code APP_PREFS} to find user's email
+     */
+    public static final String MOM_EMAIL = "mom_email_spkey";
+
+    /**
      * Key to use in {@code APP_PREFS} to find the baby
      */
     public static final String BABY_ID_KEY = "baby_id_spkey";
@@ -44,6 +49,5 @@ public class SharedConstants {
      * once completed.
      */
     public static final String DISPLAY_ONCE_KEY = "display_only_once_spkey";
-
 
 }

@@ -1,5 +1,7 @@
 package com.repina.anastasia.momandbaby.DataBase;
 
+import com.repina.anastasia.momandbaby.R;
+
 public class Metrics {
     private String babyId;
     private double weight;
@@ -46,5 +48,13 @@ public class Metrics {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    @Override
+    public String toString() {
+        if(weight == 0)
+            return "Рост " + date + " " + R.string.height_value + " " + height;
+        else
+            return "Вес " + date + " " + R.string.weight_value + " " + weight;
     }
 }

@@ -10,6 +10,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -294,30 +295,29 @@ public class FragmentTab extends Fragment {
         }
     }
 
-    private void showAlertDialog(final boolean whoFlag)
-    {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+    private void showAlertDialog(final boolean whoFlag) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom));
 
         builder.setTitle(R.string.choose_period);
 
         builder.setPositiveButton(R.string.for_day, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                SendEmail.sendEmail(getContext(), 0, whoFlag);
+                SendEmail.createEmail(getContext(), 0, whoFlag);
             }
         });
 
         builder.setNegativeButton(R.string.for_week, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                SendEmail.sendEmail(getContext(), 1, whoFlag);
+                SendEmail.createEmail(getContext(), 1, whoFlag);
             }
         });
 
         builder.setNeutralButton(R.string.for_month, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                SendEmail.sendEmail(getContext(), 2, whoFlag);
+                SendEmail.createEmail(getContext(), 2, whoFlag);
             }
         });
 
