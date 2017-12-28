@@ -59,7 +59,7 @@ public class BabyInfoActivity extends AppCompatActivity {
                     DatabaseReference databaseReference = database.getReference().child(DatabaseNames.BABY);
 
                     String babyId = databaseReference.push().getKey();
-                    databaseReference.child(momId).setValue(baby);
+                    databaseReference.child(babyId).setValue(baby);
 
                     SharedPreferences.Editor editor = sp.edit();
                     editor.putString(SharedConstants.BABY_ID_KEY, babyId);

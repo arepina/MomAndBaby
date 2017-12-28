@@ -39,7 +39,7 @@ public class RegisterActivity extends AppCompatActivity {
                     String password = ((EditText) findViewById(R.id.input_password)).getText().toString();
                     String name = ((EditText) findViewById(R.id.input_name)).getText().toString();
                     if (isValidEmailAddress(email)) {
-                        if (password.length() >= 6) {
+                        if (password.length() >= 8) {
                             if (name.length() >= 0) {
                                 //todo check if the email is not already in use
                                 FirebaseConnection connection = new FirebaseConnection();
@@ -83,6 +83,8 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     public static boolean isValidEmailAddress(String email) {
+        if(email.length() < 8)
+            return false;
         String regex = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(email);
