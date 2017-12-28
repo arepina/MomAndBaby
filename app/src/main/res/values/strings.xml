@@ -57,6 +57,11 @@
     <string name="for_day">За день</string>
     <string name="for_week">За неделю</string>
     <string name="for_month">За месяц</string>
+    <string name="report_from">Отчет с</string>
+    <string name="report_to">по</string>
+    <string name="email_text"><![CDATA[Высылаем отчет о здоровье. Спасибо, что пользуетесь Mom&Baby!]]></string>
+    <string name="report_sending">Отправка отчета...</string>
+    <string name="reports">Отчеты</string>
 
     <string-array name="characteristics">
         <item>Шаги</item>

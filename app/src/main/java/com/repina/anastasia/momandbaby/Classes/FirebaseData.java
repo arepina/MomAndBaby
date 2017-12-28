@@ -102,6 +102,16 @@ public class FirebaseData {
                 });
     }
 
+    static String getBabyStats(String start, String end, Context context) {
+
+        return "";
+    }
+
+    static String getMomStats(String start, String end, Context context) {
+
+        return "";
+    }
+
     private static int getImageId(String name) {
         //todo think about height and weight icon
         if (name.equals(DatabaseNames.METRICS))

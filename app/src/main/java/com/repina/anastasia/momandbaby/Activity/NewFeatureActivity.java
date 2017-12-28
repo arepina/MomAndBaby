@@ -1,6 +1,7 @@
 package com.repina.anastasia.momandbaby.Activity;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -95,6 +96,7 @@ public class NewFeatureActivity extends AppCompatActivity {
     }
 
     private void addNewValueToFirebase() {
+        //todo check entered by user data for correct types
         FirebaseConnection connection = new FirebaseConnection();
         FirebaseDatabase database = connection.getDatabase();
         DatabaseReference databaseReference;

@@ -34,12 +34,18 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Calendar;
 
+import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
 
 
 public class FragmentTab extends Fragment {
 
     private Calendar calendar;
+
+    private ItemArrayAdapter babyArrayAdapter;
+    private ItemArrayAdapter momArrayAdapter;
+
+    private final int BABY_NEW_FEATURE = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -128,34 +134,7 @@ public class FragmentTab extends Fragment {
         sendReportBaby.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-
-                builder.setTitle(R.string.choose_period);
-
-                builder.setPositiveButton(R.string.for_day, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        SendEmail.sendEmail(getContext(), 0);
-                    }
-                });
-
-                builder.setNegativeButton(R.string.for_week, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        SendEmail.sendEmail(getContext(), 1);
-                    }
-                });
-
-                builder.setNeutralButton(R.string.for_month, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        SendEmail.sendEmail(getContext(), 2);
-                    }
-                });
-
-                AlertDialog dialog = builder.create();
-                dialog.show();
+                showAlertDialog(true);
             }
         });
 
@@ -163,7 +142,7 @@ public class FragmentTab extends Fragment {
         sendReportMom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //todo
+                showAlertDialog(false);
             }
         });
 
@@ -215,7 +194,7 @@ public class FragmentTab extends Fragment {
         });
 
         ListView listViewMom = (ListView) v.findViewById(R.id.listViewMom);
-        final ItemArrayAdapter momArrayAdapter = new ItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row);
+        momArrayAdapter = new ItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row);
         FirebaseData.getMomStats(momArrayAdapter, calendar);// Load today add's from Firebase for mom
         listViewMom.setAdapter(momArrayAdapter);
 
@@ -247,7 +226,7 @@ public class FragmentTab extends Fragment {
         final View v = inflater.inflate(R.layout.fragment_baby, container, false);
 
         final ListView listViewBaby = (ListView) v.findViewById(R.id.listViewBaby);
-        final ItemArrayAdapter babyArrayAdapter = new ItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row);
+        babyArrayAdapter = new ItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row);
         FirebaseData.getBabyStats(babyArrayAdapter, calendar, getContext());// Load today add's from Firebase for baby
         listViewBaby.setAdapter(babyArrayAdapter);
 
@@ -259,8 +238,7 @@ public class FragmentTab extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(v.getContext(), ChooseFeatureActivity.class);
-                startActivity(intent);
-                FirebaseData.getBabyStats(babyArrayAdapter, calendar, getContext());
+                startActivityForResult(intent, BABY_NEW_FEATURE);
             }
         });
 
@@ -316,4 +294,45 @@ public class FragmentTab extends Fragment {
         }
     }
 
+    private void showAlertDialog(final boolean whoFlag)
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+        builder.setTitle(R.string.choose_period);
+
+        builder.setPositiveButton(R.string.for_day, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                SendEmail.sendEmail(getContext(), 0, whoFlag);
+            }
+        });
+
+        builder.setNegativeButton(R.string.for_week, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                SendEmail.sendEmail(getContext(), 1, whoFlag);
+            }
+        });
+
+        builder.setNeutralButton(R.string.for_month, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                SendEmail.sendEmail(getContext(), 2, whoFlag);
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case BABY_NEW_FEATURE: {
+                FirebaseData.getBabyStats(babyArrayAdapter, calendar, getContext());
+                break;
+            }
+        }
+    }
 }
