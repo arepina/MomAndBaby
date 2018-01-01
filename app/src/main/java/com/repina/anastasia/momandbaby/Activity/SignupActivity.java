@@ -64,15 +64,13 @@ public class SignupActivity extends AppCompatActivity {
                                             editor.putString(SharedConstants.MOM_ID_KEY, momId);
                                             editor.putString(SharedConstants.MOM_NAME_KEY, name);
                                             editor.putString(SharedConstants.MOM_EMAIL, email);
-                                            //todo add baby key ????
                                             editor.apply();
 
-                                            Intent nextActivity = new Intent(getApplicationContext(), TabsActivity.class);
-                                            startActivity(nextActivity);
-                                            finish();
-                                        }
+                                            checkBabyIdInFirebase(momId);//try to find the baby if DB if we have an already existing account
+                                        } else
+                                            ToastShow.show(getApplicationContext(), R.string.wrong_password_or_login);
                                     } else
-                                        ToastShow.show(getApplicationContext(), R.string.wrong_password);
+                                        ToastShow.show(getApplicationContext(), R.string.wrong_password_or_login);
                                 }
 
                                 @Override
@@ -93,5 +91,36 @@ public class SignupActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    private void checkBabyIdInFirebase(String momId) {
+        FirebaseConnection connection = new FirebaseConnection();
+        FirebaseDatabase database = connection.getDatabase();
+
+        final DatabaseReference databaseReference = database.getReference().child(DatabaseNames.BABY);
+
+        databaseReference.orderByChild("momId")//try to find the baby with the entered momId
+                .equalTo(momId)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            DataSnapshot snapshot = dataSnapshot.getChildren().iterator().next();
+                            SharedPreferences sp = getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sp.edit();
+                            editor.putString(SharedConstants.BABY_ID_KEY, snapshot.getKey());
+                            editor.apply();
+                        }
+
+                        Intent nextActivity = new Intent(getApplicationContext(), TabsActivity.class);
+                        startActivity(nextActivity);
+                        finish();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        ToastShow.show(getApplicationContext(), R.string.unpredicted_error);
+                    }
+                });
     }
 }

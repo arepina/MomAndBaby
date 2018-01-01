@@ -97,6 +97,7 @@ public class SendEmail {
                                     }
                                 }
                             }
+                            //todo fix the bug
                             try {
                                 String fileName = context.getString(R.string.report_from) + " " + start + " " + context.getString(R.string.report_to) + " " + finalEnd + ".txt";
                                 File root = new File(Environment.getExternalStorageDirectory(), context.getString(R.string.reports));

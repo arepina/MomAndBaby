@@ -49,7 +49,6 @@ public class DotsActivity extends IntroActivity {
      */
     @Override
     protected Collection<Fragment> generatePages(Bundle savedInstanceState) throws OutOfMemoryError {
-        //todo https://stackoverflow.com/questions/41070856/getting-a-fatal-exception-main-java-lang-outofmemoryerror
         // This variable holds the pages while they are being created
         ArrayList<Fragment> pages = new ArrayList<>();
         ParallaxPage newPage = ParallaxPage.newInstance();
@@ -85,6 +84,7 @@ public class DotsActivity extends IntroActivity {
 		 */
         SharedPreferences sp = getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
         SharedPreferences.Editor pendingEdits = sp.edit().putBoolean(SharedConstants.DISPLAY_ONCE_KEY, true);
+        pendingEdits.apply();
         // Define the next activity intent and create the Behaviour to use for the final button
         Intent nextActivity = new Intent(this, SignupActivity.class);
         return new IntroButton.ProgressToNextActivity(nextActivity, pendingEdits);

@@ -71,6 +71,10 @@
     <string name="outdoor">Длительность прогулки:</string>
     <string name="sleep">Длительность сна:</string>
     <string name="vaccination_name">Название прививки:</string>
+    <string name="wrong_password_or_login">Введен неверный логин или пароль</string>
+    <string name="password_again">Введите пароль еще раз</string>
+    <string name="different_passwords">Пароли должны совпадать</string>
+    <string name="email_already_used">Данный email уже используется</string>
 
     <string-array name="characteristics">
         <item>Шаги</item>

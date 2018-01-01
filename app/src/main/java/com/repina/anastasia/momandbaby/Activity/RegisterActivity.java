@@ -9,8 +9,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.repina.anastasia.momandbaby.Classes.ConnectionDetector;
 import com.repina.anastasia.momandbaby.Classes.ToastShow;
 import com.repina.anastasia.momandbaby.DataBase.DatabaseNames;
@@ -37,32 +40,16 @@ public class RegisterActivity extends AppCompatActivity {
 
                     String email = ((EditText) findViewById(R.id.input_email)).getText().toString();
                     String password = ((EditText) findViewById(R.id.input_password)).getText().toString();
+                    String passwordAgain = ((EditText) findViewById(R.id.input_password_again)).getText().toString();
                     String name = ((EditText) findViewById(R.id.input_name)).getText().toString();
                     if (isValidEmailAddress(email)) {
                         if (password.length() >= 8) {
-                            if (name.length() >= 0) {
-                                //todo check if the email is not already in use
-                                FirebaseConnection connection = new FirebaseConnection();
-                                FirebaseDatabase database = connection.getDatabase();
-
-                                User user = new User(email, password, name);
-
-                                DatabaseReference databaseReference = database.getReference().child(DatabaseNames.USER);
-
-                                String momId = databaseReference.push().getKey();
-                                databaseReference.child(momId).setValue(user);
-
-                                SharedPreferences sp = getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
-                                SharedPreferences.Editor editor = sp.edit();
-                                editor.putString(SharedConstants.MOM_ID_KEY, momId);
-                                editor.putString(SharedConstants.MOM_NAME_KEY, name);
-                                editor.putString(SharedConstants.MOM_EMAIL, email);
-                                editor.apply();
-
-                                Intent nextActivity = new Intent(getApplicationContext(), BabyInfoActivity.class);
-                                startActivity(nextActivity);
-                                finish();
-                            } else
+                            if (name.length() >= 0)
+                                if(password.equals(passwordAgain))
+                                    isEmailAlreadyInUse(email, password, name);
+                                else
+                                    ToastShow.show(getApplicationContext(), R.string.different_passwords);
+                            else
                                 ToastShow.show(getApplicationContext(), R.string.invalid_name);
                         } else
                             ToastShow.show(getApplicationContext(), R.string.invalid_password);
@@ -90,5 +77,54 @@ public class RegisterActivity extends AppCompatActivity {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(email);
         return matcher.matches();
+    }
+
+    private void isEmailAlreadyInUse(final String email, final String password, final String name)
+    {
+        FirebaseConnection connection = new FirebaseConnection();
+        FirebaseDatabase database = connection.getDatabase();
+
+        final DatabaseReference databaseReference = database.getReference().child(DatabaseNames.USER);
+
+        databaseReference.orderByChild("email")//try to find the baby with the entered momId
+                .equalTo(email)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (!dataSnapshot.exists())
+                            createNewAccount(email, password, name);
+                        else
+                            ToastShow.show(getApplicationContext(), R.string.email_already_used);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        ToastShow.show(getApplicationContext(), R.string.unpredicted_error);
+                    }
+                });
+    }
+
+    private void createNewAccount(String email, String password, String name)
+    {
+        FirebaseConnection connection = new FirebaseConnection();
+        FirebaseDatabase database = connection.getDatabase();
+
+        User user = new User(email, password, name);
+
+        DatabaseReference databaseReference = database.getReference().child(DatabaseNames.USER);
+
+        String momId = databaseReference.push().getKey();
+        databaseReference.child(momId).setValue(user);
+
+        SharedPreferences sp = getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString(SharedConstants.MOM_ID_KEY, momId);
+        editor.putString(SharedConstants.MOM_NAME_KEY, name);
+        editor.putString(SharedConstants.MOM_EMAIL, email);
+        editor.apply();
+
+        Intent nextActivity = new Intent(getApplicationContext(), BabyInfoActivity.class);
+        startActivity(nextActivity);
+        finish();
     }
 }

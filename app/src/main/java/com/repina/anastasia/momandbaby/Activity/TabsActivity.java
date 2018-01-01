@@ -11,9 +11,18 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TabHost;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.repina.anastasia.momandbaby.Classes.FirebaseConnection;
 import com.repina.anastasia.momandbaby.Classes.FormattedDate;
 import com.repina.anastasia.momandbaby.Classes.SharedConstants;
 import com.repina.anastasia.momandbaby.Classes.ToastShow;
+import com.repina.anastasia.momandbaby.DataBase.Baby;
+import com.repina.anastasia.momandbaby.DataBase.DatabaseNames;
+import com.repina.anastasia.momandbaby.DataBase.User;
 import com.repina.anastasia.momandbaby.Fragment.FragmentTab;
 import com.repina.anastasia.momandbaby.R;
 

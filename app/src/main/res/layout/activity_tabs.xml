@@ -30,6 +30,7 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         android:layout_gravity="bottom|center"
+        android:layout_marginBottom="@dimen/main_margin"
         app:fabSize="normal"
         app:backgroundTint="@color/colorAccent"
         android:src="@mipmap/plus" />

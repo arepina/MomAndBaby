@@ -51,13 +51,15 @@
 		android:layout_below="@+id/name"
 		android:layout_marginTop="@dimen/margin_prev_top"
 		android:layout_weight="1"
-		android:orientation="horizontal">
+		android:orientation="horizontal"
+		tools:ignore="ObsoleteLayoutParam">
 
 		<RadioButton
 			android:id="@+id/girl"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
+			android:checked="true"
 			android:text="@string/girl" />
 
 		<RadioButton
@@ -65,6 +67,7 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
+			android:checked="false"
 			android:text="@string/boy" />
 	</RadioGroup>
 
