@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Environment;
+import android.util.Log;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -87,8 +88,8 @@ public class SendEmail {
                                             if (value.get("babyId").equals(babyID)
                                                     &
                                                     ((current.before(endDate) & (startDate.before(current) || daysStartDif == 0)) ||
-                                                    (current.before(endDate) || daysEndDif == 0) & startDate.before(current)) ||
-                                                    (daysEndDif == 0 & daysStartDif == 0)){
+                                                            (current.before(endDate) || daysEndDif == 0) & startDate.before(current)) ||
+                                                    (daysEndDif == 0 & daysStartDif == 0)) {
                                                 //todo make the report more read-friendly
                                                 report += value.toString().replace("{", "").replace("}", "") + "\n";
                                             }
@@ -97,31 +98,7 @@ public class SendEmail {
                                     }
                                 }
                             }
-                            //todo fix the bug
-                            try {
-                                String fileName = context.getString(R.string.report_from) + " " + start + " " + context.getString(R.string.report_to) + " " + finalEnd + ".txt";
-                                File root = new File(Environment.getExternalStorageDirectory(), context.getString(R.string.reports));
-                                if (!root.exists())
-                                    root.mkdirs();
-                                File gpxfile = new File(root, fileName);
-                                FileWriter writer = new FileWriter(gpxfile);
-                                writer.append(report);
-                                writer.flush();
-                                writer.close();
-                                Uri path = Uri.fromFile(gpxfile);
-
-                                Intent i = new Intent(Intent.ACTION_SEND);
-                                i.setType("message/rfc822");
-                                SharedPreferences sp = context.getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
-                                String email = sp.getString(SharedConstants.MOM_EMAIL, "");
-                                i.putExtra(Intent.EXTRA_EMAIL, new String[]{email});
-                                i.putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.report_from) + " " + start + " " + context.getString(R.string.report_to) + " " + finalEnd);
-                                i.putExtra(Intent.EXTRA_TEXT, context.getString(R.string.email_text));
-                                i.putExtra(Intent.EXTRA_STREAM, path);
-                                context.startActivity(Intent.createChooser(i, context.getString(R.string.report_sending)));
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                            sendFile(report, context, start, finalEnd);
                         }
                     }
 
@@ -134,5 +111,35 @@ public class SendEmail {
     private static long getUnitBetweenDates(Date startDate, Date endDate, TimeUnit unit) {
         long timeDiff = endDate.getTime() - startDate.getTime();
         return unit.convert(timeDiff, TimeUnit.MILLISECONDS);
+    }
+
+    private static void sendFile(String report, Context context, String start, String finalEnd)
+    {
+        String fileName = context.getString(R.string.report_from) + " " + start + " " + context.getString(R.string.report_to) + " " + finalEnd + ".txt";
+        File root = new File(context.getFilesDir(), context.getResources().getString(R.string.reports));
+        if(!root.exists())
+            root.mkdirs();
+        try{
+            File gpxfile = new File(root, fileName);
+
+            FileWriter writer = new FileWriter(gpxfile);
+            writer.append(report);
+            writer.flush();
+            writer.close();
+            Uri path = Uri.fromFile(gpxfile);
+
+            Intent i = new Intent(Intent.ACTION_SEND);
+            i.setType("message/rfc822");
+            SharedPreferences sp = context.getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
+            String email = sp.getString(SharedConstants.MOM_EMAIL, "");
+            i.putExtra(Intent.EXTRA_EMAIL, new String[]{email});
+            i.putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.report_from) + " " + start + " " + context.getString(R.string.report_to) + " " + finalEnd);
+            i.putExtra(Intent.EXTRA_TEXT, context.getString(R.string.email_text));
+            i.putExtra(Intent.EXTRA_STREAM, path);
+            context.startActivity(Intent.createChooser(i, context.getString(R.string.report_sending)));
+        } catch (Exception e) {
+            Log.w("creating file error", e.toString());
+        }
+
     }
 }

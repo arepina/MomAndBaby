@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.renderscript.Sampler;
+import android.widget.ListView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -25,7 +26,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class FirebaseData {
 
-    public static void getBabyStats(final ItemArrayAdapter adapter, final Calendar dateAndTime, Context context) {
+    public static void getBabyStats(final ItemArrayAdapter adapter, final Calendar dateAndTime, Context context, final ListView listViewBaby) {
 
         FirebaseConnection connection = new FirebaseConnection();
         FirebaseDatabase database = connection.getDatabase();
@@ -53,12 +54,13 @@ public class FirebaseData {
                                         if (date.substring(0, 10).equals(FormattedDate.getFormattedDateWithoutTime(dateAndTime))
                                                 & value.get("babyId").equals(babyID)) {
                                             int imageId = getImageId(singleSnapshot.getKey());
-                                            Item it = new Item(imageId, date.substring(10, date.length()));
+                                            Item it = new Item(imageId, date);
                                             adapter.add(it);
                                         }
                                     }
                                 }
                             }
+                            listViewBaby.setAdapter(adapter);
                         }
                     }
 

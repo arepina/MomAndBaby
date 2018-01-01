@@ -46,6 +46,9 @@ public class FragmentTab extends Fragment {
     private ItemArrayAdapter babyArrayAdapter;
     private ItemArrayAdapter momArrayAdapter;
 
+    private ListView listViewBaby;
+    private ListView listViewMom;
+
     private final int BABY_NEW_FEATURE = 0;
 
     @Override
@@ -194,10 +197,9 @@ public class FragmentTab extends Fragment {
             }
         });
 
-        ListView listViewMom = (ListView) v.findViewById(R.id.listViewMom);
+        listViewMom = (ListView) v.findViewById(R.id.listViewMom);
         momArrayAdapter = new ItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row);
         FirebaseData.getMomStats(momArrayAdapter, calendar);// Load today add's from Firebase for mom
-        listViewMom.setAdapter(momArrayAdapter);
 
         final TextView headerDate = (TextView) v.findViewById(R.id.headerMom);
         headerDate.setText(R.string.today);
@@ -226,10 +228,9 @@ public class FragmentTab extends Fragment {
     private View initBaby(LayoutInflater inflater, ViewGroup container) {
         final View v = inflater.inflate(R.layout.fragment_baby, container, false);
 
-        final ListView listViewBaby = (ListView) v.findViewById(R.id.listViewBaby);
+        listViewBaby = (ListView) v.findViewById(R.id.listViewBaby);
         babyArrayAdapter = new ItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row);
-        FirebaseData.getBabyStats(babyArrayAdapter, calendar, getContext());// Load today add's from Firebase for baby
-        listViewBaby.setAdapter(babyArrayAdapter);
+        FirebaseData.getBabyStats(babyArrayAdapter, calendar, getContext(), listViewBaby);// Load today add's from Firebase for baby
 
         FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.floatingActionButton);
         fab.setVisibility(View.VISIBLE);
@@ -252,8 +253,7 @@ public class FragmentTab extends Fragment {
             public void onClick(View v) {
                 babyArrayAdapter.clear();
                 goYesterday(headerDate);
-                FirebaseData.getBabyStats(babyArrayAdapter, calendar, getContext());
-                listViewBaby.setAdapter(babyArrayAdapter);
+                FirebaseData.getBabyStats(babyArrayAdapter, calendar, getContext(), listViewBaby);
             }
         });
 
@@ -263,8 +263,8 @@ public class FragmentTab extends Fragment {
             public void onClick(View v) {
                 babyArrayAdapter.clear();
                 goTomorrow(headerDate);
-                FirebaseData.getBabyStats(babyArrayAdapter, calendar, getContext());
-                listViewBaby.setAdapter(babyArrayAdapter);
+                FirebaseData.getBabyStats(babyArrayAdapter, calendar, getContext(), listViewBaby);
+
             }
         });
 
@@ -296,7 +296,9 @@ public class FragmentTab extends Fragment {
     }
 
     private void showAlertDialog(final boolean whoFlag) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom));
+        //todo change later
+       // AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom));
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         builder.setTitle(R.string.choose_period);
 
@@ -330,7 +332,7 @@ public class FragmentTab extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case BABY_NEW_FEATURE: {
-                FirebaseData.getBabyStats(babyArrayAdapter, calendar, getContext());
+                FirebaseData.getBabyStats(babyArrayAdapter, calendar, getContext(), listViewBaby);
                 break;
             }
         }

@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -95,7 +96,6 @@ public class NewFeatureActivity extends AppCompatActivity {
     }
 
     private void addNewValueToFirebase() {
-        //todo check entered by user data for correct types
         FirebaseConnection connection = new FirebaseConnection();
         FirebaseDatabase database = connection.getDatabase();
         DatabaseReference databaseReference;
@@ -158,11 +158,13 @@ public class NewFeatureActivity extends AppCompatActivity {
             dataName1.setText(getString(R.string.add_new_data) + " " + getString(R.string.height));
             dataName1.setVisibility(View.VISIBLE);
             dataValue1.setVisibility(View.VISIBLE);
+            dataValue1.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_NUMBER);
         }
         if (data.equals(features[1])) {
             dataName1.setText(getString(R.string.add_new_data) + " " + getString(R.string.weight));
             dataName1.setVisibility(View.VISIBLE);
             dataValue1.setVisibility(View.VISIBLE);
+            dataValue1.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_NUMBER);
         }
         if (data.equals(features[2])) {
             dataName2.setText(getString(R.string.rateValue) + " " + getString(R.string.diapers));
@@ -206,11 +208,13 @@ public class NewFeatureActivity extends AppCompatActivity {
             dataName1.setText(getString(R.string.add_new_data) + " " + getString(R.string.outdoor_duration));
             dataName1.setVisibility(View.VISIBLE);
             dataValue1.setVisibility(View.VISIBLE);
+            dataValue1.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_NUMBER);
         }
         if (data.equals(features[7])) {
             dataName1.setText(getString(R.string.add_new_data) + " " + getString(R.string.sleep_duration));
             dataName1.setVisibility(View.VISIBLE);
             dataValue1.setVisibility(View.VISIBLE);
+            dataValue1.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_NUMBER);
         }
     }
 }
