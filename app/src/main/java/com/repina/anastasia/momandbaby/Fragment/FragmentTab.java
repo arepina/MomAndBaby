@@ -192,6 +192,7 @@ public class FragmentTab extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //todo sync google fit
                 Intent intent = new Intent(v.getContext(), GoogleFitActivity.class);
                 startActivity(intent);
             }
@@ -199,7 +200,7 @@ public class FragmentTab extends Fragment {
 
         listViewMom = (ListView) v.findViewById(R.id.listViewMom);
         momArrayAdapter = new ItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row);
-        FirebaseData.getMomStats(momArrayAdapter, calendar);// Load today add's from Firebase for mom
+        // todo Load today add's for mom from google fit
 
         final TextView headerDate = (TextView) v.findViewById(R.id.headerMom);
         headerDate.setText(R.string.today);

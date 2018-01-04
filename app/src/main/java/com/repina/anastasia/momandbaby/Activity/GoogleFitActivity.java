@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 
@@ -25,6 +26,7 @@ import com.google.android.gms.fitness.result.DataReadResult;
 import com.repina.anastasia.momandbaby.R;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -35,9 +37,6 @@ public class GoogleFitActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener,
         View.OnClickListener
 {
-
-    private Button mButtonViewWeek;
-    private Button mButtonViewToday;
 
     private GoogleApiClient mGoogleApiClient;
 
@@ -57,8 +56,8 @@ public class GoogleFitActivity extends AppCompatActivity implements
     }
 
     private void initViews() {
-        mButtonViewWeek = (Button) findViewById(R.id.btn_view_week);
-        mButtonViewToday = (Button) findViewById(R.id.btn_view_today);
+        Button mButtonViewWeek = (Button) findViewById(R.id.btn_view_week);
+        Button mButtonViewToday = (Button) findViewById(R.id.btn_view_today);
 
         mButtonViewWeek.setOnClickListener(this);
         mButtonViewToday.setOnClickListener(this);
@@ -71,7 +70,11 @@ public class GoogleFitActivity extends AppCompatActivity implements
     //In use, call this every 30 seconds in active mode, 60 in ambient on watch faces
     private void displayStepDataForToday() {
         DailyTotalResult result = Fitness.HistoryApi.readDailyTotal( mGoogleApiClient, DataType.TYPE_STEP_COUNT_DELTA ).await(5, TimeUnit.SECONDS);
-        showDataSet(result.getTotal());
+        ArrayList<Pair<String, Integer>> stepsData = parseStepsData(result.getTotal());
+        //todo
+        //if(!stepsData.size() == 0)//no data for today
+        //show toast
+
     }
 
     private void displayLastWeeksData() {
@@ -79,10 +82,10 @@ public class GoogleFitActivity extends AppCompatActivity implements
         Date now = new Date();
         cal.setTime(now);
         long endTime = cal.getTimeInMillis();
-        cal.add(Calendar.WEEK_OF_YEAR, -1);
+        cal.add(Calendar.WEEK_OF_YEAR, -1);//one week from today's date backward
         long startTime = cal.getTimeInMillis();
 
-        java.text.DateFormat dateFormat = DateFormat.getDateInstance();
+        DateFormat dateFormat = DateFormat.getDateInstance();
         Log.e("History", "Range Start: " + dateFormat.format(startTime));
         Log.e("History", "Range End: " + dateFormat.format(endTime));
 
@@ -95,41 +98,52 @@ public class GoogleFitActivity extends AppCompatActivity implements
 
         DataReadResult dataReadResult = Fitness.HistoryApi.readData(mGoogleApiClient, readRequest).await(5, TimeUnit.SECONDS);
 
+        ArrayList<Pair<String, Integer>> sumStepsData = new ArrayList<>();
+
         //Used for aggregated data
         if (dataReadResult.getBuckets().size() > 0) {
-            Log.e("History", "Number of buckets: " + dataReadResult.getBuckets().size());
             for (Bucket bucket : dataReadResult.getBuckets()) {
                 List<DataSet> dataSets = bucket.getDataSets();
                 for (DataSet dataSet : dataSets) {
-                    showDataSet(dataSet);
+                    cal.add(Calendar.DAY_OF_YEAR, 1);
+                    ArrayList<Pair<String, Integer>> stepsDataForADay = parseStepsData(dataSet);
+                    if(stepsDataForADay.size() == 0)//no data for a day
+                        stepsDataForADay.add(new Pair<>(dateFormat.format(cal.getTimeInMillis()),-1));
+                    sumStepsData.addAll(stepsDataForADay);
                 }
             }
         }
         //Used for non-aggregated data
         else if (dataReadResult.getDataSets().size() > 0) {
-            Log.e("History", "Number of returned DataSets: " + dataReadResult.getDataSets().size());
             for (DataSet dataSet : dataReadResult.getDataSets()) {
-                showDataSet(dataSet);
+                ArrayList<Pair<String, Integer>> stepsDataForADay = parseStepsData(dataSet);
+                sumStepsData.addAll(stepsDataForADay);
             }
         }
+
+        //todo show sumStepsData
     }
 
-
-    private void showDataSet(DataSet dataSet) {
-        Log.e("History", "Data returned for Data type: " + dataSet.getDataType().getName());
+    private ArrayList<Pair<String, Integer>> parseStepsData(DataSet dataSet) {
         DateFormat dateFormat = DateFormat.getDateInstance();
         DateFormat timeFormat = DateFormat.getTimeInstance();
-
+        ArrayList<Pair<String, Integer>> stepsData = new ArrayList<>();
         for (DataPoint dp : dataSet.getDataPoints()) {
-            Log.e("History", "Data point:");
-            Log.e("History", "\tType: " + dp.getDataType().getName());
-            Log.e("History", "\tStart: " + dateFormat.format(dp.getStartTime(TimeUnit.MILLISECONDS)) + " " + timeFormat.format(dp.getStartTime(TimeUnit.MILLISECONDS)));
-            Log.e("History", "\tEnd: " + dateFormat.format(dp.getEndTime(TimeUnit.MILLISECONDS)) + " " + timeFormat.format(dp.getStartTime(TimeUnit.MILLISECONDS)));
-            for(Field field : dp.getDataType().getFields()) {
-                Log.e("History", "\tField: " + field.getName() +
-                        " Value: " + dp.getValue(field));
+            String startDate = dateFormat.format(dp.getStartTime(TimeUnit.MILLISECONDS));
+            String endDate = dateFormat.format(dp.getEndTime(TimeUnit.MILLISECONDS));
+            if(startDate.equals(endDate)) {
+                String startTime = timeFormat.format(dp.getStartTime(TimeUnit.MILLISECONDS));
+                String endTime = timeFormat.format(dp.getStartTime(TimeUnit.MILLISECONDS));
+                Log.e("History", "\tStart: " + startDate + " " + startTime);
+                Log.e("History", "\tEnd: " + endDate + " " + endTime);
+                Field field = dp.getDataType().getFields().get(0);//steps number
+                Log.e("History", "\tField: " + field.getName() + " Value: " + dp.getValue(field));
+                int steps = Integer.parseInt(dp.getValue(field).toString());
+                Pair<String, Integer> newStepsEntry = new Pair<>(startDate, steps);
+                stepsData.add(newStepsEntry);
             }
         }
+        return stepsData;
     }
 
     @Override
