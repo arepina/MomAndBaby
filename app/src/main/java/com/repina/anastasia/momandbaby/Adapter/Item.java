@@ -5,9 +5,14 @@ public class Item {
     private int itemImg;
     private String itemDesc;
 
-    public Item(int fruitImgResId, String itemDesc) {
-        itemImg = fruitImgResId;
+    public Item(int imgResId, String itemDesc) {
+        itemImg = imgResId;
         this.itemDesc = itemDesc;
+    }
+
+    public Item(int imgResId, String itemDesc, String date) {
+        itemImg = imgResId;
+        this.itemDesc = itemDesc + " " + date;
     }
 
     int getItemImg() {

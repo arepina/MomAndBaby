@@ -5,12 +5,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
-import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,23 +17,18 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.repina.anastasia.momandbaby.Activity.ChartActivity;
-import com.repina.anastasia.momandbaby.Activity.GoogleFitActivity;
 import com.repina.anastasia.momandbaby.Activity.ChooseFeatureActivity;
 import com.repina.anastasia.momandbaby.Activity.SignupActivity;
 import com.repina.anastasia.momandbaby.Activity.AppInfoActivity;
 import com.repina.anastasia.momandbaby.Adapter.ItemArrayAdapter;
-import com.repina.anastasia.momandbaby.Classes.FirebaseData;
+import com.repina.anastasia.momandbaby.Classes.StatsProcessing;
 import com.repina.anastasia.momandbaby.Classes.FormattedDate;
 import com.repina.anastasia.momandbaby.Classes.SendEmail;
 import com.repina.anastasia.momandbaby.Classes.SharedConstants;
 import com.repina.anastasia.momandbaby.R;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.Calendar;
 
-import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
 
 
@@ -193,14 +186,14 @@ public class FragmentTab extends Fragment {
             @Override
             public void onClick(View view) {
                 //todo sync google fit
-                Intent intent = new Intent(v.getContext(), GoogleFitActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(v.getContext(), GoogleFit.class);
+//                startActivity(intent);
             }
         });
 
         listViewMom = (ListView) v.findViewById(R.id.listViewMom);
         momArrayAdapter = new ItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row);
-        // todo Load today add's for mom from google fit
+        StatsProcessing.getMomStatsForOneDay(momArrayAdapter, calendar, getActivity(), listViewMom);// Load today data for mom from google fit
 
         final TextView headerDate = (TextView) v.findViewById(R.id.headerMom);
         headerDate.setText(R.string.today);
@@ -210,7 +203,7 @@ public class FragmentTab extends Fragment {
             @Override
             public void onClick(View v) {
                 goYesterday(headerDate);
-                FirebaseData.getMomStats(momArrayAdapter, calendar);
+                StatsProcessing.getMomStatsForOneDay(momArrayAdapter, calendar, getActivity(), listViewMom);
             }
         });
 
@@ -219,7 +212,7 @@ public class FragmentTab extends Fragment {
             @Override
             public void onClick(View v) {
                 goTomorrow(headerDate);
-                FirebaseData.getMomStats(momArrayAdapter, calendar);
+                StatsProcessing.getMomStatsForOneDay(momArrayAdapter, calendar, getActivity(), listViewMom);
             }
         });
 
@@ -231,7 +224,7 @@ public class FragmentTab extends Fragment {
 
         listViewBaby = (ListView) v.findViewById(R.id.listViewBaby);
         babyArrayAdapter = new ItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row);
-        FirebaseData.getBabyStats(babyArrayAdapter, calendar, getContext(), listViewBaby);// Load today add's from Firebase for baby
+        StatsProcessing.getBabyStats(babyArrayAdapter, calendar, getContext(), listViewBaby);// Load today add's from Firebase for baby
 
         FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.floatingActionButton);
         fab.setVisibility(View.VISIBLE);
@@ -254,7 +247,7 @@ public class FragmentTab extends Fragment {
             public void onClick(View v) {
                 babyArrayAdapter.clear();
                 goYesterday(headerDate);
-                FirebaseData.getBabyStats(babyArrayAdapter, calendar, getContext(), listViewBaby);
+                StatsProcessing.getBabyStats(babyArrayAdapter, calendar, getContext(), listViewBaby);
             }
         });
 
@@ -264,7 +257,7 @@ public class FragmentTab extends Fragment {
             public void onClick(View v) {
                 babyArrayAdapter.clear();
                 goTomorrow(headerDate);
-                FirebaseData.getBabyStats(babyArrayAdapter, calendar, getContext(), listViewBaby);
+                StatsProcessing.getBabyStats(babyArrayAdapter, calendar, getContext(), listViewBaby);
 
             }
         });
@@ -333,7 +326,7 @@ public class FragmentTab extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case BABY_NEW_FEATURE: {
-                FirebaseData.getBabyStats(babyArrayAdapter, calendar, getContext(), listViewBaby);
+                StatsProcessing.getBabyStats(babyArrayAdapter, calendar, getContext(), listViewBaby);
                 break;
             }
         }

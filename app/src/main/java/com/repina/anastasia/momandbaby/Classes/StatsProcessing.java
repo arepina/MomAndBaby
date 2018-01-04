@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.renderscript.Sampler;
+import android.support.v4.app.FragmentActivity;
+import android.util.Pair;
 import android.widget.ListView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -17,6 +19,7 @@ import com.repina.anastasia.momandbaby.DataBase.DatabaseNames;
 import com.repina.anastasia.momandbaby.R;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -24,7 +27,7 @@ import java.util.Map;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class FirebaseData {
+public class StatsProcessing {
 
     public static void getBabyStats(final ItemArrayAdapter adapter, final Calendar dateAndTime, Context context, final ListView listViewBaby) {
 
@@ -70,8 +73,16 @@ public class FirebaseData {
                 });
     }
 
-    public static void getMomStats(final ItemArrayAdapter adapter, final Calendar dateAndTime) {
-        //todo
+    public static void getMomStatsForOneDay(final ItemArrayAdapter adapter, final Calendar dateAndTime, FragmentActivity activity, ListView listViewMom) {
+        GoogleFit googleFit = new GoogleFit(activity, adapter, listViewMom);
+        googleFit.getOneDayData(dateAndTime);
+    }
+
+    public static void getMomStatsForOneWeek(final ItemArrayAdapter adapter, final Calendar endDate, FragmentActivity activity,  ListView listViewMom) {
+        GoogleFit googleFit = new GoogleFit(activity, adapter, listViewMom);
+        Calendar startDate = endDate;
+        startDate.add(Calendar.WEEK_OF_YEAR, -1);
+        googleFit.getWeekData(startDate, endDate);
     }
 
     private static int getImageId(String name) {

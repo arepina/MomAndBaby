@@ -1,14 +1,13 @@
-package com.repina.anastasia.momandbaby.Activity;
+package com.repina.anastasia.momandbaby.Classes;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.util.Pair;
-import android.view.View;
-import android.widget.Button;
+import android.widget.ListView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.Scopes;
@@ -23,6 +22,8 @@ import com.google.android.gms.fitness.data.Field;
 import com.google.android.gms.fitness.request.DataReadRequest;
 import com.google.android.gms.fitness.result.DailyTotalResult;
 import com.google.android.gms.fitness.result.DataReadResult;
+import com.repina.anastasia.momandbaby.Adapter.Item;
+import com.repina.anastasia.momandbaby.Adapter.ItemArrayAdapter;
 import com.repina.anastasia.momandbaby.R;
 
 import java.text.DateFormat;
@@ -32,52 +33,49 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class GoogleFitActivity extends AppCompatActivity implements
+class GoogleFit implements
         GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener,
-        View.OnClickListener
-{
+        GoogleApiClient.OnConnectionFailedListener {
 
     private GoogleApiClient mGoogleApiClient;
+    private ItemArrayAdapter adapter;
+    private ListView listView;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_google_fit);
 
-        initViews();
-
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
+    GoogleFit(FragmentActivity activity, ItemArrayAdapter adapter, ListView listView) {
+        this.adapter = adapter;
+        this.listView = listView;
+        mGoogleApiClient = new GoogleApiClient.Builder(activity.getApplicationContext())
                 .addApi(Fitness.HISTORY_API)
                 .addScope(new Scope(Scopes.FITNESS_ACTIVITY_READ_WRITE))
                 .addConnectionCallbacks(this)
-                .enableAutoManage(this, 0, this)
+                .enableAutoManage(activity, 0, this)
                 .build();
     }
 
-    private void initViews() {
-        Button mButtonViewWeek = (Button) findViewById(R.id.btn_view_week);
-        Button mButtonViewToday = (Button) findViewById(R.id.btn_view_today);
-
-        mButtonViewWeek.setOnClickListener(this);
-        mButtonViewToday.setOnClickListener(this);
-    }
 
     public void onConnected(@Nullable Bundle bundle) {
         Log.e("HistoryAPI", "onConnected");
     }
 
-    //In use, call this every 30 seconds in active mode, 60 in ambient on watch faces
-    private void displayStepDataForToday() {
-        DailyTotalResult result = Fitness.HistoryApi.readDailyTotal( mGoogleApiClient, DataType.TYPE_STEP_COUNT_DELTA ).await(5, TimeUnit.SECONDS);
-        ArrayList<Pair<String, Integer>> stepsData = parseStepsData(result.getTotal());
-        //todo
-        //if(!stepsData.size() == 0)//no data for today
-        //show toast
 
+    void getWeekData(Calendar startDate, Calendar endDate) {
+        //todo use start and end dates
+        new ViewWeekStepCountTask().execute();
     }
 
-    private void displayLastWeeksData() {
+    void getOneDayData(Calendar date) {
+        //todo use date
+        new ViewTodaysStepCountTask().execute();
+    }
+
+    //In use, call this every 30 seconds in active mode, 60 in ambient on watch faces
+    private ArrayList<Pair<String, Integer>> stepDataForToday() {
+        DailyTotalResult result = Fitness.HistoryApi.readDailyTotal(mGoogleApiClient, DataType.TYPE_STEP_COUNT_DELTA).await(5, TimeUnit.SECONDS);
+        return parseStepsData(result.getTotal());
+    }
+
+    private ArrayList<Pair<String, Integer>> lastWeeksData() {
         Calendar cal = Calendar.getInstance();
         Date now = new Date();
         cal.setTime(now);
@@ -107,8 +105,8 @@ public class GoogleFitActivity extends AppCompatActivity implements
                 for (DataSet dataSet : dataSets) {
                     cal.add(Calendar.DAY_OF_YEAR, 1);
                     ArrayList<Pair<String, Integer>> stepsDataForADay = parseStepsData(dataSet);
-                    if(stepsDataForADay.size() == 0)//no data for a day
-                        stepsDataForADay.add(new Pair<>(dateFormat.format(cal.getTimeInMillis()),-1));
+                    if (stepsDataForADay.size() == 0)//no data for a day
+                        stepsDataForADay.add(new Pair<>(dateFormat.format(cal.getTimeInMillis()), -1));
                     sumStepsData.addAll(stepsDataForADay);
                 }
             }
@@ -121,7 +119,7 @@ public class GoogleFitActivity extends AppCompatActivity implements
             }
         }
 
-        //todo show sumStepsData
+        return sumStepsData;
     }
 
     private ArrayList<Pair<String, Integer>> parseStepsData(DataSet dataSet) {
@@ -131,7 +129,7 @@ public class GoogleFitActivity extends AppCompatActivity implements
         for (DataPoint dp : dataSet.getDataPoints()) {
             String startDate = dateFormat.format(dp.getStartTime(TimeUnit.MILLISECONDS));
             String endDate = dateFormat.format(dp.getEndTime(TimeUnit.MILLISECONDS));
-            if(startDate.equals(endDate)) {
+            if (startDate.equals(endDate)) {
                 String startTime = timeFormat.format(dp.getStartTime(TimeUnit.MILLISECONDS));
                 String endTime = timeFormat.format(dp.getStartTime(TimeUnit.MILLISECONDS));
                 Log.e("History", "\tStart: " + startDate + " " + startTime);
@@ -156,32 +154,45 @@ public class GoogleFitActivity extends AppCompatActivity implements
         Log.e("HistoryAPI", "onConnectionFailed");
     }
 
+    private class ViewWeekStepCountTask extends AsyncTask<Void, ArrayList<Pair<String, Integer>>, ArrayList<Pair<String, Integer>>> {
+        protected ArrayList<Pair<String, Integer>> doInBackground(Void... params) {
+            return lastWeeksData();
+        }
 
-    @Override
-    public void onClick(View v) {
-        switch(v.getId()) {
-            case R.id.btn_view_week: {
-                new ViewWeekStepCountTask().execute();
-                break;
+        @Override
+        protected void onPostExecute(ArrayList<Pair<String, Integer>> result) {
+            for(Pair<String, Integer> pair : result)
+            {
+                String date = pair.first;
+                Integer steps = pair.second;
+                Item item = new Item(R.mipmap.steps, steps.toString());
+                adapter.add(item);
             }
-            case R.id.btn_view_today: {
-                new ViewTodaysStepCountTask().execute();
-                break;
-            }
+            //todo
+            //if(!adapter.getCount() == 0)//no data for today
+            //add item with words or image
+            listView.setAdapter(adapter);
         }
     }
 
-    private class ViewWeekStepCountTask extends AsyncTask<Void, Void, Void> {
-        protected Void doInBackground(Void... params) {
-            displayLastWeeksData();
-            return null;
+    private class ViewTodaysStepCountTask extends AsyncTask<Void, ArrayList<Pair<String, Integer>>, ArrayList<Pair<String, Integer>>> {
+        protected ArrayList<Pair<String, Integer>>  doInBackground(Void... params) {
+            return stepDataForToday();
         }
-    }
 
-    private class ViewTodaysStepCountTask extends AsyncTask<Void, Void, Void> {
-        protected Void doInBackground(Void... params) {
-            displayStepDataForToday();
-            return null;
+        @Override
+        protected void onPostExecute(ArrayList<Pair<String, Integer>> result) {
+            for(Pair<String, Integer> pair : result)
+            {
+                String date = pair.first;
+                Integer steps = pair.second;
+                Item item = new Item(R.mipmap.steps, steps.toString(), date);
+                adapter.add(item);
+            }
+            //todo
+            //if(!adapter.getCount() == 0)//no data for today
+            //add item with words or image
+            listView.setAdapter(adapter);
         }
     }
 }
