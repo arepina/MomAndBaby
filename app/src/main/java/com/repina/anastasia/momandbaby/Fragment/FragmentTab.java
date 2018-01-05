@@ -31,6 +31,7 @@ import com.repina.anastasia.momandbaby.R;
 import java.util.Calendar;
 
 import static android.content.Context.MODE_PRIVATE;
+import static com.repina.anastasia.momandbaby.Activity.TabsActivity.googleFit;
 
 
 public class FragmentTab extends Fragment {
@@ -194,16 +195,15 @@ public class FragmentTab extends Fragment {
 
         listViewMom = (ListView) v.findViewById(R.id.listViewMom);
         momArrayAdapter = new ItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row);
-        final GoogleFit googleFit = new GoogleFit(getActivity());
         StatsProcessing.getMomStatsForOneDay(googleFit, momArrayAdapter, calendar, getActivity(), listViewMom);// Load today data for mom from google fit
 
         final TextView headerDate = (TextView) v.findViewById(R.id.headerMom);
-        headerDate.setText(R.string.today);
 
         TextView yesterday = (TextView) v.findViewById(R.id.yesterdayMom);
         yesterday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                momArrayAdapter.clear();
                 goYesterday(headerDate);
                 StatsProcessing.getMomStatsForOneDay(googleFit, momArrayAdapter, calendar, getActivity(), listViewMom);
             }
@@ -213,6 +213,7 @@ public class FragmentTab extends Fragment {
         tomorrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                momArrayAdapter.clear();
                 goTomorrow(headerDate);
                 StatsProcessing.getMomStatsForOneDay(googleFit, momArrayAdapter, calendar, getActivity(), listViewMom);
             }
@@ -241,7 +242,6 @@ public class FragmentTab extends Fragment {
         });
 
         final TextView headerDate = (TextView) v.findViewById(R.id.headerBaby);
-        headerDate.setText(R.string.today);
 
         TextView yesterday = (TextView) v.findViewById(R.id.yesterdayBaby);
         yesterday.setOnClickListener(new View.OnClickListener() {

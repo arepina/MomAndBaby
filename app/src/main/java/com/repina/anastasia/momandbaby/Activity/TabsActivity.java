@@ -1,5 +1,6 @@
 package com.repina.anastasia.momandbaby.Activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.repina.anastasia.momandbaby.Classes.FirebaseConnection;
 import com.repina.anastasia.momandbaby.Classes.FormattedDate;
+import com.repina.anastasia.momandbaby.Classes.GoogleFit;
 import com.repina.anastasia.momandbaby.Classes.SharedConstants;
 import com.repina.anastasia.momandbaby.Classes.ToastShow;
 import com.repina.anastasia.momandbaby.DataBase.Baby;
@@ -30,6 +32,8 @@ import java.util.Calendar;
 
 public class TabsActivity extends FragmentActivity {
 
+    public static GoogleFit googleFit;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +41,8 @@ public class TabsActivity extends FragmentActivity {
 
         SharedPreferences sp = getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
         String babyID = sp.getString(SharedConstants.BABY_ID_KEY, "");
+
+        googleFit = new GoogleFit(this);
 
         if (babyID.length() == 0) {
             Intent nextActivity = new Intent(this, BabyInfoActivity.class);

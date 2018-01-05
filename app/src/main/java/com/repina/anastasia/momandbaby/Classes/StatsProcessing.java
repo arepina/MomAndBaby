@@ -2,10 +2,7 @@ package com.repina.anastasia.momandbaby.Classes;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.renderscript.Sampler;
 import android.support.v4.app.FragmentActivity;
-import android.util.Pair;
 import android.widget.ListView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -18,10 +15,7 @@ import com.repina.anastasia.momandbaby.Adapter.ItemArrayAdapter;
 import com.repina.anastasia.momandbaby.DataBase.DatabaseNames;
 import com.repina.anastasia.momandbaby.R;
 
-import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -74,13 +68,24 @@ public class StatsProcessing {
     }
 
     public static void getMomStatsForOneDay(GoogleFit googleFit, final ItemArrayAdapter adapter, final Calendar dateAndTime, FragmentActivity activity, ListView listViewMom) {
-        googleFit.getOneDayData(dateAndTime, activity, adapter, listViewMom);
+        Calendar today = Calendar.getInstance();
+        Calendar dateClone = Calendar.getInstance();
+        dateClone.setTime(dateAndTime.getTime());
+        if(today.get(Calendar.DAY_OF_YEAR) == (dateClone.get(Calendar.DAY_OF_YEAR)) && today.get(Calendar.YEAR) == (dateClone.get(Calendar.YEAR)))
+            googleFit.getOneDayData(dateClone, activity, adapter, listViewMom);
+        else {
+            Calendar extra = Calendar.getInstance();
+            extra.setTime(dateClone.getTime());
+            extra.add(Calendar.SECOND, 1);
+            googleFit.getPeriodData(dateClone, extra, activity, adapter, listViewMom);
+        }
     }
 
     public static void getMomStatsForOneWeek(GoogleFit googleFit, final ItemArrayAdapter adapter, final Calendar endDate, FragmentActivity activity,  ListView listViewMom) {
-        Calendar startDate = endDate;
+        Calendar startDate = Calendar.getInstance();
+        startDate.setTime(endDate.getTime());
         startDate.add(Calendar.WEEK_OF_YEAR, -1);
-        googleFit.getWeekData(startDate, endDate, activity, adapter, listViewMom);
+        googleFit.getPeriodData(startDate, endDate, activity, adapter, listViewMom);
     }
 
     private static int getImageId(String name) {

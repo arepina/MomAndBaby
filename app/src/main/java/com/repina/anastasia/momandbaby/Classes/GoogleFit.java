@@ -1,5 +1,6 @@
 package com.repina.anastasia.momandbaby.Classes;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -41,12 +42,13 @@ public class GoogleFit implements
     private ListView listView;
     private FragmentActivity activity;
 
-    public GoogleFit(FragmentActivity activity) {
+    public GoogleFit(Activity activity) {
+        FragmentActivity fragmentActivity = (FragmentActivity)activity;
         mGoogleApiClient = new GoogleApiClient.Builder(activity.getApplicationContext())
                 .addApi(Fitness.HISTORY_API)
                 .addScope(new Scope(Scopes.FITNESS_ACTIVITY_READ_WRITE))
                 .addConnectionCallbacks(this)
-                .enableAutoManage(activity, 0, this)
+                .enableAutoManage(fragmentActivity, 0, this)
                 .build();
     }
 
@@ -54,11 +56,11 @@ public class GoogleFit implements
         Log.e("HistoryAPI", "onConnected");
     }
 
-    void getWeekData(Calendar startDate, Calendar endDate, FragmentActivity activity, ItemArrayAdapter adapter, ListView listView) {
+    void getPeriodData(Calendar startDate, Calendar endDate, FragmentActivity activity, ItemArrayAdapter adapter, ListView listView) {
         this.adapter = adapter;
         this.listView = listView;
         this.activity = activity;
-        new ViewWeekStepCountTask().execute(startDate, endDate);
+        new ViewPeriodStepCountTask().execute(startDate, endDate);
     }
 
     void getOneDayData(Calendar date, FragmentActivity activity, ItemArrayAdapter adapter, ListView listView) {
@@ -68,15 +70,14 @@ public class GoogleFit implements
         new ViewTodaysStepCountTask().execute(date);
     }
 
-    private ArrayList<Pair<String, Integer>> stepDataForToday(Calendar date) {
-        //todo use date here
+    private ArrayList<Pair<String, Integer>> stepDataForToday() {
         DailyTotalResult result = Fitness.HistoryApi
                 .readDailyTotal(mGoogleApiClient, DataType.TYPE_STEP_COUNT_DELTA)
                 .await(5, TimeUnit.SECONDS);
         return parseStepsData(result.getTotal());
     }
 
-    private ArrayList<Pair<String, Integer>> lastWeeksData(Calendar startDate, Calendar endDate) {
+    private ArrayList<Pair<String, Integer>> stepsPeriodData(Calendar startDate, Calendar endDate) {
         long endTime = endDate.getTimeInMillis();
         long startTime = startDate.getTimeInMillis();
 
@@ -102,8 +103,8 @@ public class GoogleFit implements
                 for (DataSet dataSet : dataSets) {
                     startDate.add(Calendar.DAY_OF_YEAR, 1);
                     ArrayList<Pair<String, Integer>> stepsDataForADay = parseStepsData(dataSet);
-                    if (stepsDataForADay.size() == 0)//no data for a day
-                        stepsDataForADay.add(new Pair<>(dateFormat.format(startDate.getTimeInMillis()), -1));
+//                    if (stepsDataForADay.size() == 0)//no data for a day
+//                        stepsDataForADay.add(new Pair<>(dateFormat.format(startDate.getTimeInMillis()), 0));
                     sumStepsData.addAll(stepsDataForADay);
                 }
             }
@@ -151,9 +152,9 @@ public class GoogleFit implements
         Log.e("HistoryAPI", "onConnectionFailed");
     }
 
-    private class ViewWeekStepCountTask extends AsyncTask<Calendar, ArrayList<Pair<String, Integer>>, ArrayList<Pair<String, Integer>>> {
+    private class ViewPeriodStepCountTask extends AsyncTask<Calendar, ArrayList<Pair<String, Integer>>, ArrayList<Pair<String, Integer>>> {
         protected ArrayList<Pair<String, Integer>> doInBackground(Calendar... params) {
-            return lastWeeksData(params[0], params[1]);
+            return stepsPeriodData(params[0], params[1]);
         }
 
         @Override
@@ -177,7 +178,7 @@ public class GoogleFit implements
 
     private class ViewTodaysStepCountTask extends AsyncTask<Calendar, ArrayList<Pair<String, Integer>>, ArrayList<Pair<String, Integer>>> {
         protected ArrayList<Pair<String, Integer>>  doInBackground(Calendar... params) {
-            return stepDataForToday(params[0]);
+            return stepDataForToday();
         }
 
         @Override

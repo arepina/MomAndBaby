@@ -51,9 +51,13 @@ public class ItemArrayAdapter extends ArrayAdapter<Item> {
 
     public boolean hasItem(Item item)
     {
-        //todo fix
-        return itemList.contains(item);
+        for(Item i : itemList)
+            if(i.getItemDesc().equals(item.getItemDesc()) && i.getItemImg() == item.getItemImg())
+                return true;
+        return false;
     }
+
+
 
     @NonNull
     @Override
