@@ -21,6 +21,7 @@ import com.repina.anastasia.momandbaby.Activity.ChooseFeatureActivity;
 import com.repina.anastasia.momandbaby.Activity.SignupActivity;
 import com.repina.anastasia.momandbaby.Activity.AppInfoActivity;
 import com.repina.anastasia.momandbaby.Adapter.ItemArrayAdapter;
+import com.repina.anastasia.momandbaby.Classes.GoogleFit;
 import com.repina.anastasia.momandbaby.Classes.StatsProcessing;
 import com.repina.anastasia.momandbaby.Classes.FormattedDate;
 import com.repina.anastasia.momandbaby.Classes.SendEmail;
@@ -193,7 +194,8 @@ public class FragmentTab extends Fragment {
 
         listViewMom = (ListView) v.findViewById(R.id.listViewMom);
         momArrayAdapter = new ItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row);
-        StatsProcessing.getMomStatsForOneDay(momArrayAdapter, calendar, getActivity(), listViewMom);// Load today data for mom from google fit
+        final GoogleFit googleFit = new GoogleFit(getActivity());
+        StatsProcessing.getMomStatsForOneDay(googleFit, momArrayAdapter, calendar, getActivity(), listViewMom);// Load today data for mom from google fit
 
         final TextView headerDate = (TextView) v.findViewById(R.id.headerMom);
         headerDate.setText(R.string.today);
@@ -203,7 +205,7 @@ public class FragmentTab extends Fragment {
             @Override
             public void onClick(View v) {
                 goYesterday(headerDate);
-                StatsProcessing.getMomStatsForOneDay(momArrayAdapter, calendar, getActivity(), listViewMom);
+                StatsProcessing.getMomStatsForOneDay(googleFit, momArrayAdapter, calendar, getActivity(), listViewMom);
             }
         });
 
@@ -212,7 +214,7 @@ public class FragmentTab extends Fragment {
             @Override
             public void onClick(View v) {
                 goTomorrow(headerDate);
-                StatsProcessing.getMomStatsForOneDay(momArrayAdapter, calendar, getActivity(), listViewMom);
+                StatsProcessing.getMomStatsForOneDay(googleFit, momArrayAdapter, calendar, getActivity(), listViewMom);
             }
         });
 

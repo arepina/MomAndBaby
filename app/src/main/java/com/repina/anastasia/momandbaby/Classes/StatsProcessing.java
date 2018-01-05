@@ -73,16 +73,14 @@ public class StatsProcessing {
                 });
     }
 
-    public static void getMomStatsForOneDay(final ItemArrayAdapter adapter, final Calendar dateAndTime, FragmentActivity activity, ListView listViewMom) {
-        GoogleFit googleFit = new GoogleFit(activity, adapter, listViewMom);
-        googleFit.getOneDayData(dateAndTime);
+    public static void getMomStatsForOneDay(GoogleFit googleFit, final ItemArrayAdapter adapter, final Calendar dateAndTime, FragmentActivity activity, ListView listViewMom) {
+        googleFit.getOneDayData(dateAndTime, activity, adapter, listViewMom);
     }
 
-    public static void getMomStatsForOneWeek(final ItemArrayAdapter adapter, final Calendar endDate, FragmentActivity activity,  ListView listViewMom) {
-        GoogleFit googleFit = new GoogleFit(activity, adapter, listViewMom);
+    public static void getMomStatsForOneWeek(GoogleFit googleFit, final ItemArrayAdapter adapter, final Calendar endDate, FragmentActivity activity,  ListView listViewMom) {
         Calendar startDate = endDate;
         startDate.add(Calendar.WEEK_OF_YEAR, -1);
-        googleFit.getWeekData(startDate, endDate);
+        googleFit.getWeekData(startDate, endDate, activity, adapter, listViewMom);
     }
 
     private static int getImageId(String name) {

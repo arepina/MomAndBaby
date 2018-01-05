@@ -29,22 +29,19 @@ import com.repina.anastasia.momandbaby.R;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-class GoogleFit implements
+public class GoogleFit implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
     private GoogleApiClient mGoogleApiClient;
     private ItemArrayAdapter adapter;
     private ListView listView;
+    private FragmentActivity activity;
 
-
-    GoogleFit(FragmentActivity activity, ItemArrayAdapter adapter, ListView listView) {
-        this.adapter = adapter;
-        this.listView = listView;
+    public GoogleFit(FragmentActivity activity) {
         mGoogleApiClient = new GoogleApiClient.Builder(activity.getApplicationContext())
                 .addApi(Fitness.HISTORY_API)
                 .addScope(new Scope(Scopes.FITNESS_ACTIVITY_READ_WRITE))
@@ -53,35 +50,35 @@ class GoogleFit implements
                 .build();
     }
 
-
     public void onConnected(@Nullable Bundle bundle) {
         Log.e("HistoryAPI", "onConnected");
     }
 
-
-    void getWeekData(Calendar startDate, Calendar endDate) {
-        //todo use start and end dates
-        new ViewWeekStepCountTask().execute();
+    void getWeekData(Calendar startDate, Calendar endDate, FragmentActivity activity, ItemArrayAdapter adapter, ListView listView) {
+        this.adapter = adapter;
+        this.listView = listView;
+        this.activity = activity;
+        new ViewWeekStepCountTask().execute(startDate, endDate);
     }
 
-    void getOneDayData(Calendar date) {
-        //todo use date
-        new ViewTodaysStepCountTask().execute();
+    void getOneDayData(Calendar date, FragmentActivity activity, ItemArrayAdapter adapter, ListView listView) {
+        this.adapter = adapter;
+        this.listView = listView;
+        this.activity = activity;
+        new ViewTodaysStepCountTask().execute(date);
     }
 
-    //In use, call this every 30 seconds in active mode, 60 in ambient on watch faces
-    private ArrayList<Pair<String, Integer>> stepDataForToday() {
-        DailyTotalResult result = Fitness.HistoryApi.readDailyTotal(mGoogleApiClient, DataType.TYPE_STEP_COUNT_DELTA).await(5, TimeUnit.SECONDS);
+    private ArrayList<Pair<String, Integer>> stepDataForToday(Calendar date) {
+        //todo use date here
+        DailyTotalResult result = Fitness.HistoryApi
+                .readDailyTotal(mGoogleApiClient, DataType.TYPE_STEP_COUNT_DELTA)
+                .await(5, TimeUnit.SECONDS);
         return parseStepsData(result.getTotal());
     }
 
-    private ArrayList<Pair<String, Integer>> lastWeeksData() {
-        Calendar cal = Calendar.getInstance();
-        Date now = new Date();
-        cal.setTime(now);
-        long endTime = cal.getTimeInMillis();
-        cal.add(Calendar.WEEK_OF_YEAR, -1);//one week from today's date backward
-        long startTime = cal.getTimeInMillis();
+    private ArrayList<Pair<String, Integer>> lastWeeksData(Calendar startDate, Calendar endDate) {
+        long endTime = endDate.getTimeInMillis();
+        long startTime = startDate.getTimeInMillis();
 
         DateFormat dateFormat = DateFormat.getDateInstance();
         Log.e("History", "Range Start: " + dateFormat.format(startTime));
@@ -103,10 +100,10 @@ class GoogleFit implements
             for (Bucket bucket : dataReadResult.getBuckets()) {
                 List<DataSet> dataSets = bucket.getDataSets();
                 for (DataSet dataSet : dataSets) {
-                    cal.add(Calendar.DAY_OF_YEAR, 1);
+                    startDate.add(Calendar.DAY_OF_YEAR, 1);
                     ArrayList<Pair<String, Integer>> stepsDataForADay = parseStepsData(dataSet);
                     if (stepsDataForADay.size() == 0)//no data for a day
-                        stepsDataForADay.add(new Pair<>(dateFormat.format(cal.getTimeInMillis()), -1));
+                        stepsDataForADay.add(new Pair<>(dateFormat.format(startDate.getTimeInMillis()), -1));
                     sumStepsData.addAll(stepsDataForADay);
                 }
             }
@@ -154,9 +151,9 @@ class GoogleFit implements
         Log.e("HistoryAPI", "onConnectionFailed");
     }
 
-    private class ViewWeekStepCountTask extends AsyncTask<Void, ArrayList<Pair<String, Integer>>, ArrayList<Pair<String, Integer>>> {
-        protected ArrayList<Pair<String, Integer>> doInBackground(Void... params) {
-            return lastWeeksData();
+    private class ViewWeekStepCountTask extends AsyncTask<Calendar, ArrayList<Pair<String, Integer>>, ArrayList<Pair<String, Integer>>> {
+        protected ArrayList<Pair<String, Integer>> doInBackground(Calendar... params) {
+            return lastWeeksData(params[0], params[1]);
         }
 
         @Override
@@ -166,18 +163,21 @@ class GoogleFit implements
                 String date = pair.first;
                 Integer steps = pair.second;
                 Item item = new Item(R.mipmap.steps, steps.toString());
+                if(!adapter.hasItem(item))
+                    adapter.add(item);
+            }
+            if(adapter.getCount() == 0)//no data for today
+            {
+                Item item = new Item(R.mipmap.cross, activity.getResources().getString(R.string.need_to_sync));
                 adapter.add(item);
             }
-            //todo
-            //if(!adapter.getCount() == 0)//no data for today
-            //add item with words or image
             listView.setAdapter(adapter);
         }
     }
 
-    private class ViewTodaysStepCountTask extends AsyncTask<Void, ArrayList<Pair<String, Integer>>, ArrayList<Pair<String, Integer>>> {
-        protected ArrayList<Pair<String, Integer>>  doInBackground(Void... params) {
-            return stepDataForToday();
+    private class ViewTodaysStepCountTask extends AsyncTask<Calendar, ArrayList<Pair<String, Integer>>, ArrayList<Pair<String, Integer>>> {
+        protected ArrayList<Pair<String, Integer>>  doInBackground(Calendar... params) {
+            return stepDataForToday(params[0]);
         }
 
         @Override
@@ -187,11 +187,14 @@ class GoogleFit implements
                 String date = pair.first;
                 Integer steps = pair.second;
                 Item item = new Item(R.mipmap.steps, steps.toString(), date);
+                if(!adapter.hasItem(item))
+                    adapter.add(item);
+            }
+            if(adapter.getCount() == 0)//no data for today
+            {
+                Item item = new Item(R.mipmap.cross, activity.getResources().getString(R.string.need_to_sync));
                 adapter.add(item);
             }
-            //todo
-            //if(!adapter.getCount() == 0)//no data for today
-            //add item with words or image
             listView.setAdapter(adapter);
         }
     }

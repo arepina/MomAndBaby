@@ -49,6 +49,12 @@ public class ItemArrayAdapter extends ArrayAdapter<Item> {
         return this.itemList.get(index);
     }
 
+    public boolean hasItem(Item item)
+    {
+        //todo fix
+        return itemList.contains(item);
+    }
+
     @NonNull
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
