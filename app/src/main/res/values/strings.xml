@@ -76,6 +76,7 @@
     <string name="different_passwords">Пароли должны совпадать</string>
     <string name="email_already_used">Данный email уже используется</string>
     <string name="need_to_sync">Требуется синхронизировать носимое устройство с Google Fit, чтобы данные появились в приложении</string>
+    <string name="google_fit_notification">Для корректной работы требуется разрешить доступ к Google Fit и войти в свой аккаунт</string>
 
     <string-array name="characteristics">
         <item>Шаги</item>

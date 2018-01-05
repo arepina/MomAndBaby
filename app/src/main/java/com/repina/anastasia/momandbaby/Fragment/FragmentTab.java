@@ -26,6 +26,7 @@ import com.repina.anastasia.momandbaby.Classes.StatsProcessing;
 import com.repina.anastasia.momandbaby.Classes.FormattedDate;
 import com.repina.anastasia.momandbaby.Classes.SendEmail;
 import com.repina.anastasia.momandbaby.Classes.SharedConstants;
+import com.repina.anastasia.momandbaby.Classes.ToastShow;
 import com.repina.anastasia.momandbaby.R;
 
 import java.util.Calendar;
@@ -187,9 +188,7 @@ public class FragmentTab extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //todo sync google fit
-//                Intent intent = new Intent(v.getContext(), GoogleFit.class);
-//                startActivity(intent);
+                ToastShow.show(getContext(), getString(R.string.google_fit_notification));
             }
         });
 

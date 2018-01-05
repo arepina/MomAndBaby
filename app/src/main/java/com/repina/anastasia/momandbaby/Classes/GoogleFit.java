@@ -56,6 +56,16 @@ public class GoogleFit implements
         Log.e("HistoryAPI", "onConnected");
     }
 
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.e("HistoryAPI", "onConnectionSuspended");
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.e("HistoryAPI", "onConnectionFailed");
+    }
+
     void getPeriodData(Calendar startDate, Calendar endDate, FragmentActivity activity, ItemArrayAdapter adapter, ListView listView) {
         this.adapter = adapter;
         this.listView = listView;
@@ -70,14 +80,14 @@ public class GoogleFit implements
         new ViewTodaysStepCountTask().execute(date);
     }
 
-    private ArrayList<Pair<String, Integer>> stepDataForToday() {
+    private ArrayList<Pair<String, Integer>> dataForToday(DataType type) {
         DailyTotalResult result = Fitness.HistoryApi
-                .readDailyTotal(mGoogleApiClient, DataType.TYPE_STEP_COUNT_DELTA)
+                .readDailyTotal(mGoogleApiClient, type)
                 .await(5, TimeUnit.SECONDS);
         return parseStepsData(result.getTotal());
     }
 
-    private ArrayList<Pair<String, Integer>> stepsPeriodData(Calendar startDate, Calendar endDate) {
+    private ArrayList<Pair<String, Integer>> periodData(Calendar startDate, Calendar endDate, DataType type, DataType agrType) {
         long endTime = endDate.getTimeInMillis();
         long startTime = startDate.getTimeInMillis();
 
@@ -87,7 +97,7 @@ public class GoogleFit implements
 
         //Check how many steps were walked and recorded in the last 7 days
         DataReadRequest readRequest = new DataReadRequest.Builder()
-                .aggregate(DataType.TYPE_STEP_COUNT_DELTA, DataType.AGGREGATE_STEP_COUNT_DELTA)
+                .aggregate(type, agrType)
                 .bucketByTime(1, TimeUnit.DAYS)
                 .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
                 .build();
@@ -103,8 +113,6 @@ public class GoogleFit implements
                 for (DataSet dataSet : dataSets) {
                     startDate.add(Calendar.DAY_OF_YEAR, 1);
                     ArrayList<Pair<String, Integer>> stepsDataForADay = parseStepsData(dataSet);
-//                    if (stepsDataForADay.size() == 0)//no data for a day
-//                        stepsDataForADay.add(new Pair<>(dateFormat.format(startDate.getTimeInMillis()), 0));
                     sumStepsData.addAll(stepsDataForADay);
                 }
             }
@@ -142,19 +150,11 @@ public class GoogleFit implements
         return stepsData;
     }
 
-    @Override
-    public void onConnectionSuspended(int i) {
-        Log.e("HistoryAPI", "onConnectionSuspended");
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.e("HistoryAPI", "onConnectionFailed");
-    }
-
     private class ViewPeriodStepCountTask extends AsyncTask<Calendar, ArrayList<Pair<String, Integer>>, ArrayList<Pair<String, Integer>>> {
         protected ArrayList<Pair<String, Integer>> doInBackground(Calendar... params) {
-            return stepsPeriodData(params[0], params[1]);
+            DataType type = DataType.TYPE_STEP_COUNT_DELTA;
+            DataType agrType = DataType.AGGREGATE_STEP_COUNT_DELTA;
+            return periodData(params[0], params[1], type, agrType);
         }
 
         @Override
@@ -176,13 +176,67 @@ public class GoogleFit implements
         }
     }
 
-    private class ViewTodaysStepCountTask extends AsyncTask<Calendar, ArrayList<Pair<String, Integer>>, ArrayList<Pair<String, Integer>>> {
-        protected ArrayList<Pair<String, Integer>>  doInBackground(Calendar... params) {
-            return stepDataForToday();
+    private class ViewPeriodCaloriesTask extends AsyncTask<Calendar, ArrayList<Pair<String, Integer>>, ArrayList<Pair<String, Integer>>> {
+        protected ArrayList<Pair<String, Integer>> doInBackground(Calendar... params) {
+            DataType type = DataType.TYPE_CALORIES_EXPENDED;
+            DataType agrType = DataType.AGGREGATE_CALORIES_EXPENDED;
+            return periodData(params[0], params[1], type, agrType);
         }
 
         @Override
         protected void onPostExecute(ArrayList<Pair<String, Integer>> result) {
+            //todo change to calories
+            for(Pair<String, Integer> pair : result)
+            {
+                String date = pair.first;
+                Integer steps = pair.second;
+                Item item = new Item(R.mipmap.steps, steps.toString());
+                if(!adapter.hasItem(item))
+                    adapter.add(item);
+            }
+            if(adapter.getCount() == 0)//no data for today
+            {
+                Item item = new Item(R.mipmap.cross, activity.getResources().getString(R.string.need_to_sync));
+                adapter.add(item);
+            }
+            listView.setAdapter(adapter);
+        }
+    }
+
+    private class ViewTodaysStepCountTask extends AsyncTask<Calendar, ArrayList<Pair<String, Integer>>, ArrayList<Pair<String, Integer>>> {
+        protected ArrayList<Pair<String, Integer>>  doInBackground(Calendar... params) {
+            DataType type = DataType.TYPE_STEP_COUNT_DELTA;
+            return dataForToday(type);
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Pair<String, Integer>> result) {
+            for(Pair<String, Integer> pair : result)
+            {
+                String date = pair.first;
+                Integer steps = pair.second;
+                Item item = new Item(R.mipmap.steps, steps.toString(), date);
+                if(!adapter.hasItem(item))
+                    adapter.add(item);
+            }
+            if(adapter.getCount() == 0)//no data for today
+            {
+                Item item = new Item(R.mipmap.cross, activity.getResources().getString(R.string.need_to_sync));
+                adapter.add(item);
+            }
+            listView.setAdapter(adapter);
+        }
+    }
+
+    private class ViewTodaysCaloriesTask extends AsyncTask<Calendar, ArrayList<Pair<String, Integer>>, ArrayList<Pair<String, Integer>>> {
+        protected ArrayList<Pair<String, Integer>>  doInBackground(Calendar... params) {
+            DataType type = DataType.TYPE_CALORIES_EXPENDED;
+            return dataForToday(type);
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Pair<String, Integer>> result) {
+            //todo change to calories
             for(Pair<String, Integer> pair : result)
             {
                 String date = pair.first;

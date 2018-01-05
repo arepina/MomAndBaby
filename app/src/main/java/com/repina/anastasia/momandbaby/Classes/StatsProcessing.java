@@ -33,6 +33,7 @@ public class StatsProcessing {
         SharedPreferences sp = context.getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
         final String babyID = sp.getString(SharedConstants.BABY_ID_KEY, "");
 
+        //todo make async
         databaseReference
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
