@@ -112,6 +112,7 @@
         <item>Эпидемический паротит</item>
     </string-array>
     <string name="title_activity_main123">MainActivity123</string>
+    <string name="report_error">Возникла проблема при создании отчета, проверьте наличие SD карты в вашем устройстве</string>
 
 
 </resources>

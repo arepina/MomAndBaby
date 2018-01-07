@@ -17,6 +17,7 @@ import com.repina.anastasia.momandbaby.R;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -46,12 +47,12 @@ public class SendEmail {
                 break;
             }
             case 1: {
-                calendar.add(Calendar.DAY_OF_MONTH, 7);
+                calendar.add(Calendar.DAY_OF_MONTH, -7);
                 end = FormattedDate.getFormattedDateWithoutTime(calendar);
                 break;
             }
             case 2: {
-                calendar.add(Calendar.DAY_OF_MONTH, 31);
+                calendar.add(Calendar.DAY_OF_MONTH, -31);
                 end = FormattedDate.getFormattedDateWithoutTime(calendar);
                 break;
             }
@@ -83,11 +84,11 @@ public class SendEmail {
                                         HashMap<String, String> value = entry.getValue();
                                         String date = value.get("date").substring(0, 10);
                                         try {
-                                            Date startDate = FormattedDate.stringToDate(start);
-                                            Date endDate = FormattedDate.stringToDate(finalEnd);
+                                            Date endDate = FormattedDate.stringToDate(start);
+                                            Date startDate = FormattedDate.stringToDate(finalEnd);
                                             Date current = FormattedDate.stringToDate(date);
-                                            long daysStartDif = getUnitBetweenDates(startDate, current, TimeUnit.DAYS);
-                                            long daysEndDif = getUnitBetweenDates(current, endDate, TimeUnit.DAYS);
+                                            long daysStartDif = Math.abs(getUnitBetweenDates(startDate, current, TimeUnit.DAYS));
+                                            long daysEndDif = Math.abs(getUnitBetweenDates(current, endDate, TimeUnit.DAYS));
                                             if (value.get("babyId").equals(babyID)
                                                     &
                                                     ((current.before(endDate) & (startDate.before(current) || daysStartDif == 0)) ||
@@ -117,52 +118,54 @@ public class SendEmail {
     }
 
     private static void sendFile(String report, Context context, String start, String finalEnd) {
-        //todo fix
         String fileName = context.getString(R.string.report_from) + " " + start + " " + context.getString(R.string.report_to) + " " + finalEnd + ".txt";
-        createFile(fileName, report, context);
-        File gpxfile = new File(fileName);
-
-        //Read text from file
-        StringBuilder text = new StringBuilder();
-
         try {
-            BufferedReader br = new BufferedReader(new FileReader(gpxfile));
-            String line;
-
-            while ((line = br.readLine()) != null) {
-                text.append(line);
-                text.append('\n');
+            File f = createFile(fileName, report);
+            if(f != null) {
+                Uri path = Uri.fromFile(f);
+                Intent i = new Intent(Intent.ACTION_SEND);
+                i.setType("message/rfc822");
+                SharedPreferences sp = context.getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
+                String email = sp.getString(SharedConstants.MOM_EMAIL, "");
+                i.putExtra(Intent.EXTRA_EMAIL, new String[]{email});
+                i.putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.report_from) + " " + start + " " + context.getString(R.string.report_to) + " " + finalEnd);
+                i.putExtra(Intent.EXTRA_TEXT, context.getString(R.string.email_text));
+                i.putExtra(Intent.EXTRA_STREAM, path);
+                context.startActivity(Intent.createChooser(i, context.getString(R.string.report_sending)));
             }
-            br.close();
-        }
-        catch (IOException e) {
+            else
+                ToastShow.show(context, context.getString(R.string.report_error));
+        }catch (IOException e){
             e.printStackTrace();
-            //You'll need to add proper error handling here
         }
-
-
-        Uri path = Uri.fromFile(gpxfile);
-        Intent i = new Intent(Intent.ACTION_SEND);
-        i.setType("message/rfc822");
-        SharedPreferences sp = context.getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
-        String email = sp.getString(SharedConstants.MOM_EMAIL, "");
-        i.putExtra(Intent.EXTRA_EMAIL, new String[]{email});
-        i.putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.report_from) + " " + start + " " + context.getString(R.string.report_to) + " " + finalEnd);
-        i.putExtra(Intent.EXTRA_TEXT, context.getString(R.string.email_text));
-        i.putExtra(Intent.EXTRA_STREAM, path);
-        context.startActivity(Intent.createChooser(i, context.getString(R.string.report_sending)));
     }
 
     /*
-   * Create file in internal storage
+   * Create file in external storage
    * */
-    private static void createFile(String name, String content, Context context) {
-        try {
-            FileOutputStream fos = context.openFileOutput(name, Context.MODE_APPEND);
-            fos.write(content.getBytes());
-            fos.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+    private static File createFile(String name, String content) throws IOException {
+        // get the state of your external storage
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            // if storage is mounted return true
+            File folder = new File(String.valueOf(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)));
+            boolean success = true;
+            if (!folder.exists()) {
+                success = folder.mkdirs();
+            }
+            if (success) {
+                Log.d("Success","Open");
+                // create the file in which we will write the contents
+                File file = new File(folder, name);
+                FileOutputStream os = new FileOutputStream(file);
+                os.write(content.getBytes());
+                os.close();
+                return file;
+            } else
+                Log.d("Failed","Open");
         }
+        return null;
     }
+
+
 }

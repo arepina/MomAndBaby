@@ -1,10 +1,14 @@
 package com.repina.anastasia.momandbaby.Fragment;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -22,7 +26,6 @@ import com.repina.anastasia.momandbaby.Activity.SignupActivity;
 import com.repina.anastasia.momandbaby.Activity.AppInfoActivity;
 import com.repina.anastasia.momandbaby.Adapter.ItemArrayAdapter;
 import com.repina.anastasia.momandbaby.Classes.ConnectionDetector;
-import com.repina.anastasia.momandbaby.Classes.GoogleFit;
 import com.repina.anastasia.momandbaby.Classes.StatsProcessing;
 import com.repina.anastasia.momandbaby.Classes.FormattedDate;
 import com.repina.anastasia.momandbaby.Classes.SendEmail;
@@ -47,6 +50,9 @@ public class FragmentTab extends Fragment {
     private ListView listViewMom;
 
     private final int BABY_NEW_FEATURE = 0;
+
+    private final int MY_PERMISSIONS_REQUEST_CREATE_FILE_BABY = 0;
+    private final int MY_PERMISSIONS_REQUEST_CREATE_FILE_MOM = 1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -135,7 +141,13 @@ public class FragmentTab extends Fragment {
         sendReportBaby.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showAlertDialog(true);
+                if(ConnectionDetector.isConnected(getContext())) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
+                            getContext().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+                        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+                    else
+                        showAlertDialog(true);
+                }
             }
         });
 
@@ -143,7 +155,12 @@ public class FragmentTab extends Fragment {
         sendReportMom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showAlertDialog(false);
+                if(ConnectionDetector.isConnected(getContext()))
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
+                            getContext().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+                        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+                    else
+                        showAlertDialog(false);
             }
         });
 
@@ -338,6 +355,26 @@ public class FragmentTab extends Fragment {
             case BABY_NEW_FEATURE: {
                 StatsProcessing.getBabyStats(babyArrayAdapter, calendar, getContext(), listViewBaby);
                 break;
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_CREATE_FILE_BABY: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    showAlertDialog(true);
+                }
+            }
+            case MY_PERMISSIONS_REQUEST_CREATE_FILE_MOM: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    showAlertDialog(false);
+                }
             }
         }
     }
