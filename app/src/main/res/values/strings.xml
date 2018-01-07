@@ -111,6 +111,7 @@
         <item>Гемофильная инфекция</item>
         <item>Эпидемический паротит</item>
     </string-array>
+    <string name="title_activity_main123">MainActivity123</string>
 
 
 </resources>

@@ -32,7 +32,11 @@
             android:theme="@android:style/Theme.Dialog" />
         <activity android:name=".Activity.ChartActivity" />
         <activity android:name=".Activity.NewFeatureActivity" />
-        <activity android:name=".Activity.AppInfoActivity"></activity>
+        <activity android:name=".Activity.AppInfoActivity" />
+        <activity
+            android:name=".Activity.MainActivity123"
+            android:label="@string/title_activity_main123"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

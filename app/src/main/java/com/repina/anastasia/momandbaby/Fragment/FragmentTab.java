@@ -21,6 +21,7 @@ import com.repina.anastasia.momandbaby.Activity.ChooseFeatureActivity;
 import com.repina.anastasia.momandbaby.Activity.SignupActivity;
 import com.repina.anastasia.momandbaby.Activity.AppInfoActivity;
 import com.repina.anastasia.momandbaby.Adapter.ItemArrayAdapter;
+import com.repina.anastasia.momandbaby.Classes.ConnectionDetector;
 import com.repina.anastasia.momandbaby.Classes.GoogleFit;
 import com.repina.anastasia.momandbaby.Classes.StatsProcessing;
 import com.repina.anastasia.momandbaby.Classes.FormattedDate;
@@ -202,9 +203,11 @@ public class FragmentTab extends Fragment {
         yesterday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                momArrayAdapter.clear();
-                goYesterday(headerDate);
-                StatsProcessing.getMomStatsForOneDay(googleFit, momArrayAdapter, calendar, getActivity(), listViewMom);
+                if(ConnectionDetector.isConnected(getContext())) {
+                    momArrayAdapter.clear();
+                    goYesterday(headerDate);
+                    StatsProcessing.getMomStatsForOneDay(googleFit, momArrayAdapter, calendar, getActivity(), listViewMom);
+                }
             }
         });
 
@@ -212,9 +215,11 @@ public class FragmentTab extends Fragment {
         tomorrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                momArrayAdapter.clear();
-                goTomorrow(headerDate);
-                StatsProcessing.getMomStatsForOneDay(googleFit, momArrayAdapter, calendar, getActivity(), listViewMom);
+                if(ConnectionDetector.isConnected(getContext())) {
+                    momArrayAdapter.clear();
+                    goTomorrow(headerDate);
+                    StatsProcessing.getMomStatsForOneDay(googleFit, momArrayAdapter, calendar, getActivity(), listViewMom);
+                }
             }
         });
 
@@ -246,9 +251,11 @@ public class FragmentTab extends Fragment {
         yesterday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                babyArrayAdapter.clear();
-                goYesterday(headerDate);
-                StatsProcessing.getBabyStats(babyArrayAdapter, calendar, getContext(), listViewBaby);
+                if(ConnectionDetector.isConnected(getContext())) {
+                    babyArrayAdapter.clear();
+                    goYesterday(headerDate);
+                    StatsProcessing.getBabyStats(babyArrayAdapter, calendar, getContext(), listViewBaby);
+                }
             }
         });
 
@@ -256,9 +263,11 @@ public class FragmentTab extends Fragment {
         tomorrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                babyArrayAdapter.clear();
-                goTomorrow(headerDate);
-                StatsProcessing.getBabyStats(babyArrayAdapter, calendar, getContext(), listViewBaby);
+                if(ConnectionDetector.isConnected(getContext())) {
+                    babyArrayAdapter.clear();
+                    goTomorrow(headerDate);
+                    StatsProcessing.getBabyStats(babyArrayAdapter, calendar, getContext(), listViewBaby);
+                }
 
             }
         });
