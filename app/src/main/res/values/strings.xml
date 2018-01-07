@@ -77,6 +77,7 @@
     <string name="email_already_used">Данный email уже используется</string>
     <string name="need_to_sync">Требуется синхронизировать носимое устройство с Google Fit, чтобы данные появились в приложении</string>
     <string name="google_fit_notification">Для корректной работы требуется разрешить доступ к Google Fit и войти в свой аккаунт</string>
+    <string name="licenses">Все изображения в приложении используются по Flaticon Basic License. Изображения являются частью пакетов, созданных Freepik, Smashicons, Nikita Golubev,  Vectors Market, Maxim Basinski</string>
 
     <string-array name="characteristics">
         <item>Шаги</item>
@@ -95,12 +96,20 @@
         <item>Сон</item>
     </string-array>
 
+    <!--todo add more or update-->
     <string-array name="vaccinations">
-        <item>Прививка от кори</item>
-        <item>Привика от гриппа</item>
-        <item>Прививка от краснухи</item>
-        <item>Прививка от ветрянки</item>
-        <item>Прививка от вредности</item>
+        <item>Вирусный гепатит В</item>
+        <item>Туберкулез</item>
+        <item>Краснуха</item>
+        <item>Ветрянка</item>
+        <item>Корь</item>
+        <item>Полиомиелит</item>
+        <item>Столбняк</item>
+        <item>Дифтерия</item>
+        <item>Коклюш</item>
+        <item>Пневмококковая инфекция</item>
+        <item>Гемофильная инфекция</item>
+        <item>Эпидемический паротит</item>
     </string-array>
 
 

@@ -23,4 +23,13 @@
         android:textSize="@dimen/text_size"
         android:layout_margin="@dimen/main_margin"
         android:textColor="@color/colorTextDark"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/licenses"
+        android:textAlignment="center"
+        android:textSize="@dimen/text_size"
+        android:layout_margin="@dimen/main_margin"
+        android:textColor="@color/colorTextDark"/>
 </LinearLayout>
