@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Environment;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.firebase.database.DataSnapshot;
@@ -22,10 +23,14 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -94,15 +99,17 @@ public class SendEmail {
                                                     ((current.before(endDate) & (startDate.before(current) || daysStartDif == 0)) ||
                                                             (current.before(endDate) || daysEndDif == 0) & startDate.before(current)) ||
                                                     (daysEndDif == 0 & daysStartDif == 0)) {
-                                                //todo make the report more read-friendly
-                                                report += value.toString().replace("{", "").replace("}", "") + "\n";
+                                                report += cleanData(value, report, singleSnapshot);
                                             }
                                         } catch (ParseException ignored) {
                                         }
                                     }
                                 }
                             }
-                            sendFile(report, context, start, finalEnd);
+                            if(report.length() == 0)
+                                ToastShow.show(context, context.getString(R.string.no_data));
+                            else
+                                sendFile(report, context, start, finalEnd);
                         }
                     }
 
@@ -110,6 +117,41 @@ public class SendEmail {
                     public void onCancelled(DatabaseError databaseError) {
                     }
                 });
+    }
+
+    private static String cleanData(HashMap<String, String>  value, String report, DataSnapshot singleSnapshot)
+    {
+        ArrayList<String> values = new ArrayList<>(Arrays.asList(value.toString().replace("{", "").replace("}", "").split(" ")));
+        //remove babyID data
+        values.remove(values.size() - 1);
+        int dateIndex = 0;
+        //solve height and weight problem
+        for(int i = 0; i < values.size(); i++)
+        {
+            String item = values.get(i);
+            if(item.contains("weight"))
+            {
+                String[] weightArr = item.split("=");
+                if(Double.parseDouble(weightArr[1].replace(",", "")) == 0) {
+                    values.remove(i);
+                    i--;
+                }
+            }
+            if(item.contains("height"))
+            {
+                String[] heightArr = item.split("=");
+                if(Double.parseDouble(heightArr[1].replace(",", "")) == 0) {
+                    values.remove(i);
+                    i--;
+                }
+            }
+            if(item.contains("date"))
+                dateIndex = i;
+        }
+        String dateValue = values.get(dateIndex);
+        values.remove(dateIndex);
+        values.set(values.size() - 1, values.get(values.size() - 1).replace(",", ""));//remove the last comma
+        return singleSnapshot.getKey() + "| " + dateValue + " "+ TextUtils.join(" ", values) + "\n";
     }
 
     private static long getUnitBetweenDates(Date startDate, Date endDate, TimeUnit unit) {
@@ -166,6 +208,4 @@ public class SendEmail {
         }
         return null;
     }
-
-
 }
