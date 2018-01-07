@@ -17,6 +17,7 @@ import com.repina.anastasia.momandbaby.R;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
 
 public class MainActivity123 extends AppCompatActivity {
@@ -36,7 +37,8 @@ public class MainActivity123 extends AppCompatActivity {
         btnCreateFile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createTestFile();
+
+                createTestFile(getBaseContext());
             }
         });
 
@@ -61,11 +63,12 @@ public class MainActivity123 extends AppCompatActivity {
     /*
     * Create Test file in internal storage.
     * */
-    private void createTestFile() {
+    private void createTestFile(Context c) {
         try {
-            FileOutputStream fos = getApplicationContext().openFileOutput(FILENAME, Context.MODE_APPEND);
-            fos.write("Your content".getBytes());
-            fos.close();
+            FileOutputStream fos = c.openFileOutput(FILENAME, Context.MODE_APPEND);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject("Your content");
+            oos.close();
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -16,11 +16,7 @@
         <activity
             android:name=".Activity.SplashActivity"
             android:theme="@style/SplashTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".Activity.DotsActivity" />
         <activity android:name=".Activity.BabyInfoActivity" />
@@ -36,7 +32,13 @@
         <activity
             android:name=".Activity.MainActivity123"
             android:label="@string/title_activity_main123"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
