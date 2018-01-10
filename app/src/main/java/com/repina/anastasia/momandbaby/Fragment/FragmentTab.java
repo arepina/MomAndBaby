@@ -50,9 +50,7 @@ public class FragmentTab extends Fragment {
     private ListView listViewMom;
 
     private final int BABY_NEW_FEATURE = 0;
-
-    private final int MY_PERMISSIONS_REQUEST_CREATE_FILE_BABY = 0;
-    private final int MY_PERMISSIONS_REQUEST_CREATE_FILE_MOM = 1;
+    private final int MOM_NEW_FEATURE = 1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -141,7 +139,7 @@ public class FragmentTab extends Fragment {
         sendReportBaby.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(ConnectionDetector.isConnected(getContext())) {
+                if (ConnectionDetector.isConnected(getContext())) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
                             getContext().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
                         requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
@@ -155,7 +153,7 @@ public class FragmentTab extends Fragment {
         sendReportMom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(ConnectionDetector.isConnected(getContext()))
+                if (ConnectionDetector.isConnected(getContext()))
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
                             getContext().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
                         requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
@@ -201,12 +199,14 @@ public class FragmentTab extends Fragment {
 
         FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.floatingActionButton);
         fab.setVisibility(View.VISIBLE);
-        fab.setImageResource(R.drawable.band_dark);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ToastShow.show(getContext(), getString(R.string.google_fit_notification));
+                momArrayAdapter.clear();
+                Intent intent = new Intent(v.getContext(), ChooseFeatureActivity.class);
+                intent.putExtra("requestCode", MOM_NEW_FEATURE);
+                startActivityForResult(intent, MOM_NEW_FEATURE);
             }
         });
 
@@ -252,12 +252,13 @@ public class FragmentTab extends Fragment {
 
         FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.floatingActionButton);
         fab.setVisibility(View.VISIBLE);
-        fab.setImageResource(R.mipmap.plus);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                babyArrayAdapter.clear();
                 Intent intent = new Intent(v.getContext(), ChooseFeatureActivity.class);
+                intent.putExtra("requestCode", BABY_NEW_FEATURE);
                 startActivityForResult(intent, BABY_NEW_FEATURE);
             }
         });
@@ -268,7 +269,7 @@ public class FragmentTab extends Fragment {
         yesterday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(ConnectionDetector.isConnected(getContext())) {
+                if (ConnectionDetector.isConnected(getContext())) {
                     babyArrayAdapter.clear();
                     goYesterday(headerDate);
                     StatsProcessing.getBabyStats(babyArrayAdapter, calendar, getContext(), listViewBaby);
@@ -280,7 +281,7 @@ public class FragmentTab extends Fragment {
         tomorrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(ConnectionDetector.isConnected(getContext())) {
+                if (ConnectionDetector.isConnected(getContext())) {
                     babyArrayAdapter.clear();
                     goTomorrow(headerDate);
                     StatsProcessing.getBabyStats(babyArrayAdapter, calendar, getContext(), listViewBaby);
@@ -299,7 +300,7 @@ public class FragmentTab extends Fragment {
                 && calendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR))
             headerDate.setText(R.string.today);
         else {
-            String date = FormattedDate.getFormattedDateWithoutTime(calendar);
+            String date = FormattedDate.getTextDate(calendar);
             headerDate.setText(date);
         }
     }
@@ -311,14 +312,14 @@ public class FragmentTab extends Fragment {
                 && calendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR))
             headerDate.setText(R.string.today);
         else {
-            String date = FormattedDate.getFormattedDateWithoutTime(calendar);
+            String date = FormattedDate.getTextDate(calendar);
             headerDate.setText(date);
         }
     }
 
     private void showAlertDialog(final boolean whoFlag) {
         //todo change later
-       // AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom));
+        // AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom));
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         builder.setTitle(R.string.choose_period);
@@ -362,14 +363,14 @@ public class FragmentTab extends Fragment {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_CREATE_FILE_BABY: {
+            case 0: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     showAlertDialog(true);
                 }
             }
-            case MY_PERMISSIONS_REQUEST_CREATE_FILE_MOM: {
+            case 1: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {

@@ -10,20 +10,10 @@ import android.widget.GridView;
 
 import com.repina.anastasia.momandbaby.Classes.ConnectionDetector;
 import com.repina.anastasia.momandbaby.Classes.CustomGrid;
+import com.repina.anastasia.momandbaby.Classes.ToastShow;
 import com.repina.anastasia.momandbaby.R;
 
 public class ChooseFeatureActivity extends Activity {
-
-    int[] imageId = {
-            R.mipmap.height,
-            R.mipmap.weight,
-            R.mipmap.diapers,
-            R.mipmap.vaccination,
-            R.mipmap.illness,
-            R.mipmap.food,
-            R.mipmap.outdoor,
-            R.mipmap.sleep,
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,14 +23,46 @@ public class ChooseFeatureActivity extends Activity {
 
         this.setFinishOnTouchOutside(false);
 
-        final String[] features = getResources().getStringArray(R.array.parameters);
+        int activityCode = getIntent().getExtras().getInt("requestCode");
+
+        final String[] features;
+        int[] imageId;
+
+        if (activityCode == 0) // baby
+        {
+            imageId = new int[]{
+                    R.mipmap.height,
+                    R.mipmap.weight,
+                    R.mipmap.diapers,
+                    R.mipmap.vaccination,
+                    R.mipmap.illness,
+                    R.mipmap.food,
+                    R.mipmap.outdoor,
+                    R.mipmap.sleep
+            };
+            features = getResources().getStringArray(R.array.parametersBaby);
+        } else // mom
+        {
+            imageId = new int[]{
+                    R.mipmap.weight,
+                    R.mipmap.food,
+                    R.mipmap.sleep,
+                    R.mipmap.google_fit
+            };
+            features = getResources().getStringArray(R.array.parametersMom);
+        }
+
         CustomGrid adapter = new CustomGrid(ChooseFeatureActivity.this, features, imageId);
 
-        GridView grid = (GridView)findViewById(R.id.gridView);
+        GridView grid = (GridView) findViewById(R.id.gridView);
         grid.setAdapter(adapter);
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                if(ConnectionDetector.isConnected(getApplicationContext())) {
+                if(features[position].equals(getString(R.string.google_fit))) {
+                    ToastShow.show(v.getContext(), getString(R.string.google_fit_notification));
+                    finish();//back to main screen
+                }
+                else if (ConnectionDetector.isConnected(getApplicationContext())) {
                     Intent nextActivity = new Intent(getApplicationContext(), NewFeatureActivity.class);
                     nextActivity.putExtra("data", features[position]);
                     startActivity(nextActivity);

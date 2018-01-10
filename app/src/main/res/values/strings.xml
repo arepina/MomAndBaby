@@ -78,6 +78,10 @@
     <string name="need_to_sync">Требуется синхронизировать носимое устройство с Google Fit, чтобы данные появились в приложении</string>
     <string name="google_fit_notification">Для корректной работы требуется разрешить доступ к Google Fit и войти в свой аккаунт</string>
     <string name="licenses">Все изображения в приложении используются по Flaticon Basic License. Изображения являются частью пакетов, созданных Freepik, Smashicons, Nikita Golubev,  Vectors Market, Maxim Basinski</string>
+    <string name="report_error">Возникла проблема при создании отчета, проверьте наличие SD карты в вашем устройстве</string>
+    <string name="no_data">Нет доступных данных. Попробуйте выбрать другой временной период.</string>
+    <string name="no_data_today">Записей нет</string>
+    <string name="google_fit">Google Fit</string>
 
     <string-array name="characteristics">
         <item>Шаги</item>
@@ -85,7 +89,7 @@
         <item>Сон</item>
     </string-array>
 
-    <string-array name="parameters">
+    <string-array name="parametersBaby">
         <item>Рост</item>
         <item>Вес</item>
         <item>Стул</item>
@@ -94,6 +98,13 @@
         <item>Питание</item>
         <item>Прогулки</item>
         <item>Сон</item>
+    </string-array>
+
+    <string-array name="parametersMom">
+        <item>Вес</item>
+        <item>Питание</item>
+        <item>Сон</item>
+        <item>Google Fit</item>
     </string-array>
 
     <!--todo add more or update-->
@@ -111,9 +122,4 @@
         <item>Гемофильная инфекция</item>
         <item>Эпидемический паротит</item>
     </string-array>
-    <string name="title_activity_main123">MainActivity123</string>
-    <string name="report_error">Возникла проблема при создании отчета, проверьте наличие SD карты в вашем устройстве</string>
-    <string name="no_data">Нет доступных данных. Попробуйте выбрать другой временной период.</string>
-
-
 </resources>

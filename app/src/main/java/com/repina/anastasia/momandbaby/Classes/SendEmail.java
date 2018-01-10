@@ -16,21 +16,15 @@ import com.google.firebase.database.ValueEventListener;
 import com.repina.anastasia.momandbaby.DataBase.DatabaseNames;
 import com.repina.anastasia.momandbaby.R;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -99,7 +93,7 @@ public class SendEmail {
                                                     ((current.before(endDate) & (startDate.before(current) || daysStartDif == 0)) ||
                                                             (current.before(endDate) || daysEndDif == 0) & startDate.before(current)) ||
                                                     (daysEndDif == 0 & daysStartDif == 0)) {
-                                                report += cleanData(value, report, singleSnapshot);
+                                                report += cleanData(value, singleSnapshot);
                                             }
                                         } catch (ParseException ignored) {
                                         }
@@ -119,8 +113,9 @@ public class SendEmail {
                 });
     }
 
-    private static String cleanData(HashMap<String, String>  value, String report, DataSnapshot singleSnapshot)
+    private static String cleanData(HashMap<String, String> value, DataSnapshot singleSnapshot)
     {
+        //todo add translation
         ArrayList<String> values = new ArrayList<>(Arrays.asList(value.toString().replace("{", "").replace("}", "").split(" ")));
         //remove babyID data
         values.remove(values.size() - 1);
@@ -151,7 +146,7 @@ public class SendEmail {
         String dateValue = values.get(dateIndex);
         values.remove(dateIndex);
         values.set(values.size() - 1, values.get(values.size() - 1).replace(",", ""));//remove the last comma
-        return singleSnapshot.getKey() + "| " + dateValue + " "+ TextUtils.join(" ", values) + "\n";
+        return singleSnapshot.getKey() + " " + dateValue + " "+ TextUtils.join(" ", values) + "\n";
     }
 
     private static long getUnitBetweenDates(Date startDate, Date endDate, TimeUnit unit) {

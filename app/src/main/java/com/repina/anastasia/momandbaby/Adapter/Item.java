@@ -12,7 +12,7 @@ public class Item {
 
     public Item(int imgResId, String itemDesc, String date) {
         itemImg = imgResId;
-        this.itemDesc = itemDesc + " " + date;
+        this.itemDesc = itemDesc; // + " " + date;
     }
 
     int getItemImg() {

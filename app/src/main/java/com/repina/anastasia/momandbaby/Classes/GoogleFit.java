@@ -46,9 +46,10 @@ public class GoogleFit implements
         FragmentActivity fragmentActivity = (FragmentActivity)activity;
         mGoogleApiClient = new GoogleApiClient.Builder(activity.getApplicationContext())
                 .addApi(Fitness.HISTORY_API)
-                .addScope(new Scope(Scopes.FITNESS_ACTIVITY_READ_WRITE))
                 .addConnectionCallbacks(this)
                 .enableAutoManage(fragmentActivity, 0, this)
+                .addScope(new Scope(Scopes.FITNESS_ACTIVITY_READ_WRITE))
+                //.addScope(new Scope(Scopes.FITNESS_BODY_READ_WRITE))
                 .build();
     }
 
@@ -88,8 +89,11 @@ public class GoogleFit implements
     }
 
     private ArrayList<Pair<DataType, Pair<String, Double>>> periodData(Calendar startDate, Calendar endDate, DataType type, DataType agrType) {
+        Calendar startDateClone = Calendar.getInstance();
+        startDateClone.setTime(startDate.getTime());
+
         long endTime = endDate.getTimeInMillis();
-        long startTime = startDate.getTimeInMillis();
+        long startTime = startDateClone.getTimeInMillis();
 
         DateFormat dateFormat = DateFormat.getDateInstance();
         Log.e("History", "Range Start: " + dateFormat.format(startTime));
@@ -110,7 +114,7 @@ public class GoogleFit implements
             for (Bucket bucket : dataReadResult.getBuckets()) {
                 List<DataSet> dataSets = bucket.getDataSets();
                 for (DataSet dataSet : dataSets) {
-                    startDate.add(Calendar.DAY_OF_YEAR, 1);
+                    startDateClone.add(Calendar.DAY_OF_YEAR, 1);
                     ArrayList<Pair<DataType, Pair<String, Double>>> dataForADay = parseData(dataSet, type);
                     sumData.addAll(dataForADay);
                 }
@@ -155,9 +159,17 @@ public class GoogleFit implements
             DataType type = DataType.TYPE_STEP_COUNT_DELTA;
             DataType agrType = DataType.AGGREGATE_STEP_COUNT_DELTA;
             ArrayList<Pair<DataType, Pair<String, Double>>> result = periodData(params[0], params[1], type, agrType);
+
             type = DataType.TYPE_CALORIES_EXPENDED;
             agrType = DataType.AGGREGATE_CALORIES_EXPENDED;
-            result.addAll(periodData(params[0], params[1], type, agrType));
+            ArrayList<Pair<DataType, Pair<String, Double>>> result1 = periodData(params[0], params[1], type, agrType);
+            result.addAll(result1);
+
+            type = DataType.TYPE_WEIGHT;
+            agrType = DataType.AGGREGATE_WEIGHT_SUMMARY;
+            result1 = periodData(params[0], params[1], type, agrType);
+            result.addAll(result1);
+
             return result;
         }
 
@@ -174,6 +186,8 @@ public class GoogleFit implements
                     item = new Item(R.mipmap.steps, value.toString(), date);
                 if(type.equals(DataType.TYPE_CALORIES_EXPENDED))
                     item = new Item(R.mipmap.calories, value.toString(), date);
+                if(type.equals(DataType.TYPE_WEIGHT))
+                    item = new Item(R.mipmap.weight, value.toString(), date);
                 if(!adapter.hasItem(item))
                     adapter.add(item);
             }
@@ -190,9 +204,15 @@ public class GoogleFit implements
         protected ArrayList<Pair<DataType, Pair<String, Double>>>  doInBackground(Calendar... params) {
             DataType type = DataType.TYPE_STEP_COUNT_DELTA;
             ArrayList<Pair<DataType, Pair<String, Double>>> result = dataForToday(type);
+
             type = DataType.TYPE_CALORIES_EXPENDED;
             ArrayList<Pair<DataType, Pair<String, Double>>> result1 = dataForToday(type);
             result.addAll(result1);
+
+            type = DataType.TYPE_WEIGHT;
+            result1 = dataForToday(type);
+            result.addAll(result1);
+
             return result;
         }
 
@@ -209,6 +229,8 @@ public class GoogleFit implements
                     item = new Item(R.mipmap.steps, value.toString(), date);
                 if(type.equals(DataType.TYPE_CALORIES_EXPENDED))
                     item = new Item(R.mipmap.calories, value.toString(), date);
+                if(type.equals(DataType.TYPE_WEIGHT))
+                    item = new Item(R.mipmap.weight, value.toString(), date);
                 if(!adapter.hasItem(item))
                     adapter.add(item);
             }

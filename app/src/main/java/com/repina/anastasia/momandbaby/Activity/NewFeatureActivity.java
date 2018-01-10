@@ -18,6 +18,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.repina.anastasia.momandbaby.Classes.FirebaseConnection;
 import com.repina.anastasia.momandbaby.Classes.SharedConstants;
+import com.repina.anastasia.momandbaby.Classes.ToastShow;
 import com.repina.anastasia.momandbaby.DataBase.DatabaseNames;
 import com.repina.anastasia.momandbaby.DataBase.Food;
 import com.repina.anastasia.momandbaby.DataBase.Illness;
@@ -53,7 +54,7 @@ public class NewFeatureActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_feature);
         featureName = getIntent().getExtras().getString("data");
-        features = getResources().getStringArray(R.array.parameters);
+        features = getResources().getStringArray(R.array.parametersBaby);
 
         dataValue1 = (EditText) findViewById(R.id.dataValue1);
         dataValue2 = (EditText) findViewById(R.id.dataValue2);

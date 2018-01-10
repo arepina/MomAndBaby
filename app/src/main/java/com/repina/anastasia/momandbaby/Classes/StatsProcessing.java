@@ -15,15 +15,18 @@ import com.repina.anastasia.momandbaby.Adapter.ItemArrayAdapter;
 import com.repina.anastasia.momandbaby.DataBase.DatabaseNames;
 import com.repina.anastasia.momandbaby.R;
 
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+import java.util.TimeZone;
 
 import static android.content.Context.MODE_PRIVATE;
 
 public class StatsProcessing {
 
-    public static void getBabyStats(final ItemArrayAdapter adapter, final Calendar dateAndTime, Context context, final ListView listViewBaby) {
+    public static void getBabyStats(final ItemArrayAdapter adapter, final Calendar dateAndTime, final Context context, final ListView listViewBaby) {
 
         FirebaseConnection connection = new FirebaseConnection();
         FirebaseDatabase database = connection.getDatabase();
@@ -33,7 +36,6 @@ public class StatsProcessing {
         SharedPreferences sp = context.getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
         final String babyID = sp.getString(SharedConstants.BABY_ID_KEY, "");
 
-        //todo make async
         databaseReference
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -52,11 +54,16 @@ public class StatsProcessing {
                                         if (date.substring(0, 10).equals(FormattedDate.getFormattedDateWithoutTime(dateAndTime))
                                                 & value.get("babyId").equals(babyID)) {
                                             int imageId = getImageId(singleSnapshot.getKey());
-                                            Item it = new Item(imageId, date);
+                                            Item it = new Item(imageId, formDescription(value));
                                             adapter.add(it);
                                         }
                                     }
                                 }
+                            }
+                            if(adapter.getCount() == 0)
+                            {
+                                Item it = new Item(R.mipmap.cross, context.getResources().getString(R.string.no_data_today));
+                                adapter.add(it);
                             }
                             listViewBaby.setAdapter(adapter);
                         }
@@ -68,21 +75,50 @@ public class StatsProcessing {
                 });
     }
 
+    private static String formDescription(HashMap<String, String> value) {
+        String line = "";
+        value.remove("babyId");
+        value.remove("date");
+        for (Map.Entry<String, String> entry : value.entrySet()) {
+            String val = String.valueOf(entry.getValue());
+            try {
+                double number = Double.parseDouble(val);
+                if (number != 0) {
+                    line += Translator.translate(entry.getKey()) + ": " + val;
+                    if (!"\n".equals(String.valueOf(line.charAt(line.length() - 1))))
+                        line += "\n";
+                }
+            } catch (NumberFormatException e) { // not a number
+                line += Translator.translate(entry.getKey()) + ": " + val;
+                if (!"\n".equals(String.valueOf(line.charAt(line.length() - 1))))
+                    line += "\n";
+            }
+        }
+        line = line.substring(0, line.length() - 1);
+        return line;
+
+    }
+
     public static void getMomStatsForOneDay(GoogleFit googleFit, final ItemArrayAdapter adapter, final Calendar dateAndTime, FragmentActivity activity, ListView listViewMom) {
         Calendar today = Calendar.getInstance();
         Calendar dateClone = Calendar.getInstance();
         dateClone.setTime(dateAndTime.getTime());
-        if(today.get(Calendar.DAY_OF_YEAR) == (dateClone.get(Calendar.DAY_OF_YEAR)) && today.get(Calendar.YEAR) == (dateClone.get(Calendar.YEAR)))
+        if (today.get(Calendar.DAY_OF_YEAR) == (dateClone.get(Calendar.DAY_OF_YEAR)) && today.get(Calendar.YEAR) == (dateClone.get(Calendar.YEAR)))
             googleFit.getOneDayData(dateClone, activity, adapter, listViewMom);
-        else {
+        else { // not today
+            dateClone.set(Calendar.HOUR_OF_DAY, 0);
+            dateClone.set(Calendar.MINUTE, 0);
+            dateClone.set(Calendar.SECOND, 0);
             Calendar extra = Calendar.getInstance();
             extra.setTime(dateClone.getTime());
-            extra.add(Calendar.SECOND, 1);
+            extra.add(Calendar.MINUTE, 1439);
+            extra.add(Calendar.SECOND, 59);
+            //one second is not in the review
             googleFit.getPeriodData(dateClone, extra, activity, adapter, listViewMom);
         }
     }
 
-    public static void getMomStatsForOneWeek(GoogleFit googleFit, final ItemArrayAdapter adapter, final Calendar endDate, FragmentActivity activity,  ListView listViewMom) {
+    public static void getMomStatsForOneWeek(GoogleFit googleFit, final ItemArrayAdapter adapter, final Calendar endDate, FragmentActivity activity, ListView listViewMom) {
         Calendar startDate = Calendar.getInstance();
         startDate.setTime(endDate.getTime());
         startDate.add(Calendar.WEEK_OF_YEAR, -1);
