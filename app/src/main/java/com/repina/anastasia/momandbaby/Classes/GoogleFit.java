@@ -42,8 +42,10 @@ public class GoogleFit implements
     private ListView listView;
     private FragmentActivity activity;
 
+    private String start, end;
+
     public GoogleFit(Activity activity) {
-        FragmentActivity fragmentActivity = (FragmentActivity)activity;
+        FragmentActivity fragmentActivity = (FragmentActivity) activity;
         mGoogleApiClient = new GoogleApiClient.Builder(activity.getApplicationContext())
                 .addApi(Fitness.HISTORY_API)
                 .addConnectionCallbacks(this)
@@ -67,18 +69,22 @@ public class GoogleFit implements
         Log.e("HistoryAPI", "onConnectionFailed");
     }
 
-    void getPeriodData(Calendar startDate, Calendar endDate, FragmentActivity activity, ItemArrayAdapter adapter, ListView listView) {
+    void getPeriodData(Calendar startDate, Calendar endDate, FragmentActivity activity, ItemArrayAdapter adapter, ListView listView, boolean isEmail) {
+        this.start = FormattedDate.getFormattedDateWithoutTime(startDate);
+        this.end = FormattedDate.getFormattedDateWithoutTime(endDate);
         this.adapter = adapter;
         this.listView = listView;
         this.activity = activity;
-        new ViewPeriodTask().execute(startDate, endDate);
+        new ViewPeriodTask(isEmail).execute(startDate, endDate);
     }
 
-    void getOneDayData(Calendar date, FragmentActivity activity, ItemArrayAdapter adapter, ListView listView) {
+    void getOneDayData(Calendar date, FragmentActivity activity, ItemArrayAdapter adapter, ListView listView, boolean isEmail) {
+        this.start = FormattedDate.getFormattedDateWithoutTime(date);
+        this.end = FormattedDate.getFormattedDateWithoutTime(date);
         this.adapter = adapter;
         this.listView = listView;
         this.activity = activity;
-        new ViewTodayTask().execute(date);
+        new ViewTodayTask(isEmail).execute(date);
     }
 
     private ArrayList<Pair<DataType, Pair<String, Double>>> dataForToday(DataType type) {
@@ -155,6 +161,12 @@ public class GoogleFit implements
     }
 
     private class ViewPeriodTask extends AsyncTask<Calendar, ArrayList<Pair<DataType, Pair<String, Double>>>, ArrayList<Pair<DataType, Pair<String, Double>>>> {
+        private boolean isEmail;
+
+        ViewPeriodTask(boolean isEmail) {
+            this.isEmail = isEmail;
+        }
+
         protected ArrayList<Pair<DataType, Pair<String, Double>>> doInBackground(Calendar... params) {
             DataType type = DataType.TYPE_STEP_COUNT_DELTA;
             DataType agrType = DataType.AGGREGATE_STEP_COUNT_DELTA;
@@ -175,33 +187,42 @@ public class GoogleFit implements
 
         @Override
         protected void onPostExecute(ArrayList<Pair<DataType, Pair<String, Double>>> result) {
-            for(Pair<DataType, Pair<String, Double>> pair : result)
-            {
+            for (Pair<DataType, Pair<String, Double>> pair : result) {
                 DataType type = pair.first;
                 Pair<String, Double> entry = pair.second;
                 String date = entry.first;
                 Double value = entry.second;
                 Item item = null;
-                if(type.equals(DataType.TYPE_STEP_COUNT_DELTA))
+                if (type.equals(DataType.TYPE_STEP_COUNT_DELTA))
                     item = new Item(R.mipmap.steps, value.toString(), date);
-                if(type.equals(DataType.TYPE_CALORIES_EXPENDED))
+                if (type.equals(DataType.TYPE_CALORIES_EXPENDED))
                     item = new Item(R.mipmap.calories, value.toString(), date);
-                if(type.equals(DataType.TYPE_WEIGHT))
+                if (type.equals(DataType.TYPE_WEIGHT))
                     item = new Item(R.mipmap.weight, value.toString(), date);
-                if(!adapter.hasItem(item))
+                if (!adapter.hasItem(item))
                     adapter.add(item);
             }
-            if(adapter.getCount() == 0)//no data for today
+            if (adapter.getCount() == 0)//no data for today
             {
                 Item item = new Item(R.mipmap.cross, activity.getResources().getString(R.string.need_to_sync));
                 adapter.add(item);
             }
-            listView.setAdapter(adapter);
+            if(!isEmail)
+                listView.setAdapter(adapter);
+            else
+                SendEmail.formMomsReport(adapter, activity.getApplicationContext(), start, end);
         }
     }
 
     private class ViewTodayTask extends AsyncTask<Calendar, ArrayList<Pair<DataType, Pair<String, Double>>>, ArrayList<Pair<DataType, Pair<String, Double>>>> {
-        protected ArrayList<Pair<DataType, Pair<String, Double>>>  doInBackground(Calendar... params) {
+
+        private boolean isEmail;
+
+        ViewTodayTask(boolean isEmail) {
+            this.isEmail = isEmail;
+        }
+
+        protected ArrayList<Pair<DataType, Pair<String, Double>>> doInBackground(Calendar... params) {
             DataType type = DataType.TYPE_STEP_COUNT_DELTA;
             ArrayList<Pair<DataType, Pair<String, Double>>> result = dataForToday(type);
 
@@ -218,28 +239,30 @@ public class GoogleFit implements
 
         @Override
         protected void onPostExecute(ArrayList<Pair<DataType, Pair<String, Double>>> result) {
-            for(Pair<DataType, Pair<String, Double>> pair : result)
-            {
+            for (Pair<DataType, Pair<String, Double>> pair : result) {
                 DataType type = pair.first;
                 Pair<String, Double> entry = pair.second;
                 String date = entry.first;
                 Double value = entry.second;
                 Item item = null;
-                if(type.equals(DataType.TYPE_STEP_COUNT_DELTA))
+                if (type.equals(DataType.TYPE_STEP_COUNT_DELTA))
                     item = new Item(R.mipmap.steps, value.toString(), date);
-                if(type.equals(DataType.TYPE_CALORIES_EXPENDED))
+                if (type.equals(DataType.TYPE_CALORIES_EXPENDED))
                     item = new Item(R.mipmap.calories, value.toString(), date);
-                if(type.equals(DataType.TYPE_WEIGHT))
+                if (type.equals(DataType.TYPE_WEIGHT))
                     item = new Item(R.mipmap.weight, value.toString(), date);
-                if(!adapter.hasItem(item))
+                if (!adapter.hasItem(item))
                     adapter.add(item);
             }
-            if(adapter.getCount() == 0)//no data for today
+            if (adapter.getCount() == 0)//no data for today
             {
                 Item item = new Item(R.mipmap.cross, activity.getResources().getString(R.string.need_to_sync));
                 adapter.add(item);
             }
-            listView.setAdapter(adapter);
+            if (!isEmail)
+                listView.setAdapter(adapter);
+            else
+                SendEmail.formMomsReport(adapter, activity.getApplicationContext(), start, end);
         }
     }
 }

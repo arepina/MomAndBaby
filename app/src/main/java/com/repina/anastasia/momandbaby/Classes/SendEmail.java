@@ -3,8 +3,10 @@ package com.repina.anastasia.momandbaby.Classes;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Environment;
+import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -13,6 +15,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.repina.anastasia.momandbaby.Adapter.Item;
+import com.repina.anastasia.momandbaby.Adapter.ItemArrayAdapter;
 import com.repina.anastasia.momandbaby.DataBase.DatabaseNames;
 import com.repina.anastasia.momandbaby.R;
 
@@ -29,13 +33,37 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import static android.content.Context.MODE_PRIVATE;
+import static com.repina.anastasia.momandbaby.Activity.TabsActivity.googleFit;
 
 public class SendEmail {
 
-    public static void createEmail(final Context context, int length, boolean whoFlag) {
+    public static void createEmail(final Context context, int length, boolean whoFlag, FragmentActivity activity, ItemArrayAdapter adapter) {
+        // logic depends on the who flag
+        if (whoFlag) // baby
+            createBabyEmail(context, length);
+        else //mom
+            createMomEmail(length, adapter, activity);
+    }
 
-        //todo add mom logic depends on who flag
+    private static void createMomEmail(int length, ItemArrayAdapter adapter, FragmentActivity activity) {
+        Calendar today = Calendar.getInstance();
+        switch (length) {
+            case 0: {
+                StatsProcessing.getMomStatsForOneDay(googleFit, adapter, today, activity, null, true);
+                break;
+            }
+            case 1: {
+                //
+                break;
+            }
+            case 2: {
+                //
+                break;
+            }
+        }
+    }
 
+    private static void createBabyEmail(final Context context, int length) {
         Calendar calendar = Calendar.getInstance();
         final String start = FormattedDate.getFormattedDateWithoutTime(calendar);
         String end = "";
@@ -100,7 +128,7 @@ public class SendEmail {
                                     }
                                 }
                             }
-                            if(report.length() == 0)
+                            if (report.length() == 0)
                                 ToastShow.show(context, context.getString(R.string.no_data));
                             else
                                 sendFile(report, context, start, finalEnd);
@@ -113,40 +141,65 @@ public class SendEmail {
                 });
     }
 
-    private static String cleanData(HashMap<String, String> value, DataSnapshot singleSnapshot)
-    {
+    static void formMomsReport(ItemArrayAdapter adapter, Context context, String start, String end) {
+        String report = "";
+        for (int i = 0; i < adapter.getCount(); i++) {
+            Item it = adapter.getItem(i);
+            report += imageToString(it.getItemImg()) + " " + it.getItemDate() + " " + it.getItemDesc() + "\n";
+        }
+        if (report.length() == 0)
+            ToastShow.show(context, context.getString(R.string.no_data));
+        else
+            sendFile(report, context, start, end);
+    }
+
+    private static String imageToString(int imageIntPath) {
+        //todo add all icons
+        switch (imageIntPath) {
+            case 2130903042: {
+                return "Калории";
+            }
+            case 2130903058:{
+                return "Вес";
+            }
+            case 2130903055:{
+                return "Шаги";
+            }
+            default:
+                return "";
+        }
+    }
+
+    private static String cleanData(HashMap<String, String> value, DataSnapshot singleSnapshot) {
         //todo add translation
         ArrayList<String> values = new ArrayList<>(Arrays.asList(value.toString().replace("{", "").replace("}", "").split(" ")));
         //remove babyID data
         values.remove(values.size() - 1);
         int dateIndex = 0;
         //solve height and weight problem
-        for(int i = 0; i < values.size(); i++)
-        {
+        for (int i = 0; i < values.size(); i++) {
             String item = values.get(i);
-            if(item.contains("weight"))
-            {
+            if (item.contains("weight")) {
                 String[] weightArr = item.split("=");
-                if(Double.parseDouble(weightArr[1].replace(",", "")) == 0) {
+                if (Double.parseDouble(weightArr[1].replace(",", "")) == 0) {
                     values.remove(i);
                     i--;
                 }
             }
-            if(item.contains("height"))
-            {
+            if (item.contains("height")) {
                 String[] heightArr = item.split("=");
-                if(Double.parseDouble(heightArr[1].replace(",", "")) == 0) {
+                if (Double.parseDouble(heightArr[1].replace(",", "")) == 0) {
                     values.remove(i);
                     i--;
                 }
             }
-            if(item.contains("date"))
+            if (item.contains("date"))
                 dateIndex = i;
         }
         String dateValue = values.get(dateIndex);
         values.remove(dateIndex);
         values.set(values.size() - 1, values.get(values.size() - 1).replace(",", ""));//remove the last comma
-        return singleSnapshot.getKey() + " " + dateValue + " "+ TextUtils.join(" ", values) + "\n";
+        return singleSnapshot.getKey() + " " + dateValue + " " + TextUtils.join(" ", values) + "\n";
     }
 
     private static long getUnitBetweenDates(Date startDate, Date endDate, TimeUnit unit) {
@@ -158,7 +211,7 @@ public class SendEmail {
         String fileName = context.getString(R.string.report_from) + " " + start + " " + context.getString(R.string.report_to) + " " + finalEnd + ".txt";
         try {
             File f = createFile(fileName, report);
-            if(f != null) {
+            if (f != null) {
                 Uri path = Uri.fromFile(f);
                 Intent i = new Intent(Intent.ACTION_SEND);
                 i.setType("message/rfc822");
@@ -168,18 +221,15 @@ public class SendEmail {
                 i.putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.report_from) + " " + start + " " + context.getString(R.string.report_to) + " " + finalEnd);
                 i.putExtra(Intent.EXTRA_TEXT, context.getString(R.string.email_text));
                 i.putExtra(Intent.EXTRA_STREAM, path);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(Intent.createChooser(i, context.getString(R.string.report_sending)));
-            }
-            else
+            } else
                 ToastShow.show(context, context.getString(R.string.report_error));
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    /*
-   * Create file in external storage
-   * */
     private static File createFile(String name, String content) throws IOException {
         // get the state of your external storage
         String state = Environment.getExternalStorageState();
@@ -191,7 +241,7 @@ public class SendEmail {
                 success = folder.mkdirs();
             }
             if (success) {
-                Log.d("Success","Open");
+                Log.d("Success", "Open");
                 // create the file in which we will write the contents
                 File file = new File(folder, name);
                 FileOutputStream os = new FileOutputStream(file);
@@ -199,7 +249,7 @@ public class SendEmail {
                 os.close();
                 return file;
             } else
-                Log.d("Failed","Open");
+                Log.d("Failed", "Open");
         }
         return null;
     }

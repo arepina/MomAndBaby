@@ -212,7 +212,7 @@ public class FragmentTab extends Fragment {
 
         listViewMom = (ListView) v.findViewById(R.id.listViewMom);
         momArrayAdapter = new ItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row);
-        StatsProcessing.getMomStatsForOneDay(googleFit, momArrayAdapter, calendar, getActivity(), listViewMom);// Load today data for mom from google fit
+        StatsProcessing.getMomStatsForOneDay(googleFit, momArrayAdapter, calendar, getActivity(), listViewMom, false);// Load today data for mom from google fit
 
         final TextView headerDate = (TextView) v.findViewById(R.id.headerMom);
 
@@ -220,10 +220,10 @@ public class FragmentTab extends Fragment {
         yesterday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(ConnectionDetector.isConnected(getContext())) {
+                if (ConnectionDetector.isConnected(getContext())) {
                     momArrayAdapter.clear();
                     goYesterday(headerDate);
-                    StatsProcessing.getMomStatsForOneDay(googleFit, momArrayAdapter, calendar, getActivity(), listViewMom);
+                    StatsProcessing.getMomStatsForOneDay(googleFit, momArrayAdapter, calendar, getActivity(), listViewMom, false);
                 }
             }
         });
@@ -232,10 +232,10 @@ public class FragmentTab extends Fragment {
         tomorrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(ConnectionDetector.isConnected(getContext())) {
+                if (ConnectionDetector.isConnected(getContext())) {
                     momArrayAdapter.clear();
                     goTomorrow(headerDate);
-                    StatsProcessing.getMomStatsForOneDay(googleFit, momArrayAdapter, calendar, getActivity(), listViewMom);
+                    StatsProcessing.getMomStatsForOneDay(googleFit, momArrayAdapter, calendar, getActivity(), listViewMom, false);
                 }
             }
         });
@@ -327,21 +327,21 @@ public class FragmentTab extends Fragment {
         builder.setPositiveButton(R.string.for_day, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                SendEmail.createEmail(getContext(), 0, whoFlag);
+                SendEmail.createEmail(getContext(), 0, whoFlag, getActivity(), new ItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row));
             }
         });
 
         builder.setNegativeButton(R.string.for_week, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                SendEmail.createEmail(getContext(), 1, whoFlag);
+                SendEmail.createEmail(getContext(), 1, whoFlag, getActivity(), new ItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row));
             }
         });
 
         builder.setNeutralButton(R.string.for_month, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                SendEmail.createEmail(getContext(), 2, whoFlag);
+                SendEmail.createEmail(getContext(), 2, whoFlag, getActivity(), new ItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row));
             }
         });
 

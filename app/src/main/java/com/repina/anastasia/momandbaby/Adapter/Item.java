@@ -4,22 +4,26 @@ package com.repina.anastasia.momandbaby.Adapter;
 public class Item {
     private int itemImg;
     private String itemDesc;
+    private String date;
 
     public Item(int imgResId, String itemDesc) {
-        itemImg = imgResId;
+        this.itemImg = imgResId;
         this.itemDesc = itemDesc;
     }
 
     public Item(int imgResId, String itemDesc, String date) {
-        itemImg = imgResId;
-        this.itemDesc = itemDesc; // + " " + date;
+        this.itemImg = imgResId;
+        this.itemDesc = itemDesc;
+        this.date = date;
     }
 
-    int getItemImg() {
+    public int getItemImg() {
         return itemImg;
     }
 
-    String getItemDesc() {
+    public String getItemDesc() {
         return itemDesc;
     }
+
+    public String getItemDate(){return date;}
 }

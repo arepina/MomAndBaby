@@ -16,6 +16,7 @@ import com.repina.anastasia.momandbaby.DataBase.DatabaseNames;
 import com.repina.anastasia.momandbaby.R;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -99,12 +100,12 @@ public class StatsProcessing {
 
     }
 
-    public static void getMomStatsForOneDay(GoogleFit googleFit, final ItemArrayAdapter adapter, final Calendar dateAndTime, FragmentActivity activity, ListView listViewMom) {
+    public static void getMomStatsForOneDay(GoogleFit googleFit, final ItemArrayAdapter adapter, final Calendar dateAndTime, FragmentActivity activity, ListView listViewMom, boolean isEmail) {
         Calendar today = Calendar.getInstance();
         Calendar dateClone = Calendar.getInstance();
         dateClone.setTime(dateAndTime.getTime());
         if (today.get(Calendar.DAY_OF_YEAR) == (dateClone.get(Calendar.DAY_OF_YEAR)) && today.get(Calendar.YEAR) == (dateClone.get(Calendar.YEAR)))
-            googleFit.getOneDayData(dateClone, activity, adapter, listViewMom);
+            googleFit.getOneDayData(dateClone, activity, adapter, listViewMom, isEmail);
         else { // not today
             dateClone.set(Calendar.HOUR_OF_DAY, 0);
             dateClone.set(Calendar.MINUTE, 0);
@@ -114,15 +115,15 @@ public class StatsProcessing {
             extra.add(Calendar.MINUTE, 1439);
             extra.add(Calendar.SECOND, 59);
             //one second is not in the review
-            googleFit.getPeriodData(dateClone, extra, activity, adapter, listViewMom);
+            googleFit.getPeriodData(dateClone, extra, activity, adapter, listViewMom, isEmail);
         }
     }
 
-    public static void getMomStatsForOneWeek(GoogleFit googleFit, final ItemArrayAdapter adapter, final Calendar endDate, FragmentActivity activity, ListView listViewMom) {
+    public static void getMomStatsForOneWeek(GoogleFit googleFit, final ItemArrayAdapter adapter, final Calendar endDate, FragmentActivity activity, ListView listViewMom, boolean isEmail) {
         Calendar startDate = Calendar.getInstance();
         startDate.setTime(endDate.getTime());
         startDate.add(Calendar.WEEK_OF_YEAR, -1);
-        googleFit.getPeriodData(startDate, endDate, activity, adapter, listViewMom);
+        googleFit.getPeriodData(startDate, endDate, activity, adapter, listViewMom, isEmail);
     }
 
     private static int getImageId(String name) {
