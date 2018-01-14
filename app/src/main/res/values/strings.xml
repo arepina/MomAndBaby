@@ -83,12 +83,6 @@
     <string name="no_data_today">Записей нет</string>
     <string name="google_fit">Google Fit</string>
 
-    <string-array name="characteristics">
-        <item>Шаги</item>
-        <item>Калории</item>
-        <item>Сон</item>
-    </string-array>
-
     <string-array name="parametersBaby">
         <item>Рост</item>
         <item>Вес</item>
