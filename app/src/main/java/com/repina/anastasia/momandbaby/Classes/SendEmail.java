@@ -221,8 +221,7 @@ public class SendEmail {
                 i.putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.report_from) + " " + start + " " + context.getString(R.string.report_to) + " " + finalEnd);
                 i.putExtra(Intent.EXTRA_TEXT, context.getString(R.string.email_text));
                 i.putExtra(Intent.EXTRA_STREAM, path);
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(Intent.createChooser(i, context.getString(R.string.report_sending)));
+                context.startActivity(Intent.createChooser(i, context.getString(R.string.report_sending)).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             } else
                 ToastShow.show(context, context.getString(R.string.report_error));
         } catch (IOException e) {
