@@ -1,4 +1,4 @@
-package com.repina.anastasia.momandbaby.Adapter;
+package com.repina.anastasia.momandbaby.Adapters;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -16,16 +16,16 @@ import com.repina.anastasia.momandbaby.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemArrayAdapter extends ArrayAdapter<Item> {
+public class GridItemArrayAdapter extends ArrayAdapter<GridItem> {
 
-    private List<Item> itemList = new ArrayList<>();
+    private List<GridItem> itemList = new ArrayList<>();
 
     private static class ItemViewHolder {
         ImageView itemImg;
         TextView itemDesc;
     }
 
-    public ItemArrayAdapter(Context context, int textViewResourceId) {
+    public GridItemArrayAdapter(Context context, int textViewResourceId) {
         super(context, textViewResourceId);
     }
 
@@ -34,7 +34,7 @@ public class ItemArrayAdapter extends ArrayAdapter<Item> {
     }
 
     @Override
-    public void add(Item object) {
+    public void add(GridItem object) {
         itemList.add(object);
         super.add(object);
     }
@@ -45,13 +45,13 @@ public class ItemArrayAdapter extends ArrayAdapter<Item> {
     }
 
     @Override
-    public Item getItem(int index) {
+    public GridItem getItem(int index) {
         return this.itemList.get(index);
     }
 
-    public boolean hasItem(Item item)
+    public boolean hasItem(GridItem item)
     {
-        for(Item i : itemList)
+        for(GridItem i : itemList)
             if(i.getItemDesc().equals(item.getItemDesc()) && i.getItemImg() == item.getItemImg())
                 return true;
         return false;
@@ -72,7 +72,7 @@ public class ItemArrayAdapter extends ArrayAdapter<Item> {
         } else {
             viewHolder = (ItemViewHolder)row.getTag();
         }
-        Item item = getItem(position);
+        GridItem item = getItem(position);
         viewHolder.itemImg.setImageResource(item.getItemImg());
         viewHolder.itemDesc.setText(item.getItemDesc());
         return row;

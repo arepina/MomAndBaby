@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.firebase.database.DataSnapshot;
@@ -14,8 +13,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.repina.anastasia.momandbaby.Adapter.Item;
-import com.repina.anastasia.momandbaby.Adapter.ItemArrayAdapter;
+import com.repina.anastasia.momandbaby.Adapters.GridItem;
+import com.repina.anastasia.momandbaby.Adapters.GridItemArrayAdapter;
 import com.repina.anastasia.momandbaby.Connectors.FirebaseConnection;
 import com.repina.anastasia.momandbaby.DataBase.DatabaseNames;
 import com.repina.anastasia.momandbaby.R;
@@ -25,7 +24,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -37,7 +35,7 @@ import static com.repina.anastasia.momandbaby.Activity.TabsActivity.googleFit;
 
 public class SendEmail {
 
-    public static void createEmail(final Context context, int length, boolean whoFlag, FragmentActivity activity, ItemArrayAdapter adapter) {
+    public static void createEmail(final Context context, int length, boolean whoFlag, FragmentActivity activity, GridItemArrayAdapter adapter) {
         // logic depends on the who flag
         if (whoFlag) // baby
             createBabyEmail(context, length);
@@ -45,7 +43,7 @@ public class SendEmail {
             createMomEmail(length, adapter, activity);
     }
 
-    private static void createMomEmail(int length, ItemArrayAdapter adapter, FragmentActivity activity) {
+    private static void createMomEmail(int length, GridItemArrayAdapter adapter, FragmentActivity activity) {
         Calendar today = Calendar.getInstance();
         switch (length) {
             case 0: {
@@ -139,10 +137,10 @@ public class SendEmail {
                 });
     }
 
-    static void formMomsReport(ItemArrayAdapter adapter, Context context, String start, String end) {
+    static void formMomsReport(GridItemArrayAdapter adapter, Context context, String start, String end) {
         String report = "";
         for (int i = 0; i < adapter.getCount(); i++) {
-            Item it = adapter.getItem(i);
+            GridItem it = adapter.getItem(i);
             report += imageToString(it.getItemImg()) + " " + it.getItemDate() + " " + it.getItemDesc() + "\n";
         }
         if (report.length() == 0)

@@ -1,17 +1,17 @@
-package com.repina.anastasia.momandbaby.Adapter;
+package com.repina.anastasia.momandbaby.Adapters;
 
 
-public class Item {
+public class GridItem {
     private int itemImg;
     private String itemDesc;
     private String date;
 
-    public Item(int imgResId, String itemDesc) {
+    public GridItem(int imgResId, String itemDesc) {
         this.itemImg = imgResId;
         this.itemDesc = itemDesc;
     }
 
-    public Item(int imgResId, String itemDesc, String date) {
+    public GridItem(int imgResId, String itemDesc, String date) {
         this.itemImg = imgResId;
         this.itemDesc = itemDesc;
         this.date = date;

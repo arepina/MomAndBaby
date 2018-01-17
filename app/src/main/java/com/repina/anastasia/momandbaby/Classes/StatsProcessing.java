@@ -10,8 +10,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.repina.anastasia.momandbaby.Adapter.Item;
-import com.repina.anastasia.momandbaby.Adapter.ItemArrayAdapter;
+import com.repina.anastasia.momandbaby.Adapters.GridItem;
+import com.repina.anastasia.momandbaby.Adapters.GridItemArrayAdapter;
 import com.repina.anastasia.momandbaby.Connectors.FirebaseConnection;
 import com.repina.anastasia.momandbaby.DataBase.DatabaseNames;
 import com.repina.anastasia.momandbaby.R;
@@ -24,7 +24,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class StatsProcessing {
 
-    public static void getBabyStatsForOneDay(final ItemArrayAdapter adapter, final Calendar dateAndTime, final Context context, final ListView listViewBaby) {
+    public static void getBabyStatsForOneDay(final GridItemArrayAdapter adapter, final Calendar dateAndTime, final Context context, final ListView listViewBaby) {
 
         FirebaseConnection connection = new FirebaseConnection();
         FirebaseDatabase database = connection.getDatabase();
@@ -50,7 +50,7 @@ public class StatsProcessing {
                                         if (date.substring(0, 10).equals(FormattedDate.getFormattedDateWithoutTime(dateAndTime))
                                                 & value.get("babyId").equals(babyID)) {
                                             int imageId = getImageId(singleSnapshot.getKey(), value);
-                                            Item it = new Item(imageId, formDescription(value));
+                                            GridItem it = new GridItem(imageId, formDescription(value));
                                             adapter.add(it);
                                         }
                                     }
@@ -58,7 +58,7 @@ public class StatsProcessing {
                             }
                             if(adapter.getCount() == 0)
                             {
-                                Item it = new Item(R.mipmap.cross, context.getResources().getString(R.string.no_data_today));
+                                GridItem it = new GridItem(R.mipmap.cross, context.getResources().getString(R.string.no_data_today));
                                 adapter.add(it);
                             }
                             listViewBaby.setAdapter(adapter);
@@ -95,7 +95,7 @@ public class StatsProcessing {
 
     }
 
-    public static void getMomStatsForOneDay(GoogleFit googleFit, final ItemArrayAdapter adapter, final Calendar dateAndTime, FragmentActivity activity, ListView listViewMom, boolean isEmail) {
+    public static void getMomStatsForOneDay(GoogleFit googleFit, final GridItemArrayAdapter adapter, final Calendar dateAndTime, FragmentActivity activity, ListView listViewMom, boolean isEmail) {
         Calendar today = Calendar.getInstance();
         Calendar dateClone = Calendar.getInstance();
         dateClone.setTime(dateAndTime.getTime());
@@ -114,7 +114,7 @@ public class StatsProcessing {
         }
     }
 
-    static void getMomStatsForPeriod(GoogleFit googleFit, final ItemArrayAdapter adapter, final Calendar endDate, FragmentActivity activity, ListView listViewMom, int length, boolean isEmail) {
+    static void getMomStatsForPeriod(GoogleFit googleFit, final GridItemArrayAdapter adapter, final Calendar endDate, FragmentActivity activity, ListView listViewMom, int length, boolean isEmail) {
         Calendar startDate = Calendar.getInstance();
         startDate.setTime(endDate.getTime());
         if(length == 7) // - 7 days

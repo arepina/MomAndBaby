@@ -23,8 +23,8 @@ import com.google.android.gms.fitness.data.Field;
 import com.google.android.gms.fitness.request.DataReadRequest;
 import com.google.android.gms.fitness.result.DailyTotalResult;
 import com.google.android.gms.fitness.result.DataReadResult;
-import com.repina.anastasia.momandbaby.Adapter.Item;
-import com.repina.anastasia.momandbaby.Adapter.ItemArrayAdapter;
+import com.repina.anastasia.momandbaby.Adapters.GridItem;
+import com.repina.anastasia.momandbaby.Adapters.GridItemArrayAdapter;
 import com.repina.anastasia.momandbaby.R;
 
 import java.text.DateFormat;
@@ -38,7 +38,7 @@ public class GoogleFit implements
         GoogleApiClient.OnConnectionFailedListener {
 
     private GoogleApiClient mGoogleApiClient;
-    private ItemArrayAdapter adapter;
+    private GridItemArrayAdapter adapter;
     private ListView listView;
     private FragmentActivity activity;
 
@@ -69,7 +69,7 @@ public class GoogleFit implements
         Log.e("HistoryAPI", "onConnectionFailed");
     }
 
-    void getPeriodData(Calendar startDate, Calendar endDate, FragmentActivity activity, ItemArrayAdapter adapter, ListView listView, boolean isEmail) {
+    void getPeriodData(Calendar startDate, Calendar endDate, FragmentActivity activity, GridItemArrayAdapter adapter, ListView listView, boolean isEmail) {
         this.start = FormattedDate.getFormattedDateWithoutTime(startDate);
         this.end = FormattedDate.getFormattedDateWithoutTime(endDate);
         this.adapter = adapter;
@@ -78,7 +78,7 @@ public class GoogleFit implements
         new ViewPeriodTask(isEmail).execute(startDate, endDate);
     }
 
-    void getOneDayData(Calendar date, FragmentActivity activity, ItemArrayAdapter adapter, ListView listView, boolean isEmail) {
+    void getOneDayData(Calendar date, FragmentActivity activity, GridItemArrayAdapter adapter, ListView listView, boolean isEmail) {
         this.start = FormattedDate.getFormattedDateWithoutTime(date);
         this.end = FormattedDate.getFormattedDateWithoutTime(date);
         this.adapter = adapter;
@@ -192,19 +192,19 @@ public class GoogleFit implements
                 Pair<String, Double> entry = pair.second;
                 String date = entry.first;
                 Double value = entry.second;
-                Item item = null;
+                GridItem item = null;
                 if (type.equals(DataType.TYPE_STEP_COUNT_DELTA))
-                    item = new Item(R.mipmap.steps, value.toString(), date);
+                    item = new GridItem(R.mipmap.steps, value.toString(), date);
                 if (type.equals(DataType.TYPE_CALORIES_EXPENDED))
-                    item = new Item(R.mipmap.calories, value.toString(), date);
+                    item = new GridItem(R.mipmap.calories, value.toString(), date);
                 if (type.equals(DataType.TYPE_WEIGHT))
-                    item = new Item(R.mipmap.weight, value.toString(), date);
+                    item = new GridItem(R.mipmap.weight, value.toString(), date);
                 if (!adapter.hasItem(item))
                     adapter.add(item);
             }
             if (adapter.getCount() == 0)//no data for today
             {
-                Item item = new Item(R.mipmap.cross, activity.getResources().getString(R.string.need_to_sync));
+                GridItem item = new GridItem(R.mipmap.cross, activity.getResources().getString(R.string.need_to_sync));
                 adapter.add(item);
             }
             if(!isEmail)
@@ -244,19 +244,19 @@ public class GoogleFit implements
                 Pair<String, Double> entry = pair.second;
                 String date = entry.first;
                 Double value = entry.second;
-                Item item = null;
+                GridItem item = null;
                 if (type.equals(DataType.TYPE_STEP_COUNT_DELTA))
-                    item = new Item(R.mipmap.steps, value.toString(), date);
+                    item = new GridItem(R.mipmap.steps, value.toString(), date);
                 if (type.equals(DataType.TYPE_CALORIES_EXPENDED))
-                    item = new Item(R.mipmap.calories, value.toString(), date);
+                    item = new GridItem(R.mipmap.calories, value.toString(), date);
                 if (type.equals(DataType.TYPE_WEIGHT))
-                    item = new Item(R.mipmap.weight, value.toString(), date);
+                    item = new GridItem(R.mipmap.weight, value.toString(), date);
                 if (!adapter.hasItem(item))
                     adapter.add(item);
             }
             if (adapter.getCount() == 0)//no data for today
             {
-                Item item = new Item(R.mipmap.cross, activity.getResources().getString(R.string.need_to_sync));
+                GridItem item = new GridItem(R.mipmap.cross, activity.getResources().getString(R.string.need_to_sync));
                 adapter.add(item);
             }
             if (!isEmail)

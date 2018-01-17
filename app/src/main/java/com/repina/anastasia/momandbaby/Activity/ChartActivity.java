@@ -72,15 +72,15 @@ public class ChartActivity extends AppCompatActivity {
                     //todo
                 } else {
                     if (ConnectionDetector.isConnected(view.getContext())) {
-                            String selectedItemName = choose.get(position);
-                            SharedPreferences sp = view.getContext().getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
-                            String babyId = sp.getString(SharedConstants.BABY_ID_KEY, "");
-                            FirebaseConnection connection = new FirebaseConnection();
-                            FirebaseDatabase database = connection.getDatabase();
-                            getValuesFromFirebase(database,
-                                    valueToDBNameConvert(selectedItemName, choose),
-                                    babyId,
-                                    selectedItemName);
+                        String selectedItemName = choose.get(position);
+                        SharedPreferences sp = view.getContext().getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
+                        String babyId = sp.getString(SharedConstants.BABY_ID_KEY, "");
+                        FirebaseConnection connection = new FirebaseConnection();
+                        FirebaseDatabase database = connection.getDatabase();
+                        getValuesFromFirebase(database,
+                                valueToDBNameConvert(selectedItemName, choose),
+                                babyId,
+                                selectedItemName);
                     }
                 }
             }
@@ -138,11 +138,16 @@ public class ChartActivity extends AppCompatActivity {
                 weight = m.getWeight();
                 height = m.getHeight();
                 if (selectedItemName.equals("Рост")) {
-                    labels.add(m.getDate());
-                    entries.add(new BarEntry((float) height, counter));
+                    if (height != 0) // not the weight entry
+                    {
+                        labels.add(m.getDate());
+                        entries.add(new BarEntry((float) height, counter));
+                    }
                 } else {
-                    labels.add(m.getDate());
-                    entries.add(new BarEntry((float) weight, counter));
+                    if (weight != 0) { // not the height entry
+                        labels.add(m.getDate());
+                        entries.add(new BarEntry((float) weight, counter));
+                    }
                 }
                 continue;
             }

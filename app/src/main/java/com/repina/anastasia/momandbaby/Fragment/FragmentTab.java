@@ -25,7 +25,7 @@ import com.repina.anastasia.momandbaby.Activity.StatsActivity;
 import com.repina.anastasia.momandbaby.Activity.ChooseFeatureActivity;
 import com.repina.anastasia.momandbaby.Activity.SignupActivity;
 import com.repina.anastasia.momandbaby.Activity.AppInfoActivity;
-import com.repina.anastasia.momandbaby.Adapter.ItemArrayAdapter;
+import com.repina.anastasia.momandbaby.Adapters.GridItemArrayAdapter;
 import com.repina.anastasia.momandbaby.Connectors.ConnectionDetector;
 import com.repina.anastasia.momandbaby.Classes.StatsProcessing;
 import com.repina.anastasia.momandbaby.Classes.FormattedDate;
@@ -43,8 +43,8 @@ public class FragmentTab extends Fragment {
 
     private Calendar calendar;
 
-    private ItemArrayAdapter babyArrayAdapter;
-    private ItemArrayAdapter momArrayAdapter;
+    private GridItemArrayAdapter babyArrayAdapter;
+    private GridItemArrayAdapter momArrayAdapter;
 
     private ListView listViewBaby;
     private ListView listViewMom;
@@ -210,7 +210,7 @@ public class FragmentTab extends Fragment {
         });
 
         listViewMom = (ListView) v.findViewById(R.id.listViewMom);
-        momArrayAdapter = new ItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row);
+        momArrayAdapter = new GridItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row);
         StatsProcessing.getMomStatsForOneDay(googleFit, momArrayAdapter, calendar, getActivity(), listViewMom, false);// Load today data for mom from google fit
 
         final TextView headerDate = (TextView) v.findViewById(R.id.headerMom);
@@ -246,7 +246,7 @@ public class FragmentTab extends Fragment {
         final View v = inflater.inflate(R.layout.fragment_baby, container, false);
 
         listViewBaby = (ListView) v.findViewById(R.id.listViewBaby);
-        babyArrayAdapter = new ItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row);
+        babyArrayAdapter = new GridItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row);
         StatsProcessing.getBabyStatsForOneDay(babyArrayAdapter, calendar, getContext(), listViewBaby);// Load today add's from Firebase for baby
 
         FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.floatingActionButton);
@@ -326,21 +326,21 @@ public class FragmentTab extends Fragment {
         builder.setPositiveButton(R.string.for_day, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                SendEmail.createEmail(getContext(), 0, whoFlag, getActivity(), new ItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row));
+                SendEmail.createEmail(getContext(), 0, whoFlag, getActivity(), new GridItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row));
             }
         });
 
         builder.setNegativeButton(R.string.for_week, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                SendEmail.createEmail(getContext(), 1, whoFlag, getActivity(), new ItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row));
+                SendEmail.createEmail(getContext(), 1, whoFlag, getActivity(), new GridItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row));
             }
         });
 
         builder.setNeutralButton(R.string.for_month, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                SendEmail.createEmail(getContext(), 2, whoFlag, getActivity(), new ItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row));
+                SendEmail.createEmail(getContext(), 2, whoFlag, getActivity(), new GridItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row));
             }
         });
 
