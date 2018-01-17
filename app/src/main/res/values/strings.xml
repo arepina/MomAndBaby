@@ -84,6 +84,7 @@
     <string name="google_fit">Google Fit</string>
     <string name="charts">Графики</string>
     <string name="vaccinations">Прививки</string>
+    <string name="vaccinations_list">Список прививок</string>
 
     <string-array name="parametersBaby">
         <item>Рост</item>

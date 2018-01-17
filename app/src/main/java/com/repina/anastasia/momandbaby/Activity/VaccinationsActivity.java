@@ -22,6 +22,7 @@ import com.repina.anastasia.momandbaby.DataBase.Vaccination;
 import com.repina.anastasia.momandbaby.R;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class VaccinationsActivity extends AppCompatActivity {
 
@@ -47,9 +48,18 @@ public class VaccinationsActivity extends AppCompatActivity {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
                             ArrayList<ListViewItem> items = new ArrayList<>();
+                            ArrayList<String> allItems = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.vaccinations)));
                             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                 Vaccination v = snapshot.getValue(Vaccination.class);
                                 items.add(new ListViewItem(v.getVaccinationName(), 1));
+                            }
+                            for (String item : allItems) {
+                                boolean has = false;
+                                for(ListViewItem enteredItem : items)
+                                    if(enteredItem.getName().equals(item))
+                                        has = true;
+                                if(!has)
+                                    items.add(new ListViewItem(item, 0));
                             }
                             ListView lv = (ListView) findViewById(R.id.vaccinations);
                             ListViewArrayAdapter adapter = new ListViewArrayAdapter(getApplicationContext(), items);

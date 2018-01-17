@@ -1,7 +1,6 @@
 package com.repina.anastasia.momandbaby.Adapters;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
@@ -27,16 +26,19 @@ public class ListViewArrayAdapter extends ArrayAdapter<ListViewItem> {
 
     @NonNull
     @Override
-    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-        LayoutInflater inflater = ((Activity) context).getLayoutInflater();
-        convertView = inflater.inflate(R.layout.listview_single, parent, false);
-        TextView name = (TextView) convertView.findViewById(R.id.textView);
-        CheckBox cb = (CheckBox) convertView.findViewById(R.id.checkBox);
-        name.setText(modelItems.get(position).getName());
-        if (modelItems.get(position).getValue() == 1)
-            cb.setChecked(true);
-        else
-            cb.setChecked(false);
+    public View getView(int position, View convertView, ViewGroup parent) {
+
+        if (convertView == null) {
+            convertView = LayoutInflater.from(context).inflate(R.layout.listview_single, parent, false);
+            TextView name = (TextView) convertView.findViewById(R.id.textView);
+            CheckBox cb = (CheckBox) convertView.findViewById(R.id.checkBox);
+            name.setText(modelItems.get(position).getName());
+            if (modelItems.get(position).getValue() == 1)
+                cb.setChecked(true);
+            else
+                cb.setChecked(false);
+        }
+
         return convertView;
     }
 }
