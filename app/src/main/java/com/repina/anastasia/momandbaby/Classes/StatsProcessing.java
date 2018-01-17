@@ -12,22 +12,19 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.repina.anastasia.momandbaby.Adapter.Item;
 import com.repina.anastasia.momandbaby.Adapter.ItemArrayAdapter;
+import com.repina.anastasia.momandbaby.Connectors.FirebaseConnection;
 import com.repina.anastasia.momandbaby.DataBase.DatabaseNames;
 import com.repina.anastasia.momandbaby.R;
 
-import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
-import java.util.TimeZone;
 
 import static android.content.Context.MODE_PRIVATE;
 
 public class StatsProcessing {
 
-    public static void getBabyStats(final ItemArrayAdapter adapter, final Calendar dateAndTime, final Context context, final ListView listViewBaby) {
+    public static void getBabyStatsForOneDay(final ItemArrayAdapter adapter, final Calendar dateAndTime, final Context context, final ListView listViewBaby) {
 
         FirebaseConnection connection = new FirebaseConnection();
         FirebaseDatabase database = connection.getDatabase();
@@ -44,8 +41,6 @@ public class StatsProcessing {
                         if (dataSnapshot.exists()) {
                             for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
                                 if (!singleSnapshot.getKey().equals(DatabaseNames.USER)
-                                        & !singleSnapshot.getKey().equals(DatabaseNames.BAND)
-                                        & !singleSnapshot.getKey().equals(DatabaseNames.BANDDATA)
                                         & !singleSnapshot.getKey().equals(DatabaseNames.BABY)) {
                                     HashMap<String, HashMap<String, String>> items =
                                             (HashMap<String, HashMap<String, String>>) singleSnapshot.getValue();
@@ -54,7 +49,7 @@ public class StatsProcessing {
                                         String date = value.get("date");
                                         if (date.substring(0, 10).equals(FormattedDate.getFormattedDateWithoutTime(dateAndTime))
                                                 & value.get("babyId").equals(babyID)) {
-                                            int imageId = getImageId(singleSnapshot.getKey());
+                                            int imageId = getImageId(singleSnapshot.getKey(), value);
                                             Item it = new Item(imageId, formDescription(value));
                                             adapter.add(it);
                                         }
@@ -85,12 +80,12 @@ public class StatsProcessing {
             try {
                 double number = Double.parseDouble(val);
                 if (number != 0) {
-                    line += Translator.translate(entry.getKey()) + ": " + val;
+                    line += Translator.translateWord(entry.getKey()) + ": " + val;
                     if (!"\n".equals(String.valueOf(line.charAt(line.length() - 1))))
                         line += "\n";
                 }
             } catch (NumberFormatException e) { // not a number
-                line += Translator.translate(entry.getKey()) + ": " + val;
+                line += Translator.translateWord(entry.getKey()) + ": " + val;
                 if (!"\n".equals(String.valueOf(line.charAt(line.length() - 1))))
                     line += "\n";
             }
@@ -119,17 +114,24 @@ public class StatsProcessing {
         }
     }
 
-    public static void getMomStatsForOneWeek(GoogleFit googleFit, final ItemArrayAdapter adapter, final Calendar endDate, FragmentActivity activity, ListView listViewMom, boolean isEmail) {
+    static void getMomStatsForPeriod(GoogleFit googleFit, final ItemArrayAdapter adapter, final Calendar endDate, FragmentActivity activity, ListView listViewMom, int length, boolean isEmail) {
         Calendar startDate = Calendar.getInstance();
         startDate.setTime(endDate.getTime());
-        startDate.add(Calendar.WEEK_OF_YEAR, -1);
+        if(length == 7) // - 7 days
+            startDate.add(Calendar.WEEK_OF_YEAR, -1);
+        else
+            startDate.add(Calendar.MONTH, -1); // - 1 month
         googleFit.getPeriodData(startDate, endDate, activity, adapter, listViewMom, isEmail);
     }
 
-    private static int getImageId(String name) {
-        //todo think about height and weight icon
+    private static int getImageId(String name, HashMap<String, String> value) {
         if (name.equals(DatabaseNames.METRICS))
-            return R.mipmap.height;
+        {
+            if("0".equals(String.valueOf(value.get("weight"))))
+                return R.mipmap.height;
+            else
+                return R.mipmap.weight;
+        }
         if (name.equals(DatabaseNames.STOOL))
             return R.mipmap.diapers;
         if (name.equals(DatabaseNames.VACCINATION))

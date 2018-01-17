@@ -1,10 +1,9 @@
 package com.repina.anastasia.momandbaby.Classes;
 
-
 class Translator {
 
-    static String translate(String line) {
-        switch (line) {
+    static String translateWord(String word) {
+        switch (word) {
             case "weight":
                 return "Вес";
             case "height":
@@ -23,8 +22,11 @@ class Translator {
                 return "Симптомы";
             case "vaccinationName":
                 return "Название прививки";
+            case "date":
+                return "дата";
             default:
-                return line;
+                return word;
         }
     }
+
 }

@@ -82,6 +82,8 @@
     <string name="no_data">Нет доступных данных. Попробуйте выбрать другой временной период.</string>
     <string name="no_data_today">Записей нет</string>
     <string name="google_fit">Google Fit</string>
+    <string name="charts">Графики</string>
+    <string name="vaccinations">Прививки</string>
 
     <string-array name="parametersBaby">
         <item>Рост</item>

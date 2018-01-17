@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TabHost;
 
-import com.repina.anastasia.momandbaby.Classes.ConnectionDetector;
+import com.repina.anastasia.momandbaby.Connectors.ConnectionDetector;
 import com.repina.anastasia.momandbaby.Classes.FormattedDate;
 import com.repina.anastasia.momandbaby.Classes.GoogleFit;
 import com.repina.anastasia.momandbaby.Classes.SharedConstants;

@@ -44,9 +44,6 @@ public class DotsActivity extends IntroActivity {
         configureBackground();
     }
 
-    /**
-     * Generate the pages displayed in this activity.
-     */
     @Override
     protected Collection<Fragment> generatePages(Bundle savedInstanceState) throws OutOfMemoryError {
         // This variable holds the pages while they are being created
@@ -72,16 +69,8 @@ public class DotsActivity extends IntroActivity {
         return pages;
     }
 
-    /**
-     * Generate the Behaviour of the final button.
-     */
     @Override
     protected IntroButton.Behaviour generateFinalButtonBehaviour() {
-        /* The pending changes to the shared preferences editor will be applied when the
-		 * introduction is successfully completed. By setting a flag in the pending edits and
-		 * checking the status of the flag when the activity starts, the introduction screen can
-		 * be skipped if it has previously been completed.
-		 */
         SharedPreferences sp = getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
         SharedPreferences.Editor pendingEdits = sp.edit().putBoolean(SharedConstants.DISPLAY_ONCE_KEY, true);
         pendingEdits.apply();
@@ -90,10 +79,6 @@ public class DotsActivity extends IntroActivity {
         return new IntroButton.ProgressToNextActivity(nextActivity, pendingEdits);
     }
 
-    /**
-     * Checks for a shared preference flag indicating that the introduction has been completed
-     * previously.
-     */
     private boolean introductionCompletedPreviously() {
         SharedPreferences sp = getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
         return sp.getBoolean(SharedConstants.DISPLAY_ONCE_KEY, false);

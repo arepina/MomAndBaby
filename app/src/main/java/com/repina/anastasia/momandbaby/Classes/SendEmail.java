@@ -3,7 +3,6 @@ package com.repina.anastasia.momandbaby.Classes;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
@@ -17,6 +16,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.repina.anastasia.momandbaby.Adapter.Item;
 import com.repina.anastasia.momandbaby.Adapter.ItemArrayAdapter;
+import com.repina.anastasia.momandbaby.Connectors.FirebaseConnection;
 import com.repina.anastasia.momandbaby.DataBase.DatabaseNames;
 import com.repina.anastasia.momandbaby.R;
 
@@ -49,15 +49,15 @@ public class SendEmail {
         Calendar today = Calendar.getInstance();
         switch (length) {
             case 0: {
-                StatsProcessing.getMomStatsForOneDay(googleFit, adapter, today, activity, null, true);
+                StatsProcessing.getMomStatsForOneDay(googleFit, adapter, today, activity, null, true); // 1 day
                 break;
             }
             case 1: {
-                //
+                StatsProcessing.getMomStatsForPeriod(googleFit, adapter, today, activity, null, 7, true); // 1 week
                 break;
             }
             case 2: {
-                //
+                StatsProcessing.getMomStatsForPeriod(googleFit, adapter, today, activity, null, 31, true); // 1 month
                 break;
             }
         }
@@ -102,8 +102,6 @@ public class SendEmail {
                             String report = "";
                             for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
                                 if (!singleSnapshot.getKey().equals(DatabaseNames.USER)
-                                        & !singleSnapshot.getKey().equals(DatabaseNames.BAND)
-                                        & !singleSnapshot.getKey().equals(DatabaseNames.BANDDATA)
                                         & !singleSnapshot.getKey().equals(DatabaseNames.BABY)) {
                                     HashMap<String, HashMap<String, String>> items =
                                             (HashMap<String, HashMap<String, String>>) singleSnapshot.getValue();
@@ -154,7 +152,6 @@ public class SendEmail {
     }
 
     private static String imageToString(int imageIntPath) {
-        //todo add all icons
         switch (imageIntPath) {
             case 2130903042: {
                 return "Калории";
@@ -170,36 +167,46 @@ public class SendEmail {
         }
     }
 
-    private static String cleanData(HashMap<String, String> value, DataSnapshot singleSnapshot) {
-        //todo add translation
-        ArrayList<String> values = new ArrayList<>(Arrays.asList(value.toString().replace("{", "").replace("}", "").split(" ")));
-        //remove babyID data
-        values.remove(values.size() - 1);
-        int dateIndex = 0;
-        //solve height and weight problem
-        for (int i = 0; i < values.size(); i++) {
-            String item = values.get(i);
-            if (item.contains("weight")) {
-                String[] weightArr = item.split("=");
-                if (Double.parseDouble(weightArr[1].replace(",", "")) == 0) {
+    private static String cleanData(HashMap<String, String> map, DataSnapshot singleSnapshot) {
+        String dateValue = "";
+        ArrayList<String> keys = new ArrayList<>(map.keySet());
+        ArrayList<String> values = new ArrayList<>(map.values());
+        for (int i = 0; i < keys.size(); i++) {
+            String key = keys.get(i);
+            String value = values.get(i);
+            if(key.equals("babyId"))//remove babyID data
+            {
+                keys.remove(i);
+                values.remove(i);
+                i--;
+            }
+            //solve height and weight problem
+            if (key.contains("weight")) {
+                String[] weightArr = value.split("=");
+                if (Double.parseDouble(weightArr[1].replace(",", "")) == 0)
+                {
+                    keys.remove(i);
                     values.remove(i);
                     i--;
                 }
             }
-            if (item.contains("height")) {
-                String[] heightArr = item.split("=");
-                if (Double.parseDouble(heightArr[1].replace(",", "")) == 0) {
+            if (key.contains("height")) {
+                String[] heightArr = value.split("=");
+                if (Double.parseDouble(heightArr[1].replace(",", "")) == 0)
+                {
+                    keys.remove(i);
                     values.remove(i);
                     i--;
                 }
             }
-            if (item.contains("date"))
-                dateIndex = i;
+            if(key.contains("date"))
+                dateValue = value;
+
+            //translate to russian
+            String translation = Translator.translateWord(key);
+            keys.set(i, translation);
         }
-        String dateValue = values.get(dateIndex);
-        values.remove(dateIndex);
-        values.set(values.size() - 1, values.get(values.size() - 1).replace(",", ""));//remove the last comma
-        return singleSnapshot.getKey() + " " + dateValue + " " + TextUtils.join(" ", values) + "\n";
+        return singleSnapshot.getKey() + " " + dateValue ;//+ " " + TextUtils.join(" ", value) + "\n";
     }
 
     private static long getUnitBetweenDates(Date startDate, Date endDate, TimeUnit unit) {

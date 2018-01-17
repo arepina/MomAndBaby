@@ -1,4 +1,4 @@
-package com.repina.anastasia.momandbaby.Classes;
+package com.repina.anastasia.momandbaby.Connectors;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

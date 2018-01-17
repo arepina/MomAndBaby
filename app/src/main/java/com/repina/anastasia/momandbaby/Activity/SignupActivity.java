@@ -14,11 +14,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.repina.anastasia.momandbaby.Classes.ConnectionDetector;
+import com.repina.anastasia.momandbaby.Connectors.ConnectionDetector;
 import com.repina.anastasia.momandbaby.Classes.ToastShow;
 import com.repina.anastasia.momandbaby.DataBase.DatabaseNames;
 import com.repina.anastasia.momandbaby.DataBase.User;
-import com.repina.anastasia.momandbaby.Classes.FirebaseConnection;
+import com.repina.anastasia.momandbaby.Connectors.FirebaseConnection;
 import com.repina.anastasia.momandbaby.R;
 import com.repina.anastasia.momandbaby.Classes.SharedConstants;
 
@@ -56,7 +56,7 @@ public class SignupActivity extends AppCompatActivity {
                                     if (dataSnapshot.exists()) {
                                         DataSnapshot snapshot = dataSnapshot.getChildren().iterator().next();
                                         User u = snapshot.getValue(User.class);
-                                        if (password.equals(u.getPassword())) {//check whether the password is correct
+                                        if (password.length() > 0 && password.equals(u.getPassword())) {//check whether the password is correct
                                             String momId = snapshot.getKey();
                                             String name = u.getName();
                                             SharedPreferences sp = getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);

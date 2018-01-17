@@ -21,16 +21,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.repina.anastasia.momandbaby.Activity.ChartActivity;
+import com.repina.anastasia.momandbaby.Activity.StatsActivity;
 import com.repina.anastasia.momandbaby.Activity.ChooseFeatureActivity;
 import com.repina.anastasia.momandbaby.Activity.SignupActivity;
 import com.repina.anastasia.momandbaby.Activity.AppInfoActivity;
 import com.repina.anastasia.momandbaby.Adapter.ItemArrayAdapter;
-import com.repina.anastasia.momandbaby.Classes.ConnectionDetector;
+import com.repina.anastasia.momandbaby.Connectors.ConnectionDetector;
 import com.repina.anastasia.momandbaby.Classes.StatsProcessing;
 import com.repina.anastasia.momandbaby.Classes.FormattedDate;
 import com.repina.anastasia.momandbaby.Classes.SendEmail;
 import com.repina.anastasia.momandbaby.Classes.SharedConstants;
-import com.repina.anastasia.momandbaby.Classes.ToastShow;
 import com.repina.anastasia.momandbaby.R;
 
 import java.util.Calendar;
@@ -185,8 +185,7 @@ public class FragmentTab extends Fragment {
         cardViewBaby.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent nextActivity = new Intent(v.getContext(), ChartActivity.class);
-                nextActivity.putExtra("Type", "Baby");
+                Intent nextActivity = new Intent(v.getContext(), StatsActivity.class);
                 startActivity(nextActivity);
             }
         });
@@ -248,7 +247,7 @@ public class FragmentTab extends Fragment {
 
         listViewBaby = (ListView) v.findViewById(R.id.listViewBaby);
         babyArrayAdapter = new ItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row);
-        StatsProcessing.getBabyStats(babyArrayAdapter, calendar, getContext(), listViewBaby);// Load today add's from Firebase for baby
+        StatsProcessing.getBabyStatsForOneDay(babyArrayAdapter, calendar, getContext(), listViewBaby);// Load today add's from Firebase for baby
 
         FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.floatingActionButton);
         fab.setVisibility(View.VISIBLE);
@@ -272,7 +271,7 @@ public class FragmentTab extends Fragment {
                 if (ConnectionDetector.isConnected(getContext())) {
                     babyArrayAdapter.clear();
                     goYesterday(headerDate);
-                    StatsProcessing.getBabyStats(babyArrayAdapter, calendar, getContext(), listViewBaby);
+                    StatsProcessing.getBabyStatsForOneDay(babyArrayAdapter, calendar, getContext(), listViewBaby);
                 }
             }
         });
@@ -284,7 +283,7 @@ public class FragmentTab extends Fragment {
                 if (ConnectionDetector.isConnected(getContext())) {
                     babyArrayAdapter.clear();
                     goTomorrow(headerDate);
-                    StatsProcessing.getBabyStats(babyArrayAdapter, calendar, getContext(), listViewBaby);
+                    StatsProcessing.getBabyStatsForOneDay(babyArrayAdapter, calendar, getContext(), listViewBaby);
                 }
 
             }
@@ -354,7 +353,7 @@ public class FragmentTab extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case BABY_NEW_FEATURE: {
-                StatsProcessing.getBabyStats(babyArrayAdapter, calendar, getContext(), listViewBaby);
+                StatsProcessing.getBabyStatsForOneDay(babyArrayAdapter, calendar, getContext(), listViewBaby);
                 break;
             }
         }

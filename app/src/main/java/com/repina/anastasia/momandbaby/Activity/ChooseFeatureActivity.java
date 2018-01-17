@@ -8,7 +8,7 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
-import com.repina.anastasia.momandbaby.Classes.ConnectionDetector;
+import com.repina.anastasia.momandbaby.Connectors.ConnectionDetector;
 import com.repina.anastasia.momandbaby.Classes.CustomGrid;
 import com.repina.anastasia.momandbaby.Classes.ToastShow;
 import com.repina.anastasia.momandbaby.R;
