@@ -104,7 +104,6 @@
         <item>Google Fit</item>
     </string-array>
 
-    <!--todo add more or update-->
     <string-array name="vaccinations">
         <item>Вирусный гепатит В</item>
         <item>Туберкулез</item>

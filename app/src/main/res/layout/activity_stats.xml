@@ -39,7 +39,7 @@
                 android:layout_weight="0.2"
                 android:text="@string/charts"
                 android:textAlignment="center"
-                android:textColor="@color/colorTextDark" />
+                android:textColor="@color/colorPrimaryDark" />
 
         </TableLayout>
 
@@ -79,7 +79,7 @@
                 android:layout_weight="0.2"
                 android:text="@string/vaccinations"
                 android:textAlignment="center"
-                android:textColor="@color/colorTextDark" />
+                android:textColor="@color/colorPrimaryDark" />
 
         </TableLayout>
 

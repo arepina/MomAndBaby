@@ -11,9 +11,10 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/main_margin"
         android:layout_marginTop="@dimen/main_margin"
+        android:textSize="@dimen/text_size"
         android:gravity="center"
         android:text="@string/vaccinations_list"
-        android:textColor="@color/colorTextDark"
+        android:textColor="@color/colorPrimaryDark"
         android:textStyle="bold" />
 
     <ListView

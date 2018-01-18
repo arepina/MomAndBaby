@@ -13,6 +13,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -317,11 +318,11 @@ public class FragmentTab extends Fragment {
     }
 
     private void showAlertDialog(final boolean whoFlag) {
-        //todo change later
-        // AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom));
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.AlertDialogCustom);
 
         builder.setTitle(R.string.choose_period);
+        builder.setMessage("");
 
         builder.setPositiveButton(R.string.for_day, new DialogInterface.OnClickListener() {
             @Override

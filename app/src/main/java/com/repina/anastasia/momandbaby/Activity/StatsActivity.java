@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.view.View;
 
+import com.repina.anastasia.momandbaby.Connectors.ConnectionDetector;
 import com.repina.anastasia.momandbaby.R;
 
 public class StatsActivity extends AppCompatActivity {
@@ -20,9 +21,11 @@ public class StatsActivity extends AppCompatActivity {
         cardViewMom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent nextActivity = new Intent(v.getContext(), ChartActivity.class);
-                nextActivity.putExtra("Type", "Baby");
-                startActivity(nextActivity);
+                if(ConnectionDetector.isConnected(getApplicationContext())) {
+                    Intent nextActivity = new Intent(v.getContext(), ChartActivity.class);
+                    nextActivity.putExtra("Type", "Baby");
+                    startActivity(nextActivity);
+                }
             }
         });
 
@@ -30,8 +33,10 @@ public class StatsActivity extends AppCompatActivity {
         cardViewBaby.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent nextActivity = new Intent(v.getContext(), VaccinationsActivity.class);
-                startActivity(nextActivity);
+                if(ConnectionDetector.isConnected(getApplicationContext())) {
+                    Intent nextActivity = new Intent(v.getContext(), VaccinationsActivity.class);
+                    startActivity(nextActivity);
+                }
             }
         });
     }

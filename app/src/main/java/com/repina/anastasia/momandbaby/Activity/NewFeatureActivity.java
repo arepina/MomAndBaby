@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.repina.anastasia.momandbaby.Connectors.ConnectionDetector;
 import com.repina.anastasia.momandbaby.Connectors.FirebaseConnection;
 import com.repina.anastasia.momandbaby.Classes.SharedConstants;
 import com.repina.anastasia.momandbaby.DataBase.DatabaseNames;
@@ -87,8 +88,10 @@ public class NewFeatureActivity extends AppCompatActivity {
         addData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addNewValueToFirebase();
-                finish();//back to choosing
+                if(ConnectionDetector.isConnected(getApplicationContext())) {
+                    addNewValueToFirebase();
+                    finish();//back to choosing
+                }
             }
         });
 

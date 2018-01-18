@@ -31,8 +31,7 @@ public class VaccinationsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vaccination);
 
-        if (ConnectionDetector.isConnected(getApplicationContext()))
-            loadVaccinations();
+        loadVaccinations();
     }
 
     private void loadVaccinations() {

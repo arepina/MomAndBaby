@@ -15,6 +15,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.repina.anastasia.momandbaby.Classes.FormattedDate;
 import com.repina.anastasia.momandbaby.Classes.SharedConstants;
 import com.repina.anastasia.momandbaby.Classes.ToastShow;
+import com.repina.anastasia.momandbaby.Connectors.ConnectionDetector;
 import com.repina.anastasia.momandbaby.DataBase.Baby;
 import com.repina.anastasia.momandbaby.Connectors.FirebaseConnection;
 import com.repina.anastasia.momandbaby.DataBase.DatabaseNames;
@@ -38,40 +39,42 @@ public class BabyInfoActivity extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Get mom's id
-                SharedPreferences sp = getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
-                String momId = sp.getString(SharedConstants.MOM_ID_KEY, "");
+                if(ConnectionDetector.isConnected(getApplicationContext())) {
+                    // Get mom's id
+                    SharedPreferences sp = getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
+                    String momId = sp.getString(SharedConstants.MOM_ID_KEY, "");
 
-                // Read entered values
-                String name = ((EditText) findViewById(R.id.name)).getText().toString();
-                String gender;
-                if (((RadioButton) findViewById(R.id.girl)).isChecked()) gender = "girl";
-                else gender = "boy";
+                    // Read entered values
+                    String name = ((EditText) findViewById(R.id.name)).getText().toString();
+                    String gender;
+                    if (((RadioButton) findViewById(R.id.girl)).isChecked()) gender = "girl";
+                    else gender = "boy";
 
-                // Check the values for correctness
-                if (name.length() > 0) {
-                    FirebaseConnection connection = new FirebaseConnection();
-                    FirebaseDatabase database = connection.getDatabase();
+                    // Check the values for correctness
+                    if (name.length() > 0) {
+                        FirebaseConnection connection = new FirebaseConnection();
+                        FirebaseDatabase database = connection.getDatabase();
 
-                    Baby baby = new Baby(momId, name, formattedDate, gender);
+                        Baby baby = new Baby(momId, name, formattedDate, gender);
 
-                    DatabaseReference databaseReference = database.getReference().child(DatabaseNames.BABY);
+                        DatabaseReference databaseReference = database.getReference().child(DatabaseNames.BABY);
 
-                    String babyId = databaseReference.push().getKey();
-                    databaseReference.child(babyId).setValue(baby);
+                        String babyId = databaseReference.push().getKey();
+                        databaseReference.child(babyId).setValue(baby);
 
-                    SharedPreferences.Editor editor = sp.edit();
-                    editor.putString(SharedConstants.BABY_ID_KEY, babyId);
-                    editor.putString(SharedConstants.BABY_NAME_KEY, name);
-                    editor.putString(SharedConstants.BABY_GENDER_KEY, gender);
-                    editor.putString(SharedConstants.BABY_BIRTHDAY, formattedDate);
-                    editor.apply();
+                        SharedPreferences.Editor editor = sp.edit();
+                        editor.putString(SharedConstants.BABY_ID_KEY, babyId);
+                        editor.putString(SharedConstants.BABY_NAME_KEY, name);
+                        editor.putString(SharedConstants.BABY_GENDER_KEY, gender);
+                        editor.putString(SharedConstants.BABY_BIRTHDAY, formattedDate);
+                        editor.apply();
 
-                    Intent nextActivity = new Intent(getApplicationContext(), TabsActivity.class);
-                    startActivity(nextActivity);
-                    finish();
-                } else
-                    ToastShow.show(getApplicationContext(), R.string.invalid_name);
+                        Intent nextActivity = new Intent(getApplicationContext(), TabsActivity.class);
+                        startActivity(nextActivity);
+                        finish();
+                    } else
+                        ToastShow.show(getApplicationContext(), R.string.invalid_name);
+                }
             }
         });
 
