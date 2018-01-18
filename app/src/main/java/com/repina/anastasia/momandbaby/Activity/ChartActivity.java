@@ -1,5 +1,6 @@
 package com.repina.anastasia.momandbaby.Activity;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -8,16 +9,17 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.repina.anastasia.momandbaby.Classes.FormattedDate;
 import com.repina.anastasia.momandbaby.Classes.SharedConstants;
 import com.repina.anastasia.momandbaby.Classes.ToastShow;
 import com.repina.anastasia.momandbaby.Connectors.ConnectionDetector;
@@ -31,23 +33,34 @@ import com.repina.anastasia.momandbaby.DataBase.Sleep;
 import com.repina.anastasia.momandbaby.DataBase.Stool;
 import com.repina.anastasia.momandbaby.R;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 
 
 public class ChartActivity extends AppCompatActivity {
 
-    BarChart chart;
-    ArrayList<BarEntry> entries;
+    LineChart chart;
+    ArrayList<Entry> entries;
+    ArrayList<Entry> boyHeight;
+    ArrayList<Entry> boyWeight;
+    ArrayList<Entry> girlHeight;
+    ArrayList<Entry> girlWeight;
     ArrayList<String> labels;
-    BarDataSet barDataSet;
-    BarData barData;
+    ArrayList<String> labelsIdeal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chart);
         final String type = getIntent().getExtras().getString("Type");
+
+
+        //https://www.android-examples.com/create-bar-chart-graph-using-mpandroidchart-library/
+        //https://github.com/numetriclabz/numAndroidCharts
+        chart = (LineChart) findViewById(R.id.graph);
 
         final ArrayList<String> choose;
         ArrayAdapter<?> adapter;
@@ -77,6 +90,7 @@ public class ChartActivity extends AppCompatActivity {
                         String babyId = sp.getString(SharedConstants.BABY_ID_KEY, "");
                         FirebaseConnection connection = new FirebaseConnection();
                         FirebaseDatabase database = connection.getDatabase();
+                        initIdealChartData(getApplicationContext(), selectedItemName); // add the ideal data to chart
                         getValuesFromFirebase(database,
                                 valueToDBNameConvert(selectedItemName, choose),
                                 babyId,
@@ -90,10 +104,6 @@ public class ChartActivity extends AppCompatActivity {
                 //do nothing
             }
         });
-
-        //https://www.android-examples.com/create-bar-chart-graph-using-mpandroidchart-library/
-        //https://github.com/numetriclabz/numAndroidCharts
-        chart = (BarChart) findViewById(R.id.graph);
     }
 
     public static String valueToDBNameConvert(String value, ArrayList<String> features) {
@@ -106,7 +116,6 @@ public class ChartActivity extends AppCompatActivity {
         if (value.equals(features.get(6))) return DatabaseNames.SLEEP;
         return "";
     }
-
 
     void getValuesFromFirebase(final FirebaseDatabase database, final String dbName,
                                final String id, final String selectedItemName) {
@@ -127,6 +136,62 @@ public class ChartActivity extends AppCompatActivity {
                 });
     }
 
+    private void initIdealChartData(Context context, String dbName) {
+        SharedPreferences sp = context.getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
+        String gender = sp.getString(SharedConstants.BABY_GENDER_KEY, "");
+        String birthday = sp.getString(SharedConstants.BABY_BIRTHDAY, "");
+        //todo reregister or add birthday to shared!
+        labelsIdeal = new ArrayList<>();
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault());
+        try {
+            calendar.setTime(sd.parse(birthday));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        labelsIdeal.add(FormattedDate.getFormattedDateWithoutTime(calendar));
+        for (int i = 1; i < 12; i++) {
+            calendar.add(Calendar.MONTH, 1);
+            labelsIdeal.add(FormattedDate.getFormattedDateWithoutTime(calendar));
+        }
+        LineDataSet lineDataSet = null;
+        if (gender.equals("boy")) {
+            ArrayList<String> boyParamsHeight = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.heightBoy)));
+            ArrayList<String> boyParamsWeight = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.weightBoy)));
+            boyHeight = new ArrayList<>();
+            boyWeight = new ArrayList<>();
+            for(int i = 0; i < boyParamsHeight.size(); i++)
+            {
+                boyHeight.add(new Entry(Float.parseFloat(boyParamsHeight.get(i)), i));
+                boyWeight.add(new Entry(Float.parseFloat(boyParamsWeight.get(i)), i));
+            }
+            if(dbName.equals("Рост"))
+                lineDataSet = new LineDataSet(boyHeight, "Идеальный рост");
+            if(dbName.equals("Вес"))
+                lineDataSet = new LineDataSet(boyWeight, "Идеальный вес");
+        } else {
+            ArrayList<String> girlParamsHeight = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.heightGirl)));
+            ArrayList<String> girlParamsWeight = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.weightGirl)));
+            girlHeight = new ArrayList<>();
+            girlWeight = new ArrayList<>();
+            for(int i = 0; i < girlParamsHeight.size(); i++)
+            {
+                girlHeight.add(new Entry(Float.parseFloat(girlParamsHeight.get(i)), i));
+                girlWeight.add(new Entry(Float.parseFloat(girlParamsWeight.get(i)), i));
+            }
+            if(dbName.equals("Рост"))
+                lineDataSet = new LineDataSet(girlHeight, "Идеальный рост");
+            if(dbName.equals("Вес"))
+                lineDataSet = new LineDataSet(girlWeight, "Идеальный вес");
+        }
+
+        if(lineDataSet != null) {
+            LineData lineData = new LineData(labelsIdeal, lineDataSet);
+            lineDataSet.setColors(ColorTemplate.JOYFUL_COLORS);
+            chart.setData(lineData);
+        }
+    }
+
     private void fillChart(DataSnapshot dataSnapshot, String dbName, String selectedItemName) {
         entries = new ArrayList<>();
         labels = new ArrayList<>();
@@ -141,12 +206,14 @@ public class ChartActivity extends AppCompatActivity {
                     if (height != 0) // not the weight entry
                     {
                         labels.add(m.getDate());
-                        entries.add(new BarEntry((float) height, counter));
+                        entries.add(new Entry((float) height, counter));
+                        counter++;
                     }
                 } else {
                     if (weight != 0) { // not the height entry
                         labels.add(m.getDate());
-                        entries.add(new BarEntry((float) weight, counter));
+                        entries.add(new Entry((float) weight, counter));
+                        counter++;
                     }
                 }
                 continue;
@@ -154,40 +221,43 @@ public class ChartActivity extends AppCompatActivity {
             if (dbName.equals(DatabaseNames.FOOD)) {
                 Food f = snapshot.getValue(Food.class);
                 labels.add(f.getDate());
-                entries.add(new BarEntry(f.getHowMuch(), counter));
+                entries.add(new Entry(f.getHowMuch(), counter));
+                counter++;
                 continue;
             }
             if (dbName.equals(DatabaseNames.ILLNESS)) {
                 Illness i = snapshot.getValue(Illness.class);
                 labels.add(i.getDate());
-                entries.add(new BarEntry((float) i.getTemperature(), counter));
+                entries.add(new Entry((float) i.getTemperature(), counter));
+                counter++;
                 continue;
             }
             if (dbName.equals(DatabaseNames.OUTDOOR)) {
                 Outdoor o = snapshot.getValue(Outdoor.class);
                 labels.add(o.getDate());
-                entries.add(new BarEntry((float) o.getLength(), counter));
+                entries.add(new Entry((float) o.getLength(), counter));
+                counter++;
                 continue;
             }
             if (dbName.equals(DatabaseNames.SLEEP)) {
                 Sleep s = snapshot.getValue(Sleep.class);
                 labels.add(s.getDate());
-                entries.add(new BarEntry((float) s.getLength(), counter));
+                entries.add(new Entry((float) s.getLength(), counter));
+                counter++;
                 continue;
             }
             if (dbName.equals(DatabaseNames.STOOL)) {
                 Stool s = snapshot.getValue(Stool.class);
                 labels.add(s.getDate());
-                entries.add(new BarEntry(s.getHowMuch(), counter));
-                continue;
+                entries.add(new Entry(s.getHowMuch(), counter));
+                counter++;
             }
-            counter++;
         }
 
-        barDataSet = new BarDataSet(entries, dbName);
-        barData = new BarData(labels, barDataSet);
-        barDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
-        chart.setData(barData);
+        LineDataSet lineDataSet = new LineDataSet(entries, dbName);
+        LineData lineData = new LineData(labels, lineDataSet);
+        lineDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+        chart.setData(lineData);
         chart.animateY(2000);
     }
 }

@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.repina.anastasia.momandbaby.Adapters.GridItemArrayAdapter;
 import com.repina.anastasia.momandbaby.Connectors.ConnectionDetector;
 import com.repina.anastasia.momandbaby.Connectors.FirebaseConnection;
 import com.repina.anastasia.momandbaby.Classes.SharedConstants;
@@ -53,49 +54,57 @@ public class NewFeatureActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_feature);
-        featureName = getIntent().getExtras().getString("data");
-        features = getResources().getStringArray(R.array.parametersBaby);
 
-        dataValue1 = (EditText) findViewById(R.id.dataValue1);
-        dataValue2 = (EditText) findViewById(R.id.dataValue2);
-        dataValue3 = (EditText) findViewById(R.id.dataValue3);
-        ratingBar = (RatingBar) findViewById(R.id.ratingBar);
-        vaccinationsData = (Spinner) findViewById(R.id.vaccinationsData);
+        GridItemArrayAdapter item = (GridItemArrayAdapter) getIntent().getSerializableExtra("editItem");
+        if (item != null) // the user edit the item
+        {
 
-        final Calendar dateAndTime = Calendar.getInstance();
+        } else {
 
-        date = (EditText) findViewById(R.id.date);
-        date.setText(getFormattedDateWithoutTime(dateAndTime));
-        fullDate = getFormattedDateWithTime(dateAndTime);
-        date.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new DatePickerDialog(NewFeatureActivity.this, R.style.Theme_AppCompat_DayNight_Dialog,
-                        new DatePickerDialog.OnDateSetListener() {
-                            @Override
-                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                                dateAndTime.set(Calendar.YEAR, year);
-                                dateAndTime.set(Calendar.MONTH, monthOfYear);
-                                dateAndTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                                date.setText(getFormattedDateWithoutTime(dateAndTime));
-                                fullDate = getFormattedDateWithTime(dateAndTime);
-                            }
-                        }, dateAndTime.get(Calendar.YEAR), dateAndTime.get(Calendar.MONTH), dateAndTime.get(Calendar.DAY_OF_MONTH)).show();
-            }
-        });
+            featureName = getIntent().getExtras().getString("data");
+            features = getResources().getStringArray(R.array.parametersBaby);
 
-        Button addData = (Button) findViewById(R.id.addData);
-        addData.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(ConnectionDetector.isConnected(getApplicationContext())) {
-                    addNewValueToFirebase();
-                    finish();//back to choosing
+            dataValue1 = (EditText) findViewById(R.id.dataValue1);
+            dataValue2 = (EditText) findViewById(R.id.dataValue2);
+            dataValue3 = (EditText) findViewById(R.id.dataValue3);
+            ratingBar = (RatingBar) findViewById(R.id.ratingBar);
+            vaccinationsData = (Spinner) findViewById(R.id.vaccinationsData);
+
+            final Calendar dateAndTime = Calendar.getInstance();
+
+            date = (EditText) findViewById(R.id.date);
+            date.setText(getFormattedDateWithoutTime(dateAndTime));
+            fullDate = getFormattedDateWithTime(dateAndTime);
+            date.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new DatePickerDialog(NewFeatureActivity.this, R.style.Theme_AppCompat_DayNight_Dialog,
+                            new DatePickerDialog.OnDateSetListener() {
+                                @Override
+                                public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                    dateAndTime.set(Calendar.YEAR, year);
+                                    dateAndTime.set(Calendar.MONTH, monthOfYear);
+                                    dateAndTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                                    date.setText(getFormattedDateWithoutTime(dateAndTime));
+                                    fullDate = getFormattedDateWithTime(dateAndTime);
+                                }
+                            }, dateAndTime.get(Calendar.YEAR), dateAndTime.get(Calendar.MONTH), dateAndTime.get(Calendar.DAY_OF_MONTH)).show();
                 }
-            }
-        });
+            });
 
-        changeLayout(featureName);
+            Button addData = (Button) findViewById(R.id.addData);
+            addData.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (ConnectionDetector.isConnected(getApplicationContext())) {
+                        addNewValueToFirebase();
+                        finish();//back to choosing
+                    }
+                }
+            });
+
+            changeLayout(featureName);
+        }
     }
 
     private void addNewValueToFirebase() {
@@ -130,7 +139,7 @@ public class NewFeatureActivity extends AppCompatActivity {
             String symptoms = dataValue2.getText().toString();
             String pills = dataValue3.getText().toString();
             double temperature = Double.parseDouble(dataValue1.getText().toString());
-            Illness i = new Illness(babyId, currentDate,symptoms, pills, temperature);
+            Illness i = new Illness(babyId, currentDate, symptoms, pills, temperature);
             databaseReference = database.getReference().child(DatabaseNames.ILLNESS);
             databaseReference.push().setValue(i);
         }

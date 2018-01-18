@@ -1,7 +1,9 @@
 package com.repina.anastasia.momandbaby.Adapters;
 
 
-public class GridItem {
+import java.io.Serializable;
+
+public class GridItem implements Serializable {
     private int itemImg;
     private String itemDesc;
     private String date;

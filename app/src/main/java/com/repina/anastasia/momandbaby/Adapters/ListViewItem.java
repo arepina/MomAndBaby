@@ -1,7 +1,9 @@
 package com.repina.anastasia.momandbaby.Adapters;
 
 
-public class ListViewItem {
+import java.io.Serializable;
+
+public class ListViewItem implements Serializable {
     private String name;
     private int value; // 0 checkbox disable, 1  checkbox enable
 

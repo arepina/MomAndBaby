@@ -10,7 +10,7 @@
         android:background="@color/colorPrimary"
         android:popupBackground="@color/colorPrimary" />
 
-    <com.github.mikephil.charting.charts.BarChart
+    <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/graph"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
