@@ -85,6 +85,8 @@
     <string name="charts">Графики</string>
     <string name="vaccinations">Прививки</string>
     <string name="vaccinations_list">Список прививок</string>
+    <string name="ideal_height">Идеальный рост</string>
+    <string name="ideal_weight">Идеальный вес</string>
 
     <string-array name="parametersBaby">
         <item>Рост</item>
@@ -118,68 +120,66 @@
     </string-array>
 
     <string-array name="heightBoy">
-        <item>49,9</item>
-        <item>54,7</item>
-        <item>58,4</item>
-        <item>61,4</item>
-        <item>63,9</item>
-        <item>65,9</item>
-        <item>67,6</item>
-        <item>69,2</item>
-        <item>70,6</item>
-        <item>72,0</item>
-        <item>73,3</item>
-        <item>74,5</item>
-        <item>75,8</item>
+        <item>49.9</item>
+        <item>54.7</item>
+        <item>58.4</item>
+        <item>61.4</item>
+        <item>63.9</item>
+        <item>65.9</item>
+        <item>67.6</item>
+        <item>69.2</item>
+        <item>70.6</item>
+        <item>72.0</item>
+        <item>73.3</item>
+        <item>74.5</item>
+        <item>75.8</item>
     </string-array>
 
     <string-array name="heightGirl">
-        <item>49,2</item>
-        <item>53,7</item>
-        <item>57,1</item>
-        <item>59,8</item>
-        <item>62,1</item>
-        <item>64,0</item>
-        <item>65,7</item>
-        <item>67,3</item>
-        <item>68,8</item>
-        <item>70,1</item>
-        <item>71,5</item>
-        <item>72,8</item>
-        <item>74,0</item>
+        <item>49.2</item>
+        <item>53.7</item>
+        <item>57.1</item>
+        <item>59.8</item>
+        <item>62.1</item>
+        <item>64.0</item>
+        <item>65.7</item>
+        <item>67.3</item>
+        <item>68.8</item>
+        <item>70.1</item>
+        <item>71.5</item>
+        <item>72.8</item>
+        <item>74.0</item>
     </string-array>
 
     <string-array name="weightBoy">
-        <item>3,3</item>
-        <item>4,5</item>
-        <item>5,6</item>
-        <item>6,4</item>
-        <item>7,0</item>
-        <item>7,5</item>
-        <item>7,9</item>
-        <item>8,3</item>
-        <item>8,6</item>
-        <item>8,9</item>
-        <item>9,2</item>
-        <item>9,4</item>
-        <item>9,7</item>
+        <item>3.3</item>
+        <item>4.5</item>
+        <item>5.6</item>
+        <item>6.4</item>
+        <item>7.0</item>
+        <item>7.5</item>
+        <item>7.9</item>
+        <item>8.3</item>
+        <item>8.6</item>
+        <item>8.9</item>
+        <item>9.2</item>
+        <item>9.4</item>
+        <item>9.7</item>
     </string-array>
 
     <string-array name="weightGirl">
-        <item>3,2</item>
-        <item>4,2</item>
-        <item>5,1</item>
-        <item>5,9</item>
-        <item>6,4</item>
-        <item>6,9</item>
-        <item>7,3</item>
-        <item>7,6</item>
-        <item>8,0</item>
-        <item>8,2</item>
-        <item>8,5</item>
-        <item>8,7</item>
-        <item>9,0</item>
+        <item>3.2</item>
+        <item>4.2</item>
+        <item>5.1</item>
+        <item>5.9</item>
+        <item>6.4</item>
+        <item>6.9</item>
+        <item>7.3</item>
+        <item>7.6</item>
+        <item>8.0</item>
+        <item>8.2</item>
+        <item>8.5</item>
+        <item>8.7</item>
+        <item>9.0</item>
     </string-array>
-
-
 </resources>

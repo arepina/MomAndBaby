@@ -16,6 +16,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.repina.anastasia.momandbaby.Connectors.ConnectionDetector;
 import com.repina.anastasia.momandbaby.Classes.ToastShow;
+import com.repina.anastasia.momandbaby.DataBase.Baby;
 import com.repina.anastasia.momandbaby.DataBase.DatabaseNames;
 import com.repina.anastasia.momandbaby.DataBase.User;
 import com.repina.anastasia.momandbaby.Connectors.FirebaseConnection;
@@ -109,6 +110,10 @@ public class SignupActivity extends AppCompatActivity {
                             SharedPreferences sp = getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
                             SharedPreferences.Editor editor = sp.edit();
                             editor.putString(SharedConstants.BABY_ID_KEY, snapshot.getKey());
+                            Baby b = snapshot.getValue(Baby.class);
+                            editor.putString(SharedConstants.BABY_BIRTHDAY, b.getBirthDay());
+                            editor.putString(SharedConstants.BABY_GENDER_KEY, b.getGender());
+                            editor.putString(SharedConstants.BABY_NAME_KEY, b.getName());
                             editor.apply();
                         }
 

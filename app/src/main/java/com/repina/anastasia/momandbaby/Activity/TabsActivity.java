@@ -36,7 +36,7 @@ public class TabsActivity extends FragmentActivity {
 
             googleFit = new GoogleFit(this);
 
-            if (babyID.length() == 0) {
+            if (babyID.length() == 0) { // the account was created, but the baby info was not entered
                 Intent nextActivity = new Intent(this, BabyInfoActivity.class);
                 startActivity(nextActivity);
                 finish();

@@ -13,6 +13,7 @@ import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -38,6 +39,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 
 
 public class ChartActivity extends AppCompatActivity {
@@ -50,6 +52,7 @@ public class ChartActivity extends AppCompatActivity {
     ArrayList<Entry> girlWeight;
     ArrayList<String> labels;
     ArrayList<String> labelsIdeal;
+    List<ILineDataSet> dataSets;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +64,7 @@ public class ChartActivity extends AppCompatActivity {
         //https://www.android-examples.com/create-bar-chart-graph-using-mpandroidchart-library/
         //https://github.com/numetriclabz/numAndroidCharts
         chart = (LineChart) findViewById(R.id.graph);
+        dataSets = new ArrayList<>();
 
         final ArrayList<String> choose;
         ArrayAdapter<?> adapter;
@@ -140,7 +144,6 @@ public class ChartActivity extends AppCompatActivity {
         SharedPreferences sp = context.getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
         String gender = sp.getString(SharedConstants.BABY_GENDER_KEY, "");
         String birthday = sp.getString(SharedConstants.BABY_BIRTHDAY, "");
-        //todo reregister or add birthday to shared!
         labelsIdeal = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault());
@@ -150,7 +153,7 @@ public class ChartActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         labelsIdeal.add(FormattedDate.getFormattedDateWithoutTime(calendar));
-        for (int i = 1; i < 12; i++) {
+        for (int i = 1; i <= 12; i++) {
             calendar.add(Calendar.MONTH, 1);
             labelsIdeal.add(FormattedDate.getFormattedDateWithoutTime(calendar));
         }
@@ -160,35 +163,32 @@ public class ChartActivity extends AppCompatActivity {
             ArrayList<String> boyParamsWeight = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.weightBoy)));
             boyHeight = new ArrayList<>();
             boyWeight = new ArrayList<>();
-            for(int i = 0; i < boyParamsHeight.size(); i++)
-            {
-                boyHeight.add(new Entry(Float.parseFloat(boyParamsHeight.get(i)), i));
-                boyWeight.add(new Entry(Float.parseFloat(boyParamsWeight.get(i)), i));
+            for (int i = 0; i < boyParamsHeight.size(); i++) {
+                boyHeight.add(new Entry((float) Double.parseDouble(boyParamsHeight.get(i)), i));
+                boyWeight.add(new Entry((float) Double.parseDouble(boyParamsWeight.get(i)), i));
             }
-            if(dbName.equals("Рост"))
-                lineDataSet = new LineDataSet(boyHeight, "Идеальный рост");
-            if(dbName.equals("Вес"))
-                lineDataSet = new LineDataSet(boyWeight, "Идеальный вес");
+            if (dbName.equals("Рост"))
+                lineDataSet = new LineDataSet(boyHeight, getString(R.string.ideal_height));
+            if (dbName.equals("Вес"))
+                lineDataSet = new LineDataSet(boyWeight, getString(R.string.ideal_weight));
         } else {
             ArrayList<String> girlParamsHeight = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.heightGirl)));
             ArrayList<String> girlParamsWeight = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.weightGirl)));
             girlHeight = new ArrayList<>();
             girlWeight = new ArrayList<>();
-            for(int i = 0; i < girlParamsHeight.size(); i++)
-            {
-                girlHeight.add(new Entry(Float.parseFloat(girlParamsHeight.get(i)), i));
-                girlWeight.add(new Entry(Float.parseFloat(girlParamsWeight.get(i)), i));
+            for (int i = 0; i < girlParamsHeight.size(); i++) {
+                girlHeight.add(new Entry((float) Double.parseDouble(girlParamsHeight.get(i)), i));
+                girlWeight.add(new Entry((float) Double.parseDouble(girlParamsWeight.get(i)), i));
             }
-            if(dbName.equals("Рост"))
-                lineDataSet = new LineDataSet(girlHeight, "Идеальный рост");
-            if(dbName.equals("Вес"))
-                lineDataSet = new LineDataSet(girlWeight, "Идеальный вес");
+            if (dbName.equals("Рост"))
+                lineDataSet = new LineDataSet(girlHeight, getString(R.string.ideal_height));
+            if (dbName.equals("Вес"))
+                lineDataSet = new LineDataSet(girlWeight, getString(R.string.ideal_weight));
         }
 
-        if(lineDataSet != null) {
-            LineData lineData = new LineData(labelsIdeal, lineDataSet);
-            lineDataSet.setColors(ColorTemplate.JOYFUL_COLORS);
-            chart.setData(lineData);
+        if (lineDataSet != null) {
+            lineDataSet.setColors(new int[] { R.color.colorPrimary }, getApplicationContext());
+            dataSets.add(lineDataSet);
         }
     }
 
@@ -255,8 +255,9 @@ public class ChartActivity extends AppCompatActivity {
         }
 
         LineDataSet lineDataSet = new LineDataSet(entries, dbName);
-        LineData lineData = new LineData(labels, lineDataSet);
-        lineDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+        lineDataSet.setColors(new int[] { R.color.colorPrimaryDark }, getApplicationContext());
+        dataSets.add(lineDataSet);
+        LineData lineData = new LineData(labelsIdeal, dataSets);
         chart.setData(lineData);
         chart.animateY(2000);
     }
