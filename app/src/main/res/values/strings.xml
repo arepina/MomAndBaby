@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">MomAndBaby</string>
+
+    <!--Sign up and register pages-->
     <string name="birthday">Дата рождения</string>
     <string name="girl">Девочка</string>
     <string name="boy">Мальчик</string>
@@ -19,18 +21,30 @@
     <string name="invalid_email">Требуется ввести корректный email</string>
     <string name="invalid_password">Требуется ввести корректный пароль, длина которого не менее 6</string>
     <string name="invalid_name">Требуется ввести корректное имя</string>
+    <string name="wrong_password_or_login">Введен неверный логин или пароль</string>
+    <string name="password_again">Введите пароль еще раз</string>
+    <string name="different_passwords">Пароли должны совпадать</string>
+    <string name="email_already_used">Данный email уже используется</string>
+
+    <!--Analytics-->
     <string name="mom_health">Аналитика данных здоровья мамы</string>
     <string name="baby_health">Аналитика данных здоровья ребенка</string>
     <string name="today">Сегодняшняя активность</string>
-    <string name="sync_band">Синхронизировать браслет</string>
     <string name="yesterday">Назад</string>
     <string name="tomorrow">Вперед</string>
+    <string name="charts">Графики</string>
+
+    <!--Settings-->
     <string name="exit">Выйти из аккаунта</string>
     <string name="app_info">О приложении</string>
     <string name="contact_developer">Связаться с разработчиком</string>
-    <string name="rate_us">Оценить</string>
-    <string name="soon">Ссылка скоро заработает!</string>
     <string name="my_email">prostorepa@yandex.ru</string>
+    <string name="send_report_mom">Отправить отчет о здоровье мамы на почту</string>
+    <string name="send_report_baby">Отправить отчет о здоровье малыша на почту</string>
+    <string name="app_description">Приложение разработано Репиной А.А. в рамках выполнения дипломной работы и предназначено для мониторинга здоровья малыша до 1 года и помощи его маме. Научный руководитель Ахметсафина Р.З. Комментарии, пожелания и предложения привествуются!</string>
+    <string name="licenses">Все изображения в приложении используются по Flaticon Basic License. Изображения являются частью пакетов, созданных Freepik, Smashicons, Nikita Golubev,  Vectors Market, Maxim Basinski</string>
+
+    <!--New data-->
     <string name="add_new_data">Введите новое значение</string>
     <string name="height">роста малыша</string>
     <string name="weight">веса малыша</string>
@@ -46,22 +60,7 @@
     <string name="add_vaccination">Введите описание реакции малыша на прививку</string>
     <string name="vaccination">Выберите прививку из списка</string>
     <string name="add">Добавить</string>
-    <string name="send_report_mom">Отправить отчет о здоровье мамы на почту</string>
-    <string name="send_report_baby">Отправить отчет о здоровье малыша на почту</string>
-    <string name="app_description">Приложение разработано Репиной А.А. в рамках выполнения дипломной работы и предназначено для мониторинга здоровья малыша до 1 года и помощи его маме. Научный руководитель Ахметсафина Р.З. Комментарии, пожелания и предложения привествуются!</string>
     <string name="сomment">Комментарий</string>
-    <string name="happy_birthday">С днем рождения,</string>
-    <string name="mr">дорогой</string>
-    <string name="mrs">дорогая</string>
-    <string name="choose_period">Выберите период для отчета</string>
-    <string name="for_day">За день</string>
-    <string name="for_week">За неделю</string>
-    <string name="for_month">За месяц</string>
-    <string name="report_from">Отчет с</string>
-    <string name="report_to">по</string>
-    <string name="email_text"><![CDATA[Высылаем отчет о здоровье. Спасибо, что пользуетесь Mom&Baby!]]></string>
-    <string name="report_sending">Отправка отчета...</string>
-    <string name="reports">Отчеты</string>
     <string name="rate_feature">Оценка:</string>
     <string name="sympthomes">Симптомы:</string>
     <string name="pills">Лекарства:</string>
@@ -71,22 +70,45 @@
     <string name="outdoor">Длительность прогулки:</string>
     <string name="sleep">Длительность сна:</string>
     <string name="vaccination_name">Название прививки:</string>
-    <string name="wrong_password_or_login">Введен неверный логин или пароль</string>
-    <string name="password_again">Введите пароль еще раз</string>
-    <string name="different_passwords">Пароли должны совпадать</string>
-    <string name="email_already_used">Данный email уже используется</string>
-    <string name="need_to_sync">Требуется синхронизировать носимое устройство с Google Fit, чтобы данные появились в приложении</string>
-    <string name="google_fit_notification">Для корректной работы требуется разрешить доступ к Google Fit и войти в свой аккаунт</string>
-    <string name="licenses">Все изображения в приложении используются по Flaticon Basic License. Изображения являются частью пакетов, созданных Freepik, Smashicons, Nikita Golubev,  Vectors Market, Maxim Basinski</string>
+
+    <!--Happy birthday-->
+    <string name="happy_birthday">С днем рождения,</string>
+    <string name="mr">дорогой</string>
+    <string name="mrs">дорогая</string>
+
+    <!--Report-->
+    <string name="choose_period">Выберите период для отчета</string>
+    <string name="for_day">За день</string>
+    <string name="for_week">За неделю</string>
+    <string name="for_month">За месяц</string>
+    <string name="report_from">Отчет с</string>
+    <string name="report_to">по</string>
+    <string name="email_text"><![CDATA[Высылаем отчет о здоровье. Спасибо, что пользуетесь Mom&Baby!]]></string>
+    <string name="report_sending">Отправка отчета...</string>
+    <string name="reports">Отчеты</string>
     <string name="report_error">Возникла проблема при создании отчета, проверьте наличие SD карты в вашем устройстве</string>
     <string name="no_data">Нет доступных данных. Попробуйте выбрать другой временной период.</string>
     <string name="no_data_today">Записей нет</string>
+
+    <!--Google Fit-->
+    <string name="need_to_sync">Требуется синхронизировать носимое устройство с Google Fit, чтобы данные появились в приложении</string>
+    <string name="google_fit_notification">Для корректной работы требуется разрешить доступ к Google Fit и войти в свой аккаунт</string>
     <string name="google_fit">Google Fit</string>
-    <string name="charts">Графики</string>
+
+    <!--Vaccination-->
     <string name="vaccinations">Прививки</string>
     <string name="vaccinations_list">Список прививок</string>
     <string name="ideal_height">Идеальный рост</string>
     <string name="ideal_weight">Идеальный вес</string>
+
+    <!--Legend desc-->
+    <string name="height_legend">Данные роста</string>
+    <string name="weight_legend">Данные веса</string>
+    <string name="food_legend">Оценка питания</string>
+    <string name="illness_legend">Температура</string>
+    <string name="outdoor_legend">Часы прогулки</string>
+    <string name="sleep_legend">Часы сна</string>
+    <string name="stool_legend">Оценка стула</string>
 
     <string-array name="parametersBaby">
         <item>Рост</item>

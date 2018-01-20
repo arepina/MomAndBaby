@@ -64,7 +64,6 @@ public class ChartActivity extends AppCompatActivity {
         //https://www.android-examples.com/create-bar-chart-graph-using-mpandroidchart-library/
         //https://github.com/numetriclabz/numAndroidCharts
         chart = (LineChart) findViewById(R.id.graph);
-        dataSets = new ArrayList<>();
 
         final ArrayList<String> choose;
         ArrayAdapter<?> adapter;
@@ -89,6 +88,7 @@ public class ChartActivity extends AppCompatActivity {
                     //todo
                 } else {
                     if (ConnectionDetector.isConnected(view.getContext())) {
+                        dataSets = new ArrayList<>();
                         String selectedItemName = choose.get(position);
                         SharedPreferences sp = view.getContext().getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
                         String babyId = sp.getString(SharedConstants.BABY_ID_KEY, "");
@@ -203,6 +203,7 @@ public class ChartActivity extends AppCompatActivity {
                 weight = m.getWeight();
                 height = m.getHeight();
                 if (selectedItemName.equals("Рост")) {
+                    chart.setDescription(getString(R.string.height_legend));
                     if (height != 0) // not the weight entry
                     {
                         labels.add(m.getDate());
@@ -210,6 +211,7 @@ public class ChartActivity extends AppCompatActivity {
                         counter++;
                     }
                 } else {
+                    chart.setDescription(getString(R.string.weight_legend));
                     if (weight != 0) { // not the height entry
                         labels.add(m.getDate());
                         entries.add(new Entry((float) weight, counter));
@@ -219,6 +221,7 @@ public class ChartActivity extends AppCompatActivity {
                 continue;
             }
             if (dbName.equals(DatabaseNames.FOOD)) {
+                chart.setDescription(getString(R.string.food_legend));
                 Food f = snapshot.getValue(Food.class);
                 labels.add(f.getDate());
                 entries.add(new Entry(f.getHowMuch(), counter));
@@ -226,6 +229,7 @@ public class ChartActivity extends AppCompatActivity {
                 continue;
             }
             if (dbName.equals(DatabaseNames.ILLNESS)) {
+                chart.setDescription(getString(R.string.illness_legend));
                 Illness i = snapshot.getValue(Illness.class);
                 labels.add(i.getDate());
                 entries.add(new Entry((float) i.getTemperature(), counter));
@@ -233,6 +237,7 @@ public class ChartActivity extends AppCompatActivity {
                 continue;
             }
             if (dbName.equals(DatabaseNames.OUTDOOR)) {
+                chart.setDescription(getString(R.string.outdoor_legend));
                 Outdoor o = snapshot.getValue(Outdoor.class);
                 labels.add(o.getDate());
                 entries.add(new Entry((float) o.getLength(), counter));
@@ -240,6 +245,7 @@ public class ChartActivity extends AppCompatActivity {
                 continue;
             }
             if (dbName.equals(DatabaseNames.SLEEP)) {
+                chart.setDescription(getString(R.string.sleep_legend));
                 Sleep s = snapshot.getValue(Sleep.class);
                 labels.add(s.getDate());
                 entries.add(new Entry((float) s.getLength(), counter));
@@ -247,6 +253,7 @@ public class ChartActivity extends AppCompatActivity {
                 continue;
             }
             if (dbName.equals(DatabaseNames.STOOL)) {
+                chart.setDescription(getString(R.string.stool_legend));
                 Stool s = snapshot.getValue(Stool.class);
                 labels.add(s.getDate());
                 entries.add(new Entry(s.getHowMuch(), counter));
