@@ -13,7 +13,7 @@ import com.matthewtamlin.sliding_intro_screen_library.buttons.IntroButton;
 import com.matthewtamlin.sliding_intro_screen_library.core.IntroActivity;
 import com.matthewtamlin.sliding_intro_screen_library.pages.ParallaxPage;
 import com.matthewtamlin.sliding_intro_screen_library.transformers.MultiViewParallaxTransformer;
-import com.repina.anastasia.momandbaby.Classes.SharedConstants;
+import com.repina.anastasia.momandbaby.Helpers.SharedConstants;
 import com.repina.anastasia.momandbaby.R;
 
 import java.util.ArrayList;

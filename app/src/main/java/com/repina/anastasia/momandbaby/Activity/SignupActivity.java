@@ -15,13 +15,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.repina.anastasia.momandbaby.Connectors.ConnectionDetector;
-import com.repina.anastasia.momandbaby.Classes.ToastShow;
+import com.repina.anastasia.momandbaby.Helpers.ToastShow;
 import com.repina.anastasia.momandbaby.DataBase.Baby;
 import com.repina.anastasia.momandbaby.DataBase.DatabaseNames;
 import com.repina.anastasia.momandbaby.DataBase.User;
 import com.repina.anastasia.momandbaby.Connectors.FirebaseConnection;
 import com.repina.anastasia.momandbaby.R;
-import com.repina.anastasia.momandbaby.Classes.SharedConstants;
+import com.repina.anastasia.momandbaby.Helpers.SharedConstants;
 
 public class SignupActivity extends AppCompatActivity {
 

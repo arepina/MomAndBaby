@@ -12,9 +12,9 @@ import android.widget.RadioButton;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.repina.anastasia.momandbaby.Classes.FormattedDate;
-import com.repina.anastasia.momandbaby.Classes.SharedConstants;
-import com.repina.anastasia.momandbaby.Classes.ToastShow;
+import com.repina.anastasia.momandbaby.Helpers.FormattedDate;
+import com.repina.anastasia.momandbaby.Helpers.SharedConstants;
+import com.repina.anastasia.momandbaby.Helpers.ToastShow;
 import com.repina.anastasia.momandbaby.Connectors.ConnectionDetector;
 import com.repina.anastasia.momandbaby.DataBase.Baby;
 import com.repina.anastasia.momandbaby.Connectors.FirebaseConnection;

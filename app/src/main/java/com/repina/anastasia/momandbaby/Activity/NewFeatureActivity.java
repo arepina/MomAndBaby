@@ -19,7 +19,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.repina.anastasia.momandbaby.Adapters.GridItemArrayAdapter;
 import com.repina.anastasia.momandbaby.Connectors.ConnectionDetector;
 import com.repina.anastasia.momandbaby.Connectors.FirebaseConnection;
-import com.repina.anastasia.momandbaby.Classes.SharedConstants;
+import com.repina.anastasia.momandbaby.Helpers.SharedConstants;
 import com.repina.anastasia.momandbaby.DataBase.DatabaseNames;
 import com.repina.anastasia.momandbaby.DataBase.Food;
 import com.repina.anastasia.momandbaby.DataBase.Illness;
@@ -32,8 +32,8 @@ import com.repina.anastasia.momandbaby.R;
 
 import java.util.Calendar;
 
-import static com.repina.anastasia.momandbaby.Classes.FormattedDate.getFormattedDateWithTime;
-import static com.repina.anastasia.momandbaby.Classes.FormattedDate.getFormattedDateWithoutTime;
+import static com.repina.anastasia.momandbaby.Helpers.FormattedDate.getFormattedDateWithTime;
+import static com.repina.anastasia.momandbaby.Helpers.FormattedDate.getFormattedDateWithoutTime;
 
 public class NewFeatureActivity extends AppCompatActivity {
 

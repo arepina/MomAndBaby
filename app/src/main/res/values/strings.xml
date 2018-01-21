@@ -42,7 +42,7 @@
     <string name="send_report_mom">Отправить отчет о здоровье мамы на почту</string>
     <string name="send_report_baby">Отправить отчет о здоровье малыша на почту</string>
     <string name="app_description">Приложение разработано Репиной А.А. в рамках выполнения дипломной работы и предназначено для мониторинга здоровья малыша до 1 года и помощи его маме. Научный руководитель Ахметсафина Р.З. Комментарии, пожелания и предложения привествуются!</string>
-    <string name="licenses">Все изображения в приложении используются по Flaticon Basic License. Изображения являются частью пакетов, созданных Freepik, Smashicons, Nikita Golubev,  Vectors Market, Maxim Basinski</string>
+    <string name="licenses">Все изображения в приложении используются по Flaticon Basic License. Изображения являются частью пакетов, созданных Freepik, Smashicons, Nikita Golubev, Vectors Market, Maxim Basinski, Scott de Jonge</string>
 
     <!--New data-->
     <string name="add_new_data">Введите новое значение</string>

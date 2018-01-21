@@ -9,8 +9,8 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.repina.anastasia.momandbaby.Connectors.ConnectionDetector;
-import com.repina.anastasia.momandbaby.Classes.CustomGrid;
-import com.repina.anastasia.momandbaby.Classes.ToastShow;
+import com.repina.anastasia.momandbaby.Adapters.CustomGrid;
+import com.repina.anastasia.momandbaby.Helpers.ToastShow;
 import com.repina.anastasia.momandbaby.R;
 
 public class ChooseFeatureActivity extends Activity {

@@ -11,10 +11,10 @@ import android.widget.ImageView;
 import android.widget.TabHost;
 
 import com.repina.anastasia.momandbaby.Connectors.ConnectionDetector;
-import com.repina.anastasia.momandbaby.Classes.FormattedDate;
-import com.repina.anastasia.momandbaby.Classes.GoogleFit;
-import com.repina.anastasia.momandbaby.Classes.SharedConstants;
-import com.repina.anastasia.momandbaby.Classes.ToastShow;
+import com.repina.anastasia.momandbaby.Helpers.FormattedDate;
+import com.repina.anastasia.momandbaby.Helpers.GoogleFit;
+import com.repina.anastasia.momandbaby.Helpers.SharedConstants;
+import com.repina.anastasia.momandbaby.Helpers.ToastShow;
 import com.repina.anastasia.momandbaby.Fragment.FragmentTab;
 import com.repina.anastasia.momandbaby.R;
 

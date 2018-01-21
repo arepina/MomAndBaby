@@ -1,4 +1,4 @@
-package com.repina.anastasia.momandbaby.Classes;
+package com.repina.anastasia.momandbaby.Helpers;
 
 
 public class SharedConstants {

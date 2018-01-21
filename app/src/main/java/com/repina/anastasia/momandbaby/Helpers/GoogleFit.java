@@ -1,4 +1,4 @@
-package com.repina.anastasia.momandbaby.Classes;
+package com.repina.anastasia.momandbaby.Helpers;
 
 import android.app.Activity;
 import android.os.AsyncTask;
@@ -50,8 +50,12 @@ public class GoogleFit implements
                 .addApi(Fitness.HISTORY_API)
                 .addConnectionCallbacks(this)
                 .enableAutoManage(fragmentActivity, 0, this)
-                .addScope(new Scope(Scopes.FITNESS_ACTIVITY_READ_WRITE))
+                //.addScope(new Scope(Scopes.FITNESS_ACTIVITY_READ_WRITE))
                 //.addScope(new Scope(Scopes.FITNESS_BODY_READ_WRITE))
+                .addScope(Fitness.SCOPE_LOCATION_READ)
+                .addScope(Fitness.SCOPE_ACTIVITY_READ)
+                .addScope(Fitness.SCOPE_BODY_READ)
+                .addScope(Fitness.SCOPE_NUTRITION_READ)
                 .build();
     }
 
