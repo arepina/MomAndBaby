@@ -11,10 +11,9 @@ import android.util.Pair;
 import android.widget.ListView;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.fitness.Fitness;
+import com.google.android.gms.fitness.FitnessActivities;
 import com.google.android.gms.fitness.data.Bucket;
 import com.google.android.gms.fitness.data.DataPoint;
 import com.google.android.gms.fitness.data.DataSet;
@@ -50,8 +49,6 @@ public class GoogleFit implements
                 .addApi(Fitness.HISTORY_API)
                 .addConnectionCallbacks(this)
                 .enableAutoManage(fragmentActivity, 0, this)
-                //.addScope(new Scope(Scopes.FITNESS_ACTIVITY_READ_WRITE))
-                //.addScope(new Scope(Scopes.FITNESS_BODY_READ_WRITE))
                 .addScope(Fitness.SCOPE_LOCATION_READ)
                 .addScope(Fitness.SCOPE_ACTIVITY_READ)
                 .addScope(Fitness.SCOPE_BODY_READ)
@@ -186,6 +183,19 @@ public class GoogleFit implements
             result1 = periodData(params[0], params[1], type, agrType);
             result.addAll(result1);
 
+            type = DataType.TYPE_NUTRITION;
+            agrType = DataType.AGGREGATE_NUTRITION_SUMMARY;
+            result1 = periodData(params[0], params[1], type, agrType);
+            result.addAll(result1);
+
+            //todo sleep
+            //datapoint
+            //dp.getValue(Field.FIELD_ACTIVITY).setActivity(FitnessActivities.SLEEP);
+            type = DataType.TYPE_ACTIVITY_SEGMENT;
+            agrType = DataType.AGGREGATE_ACTIVITY_SUMMARY;
+            result1 = periodData(params[0], params[1], type, agrType);
+            result.addAll(result1);
+
             return result;
         }
 
@@ -203,6 +213,10 @@ public class GoogleFit implements
                     item = new GridItem(R.mipmap.calories, value.toString(), date);
                 if (type.equals(DataType.TYPE_WEIGHT))
                     item = new GridItem(R.mipmap.weight, value.toString(), date);
+                if (type.equals(DataType.TYPE_NUTRITION))
+                    item = new GridItem(R.mipmap.nutrition, value.toString(), date);
+                if (type.equals(DataType.TYPE_ACTIVITY_SEGMENT))
+                    item = new GridItem(R.mipmap.rest, value.toString(), date);
                 if (!adapter.hasItem(item))
                     adapter.add(item);
             }
@@ -238,6 +252,15 @@ public class GoogleFit implements
             result1 = dataForToday(type);
             result.addAll(result1);
 
+            type = DataType.TYPE_NUTRITION;
+            result1 = dataForToday(type);
+            result.addAll(result1);
+
+            //todo sleep
+            type = DataType.TYPE_ACTIVITY_SEGMENT;
+            result1 = dataForToday(type);
+            result.addAll(result1);
+
             return result;
         }
 
@@ -255,6 +278,10 @@ public class GoogleFit implements
                     item = new GridItem(R.mipmap.calories, value.toString(), date);
                 if (type.equals(DataType.TYPE_WEIGHT))
                     item = new GridItem(R.mipmap.weight, value.toString(), date);
+                if (type.equals(DataType.TYPE_NUTRITION))
+                    item = new GridItem(R.mipmap.nutrition, value.toString(), date);
+                if (type.equals(DataType.TYPE_ACTIVITY_SEGMENT))
+                    item = new GridItem(R.mipmap.rest, value.toString(), date);
                 if (!adapter.hasItem(item))
                     adapter.add(item);
             }
