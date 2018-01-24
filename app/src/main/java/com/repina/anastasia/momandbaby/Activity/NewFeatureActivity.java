@@ -55,56 +55,49 @@ public class NewFeatureActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_feature);
 
-        GridItemArrayAdapter item = (GridItemArrayAdapter) getIntent().getSerializableExtra("editItem");
-        if (item != null) // the user edit the item
-        {
+        featureName = getIntent().getExtras().getString("data");
+        features = getResources().getStringArray(R.array.parametersBaby);
 
-        } else {
+        dataValue1 = (EditText) findViewById(R.id.dataValue1);
+        dataValue2 = (EditText) findViewById(R.id.dataValue2);
+        dataValue3 = (EditText) findViewById(R.id.dataValue3);
+        ratingBar = (RatingBar) findViewById(R.id.ratingBar);
+        vaccinationsData = (Spinner) findViewById(R.id.vaccinationsData);
 
-            featureName = getIntent().getExtras().getString("data");
-            features = getResources().getStringArray(R.array.parametersBaby);
+        final Calendar dateAndTime = Calendar.getInstance();
 
-            dataValue1 = (EditText) findViewById(R.id.dataValue1);
-            dataValue2 = (EditText) findViewById(R.id.dataValue2);
-            dataValue3 = (EditText) findViewById(R.id.dataValue3);
-            ratingBar = (RatingBar) findViewById(R.id.ratingBar);
-            vaccinationsData = (Spinner) findViewById(R.id.vaccinationsData);
+        date = (EditText) findViewById(R.id.date);
+        date.setText(getFormattedDateWithoutTime(dateAndTime));
+        fullDate = getFormattedDateWithTime(dateAndTime);
+        date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DatePickerDialog(NewFeatureActivity.this, R.style.Theme_AppCompat_DayNight_Dialog,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                dateAndTime.set(Calendar.YEAR, year);
+                                dateAndTime.set(Calendar.MONTH, monthOfYear);
+                                dateAndTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                                date.setText(getFormattedDateWithoutTime(dateAndTime));
+                                fullDate = getFormattedDateWithTime(dateAndTime);
+                            }
+                        }, dateAndTime.get(Calendar.YEAR), dateAndTime.get(Calendar.MONTH), dateAndTime.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
 
-            final Calendar dateAndTime = Calendar.getInstance();
-
-            date = (EditText) findViewById(R.id.date);
-            date.setText(getFormattedDateWithoutTime(dateAndTime));
-            fullDate = getFormattedDateWithTime(dateAndTime);
-            date.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    new DatePickerDialog(NewFeatureActivity.this, R.style.Theme_AppCompat_DayNight_Dialog,
-                            new DatePickerDialog.OnDateSetListener() {
-                                @Override
-                                public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                                    dateAndTime.set(Calendar.YEAR, year);
-                                    dateAndTime.set(Calendar.MONTH, monthOfYear);
-                                    dateAndTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                                    date.setText(getFormattedDateWithoutTime(dateAndTime));
-                                    fullDate = getFormattedDateWithTime(dateAndTime);
-                                }
-                            }, dateAndTime.get(Calendar.YEAR), dateAndTime.get(Calendar.MONTH), dateAndTime.get(Calendar.DAY_OF_MONTH)).show();
+        Button addData = (Button) findViewById(R.id.addData);
+        addData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ConnectionDetector.isConnected(getApplicationContext())) {
+                    addNewValueToFirebase();
+                    finish();//back to choosing
                 }
-            });
+            }
+        });
 
-            Button addData = (Button) findViewById(R.id.addData);
-            addData.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (ConnectionDetector.isConnected(getApplicationContext())) {
-                        addNewValueToFirebase();
-                        finish();//back to choosing
-                    }
-                }
-            });
-
-            changeLayout(featureName);
-        }
+        changeLayout(featureName);
     }
 
     private void addNewValueToFirebase() {

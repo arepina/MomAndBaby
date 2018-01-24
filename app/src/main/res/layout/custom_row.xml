@@ -25,4 +25,16 @@
         android:gravity="center_vertical"
         android:paddingTop="@dimen/main_padding"
         android:textColor="@color/colorTextDark" />
+
+    <Button
+        android:id="@+id/delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="@dimen/main_margin"
+        android:layout_marginTop="@dimen/main_margin"
+        android:background="@color/colorPrimaryDark"
+        android:gravity="center"
+        android:text="Delete" />
 </RelativeLayout>

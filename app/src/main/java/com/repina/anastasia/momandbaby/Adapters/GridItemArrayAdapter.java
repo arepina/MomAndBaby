@@ -4,13 +4,22 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.repina.anastasia.momandbaby.Connectors.FirebaseConnection;
+import com.repina.anastasia.momandbaby.Fragment.FragmentTab;
 import com.repina.anastasia.momandbaby.R;
 
 import java.util.ArrayList;
@@ -18,12 +27,9 @@ import java.util.List;
 
 public class GridItemArrayAdapter extends ArrayAdapter<GridItem> {
 
+    private final int invalid = -1;
+    private int delete_pos = -1;
     private List<GridItem> itemList = new ArrayList<>();
-
-    private static class ItemViewHolder {
-        ImageView itemImg;
-        TextView itemDesc;
-    }
 
     public GridItemArrayAdapter(Context context, int textViewResourceId) {
         super(context, textViewResourceId);
@@ -49,37 +55,100 @@ public class GridItemArrayAdapter extends ArrayAdapter<GridItem> {
         return this.itemList.get(index);
     }
 
-    public boolean hasItem(GridItem item)
-    {
-        for(GridItem i : itemList)
-            if(i.getItemDesc().equals(item.getItemDesc()) && i.getItemImg() == item.getItemImg())
+    public void onSwipeItem(boolean isRight, int position) {
+        if (!isRight) {
+            delete_pos = position;
+        } else if (delete_pos == position) {
+            delete_pos = invalid;
+        }
+        notifyDataSetChanged();
+    }
+
+    private void deleteItem(int pos) {
+        GridItem removing = itemList.get(pos);
+        FirebaseConnection connection = new FirebaseConnection();
+        FirebaseDatabase database = connection.getDatabase();
+        final DatabaseReference databaseReference = database.getReference(removing.getType());
+        databaseReference.child(removing.getKey())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot child : dataSnapshot.getChildren()) {
+                            child.getRef().setValue(null);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
+        itemList.remove(pos);
+        if(itemList.size() == 0)
+        {
+            GridItem it = new GridItem(R.mipmap.cross, getContext().getString(R.string.no_data_today), null, null);
+            itemList.add(it);
+        }
+        delete_pos = invalid;
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return 0;
+    }
+
+    public boolean hasItem(GridItem item) {
+        for (GridItem i : itemList)
+            if (i.getItemDesc().equals(item.getItemDesc()) && i.getItemImg() == item.getItemImg())
                 return true;
         return false;
     }
 
     @NonNull
     @Override
-    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-        View row = convertView;
-        ItemViewHolder viewHolder;
-        if (row == null) {
+    public View getView(final int position, View convertView, @NonNull ViewGroup parent) {
+        if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            row = inflater.inflate(R.layout.custom_row, parent, false);
-            viewHolder = new ItemViewHolder();
-            viewHolder.itemImg = (ImageView) row.findViewById(R.id.itemImg);
-            viewHolder.itemDesc = (TextView) row.findViewById(R.id.itemDesc);
-            row.setTag(viewHolder);
-        } else {
-            viewHolder = (ItemViewHolder)row.getTag();
+            convertView = inflater.inflate(R.layout.custom_row, parent, false);
         }
+        ImageView itemImg = ViewHolderPattern.get(convertView, R.id.itemImg);
+        TextView itemDesc = ViewHolderPattern.get(convertView, R.id.itemDesc);
+        Button delete = ViewHolderPattern.get(convertView, R.id.delete);
+        if (delete_pos == position) {
+            delete.setVisibility(View.VISIBLE);
+        } else
+            delete.setVisibility(View.GONE);
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteItem(position);
+            }
+        });
         GridItem item = getItem(position);
-        viewHolder.itemImg.setImageResource(item.getItemImg());
-        viewHolder.itemDesc.setText(item.getItemDesc());
-        return row;
+        itemImg.setImageResource(item.getItemImg());
+        itemDesc.setText(item.getItemDesc());
+        return convertView;
     }
 
     public Bitmap decodeToBitmap(byte[] decodedByte) {
         return BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.length);
+    }
+}
+
+class ViewHolderPattern {
+    @SuppressWarnings("unchecked")
+    public static <T extends View> T get(View view, int id) {
+        SparseArray<View> viewHolder = (SparseArray<View>) view.getTag();
+        if (viewHolder == null) {
+            viewHolder = new SparseArray<>();
+            view.setTag(viewHolder);
+        }
+        View childView = viewHolder.get(id);
+        if (childView == null) {
+            childView = view.findViewById(id);
+            viewHolder.put(id, childView);
+        }
+        return (T) childView;
     }
 }
 

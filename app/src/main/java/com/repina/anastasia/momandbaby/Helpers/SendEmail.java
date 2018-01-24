@@ -97,7 +97,7 @@ public class SendEmail {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
-                            String report = "";
+                            StringBuilder report = new StringBuilder();
                             for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
                                 if (!singleSnapshot.getKey().equals(DatabaseNames.USER)
                                         & !singleSnapshot.getKey().equals(DatabaseNames.BABY)) {
@@ -117,7 +117,7 @@ public class SendEmail {
                                                     ((current.before(endDate) & (startDate.before(current) || daysStartDif == 0)) ||
                                                             (current.before(endDate) || daysEndDif == 0) & startDate.before(current)) ||
                                                     (daysEndDif == 0 & daysStartDif == 0)) {
-                                                report += cleanData(value, singleSnapshot);
+                                                report.append(cleanData(value, singleSnapshot));
                                             }
                                         } catch (ParseException ignored) {
                                         }
@@ -127,7 +127,7 @@ public class SendEmail {
                             if (report.length() == 0)
                                 ToastShow.show(context, context.getString(R.string.no_data));
                             else
-                                sendFile(report, context, start, finalEnd);
+                                sendFile(report.toString(), context, start, finalEnd);
                         }
                     }
 
@@ -138,15 +138,15 @@ public class SendEmail {
     }
 
     static void formMomsReport(GridItemArrayAdapter adapter, Context context, String start, String end) {
-        String report = "";
+        StringBuilder report = new StringBuilder();
         for (int i = 0; i < adapter.getCount(); i++) {
             GridItem it = adapter.getItem(i);
-            report += imageToString(it.getItemImg()) + " " + it.getItemDate() + " " + it.getItemDesc() + "\n";
+            report.append(imageToString(it.getItemImg())).append(" ").append(it.getItemDate()).append(" ").append(it.getItemDesc()).append("\n");
         }
         if (report.length() == 0)
             ToastShow.show(context, context.getString(R.string.no_data));
         else
-            sendFile(report, context, start, end);
+            sendFile(report.toString(), context, start, end);
     }
 
     private static String imageToString(int imageIntPath) {

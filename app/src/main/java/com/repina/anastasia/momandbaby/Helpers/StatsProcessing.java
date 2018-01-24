@@ -50,7 +50,7 @@ public class StatsProcessing {
                                         if (date.substring(0, 10).equals(FormattedDate.getFormattedDateWithoutTime(dateAndTime))
                                                 & value.get("babyId").equals(babyID)) {
                                             int imageId = getImageId(singleSnapshot.getKey(), value);
-                                            GridItem it = new GridItem(imageId, formDescription(value));
+                                            GridItem it = new GridItem(imageId, formDescription(value), entry.getKey(), singleSnapshot.getKey());
                                             adapter.add(it);
                                         }
                                     }
@@ -58,7 +58,7 @@ public class StatsProcessing {
                             }
                             if(adapter.getCount() == 0)
                             {
-                                GridItem it = new GridItem(R.mipmap.cross, context.getResources().getString(R.string.no_data_today));
+                                GridItem it = new GridItem(R.mipmap.cross, context.getResources().getString(R.string.no_data_today), null, null);
                                 adapter.add(it);
                             }
                             listViewBaby.setAdapter(adapter);

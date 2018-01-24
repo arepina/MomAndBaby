@@ -16,23 +16,23 @@ import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.repina.anastasia.momandbaby.Activity.AppInfoActivity;
 import com.repina.anastasia.momandbaby.Activity.ChartActivity;
-import com.repina.anastasia.momandbaby.Activity.NewFeatureActivity;
-import com.repina.anastasia.momandbaby.Activity.StatsActivity;
 import com.repina.anastasia.momandbaby.Activity.ChooseFeatureActivity;
 import com.repina.anastasia.momandbaby.Activity.SignupActivity;
-import com.repina.anastasia.momandbaby.Activity.AppInfoActivity;
+import com.repina.anastasia.momandbaby.Activity.StatsActivity;
 import com.repina.anastasia.momandbaby.Adapters.GridItemArrayAdapter;
+import com.repina.anastasia.momandbaby.Adapters.SwipeListView;
 import com.repina.anastasia.momandbaby.Connectors.ConnectionDetector;
-import com.repina.anastasia.momandbaby.Helpers.StatsProcessing;
 import com.repina.anastasia.momandbaby.Helpers.FormattedDate;
 import com.repina.anastasia.momandbaby.Helpers.SendEmail;
 import com.repina.anastasia.momandbaby.Helpers.SharedConstants;
+import com.repina.anastasia.momandbaby.Helpers.StatsProcessing;
 import com.repina.anastasia.momandbaby.R;
 
 import java.util.Calendar;
@@ -41,7 +41,7 @@ import static android.content.Context.MODE_PRIVATE;
 import static com.repina.anastasia.momandbaby.Activity.TabsActivity.googleFit;
 
 
-public class FragmentTab extends Fragment {
+public class FragmentTab extends Fragment implements SwipeListView.SwipeListViewCallback {
 
     private Calendar calendar;
 
@@ -248,18 +248,11 @@ public class FragmentTab extends Fragment {
         final View v = inflater.inflate(R.layout.fragment_baby, container, false);
 
         listViewBaby = (ListView) v.findViewById(R.id.listViewBaby);
+        SwipeListView l = new SwipeListView(getContext(), this);
+        l.exec();
+
         babyArrayAdapter = new GridItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row);
         StatsProcessing.getBabyStatsForOneDay(babyArrayAdapter, calendar, getContext(), listViewBaby);// Load today add's from Firebase for baby
-        listViewBaby.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //todo // FIXME: 18.01.2018
-                Intent intent = new Intent(v.getContext(), NewFeatureActivity.class);
-                intent.putExtra("editItem", babyArrayAdapter.getItem(0));
-                startActivity(intent);
-            }
-        });
-
         FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.floatingActionButton);
         fab.setVisibility(View.VISIBLE);
 
@@ -358,6 +351,29 @@ public class FragmentTab extends Fragment {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
+    @Override
+    public ListView getListView() {
+        if (this.getTag().equals("Mom"))
+            return listViewMom;
+        return listViewBaby;
+    }
+
+    @Override
+    public void onSwipeItem(boolean isRight, int position) {
+        if (this.getTag().equals("Baby")) {
+            if (!(babyArrayAdapter.getCount() == 1 &&
+                    babyArrayAdapter.getItem(0)
+                            .getItemDesc().equals(getString(R.string.no_data_today)))) // do not need to delete no data item
+                babyArrayAdapter.onSwipeItem(isRight, position);
+        }
+    }
+
+    @Override
+    public void onItemClickListener(ListAdapter adapter, int position) {
+        // do nothing
+    }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

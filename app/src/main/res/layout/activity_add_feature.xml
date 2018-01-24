@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="@dimen/main_margin"
     android:background="@color/colorPrimary"
     android:baselineAligned="false"
     android:orientation="vertical">
@@ -11,40 +10,40 @@
         android:id="@+id/dateName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/main_margin"
         android:layout_marginLeft="@dimen/main_margin"
         android:layout_marginRight="@dimen/main_margin"
+        android:layout_marginTop="@dimen/main_margin"
         android:text="@string/choose_date"
         android:textAlignment="center"
-        android:textSize="@dimen/text_size"
         android:textColor="@color/colorText"
+        android:textSize="@dimen/text_size"
         android:textStyle="bold" />
 
     <EditText
         android:id="@+id/date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/main_margin"
+        android:layout_below="@+id/dateName"
         android:layout_marginLeft="@dimen/main_margin"
         android:layout_marginRight="@dimen/main_margin"
+        android:layout_marginTop="@dimen/main_margin"
         android:ems="10"
         android:inputType="date"
-        android:textSize="@dimen/text_size"
         android:textAlignment="center"
         android:textColor="@color/colorText"
-        android:layout_below="@+id/dateName" />
+        android:textSize="@dimen/text_size" />
 
     <TextView
         android:id="@+id/dataName1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/date"
-        android:layout_marginTop="@dimen/main_margin"
         android:layout_marginLeft="@dimen/main_margin"
         android:layout_marginRight="@dimen/main_margin"
+        android:layout_marginTop="@dimen/main_margin"
         android:textAlignment="center"
-        android:textSize="@dimen/text_size"
         android:textColor="@color/colorText"
+        android:textSize="@dimen/text_size"
         android:textStyle="bold"
         android:visibility="gone" />
 
@@ -53,9 +52,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/dataName1"
-        android:layout_marginTop="@dimen/main_margin"
         android:layout_marginLeft="@dimen/main_margin"
         android:layout_marginRight="@dimen/main_margin"
+        android:layout_marginTop="@dimen/main_margin"
         android:popupBackground="@color/colorPrimaryDark"
         android:textColor="@color/colorText"
         android:visibility="gone" />
@@ -65,14 +64,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/vaccinationsData"
-        android:layout_marginTop="@dimen/main_margin"
         android:layout_marginLeft="@dimen/main_margin"
         android:layout_marginRight="@dimen/main_margin"
+        android:layout_marginTop="@dimen/main_margin"
         android:ems="10"
         android:inputType="text"
-        android:textSize="@dimen/text_size"
         android:textAlignment="center"
         android:textColor="@color/colorText"
+        android:textSize="@dimen/text_size"
         android:visibility="gone" />
 
     <TextView
@@ -80,12 +79,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/dataValue1"
-        android:layout_marginTop="@dimen/main_margin"
         android:layout_marginLeft="@dimen/main_margin"
         android:layout_marginRight="@dimen/main_margin"
+        android:layout_marginTop="@dimen/main_margin"
         android:textAlignment="center"
-        android:textSize="@dimen/text_size"
         android:textColor="@color/colorText"
+        android:textSize="@dimen/text_size"
         android:textStyle="bold"
         android:visibility="gone" />
 
@@ -94,17 +93,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/dataName2"
-        android:layout_marginTop="@dimen/main_margin"
         android:layout_marginLeft="@dimen/main_margin"
         android:layout_marginRight="@dimen/main_margin"
+        android:layout_marginTop="@dimen/main_margin"
         android:ems="10"
         android:inputType="textMultiLine"
-        android:minLines="4"
-        android:maxLines="4"
         android:lines="4"
+        android:maxLines="4"
+        android:minLines="4"
         android:textAlignment="center"
-        android:textSize="@dimen/text_size"
         android:textColor="@color/colorText"
+        android:textSize="@dimen/text_size"
         android:visibility="gone" />
 
     <RatingBar
@@ -112,9 +111,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/dataValue2"
-        android:layout_marginTop="@dimen/main_margin"
         android:layout_marginLeft="@dimen/main_margin"
         android:layout_marginRight="@dimen/main_margin"
+        android:layout_marginTop="@dimen/main_margin"
         android:visibility="gone" />
 
     <TextView
@@ -124,8 +123,8 @@
         android:layout_below="@+id/ratingBar"
         android:layout_marginTop="@dimen/main_margin"
         android:textAlignment="center"
-        android:textSize="@dimen/text_size"
         android:textColor="@color/colorText"
+        android:textSize="@dimen/text_size"
         android:textStyle="bold"
         android:visibility="gone" />
 
@@ -136,22 +135,22 @@
         android:layout_below="@+id/dataName3"
         android:ems="10"
         android:inputType="textMultiLine"
-        android:minLines="4"
-        android:maxLines="4"
         android:lines="4"
+        android:maxLines="4"
+        android:minLines="4"
         android:textAlignment="center"
-        android:textSize="@dimen/text_size"
         android:textColor="@color/colorText"
+        android:textSize="@dimen/text_size"
         android:visibility="gone" />
 
     <Button
         android:id="@+id/addData"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:background="@color/colorPrimaryDark"
         android:text="@string/add"
-        android:textColor="@color/colorText"
-        android:layout_alignParentBottom="true" />
+        android:textColor="@color/colorText" />
 
 
 </RelativeLayout>

@@ -12,16 +12,23 @@ import android.widget.ListView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.fitness.Fitness;
 import com.google.android.gms.fitness.FitnessActivities;
+import com.google.android.gms.fitness.SessionsApi;
 import com.google.android.gms.fitness.data.Bucket;
 import com.google.android.gms.fitness.data.DataPoint;
 import com.google.android.gms.fitness.data.DataSet;
 import com.google.android.gms.fitness.data.DataType;
 import com.google.android.gms.fitness.data.Field;
+import com.google.android.gms.fitness.data.Session;
 import com.google.android.gms.fitness.request.DataReadRequest;
+import com.google.android.gms.fitness.request.SessionReadRequest;
 import com.google.android.gms.fitness.result.DailyTotalResult;
 import com.google.android.gms.fitness.result.DataReadResult;
+import com.google.android.gms.fitness.result.SessionReadResult;
 import com.repina.anastasia.momandbaby.Adapters.GridItem;
 import com.repina.anastasia.momandbaby.Adapters.GridItemArrayAdapter;
 import com.repina.anastasia.momandbaby.R;
@@ -29,6 +36,7 @@ import com.repina.anastasia.momandbaby.R;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -47,6 +55,7 @@ public class GoogleFit implements
         FragmentActivity fragmentActivity = (FragmentActivity) activity;
         mGoogleApiClient = new GoogleApiClient.Builder(activity.getApplicationContext())
                 .addApi(Fitness.HISTORY_API)
+                .addApi(Fitness.SESSIONS_API)
                 .addConnectionCallbacks(this)
                 .enableAutoManage(fragmentActivity, 0, this)
                 .addScope(Fitness.SCOPE_LOCATION_READ)
@@ -150,9 +159,40 @@ public class GoogleFit implements
                 String endTime = timeFormat.format(dp.getStartTime(TimeUnit.MILLISECONDS));
                 Log.e("History", "\tStart: " + startDate + " " + startTime);
                 Log.e("History", "\tEnd: " + endDate + " " + endTime);
-                Field field = dp.getDataType().getFields().get(0);
-                Log.e("History", "\tField: " + field.getName() + " Value: " + dp.getValue(field));
-                double value = Double.parseDouble(dp.getValue(field).toString());
+                double value = 0;
+                if (type.equals(DataType.TYPE_ACTIVITY_SEGMENT)) {
+                    dp.getValue(Field.FIELD_ACTIVITY).setActivity(FitnessActivities.SLEEP);
+                    String activity = dp.getValue(Field.FIELD_ACTIVITY).asActivity();
+                    value = dp.getValue(Field.FIELD_DURATION).asInt();
+
+                    Calendar cal = Calendar.getInstance();
+                    Date now = new Date();
+                    cal.setTime(now);
+                    long endTime1 = cal.getTimeInMillis();
+                    cal.add(Calendar.WEEK_OF_YEAR, -1);
+                    long startTime1 = cal.getTimeInMillis();
+
+
+//                    final SessionReadRequest.Builder sessionBuilder = new SessionReadRequest.Builder()
+//
+//                            .setTimeInterval(startTime1, endTime1, TimeUnit.MILLISECONDS)
+//                            .read(DataType.TYPE_ACTIVITY_SEGMENT)
+//                            .readSessionsFromAllApps()
+//                            .enableServerQueries();
+//
+//                    final SessionReadRequest readRequest = sessionBuilder.build();
+//
+//                    SessionReadResult sessionReadResult =
+//                            SessionsApi.readSession(mGoogleApiClient, readRequest).await(120, TimeUnit.SECONDS);
+//
+//                    Status status = sessionReadResult.getStatus();
+
+                    Log.e("History", "\tField: " + activity + " Value: " + value);
+                } else {
+                    Field field = dp.getDataType().getFields().get(0);
+                    Log.e("History", "\tField: " + field.getName() + " Value: " + dp.getValue(field));
+                    value = Double.parseDouble(dp.getValue(field).toString());
+                }
                 Pair<String, Double> newDataEntry = new Pair<>(startDate, value);
                 Pair<DataType, Pair<String, Double>> entry = new Pair<>(type, newDataEntry);
                 parsedData.add(entry);
@@ -222,10 +262,10 @@ public class GoogleFit implements
             }
             if (adapter.getCount() == 0)//no data for today
             {
-                GridItem item = new GridItem(R.mipmap.cross, activity.getResources().getString(R.string.need_to_sync));
+                GridItem item = new GridItem(R.mipmap.cross, activity.getResources().getString(R.string.need_to_sync), null, null);
                 adapter.add(item);
             }
-            if(!isEmail)
+            if (!isEmail)
                 listView.setAdapter(adapter);
             else
                 SendEmail.formMomsReport(adapter, activity.getApplicationContext(), start, end);
@@ -287,7 +327,7 @@ public class GoogleFit implements
             }
             if (adapter.getCount() == 0)//no data for today
             {
-                GridItem item = new GridItem(R.mipmap.cross, activity.getResources().getString(R.string.need_to_sync));
+                GridItem item = new GridItem(R.mipmap.cross, activity.getResources().getString(R.string.need_to_sync), null, null);
                 adapter.add(item);
             }
             if (!isEmail)
