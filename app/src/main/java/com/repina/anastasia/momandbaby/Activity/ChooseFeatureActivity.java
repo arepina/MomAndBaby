@@ -38,7 +38,8 @@ public class ChooseFeatureActivity extends Activity {
                     R.mipmap.illness,
                     R.mipmap.food,
                     R.mipmap.outdoor,
-                    R.mipmap.sleep
+                    R.mipmap.sleep,
+                    R.mipmap.other
             };
             features = getResources().getStringArray(R.array.parametersBaby);
         } else // mom

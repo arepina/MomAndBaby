@@ -144,6 +144,8 @@ public class StatsProcessing {
             return R.mipmap.outdoor;
         if (name.equals(DatabaseNames.SLEEP))
             return R.mipmap.sleep;
+        if (name.equals(DatabaseNames.OTHER))
+            return R.mipmap.other;
         return -1;
     }
 }

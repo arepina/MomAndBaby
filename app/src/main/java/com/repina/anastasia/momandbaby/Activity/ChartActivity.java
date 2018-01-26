@@ -72,6 +72,7 @@ public class ChartActivity extends AppCompatActivity {
         } else {
             choose = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.parametersBaby)));
             choose.remove(3);//no vaccinations
+            choose.remove(7);//no other
             adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, choose);
         }
 

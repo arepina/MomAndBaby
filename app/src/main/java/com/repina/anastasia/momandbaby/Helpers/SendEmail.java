@@ -150,15 +150,22 @@ public class SendEmail {
     }
 
     private static String imageToString(int imageIntPath) {
+        //todo fix chnage to image names, not nums
         switch (imageIntPath) {
-            case 2130903042: {
+            case 2131492866: {
                 return "Калории";
             }
             case 2130903058:{
                 return "Вес";
             }
-            case 2130903055:{
+            case 2131492881:{
                 return "Шаги";
+            }
+            case 2131492875:{
+                return "Питание";
+            }
+            case 2131492878:{
+                return "Сон";
             }
             default:
                 return "";

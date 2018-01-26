@@ -109,6 +109,7 @@
     <string name="outdoor_legend">Часы прогулки</string>
     <string name="sleep_legend">Часы сна</string>
     <string name="stool_legend">Оценка стула</string>
+    <string name="add_new_other">Введите информацию о событии</string>
 
     <string-array name="parametersBaby">
         <item>Рост</item>
@@ -119,6 +120,7 @@
         <item>Питание</item>
         <item>Прогулки</item>
         <item>Сон</item>
+        <item>Другое</item>
     </string-array>
 
     <string-array name="parametersMom">

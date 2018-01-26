@@ -16,9 +16,9 @@ import android.widget.TextView;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.repina.anastasia.momandbaby.Adapters.GridItemArrayAdapter;
 import com.repina.anastasia.momandbaby.Connectors.ConnectionDetector;
 import com.repina.anastasia.momandbaby.Connectors.FirebaseConnection;
+import com.repina.anastasia.momandbaby.DataBase.Other;
 import com.repina.anastasia.momandbaby.Helpers.SharedConstants;
 import com.repina.anastasia.momandbaby.DataBase.DatabaseNames;
 import com.repina.anastasia.momandbaby.DataBase.Food;
@@ -153,6 +153,12 @@ public class NewFeatureActivity extends AppCompatActivity {
             databaseReference = database.getReference().child(DatabaseNames.SLEEP);
             databaseReference.push().setValue(s);
         }
+        if (featureName.equals(features[8])) {
+            String desc = dataValue1.getText().toString();
+            Other o = new Other(babyId, currentDate, desc);
+            databaseReference = database.getReference().child(DatabaseNames.OTHER);
+            databaseReference.push().setValue(o);
+        }
     }
 
     private void changeLayout(String data) {
@@ -220,6 +226,11 @@ public class NewFeatureActivity extends AppCompatActivity {
             dataName1.setVisibility(View.VISIBLE);
             dataValue1.setVisibility(View.VISIBLE);
             dataValue1.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_NUMBER);
+        }
+        if (data.equals(features[8])) {
+            dataName1.setText(getString(R.string.add_new_other));
+            dataName1.setVisibility(View.VISIBLE);
+            dataValue1.setVisibility(View.VISIBLE);
         }
     }
 }
