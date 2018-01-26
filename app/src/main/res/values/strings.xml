@@ -98,8 +98,14 @@
     <!--Vaccination-->
     <string name="vaccinations">Прививки</string>
     <string name="vaccinations_list">Список прививок</string>
-    <string name="ideal_height">Идеальный рост</string>
-    <string name="ideal_weight">Идеальный вес</string>
+
+    <!--Chart-->
+    <string name="ideal_height">Средний рост</string>
+    <string name="ideal_weight">Средний вес</string>
+    <string name="min_height">Минимальный рост</string>
+    <string name="min_weight">Минимальный вес</string>
+    <string name="max_height">Максимальный рост</string>
+    <string name="max_weight">Максимальный вес</string>
 
     <!--Legend desc-->
     <string name="height_legend">Данные роста</string>

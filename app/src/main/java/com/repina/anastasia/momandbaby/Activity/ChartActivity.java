@@ -33,6 +33,7 @@ import com.repina.anastasia.momandbaby.DataBase.Sleep;
 import com.repina.anastasia.momandbaby.DataBase.Stool;
 import com.repina.anastasia.momandbaby.R;
 
+import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -45,8 +46,6 @@ public class ChartActivity extends AppCompatActivity {
 
     LineChart chart;
     ArrayList<Entry> entries;
-    ArrayList<Entry> boyHeight;
-    ArrayList<Entry> boyWeight;
     ArrayList<Entry> girlHeight;
     ArrayList<Entry> girlWeight;
     ArrayList<String> labels;
@@ -157,39 +156,101 @@ public class ChartActivity extends AppCompatActivity {
             calendar.add(Calendar.MONTH, 1);
             labelsIdeal.add(FormattedDate.getFormattedDateWithoutTime(calendar));
         }
-        LineDataSet lineDataSet = null;
-        if (gender.equals("boy")) {
-            ArrayList<String> boyParamsHeight = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.heightBoyNorm)));
-            ArrayList<String> boyParamsWeight = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.weightBoyNorm)));
-            boyHeight = new ArrayList<>();
-            boyWeight = new ArrayList<>();
-            for (int i = 0; i < boyParamsHeight.size(); i++) {
-                boyHeight.add(new Entry((float) Double.parseDouble(boyParamsHeight.get(i)), i));
-                boyWeight.add(new Entry((float) Double.parseDouble(boyParamsWeight.get(i)), i));
-            }
-            if (dbName.equals("Рост"))
-                lineDataSet = new LineDataSet(boyHeight, getString(R.string.ideal_height));
-            if (dbName.equals("Вес"))
-                lineDataSet = new LineDataSet(boyWeight, getString(R.string.ideal_weight));
-        } else {
-            ArrayList<String> girlParamsHeight = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.heightGirlNorm)));
-            ArrayList<String> girlParamsWeight = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.weightGirlNorm)));
-            girlHeight = new ArrayList<>();
-            girlWeight = new ArrayList<>();
-            for (int i = 0; i < girlParamsHeight.size(); i++) {
-                girlHeight.add(new Entry((float) Double.parseDouble(girlParamsHeight.get(i)), i));
-                girlWeight.add(new Entry((float) Double.parseDouble(girlParamsWeight.get(i)), i));
-            }
-            if (dbName.equals("Рост"))
-                lineDataSet = new LineDataSet(girlHeight, getString(R.string.ideal_height));
-            if (dbName.equals("Вес"))
-                lineDataSet = new LineDataSet(girlWeight, getString(R.string.ideal_weight));
+        ArrayList<LineDataSet> sets;
+        if (gender.equals("boy"))
+            sets = initBoy(dbName);
+        else
+            sets = initGirl(dbName);
+        if (sets != null) {
+            sets.get(0).setColors(new int[]{R.color.border}, getApplicationContext());
+            sets.get(1).setColors(new int[]{R.color.norm}, getApplicationContext());
+            sets.get(2).setColors(new int[]{R.color.border}, getApplicationContext());
+            dataSets.add(sets.get(0));
+            dataSets.add(sets.get(1));
+            dataSets.add(sets.get(2));
         }
+    }
 
-        if (lineDataSet != null) {
-            lineDataSet.setColors(new int[] { R.color.colorPrimary }, getApplicationContext());
-            dataSets.add(lineDataSet);
+    private ArrayList<LineDataSet> initBoy(String dbName) {
+        ArrayList<LineDataSet> setsList = new ArrayList<>();
+        LineDataSet lineDataSetNorm = null;
+        LineDataSet lineDataSetMin = null;
+        LineDataSet lineDataSetMax = null;
+        ArrayList<String> boyParamsHeightNorm = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.heightBoyNorm)));
+        ArrayList<String> boyParamsWeightNorm = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.weightBoyNorm)));
+        ArrayList<String> boyParamsHeightMin = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.heightBoyMin)));
+        ArrayList<String> boyParamsWeightMin = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.weightBoyMin)));
+        ArrayList<String> boyParamsHeightMax = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.heightBoyMax)));
+        ArrayList<String> boyParamsWeightMax = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.weightBoyMax)));
+        ArrayList<Entry> boyHeightNorm = new ArrayList<>();
+        ArrayList<Entry> boyWeightNorm = new ArrayList<>();
+        ArrayList<Entry> boyHeightMin = new ArrayList<>();
+        ArrayList<Entry> boyWeightMin = new ArrayList<>();
+        ArrayList<Entry> boyHeightMax = new ArrayList<>();
+        ArrayList<Entry> boyWeightMax = new ArrayList<>();
+        for (int i = 0; i < boyParamsHeightNorm.size(); i++) {
+            boyHeightNorm.add(new Entry((float) Double.parseDouble(boyParamsHeightNorm.get(i)), i));
+            boyWeightNorm.add(new Entry((float) Double.parseDouble(boyParamsWeightNorm.get(i)), i));
+            boyHeightMin.add(new Entry((float) Double.parseDouble(boyParamsHeightMin.get(i)), i));
+            boyWeightMin.add(new Entry((float) Double.parseDouble(boyParamsWeightMin.get(i)), i));
+            boyHeightMax.add(new Entry((float) Double.parseDouble(boyParamsHeightMax.get(i)), i));
+            boyWeightMax.add(new Entry((float) Double.parseDouble(boyParamsWeightMax.get(i)), i));
         }
+        if (dbName.equals("Рост")) {
+            lineDataSetNorm = new LineDataSet(boyHeightNorm, getString(R.string.ideal_height));
+            lineDataSetMin = new LineDataSet(boyHeightMin, getString(R.string.min_height));
+            lineDataSetMax = new LineDataSet(boyHeightMax, getString(R.string.max_height));
+        }
+        if (dbName.equals("Вес")) {
+            lineDataSetNorm = new LineDataSet(boyWeightNorm, getString(R.string.ideal_weight));
+            lineDataSetMin = new LineDataSet(boyWeightMin, getString(R.string.min_weight));
+            lineDataSetMax = new LineDataSet(boyWeightMax, getString(R.string.max_weight));
+        }
+        setsList.add(lineDataSetMin);
+        setsList.add(lineDataSetNorm);
+        setsList.add(lineDataSetMax);
+        return setsList;
+    }
+
+    private ArrayList<LineDataSet> initGirl(String dbName) {
+        ArrayList<LineDataSet> setsList = new ArrayList<>();
+        LineDataSet lineDataSetNorm = null;
+        LineDataSet lineDataSetMin = null;
+        LineDataSet lineDataSetMax = null;
+        ArrayList<String> girlParamsHeightNorm = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.heightGirlNorm)));
+        ArrayList<String> girlParamsWeightNorm = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.weightGirlNorm)));
+        ArrayList<String> girlParamsHeightMin = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.heightGirlMin)));
+        ArrayList<String> girlParamsWeightMin = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.weightGirlMin)));
+        ArrayList<String> girlParamsHeightMax = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.heightGirlMax)));
+        ArrayList<String> girlParamsWeightMax = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.weightGirlMax)));
+        ArrayList<Entry> girlHeightNorm = new ArrayList<>();
+        ArrayList<Entry> girlWeightNorm = new ArrayList<>();
+        ArrayList<Entry> girlHeightMin = new ArrayList<>();
+        ArrayList<Entry> girlWeightMin = new ArrayList<>();
+        ArrayList<Entry> girlHeightMax = new ArrayList<>();
+        ArrayList<Entry> girlWeightMax = new ArrayList<>();
+        for (int i = 0; i < girlParamsHeightNorm.size(); i++) {
+            girlHeightNorm.add(new Entry((float) Double.parseDouble(girlParamsHeightNorm.get(i)), i));
+            girlWeightNorm.add(new Entry((float) Double.parseDouble(girlParamsWeightNorm.get(i)), i));
+            girlHeightMin.add(new Entry((float) Double.parseDouble(girlParamsHeightMin.get(i)), i));
+            girlWeightMin.add(new Entry((float) Double.parseDouble(girlParamsWeightMin.get(i)), i));
+            girlHeightMax.add(new Entry((float) Double.parseDouble(girlParamsHeightMax.get(i)), i));
+            girlWeightMax.add(new Entry((float) Double.parseDouble(girlParamsWeightMax.get(i)), i));
+        }
+        if (dbName.equals("Рост")) {
+            lineDataSetNorm = new LineDataSet(girlHeightNorm, getString(R.string.ideal_height));
+            lineDataSetMin = new LineDataSet(girlHeightMin, getString(R.string.min_height));
+            lineDataSetMax = new LineDataSet(girlHeightMax, getString(R.string.max_height));
+        }
+        if (dbName.equals("Вес")) {
+            lineDataSetNorm = new LineDataSet(girlWeightNorm, getString(R.string.ideal_weight));
+            lineDataSetMin = new LineDataSet(girlWeightMin, getString(R.string.min_weight));
+            lineDataSetMax = new LineDataSet(girlWeightMax, getString(R.string.max_weight));
+        }
+        setsList.add(lineDataSetMin);
+        setsList.add(lineDataSetNorm);
+        setsList.add(lineDataSetMax);
+        return setsList;
     }
 
     private void fillChart(DataSnapshot dataSnapshot, String dbName, String selectedItemName) {
@@ -260,9 +321,8 @@ public class ChartActivity extends AppCompatActivity {
                 counter++;
             }
         }
-
         LineDataSet lineDataSet = new LineDataSet(entries, dbName);
-        lineDataSet.setColors(new int[] { R.color.colorPrimaryDark }, getApplicationContext());
+        lineDataSet.setColors(new int[]{R.color.colorPrimary}, getApplicationContext());
         dataSets.add(lineDataSet);
         LineData lineData = new LineData(labelsIdeal, dataSets);
         chart.setData(lineData);

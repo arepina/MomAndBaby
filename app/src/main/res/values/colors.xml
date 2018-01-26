@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#FFD15D</color>
-    <color name="colorPrimaryDark">#c75163</color>
+    <color name="colorPrimaryDark">#C75163</color>
     <color name="colorAccent">#FFFFFF</color>
     <color name="colorText">#FFFFFF</color>
     <color name="colorTextDark">#000000</color>
+    <color name="border">#FF0000</color>
+    <color name="norm">#00FF00</color>
 </resources>
