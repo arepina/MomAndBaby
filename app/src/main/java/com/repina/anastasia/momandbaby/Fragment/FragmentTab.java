@@ -32,7 +32,7 @@ import com.repina.anastasia.momandbaby.Connectors.ConnectionDetector;
 import com.repina.anastasia.momandbaby.Helpers.FormattedDate;
 import com.repina.anastasia.momandbaby.Helpers.SendEmail;
 import com.repina.anastasia.momandbaby.Helpers.SharedConstants;
-import com.repina.anastasia.momandbaby.Helpers.StatsProcessing;
+import com.repina.anastasia.momandbaby.Helpers.Processing.StatsProcessing;
 import com.repina.anastasia.momandbaby.R;
 
 import java.util.Calendar;

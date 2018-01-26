@@ -1,4 +1,4 @@
-package com.repina.anastasia.momandbaby.Helpers;
+package com.repina.anastasia.momandbaby.Helpers.Processing;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -14,6 +14,11 @@ import com.repina.anastasia.momandbaby.Adapters.GridItem;
 import com.repina.anastasia.momandbaby.Adapters.GridItemArrayAdapter;
 import com.repina.anastasia.momandbaby.Connectors.FirebaseConnection;
 import com.repina.anastasia.momandbaby.DataBase.DatabaseNames;
+import com.repina.anastasia.momandbaby.Helpers.FormattedDate;
+import com.repina.anastasia.momandbaby.Helpers.GoogleFit;
+import com.repina.anastasia.momandbaby.Helpers.Processing.ImageProcessing;
+import com.repina.anastasia.momandbaby.Helpers.Processing.TextProcessing;
+import com.repina.anastasia.momandbaby.Helpers.SharedConstants;
 import com.repina.anastasia.momandbaby.R;
 
 import java.util.Calendar;
@@ -49,16 +54,17 @@ public class StatsProcessing {
                                         String date = value.get("date");
                                         if (date.substring(0, 10).equals(FormattedDate.getFormattedDateWithoutTime(dateAndTime))
                                                 & value.get("babyId").equals(babyID)) {
-                                            int imageId = getImageId(singleSnapshot.getKey(), value);
-                                            String imageName = getImageName(singleSnapshot.getKey(), value);
-                                            GridItem it = new GridItem(imageId, imageName, formBabyDescription(value), entry.getKey(), singleSnapshot.getKey());
+                                            int imageId = ImageProcessing.getImageId(singleSnapshot.getKey(), value);
+                                            String imageName = ImageProcessing.getImageName(singleSnapshot.getKey(), value);
+                                            GridItem it = new GridItem(imageId, imageName,
+                                                    TextProcessing.formBabyDescription(value), entry.getKey(),
+                                                    singleSnapshot.getKey());
                                             adapter.add(it);
                                         }
                                     }
                                 }
                             }
-                            if(adapter.getCount() == 0)
-                            {
+                            if (adapter.getCount() == 0) {
                                 GridItem it = new GridItem(R.mipmap.cross, "R.mipmap.cross", context.getResources().getString(R.string.no_data_today), null, null);
                                 adapter.add(it);
                             }
@@ -70,30 +76,6 @@ public class StatsProcessing {
                     public void onCancelled(DatabaseError databaseError) {
                     }
                 });
-    }
-
-    private static String formBabyDescription(HashMap<String, String> value) {
-        StringBuilder line = new StringBuilder();
-        value.remove("babyId");
-        value.remove("date");
-        for (Map.Entry<String, String> entry : value.entrySet()) {
-            String val = String.valueOf(entry.getValue());
-            try {
-                double number = Double.parseDouble(val);
-                if (number != 0) {
-                    line.append(Translator.translateWord(entry.getKey())).append(": ").append(val);
-                    if (!"\n".equals(String.valueOf(line.charAt(line.length() - 1))))
-                        line.append("\n");
-                }
-            } catch (NumberFormatException e) { // not a number
-                line.append(Translator.translateWord(entry.getKey())).append(": ").append(val);
-                if (!"\n".equals(String.valueOf(line.charAt(line.length() - 1))))
-                    line.append("\n");
-            }
-        }
-        line = new StringBuilder(line.substring(0, line.length() - 1));
-        return line.toString();
-
     }
 
     public static void getMomStatsForOneDay(GoogleFit googleFit, final GridItemArrayAdapter adapter, final Calendar dateAndTime, FragmentActivity activity, ListView listViewMom, boolean isEmail) {
@@ -111,67 +93,20 @@ public class StatsProcessing {
             extra.add(Calendar.MINUTE, 1439);
             extra.add(Calendar.SECOND, 59);
             //one second is not in the review
-            googleFit.getPeriodData(dateClone, extra, activity, adapter, listViewMom, isEmail);
+            googleFit.getPeriodData(dateClone, extra, activity, adapter, listViewMom, isEmail, false);
         }
     }
 
-    static void getMomStatsForPeriod(GoogleFit googleFit, final GridItemArrayAdapter adapter, final Calendar endDate, FragmentActivity activity, ListView listViewMom, int length, boolean isEmail) {
+    public static void getMomStatsForPeriod(GoogleFit googleFit, final GridItemArrayAdapter adapter,
+                                            final Calendar endDate, FragmentActivity activity,
+                                            ListView listViewMom, int length,
+                                            boolean isEmail, boolean isChart) {
         Calendar startDate = Calendar.getInstance();
         startDate.setTime(endDate.getTime());
-        if(length == 7) // - 7 days
+        if (length == 7) // - 7 days
             startDate.add(Calendar.WEEK_OF_YEAR, -1);
         else
             startDate.add(Calendar.MONTH, -1); // - 1 month
-        googleFit.getPeriodData(startDate, endDate, activity, adapter, listViewMom, isEmail);
-    }
-
-    private static int getImageId(String name, HashMap<String, String> value) {
-        if (name.equals(DatabaseNames.METRICS))
-        {
-            if("0".equals(String.valueOf(value.get("weight"))))
-                return R.mipmap.height;
-            else
-                return R.mipmap.weight;
-        }
-        if (name.equals(DatabaseNames.STOOL))
-            return R.mipmap.diapers;
-        if (name.equals(DatabaseNames.VACCINATION))
-            return R.mipmap.vaccination;
-        if (name.equals(DatabaseNames.ILLNESS))
-            return R.mipmap.illness;
-        if (name.equals(DatabaseNames.FOOD))
-            return R.mipmap.food;
-        if (name.equals(DatabaseNames.OUTDOOR))
-            return R.mipmap.outdoor;
-        if (name.equals(DatabaseNames.SLEEP))
-            return R.mipmap.sleep;
-        if (name.equals(DatabaseNames.OTHER))
-            return R.mipmap.other;
-        return -1;
-    }
-
-    private static String getImageName(String name, HashMap<String, String> value) {
-        if (name.equals(DatabaseNames.METRICS))
-        {
-            if("0".equals(String.valueOf(value.get("weight"))))
-                return "R.mipmap.height";
-            else
-                return "R.mipmap.weight";
-        }
-        if (name.equals(DatabaseNames.STOOL))
-            return "R.mipmap.diapers";
-        if (name.equals(DatabaseNames.VACCINATION))
-            return "R.mipmap.vaccination";
-        if (name.equals(DatabaseNames.ILLNESS))
-            return "R.mipmap.illness";
-        if (name.equals(DatabaseNames.FOOD))
-            return "R.mipmap.food";
-        if (name.equals(DatabaseNames.OUTDOOR))
-            return "R.mipmap.outdoor";
-        if (name.equals(DatabaseNames.SLEEP))
-            return "R.mipmap.sleep";
-        if (name.equals(DatabaseNames.OTHER))
-            return "R.mipmap.other";
-        return "";
+        googleFit.getPeriodData(startDate, endDate, activity, adapter, listViewMom, isEmail, isChart);
     }
 }

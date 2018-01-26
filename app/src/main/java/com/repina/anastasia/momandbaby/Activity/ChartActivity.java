@@ -19,8 +19,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.repina.anastasia.momandbaby.Adapters.GridItemArrayAdapter;
 import com.repina.anastasia.momandbaby.Helpers.FormattedDate;
 import com.repina.anastasia.momandbaby.Helpers.SharedConstants;
+import com.repina.anastasia.momandbaby.Helpers.Processing.StatsProcessing;
 import com.repina.anastasia.momandbaby.Helpers.ToastShow;
 import com.repina.anastasia.momandbaby.Connectors.ConnectionDetector;
 import com.repina.anastasia.momandbaby.Connectors.FirebaseConnection;
@@ -33,13 +35,14 @@ import com.repina.anastasia.momandbaby.DataBase.Sleep;
 import com.repina.anastasia.momandbaby.DataBase.Stool;
 import com.repina.anastasia.momandbaby.R;
 
-import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+
+import static com.repina.anastasia.momandbaby.Activity.TabsActivity.googleFit;
 
 
 public class ChartActivity extends AppCompatActivity {
@@ -83,11 +86,12 @@ public class ChartActivity extends AppCompatActivity {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                dataSets = new ArrayList<>();
                 if (type.equals("Mom")) {
-                    //todo
+                    String selectedItemName = choose.get(position);
+                    getValuesFromGoogleFit(selectedItemName);
                 } else {
                     if (ConnectionDetector.isConnected(view.getContext())) {
-                        dataSets = new ArrayList<>();
                         String selectedItemName = choose.get(position);
                         SharedPreferences sp = view.getContext().getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
                         String babyId = sp.getString(SharedConstants.BABY_ID_KEY, "");
@@ -129,7 +133,7 @@ public class ChartActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists())
-                            fillChart(dataSnapshot, dbName, selectedItemName);
+                            fillChartBaby(dataSnapshot, dbName, selectedItemName);
                     }
 
                     @Override
@@ -137,6 +141,12 @@ public class ChartActivity extends AppCompatActivity {
                         ToastShow.show(getApplicationContext(), R.string.unpredicted_error);
                     }
                 });
+    }
+
+    private void getValuesFromGoogleFit(String selectedItemName) {
+        StatsProcessing.getMomStatsForPeriod(googleFit,
+                new GridItemArrayAdapter(getApplicationContext(), R.layout.custom_row),
+                Calendar.getInstance(), this, null, 31, false, true);
     }
 
     private void initIdealChartData(Context context, String dbName) {
@@ -253,7 +263,7 @@ public class ChartActivity extends AppCompatActivity {
         return setsList;
     }
 
-    private void fillChart(DataSnapshot dataSnapshot, String dbName, String selectedItemName) {
+    private void fillChartBaby(DataSnapshot dataSnapshot, String dbName, String selectedItemName) {
         entries = new ArrayList<>();
         labels = new ArrayList<>();
         int counter = 0;
@@ -327,5 +337,17 @@ public class ChartActivity extends AppCompatActivity {
         LineData lineData = new LineData(labelsIdeal, dataSets);
         chart.setData(lineData);
         chart.animateY(2000);
+    }
+
+    public static void fillChartMom(GridItemArrayAdapter adapter) {
+        //todo
+//        switch (value)
+//        {
+//            case "Сон":{}
+//            case "Шаги":{}
+//            case "Калории":{}
+//            case "Питание":{}
+//            case "Вес":{}
+//        }
     }
 }

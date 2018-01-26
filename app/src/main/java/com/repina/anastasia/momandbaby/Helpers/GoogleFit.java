@@ -12,25 +12,20 @@ import android.widget.ListView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.fitness.Fitness;
 import com.google.android.gms.fitness.FitnessActivities;
-import com.google.android.gms.fitness.SessionsApi;
 import com.google.android.gms.fitness.data.Bucket;
 import com.google.android.gms.fitness.data.DataPoint;
 import com.google.android.gms.fitness.data.DataSet;
 import com.google.android.gms.fitness.data.DataType;
 import com.google.android.gms.fitness.data.Field;
-import com.google.android.gms.fitness.data.Session;
 import com.google.android.gms.fitness.request.DataReadRequest;
-import com.google.android.gms.fitness.request.SessionReadRequest;
 import com.google.android.gms.fitness.result.DailyTotalResult;
 import com.google.android.gms.fitness.result.DataReadResult;
-import com.google.android.gms.fitness.result.SessionReadResult;
+import com.repina.anastasia.momandbaby.Activity.ChartActivity;
 import com.repina.anastasia.momandbaby.Adapters.GridItem;
 import com.repina.anastasia.momandbaby.Adapters.GridItemArrayAdapter;
+import com.repina.anastasia.momandbaby.Helpers.Processing.TextProcessing;
 import com.repina.anastasia.momandbaby.R;
 
 import java.text.DateFormat;
@@ -79,16 +74,19 @@ public class GoogleFit implements
         Log.e("HistoryAPI", "onConnectionFailed");
     }
 
-    void getPeriodData(Calendar startDate, Calendar endDate, FragmentActivity activity, GridItemArrayAdapter adapter, ListView listView, boolean isEmail) {
+    public void getPeriodData(Calendar startDate, Calendar endDate, FragmentActivity activity,
+                              GridItemArrayAdapter adapter, ListView listView,
+                              boolean isEmail, boolean isChart) {
         this.start = FormattedDate.getFormattedDateWithoutTime(startDate);
         this.end = FormattedDate.getFormattedDateWithoutTime(endDate);
         this.adapter = adapter;
         this.listView = listView;
         this.activity = activity;
-        new ViewPeriodTask(isEmail).execute(startDate, endDate);
+        new ViewPeriodTask(isEmail, isChart).execute(startDate, endDate);
     }
 
-    void getOneDayData(Calendar date, FragmentActivity activity, GridItemArrayAdapter adapter, ListView listView, boolean isEmail) {
+    public void getOneDayData(Calendar date, FragmentActivity activity, GridItemArrayAdapter adapter,
+                              ListView listView, boolean isEmail) {
         this.start = FormattedDate.getFormattedDateWithoutTime(date);
         this.end = FormattedDate.getFormattedDateWithoutTime(date);
         this.adapter = adapter;
@@ -203,9 +201,11 @@ public class GoogleFit implements
 
     private class ViewPeriodTask extends AsyncTask<Calendar, ArrayList<Pair<DataType, Pair<String, Double>>>, ArrayList<Pair<DataType, Pair<String, Double>>>> {
         private boolean isEmail;
+        private boolean isChart;
 
-        ViewPeriodTask(boolean isEmail) {
+        ViewPeriodTask(boolean isEmail, boolean isChart) {
             this.isEmail = isEmail;
+            this.isChart = isChart;
         }
 
         protected ArrayList<Pair<DataType, Pair<String, Double>>> doInBackground(Calendar... params) {
@@ -265,10 +265,12 @@ public class GoogleFit implements
                 GridItem item = new GridItem(R.mipmap.cross, "R.mipmap.cross", activity.getResources().getString(R.string.need_to_sync), null, null);
                 adapter.add(item);
             }
-            if (!isEmail)
-                listView.setAdapter(adapter);
+            if (isEmail)
+                TextProcessing.formMomReport(adapter, activity.getApplicationContext(), start, end);
+            if(isChart)
+                ChartActivity.fillChartMom(adapter);
             else
-                SendEmail.formMomsReport(adapter, activity.getApplicationContext(), start, end);
+                listView.setAdapter(adapter);
         }
     }
 
@@ -333,7 +335,7 @@ public class GoogleFit implements
             if (!isEmail)
                 listView.setAdapter(adapter);
             else
-                SendEmail.formMomsReport(adapter, activity.getApplicationContext(), start, end);
+                TextProcessing.formMomReport(adapter, activity.getApplicationContext(), start, end);
         }
     }
 }

@@ -53,7 +53,7 @@
     <string name="food">, как малыш покушал</string>
     <string name="choose_date">Выберите дату</string>
     <string name="temperature"> температуры</string>
-    <string name="add_symptomes">Укажите симптомы</string>
+    <string name="add_symptomes">Укажите название и симптомы</string>
     <string name="add_pills">Укажите лекарства</string>
     <string name="outdoor_duration">продолжительности прогулки</string>
     <string name="sleep_duration">продолжительности сна</string>
@@ -62,7 +62,7 @@
     <string name="add">Добавить</string>
     <string name="сomment">Комментарий</string>
     <string name="rate_feature">Оценка:</string>
-    <string name="sympthomes">Симптомы:</string>
+    <string name="sympthomes">Название и симптомы:</string>
     <string name="pills">Лекарства:</string>
     <string name="temperature_value">Температура:</string>
     <string name="height_value">Рост:</string>
