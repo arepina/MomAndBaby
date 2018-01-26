@@ -56,6 +56,8 @@
         android:layout_marginRight="@dimen/main_margin"
         android:layout_marginTop="@dimen/main_margin"
         android:popupBackground="@color/colorPrimaryDark"
+        android:gravity="center_horizontal"
+        android:textAlignment="center"
         android:textColor="@color/colorText"
         android:visibility="gone" />
 
@@ -68,7 +70,7 @@
         android:layout_marginRight="@dimen/main_margin"
         android:layout_marginTop="@dimen/main_margin"
         android:ems="10"
-        android:inputType="text"
+        android:inputType="date"
         android:textAlignment="center"
         android:textColor="@color/colorText"
         android:textSize="@dimen/text_size"

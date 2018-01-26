@@ -159,8 +159,8 @@ public class ChartActivity extends AppCompatActivity {
         }
         LineDataSet lineDataSet = null;
         if (gender.equals("boy")) {
-            ArrayList<String> boyParamsHeight = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.heightBoy)));
-            ArrayList<String> boyParamsWeight = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.weightBoy)));
+            ArrayList<String> boyParamsHeight = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.heightBoyNorm)));
+            ArrayList<String> boyParamsWeight = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.weightBoyNorm)));
             boyHeight = new ArrayList<>();
             boyWeight = new ArrayList<>();
             for (int i = 0; i < boyParamsHeight.size(); i++) {
@@ -172,8 +172,8 @@ public class ChartActivity extends AppCompatActivity {
             if (dbName.equals("Вес"))
                 lineDataSet = new LineDataSet(boyWeight, getString(R.string.ideal_weight));
         } else {
-            ArrayList<String> girlParamsHeight = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.heightGirl)));
-            ArrayList<String> girlParamsWeight = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.weightGirl)));
+            ArrayList<String> girlParamsHeight = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.heightGirlNorm)));
+            ArrayList<String> girlParamsWeight = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.weightGirlNorm)));
             girlHeight = new ArrayList<>();
             girlWeight = new ArrayList<>();
             for (int i = 0; i < girlParamsHeight.size(); i++) {

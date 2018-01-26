@@ -169,13 +169,11 @@ public class NewFeatureActivity extends AppCompatActivity {
             dataName1.setText(getString(R.string.add_new_data) + " " + getString(R.string.height));
             dataName1.setVisibility(View.VISIBLE);
             dataValue1.setVisibility(View.VISIBLE);
-            dataValue1.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_NUMBER);
         }
         if (data.equals(features[1])) {
             dataName1.setText(getString(R.string.add_new_data) + " " + getString(R.string.weight));
             dataName1.setVisibility(View.VISIBLE);
             dataValue1.setVisibility(View.VISIBLE);
-            dataValue1.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_NUMBER);
         }
         if (data.equals(features[2])) {
             dataName2.setText(getString(R.string.rateValue) + " " + getString(R.string.diapers));
@@ -219,18 +217,17 @@ public class NewFeatureActivity extends AppCompatActivity {
             dataName1.setText(getString(R.string.add_new_data) + " " + getString(R.string.outdoor_duration));
             dataName1.setVisibility(View.VISIBLE);
             dataValue1.setVisibility(View.VISIBLE);
-            dataValue1.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_NUMBER);
         }
         if (data.equals(features[7])) {
             dataName1.setText(getString(R.string.add_new_data) + " " + getString(R.string.sleep_duration));
             dataName1.setVisibility(View.VISIBLE);
             dataValue1.setVisibility(View.VISIBLE);
-            dataValue1.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_NUMBER);
         }
         if (data.equals(features[8])) {
             dataName1.setText(getString(R.string.add_new_other));
             dataName1.setVisibility(View.VISIBLE);
             dataValue1.setVisibility(View.VISIBLE);
+            dataValue1.setInputType(InputType.TYPE_CLASS_TEXT);
         }
     }
 }
