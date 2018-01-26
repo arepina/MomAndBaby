@@ -248,21 +248,21 @@ public class GoogleFit implements
                 Double value = entry.second;
                 GridItem item = null;
                 if (type.equals(DataType.TYPE_STEP_COUNT_DELTA))
-                    item = new GridItem(R.mipmap.steps, value.toString(), date);
+                    item = new GridItem(R.mipmap.steps, "R.mipmap.steps", value.toString(), date);
                 if (type.equals(DataType.TYPE_CALORIES_EXPENDED))
-                    item = new GridItem(R.mipmap.calories, value.toString(), date);
+                    item = new GridItem(R.mipmap.calories, "R.mipmap.calories", value.toString(), date);
                 if (type.equals(DataType.TYPE_WEIGHT))
-                    item = new GridItem(R.mipmap.weight, value.toString(), date);
+                    item = new GridItem(R.mipmap.weight, "R.mipmap.weight", value.toString(), date);
                 if (type.equals(DataType.TYPE_NUTRITION))
-                    item = new GridItem(R.mipmap.nutrition, value.toString(), date);
+                    item = new GridItem(R.mipmap.nutrition, "R.mipmap.nutrition", value.toString(), date);
                 if (type.equals(DataType.TYPE_ACTIVITY_SEGMENT))
-                    item = new GridItem(R.mipmap.rest, value.toString(), date);
+                    item = new GridItem(R.mipmap.rest, "R.mipmap.rest", value.toString(), date);
                 if (!adapter.hasItem(item))
                     adapter.add(item);
             }
             if (adapter.getCount() == 0)//no data for today
             {
-                GridItem item = new GridItem(R.mipmap.cross, activity.getResources().getString(R.string.need_to_sync), null, null);
+                GridItem item = new GridItem(R.mipmap.cross, "R.mipmap.cross", activity.getResources().getString(R.string.need_to_sync), null, null);
                 adapter.add(item);
             }
             if (!isEmail)
@@ -313,21 +313,21 @@ public class GoogleFit implements
                 Double value = entry.second;
                 GridItem item = null;
                 if (type.equals(DataType.TYPE_STEP_COUNT_DELTA))
-                    item = new GridItem(R.mipmap.steps, value.toString(), date);
+                    item = new GridItem(R.mipmap.steps, "R.mipmap.steps", value.toString(), date);
                 if (type.equals(DataType.TYPE_CALORIES_EXPENDED))
-                    item = new GridItem(R.mipmap.calories, value.toString(), date);
+                    item = new GridItem(R.mipmap.calories, "R.mipmap.calories", value.toString(), date);
                 if (type.equals(DataType.TYPE_WEIGHT))
-                    item = new GridItem(R.mipmap.weight, value.toString(), date);
+                    item = new GridItem(R.mipmap.weight, "R.mipmap.weight", value.toString(), date);
                 if (type.equals(DataType.TYPE_NUTRITION))
-                    item = new GridItem(R.mipmap.nutrition, value.toString(), date);
+                    item = new GridItem(R.mipmap.nutrition, "R.mipmap.nutrition", value.toString(), date);
                 if (type.equals(DataType.TYPE_ACTIVITY_SEGMENT))
-                    item = new GridItem(R.mipmap.rest, value.toString(), date);
+                    item = new GridItem(R.mipmap.rest, "R.mipmap.rest", value.toString(), date);
                 if (!adapter.hasItem(item))
                     adapter.add(item);
             }
             if (adapter.getCount() == 0)//no data for today
             {
-                GridItem item = new GridItem(R.mipmap.cross, activity.getResources().getString(R.string.need_to_sync), null, null);
+                GridItem item = new GridItem(R.mipmap.cross, "R.mipmap.cross", activity.getResources().getString(R.string.need_to_sync), null, null);
                 adapter.add(item);
             }
             if (!isEmail)

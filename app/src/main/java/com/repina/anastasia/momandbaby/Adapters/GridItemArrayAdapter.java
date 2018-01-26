@@ -85,7 +85,7 @@ public class GridItemArrayAdapter extends ArrayAdapter<GridItem> {
         itemList.remove(pos);
         if(itemList.size() == 0)
         {
-            GridItem it = new GridItem(R.mipmap.cross, getContext().getString(R.string.no_data_today), null, null);
+            GridItem it = new GridItem(R.mipmap.cross, "R.mipmap.cross", getContext().getString(R.string.no_data_today), null, null);
             itemList.add(it);
         }
         delete_pos = invalid;

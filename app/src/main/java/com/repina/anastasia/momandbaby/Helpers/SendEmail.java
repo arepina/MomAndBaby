@@ -141,7 +141,7 @@ public class SendEmail {
         StringBuilder report = new StringBuilder();
         for (int i = 0; i < adapter.getCount(); i++) {
             GridItem it = adapter.getItem(i);
-            report.append(imageToString(it.getItemImg())).append(" ").append(it.getItemDate()).append(" ").append(it.getItemDesc()).append("\n");
+            report.append(imageToString(it.getItemImgName())).append(" ").append(it.getItemDate()).append(" ").append(it.getItemDesc()).append("\n");
         }
         if (report.length() == 0)
             ToastShow.show(context, context.getString(R.string.no_data));
@@ -149,24 +149,34 @@ public class SendEmail {
             sendFile(report.toString(), context, start, end);
     }
 
-    private static String imageToString(int imageIntPath) {
-        //todo fix chnage to image names, not nums
-        switch (imageIntPath) {
-            case 2131492866: {
-                return "Калории";
-            }
-            case 2130903058:{
+    private static String imageToString(String imageName) {
+        switch (imageName) {
+            case "R.mipmap.height":
+                return "Рост";
+            case "R.mipmap.weight":
                 return "Вес";
-            }
-            case 2131492881:{
-                return "Шаги";
-            }
-            case 2131492875:{
+            case "R.mipmap.diapers":
+                return "Стул";
+            case "R.mipmap.vaccination":
+                return "Прививки";
+            case "R.mipmap.illness":
+                return "Болезни";
+            case "R.mipmap.food":
                 return "Питание";
-            }
-            case 2131492878:{
+            case "R.mipmap.outdoor":
+                return "Прогулки";
+            case "R.mipmap.sleep":
                 return "Сон";
-            }
+            case "R.mipmap.other":
+                return "Другое";
+            case "R.mipmap.steps":
+                return "Шаги";
+            case "R.mipmap.calories":
+                return "Калории";
+            case "R.mipmap.nutrition":
+                return "Питание";
+            case "R.mipmap.rest":
+                return "Сон";
             default:
                 return "";
         }
@@ -179,7 +189,7 @@ public class SendEmail {
         for (int i = 0; i < keys.size(); i++) {
             String key = keys.get(i);
             String value = values.get(i);
-            if(key.equals("babyId"))//remove babyID data
+            if (key.equals("babyId"))//remove babyID data
             {
                 keys.remove(i);
                 values.remove(i);
@@ -188,8 +198,7 @@ public class SendEmail {
             //solve height and weight problem
             if (key.contains("weight")) {
                 String[] weightArr = value.split("=");
-                if (Double.parseDouble(weightArr[1].replace(",", "")) == 0)
-                {
+                if (Double.parseDouble(weightArr[1].replace(",", "")) == 0) {
                     keys.remove(i);
                     values.remove(i);
                     i--;
@@ -197,21 +206,20 @@ public class SendEmail {
             }
             if (key.contains("height")) {
                 String[] heightArr = value.split("=");
-                if (Double.parseDouble(heightArr[1].replace(",", "")) == 0)
-                {
+                if (Double.parseDouble(heightArr[1].replace(",", "")) == 0) {
                     keys.remove(i);
                     values.remove(i);
                     i--;
                 }
             }
-            if(key.contains("date"))
+            if (key.contains("date"))
                 dateValue = value;
 
             //translate to russian
             String translation = Translator.translateWord(key);
             keys.set(i, translation);
         }
-        return singleSnapshot.getKey() + " " + dateValue ;//+ " " + TextUtils.join(" ", value) + "\n";
+        return singleSnapshot.getKey() + " " + dateValue;//+ " " + TextUtils.join(" ", value) + "\n";
     }
 
     private static long getUnitBetweenDates(Date startDate, Date endDate, TimeUnit unit) {

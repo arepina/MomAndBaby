@@ -50,7 +50,8 @@ public class StatsProcessing {
                                         if (date.substring(0, 10).equals(FormattedDate.getFormattedDateWithoutTime(dateAndTime))
                                                 & value.get("babyId").equals(babyID)) {
                                             int imageId = getImageId(singleSnapshot.getKey(), value);
-                                            GridItem it = new GridItem(imageId, formDescription(value), entry.getKey(), singleSnapshot.getKey());
+                                            String imageName = getImageName(singleSnapshot.getKey(), value);
+                                            GridItem it = new GridItem(imageId, imageName, formBabyDescription(value), entry.getKey(), singleSnapshot.getKey());
                                             adapter.add(it);
                                         }
                                     }
@@ -58,7 +59,7 @@ public class StatsProcessing {
                             }
                             if(adapter.getCount() == 0)
                             {
-                                GridItem it = new GridItem(R.mipmap.cross, context.getResources().getString(R.string.no_data_today), null, null);
+                                GridItem it = new GridItem(R.mipmap.cross, "R.mipmap.cross", context.getResources().getString(R.string.no_data_today), null, null);
                                 adapter.add(it);
                             }
                             listViewBaby.setAdapter(adapter);
@@ -71,8 +72,8 @@ public class StatsProcessing {
                 });
     }
 
-    private static String formDescription(HashMap<String, String> value) {
-        String line = "";
+    private static String formBabyDescription(HashMap<String, String> value) {
+        StringBuilder line = new StringBuilder();
         value.remove("babyId");
         value.remove("date");
         for (Map.Entry<String, String> entry : value.entrySet()) {
@@ -80,18 +81,18 @@ public class StatsProcessing {
             try {
                 double number = Double.parseDouble(val);
                 if (number != 0) {
-                    line += Translator.translateWord(entry.getKey()) + ": " + val;
+                    line.append(Translator.translateWord(entry.getKey())).append(": ").append(val);
                     if (!"\n".equals(String.valueOf(line.charAt(line.length() - 1))))
-                        line += "\n";
+                        line.append("\n");
                 }
             } catch (NumberFormatException e) { // not a number
-                line += Translator.translateWord(entry.getKey()) + ": " + val;
+                line.append(Translator.translateWord(entry.getKey())).append(": ").append(val);
                 if (!"\n".equals(String.valueOf(line.charAt(line.length() - 1))))
-                    line += "\n";
+                    line.append("\n");
             }
         }
-        line = line.substring(0, line.length() - 1);
-        return line;
+        line = new StringBuilder(line.substring(0, line.length() - 1));
+        return line.toString();
 
     }
 
@@ -147,5 +148,30 @@ public class StatsProcessing {
         if (name.equals(DatabaseNames.OTHER))
             return R.mipmap.other;
         return -1;
+    }
+
+    private static String getImageName(String name, HashMap<String, String> value) {
+        if (name.equals(DatabaseNames.METRICS))
+        {
+            if("0".equals(String.valueOf(value.get("weight"))))
+                return "R.mipmap.height";
+            else
+                return "R.mipmap.weight";
+        }
+        if (name.equals(DatabaseNames.STOOL))
+            return "R.mipmap.diapers";
+        if (name.equals(DatabaseNames.VACCINATION))
+            return "R.mipmap.vaccination";
+        if (name.equals(DatabaseNames.ILLNESS))
+            return "R.mipmap.illness";
+        if (name.equals(DatabaseNames.FOOD))
+            return "R.mipmap.food";
+        if (name.equals(DatabaseNames.OUTDOOR))
+            return "R.mipmap.outdoor";
+        if (name.equals(DatabaseNames.SLEEP))
+            return "R.mipmap.sleep";
+        if (name.equals(DatabaseNames.OTHER))
+            return "R.mipmap.other";
+        return "";
     }
 }
