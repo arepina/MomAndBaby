@@ -41,15 +41,18 @@ public class SendEmail {
         Calendar today = Calendar.getInstance();
         switch (length) {
             case 0: {
-                StatsProcessing.getMomStatsForOneDay(googleFit, adapter, today, activity, null, true); // 1 day
+                StatsProcessing.getMomStatsForOneDay(googleFit, adapter, today, activity,
+                        null, true); // 1 day
                 break;
             }
             case 1: {
-                StatsProcessing.getMomStatsForPeriod(googleFit, adapter, today, activity, null, 7, true, false); // 1 week
+                StatsProcessing.getMomStatsForPeriod(googleFit, adapter, today, activity,
+                        null, 7, true, false, null); // 1 week
                 break;
             }
             case 2: {
-                StatsProcessing.getMomStatsForPeriod(googleFit, adapter, today, activity, null, 31, true, false); // 1 month
+                StatsProcessing.getMomStatsForPeriod(googleFit, adapter, today, activity,
+                        null, 31, true, false, null); // 1 month
                 break;
             }
         }

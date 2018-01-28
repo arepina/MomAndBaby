@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.util.Pair;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -76,13 +77,13 @@ public class GoogleFit implements
 
     public void getPeriodData(Calendar startDate, Calendar endDate, FragmentActivity activity,
                               GridItemArrayAdapter adapter, ListView listView,
-                              boolean isEmail, boolean isChart) {
+                              boolean isEmail, boolean isChart, String selectedItemName) {
         this.start = FormattedDate.getFormattedDateWithoutTime(startDate);
         this.end = FormattedDate.getFormattedDateWithoutTime(endDate);
         this.adapter = adapter;
         this.listView = listView;
         this.activity = activity;
-        new ViewPeriodTask(isEmail, isChart).execute(startDate, endDate);
+        new ViewPeriodTask(isEmail, isChart, selectedItemName).execute(startDate, endDate);
     }
 
     public void getOneDayData(Calendar date, FragmentActivity activity, GridItemArrayAdapter adapter,
@@ -202,10 +203,12 @@ public class GoogleFit implements
     private class ViewPeriodTask extends AsyncTask<Calendar, ArrayList<Pair<DataType, Pair<String, Double>>>, ArrayList<Pair<DataType, Pair<String, Double>>>> {
         private boolean isEmail;
         private boolean isChart;
+        private String selectedItemName;
 
-        ViewPeriodTask(boolean isEmail, boolean isChart) {
+        ViewPeriodTask(boolean isEmail, boolean isChart, String selectedItemName) {
             this.isEmail = isEmail;
             this.isChart = isChart;
+            this.selectedItemName = selectedItemName;
         }
 
         protected ArrayList<Pair<DataType, Pair<String, Double>>> doInBackground(Calendar... params) {
@@ -231,10 +234,10 @@ public class GoogleFit implements
             //todo sleep
             //datapoint
             //dp.getValue(Field.FIELD_ACTIVITY).setActivity(FitnessActivities.SLEEP);
-            type = DataType.TYPE_ACTIVITY_SEGMENT;
-            agrType = DataType.AGGREGATE_ACTIVITY_SUMMARY;
-            result1 = periodData(params[0], params[1], type, agrType);
-            result.addAll(result1);
+//            type = DataType.TYPE_ACTIVITY_SEGMENT;
+//            agrType = DataType.AGGREGATE_ACTIVITY_SUMMARY;
+//            result1 = periodData(params[0], params[1], type, agrType);
+//            result.addAll(result1);
 
             return result;
         }
@@ -268,8 +271,8 @@ public class GoogleFit implements
             if (isEmail)
                 TextProcessing.formMomReport(adapter, activity.getApplicationContext(), start, end);
             if(isChart)
-                ChartActivity.fillChartMom(adapter);
-            else
+                ChartActivity.fillChartMom(adapter, activity.getApplicationContext(), selectedItemName);
+            else if(adapter != null)
                 listView.setAdapter(adapter);
         }
     }
@@ -299,9 +302,9 @@ public class GoogleFit implements
             result.addAll(result1);
 
             //todo sleep
-            type = DataType.TYPE_ACTIVITY_SEGMENT;
-            result1 = dataForToday(type);
-            result.addAll(result1);
+//            type = DataType.TYPE_ACTIVITY_SEGMENT;
+//            result1 = dataForToday(type);
+//            result.addAll(result1);
 
             return result;
         }
@@ -333,7 +336,8 @@ public class GoogleFit implements
                 adapter.add(item);
             }
             if (!isEmail)
-                listView.setAdapter(adapter);
+                if(adapter != null)
+                    listView.setAdapter(adapter);
             else
                 TextProcessing.formMomReport(adapter, activity.getApplicationContext(), start, end);
         }

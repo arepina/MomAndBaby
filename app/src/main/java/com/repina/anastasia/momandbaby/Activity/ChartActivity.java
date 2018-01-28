@@ -1,5 +1,6 @@
 package com.repina.anastasia.momandbaby.Activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -19,6 +21,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.repina.anastasia.momandbaby.Adapters.GridItem;
 import com.repina.anastasia.momandbaby.Adapters.GridItemArrayAdapter;
 import com.repina.anastasia.momandbaby.Helpers.FormattedDate;
 import com.repina.anastasia.momandbaby.Helpers.SharedConstants;
@@ -47,19 +50,19 @@ import static com.repina.anastasia.momandbaby.Activity.TabsActivity.googleFit;
 
 public class ChartActivity extends AppCompatActivity {
 
-    LineChart chart;
-    ArrayList<Entry> entries;
-    ArrayList<Entry> girlHeight;
-    ArrayList<Entry> girlWeight;
-    ArrayList<String> labels;
-    ArrayList<String> labelsIdeal;
-    List<ILineDataSet> dataSets;
+    private static LineChart chart;
+    private static ArrayList<Entry> entries;
+    private static ArrayList<String> labels;
+    private ArrayList<String> labelsIdeal;
+    private static List<ILineDataSet> dataSets;
+    private static Activity activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chart);
         final String type = getIntent().getExtras().getString("Type");
+        activity = this;
 
 
         //https://www.android-examples.com/create-bar-chart-graph-using-mpandroidchart-library/
@@ -144,9 +147,11 @@ public class ChartActivity extends AppCompatActivity {
     }
 
     private void getValuesFromGoogleFit(String selectedItemName) {
+        makeInvisible();
         StatsProcessing.getMomStatsForPeriod(googleFit,
                 new GridItemArrayAdapter(getApplicationContext(), R.layout.custom_row),
-                Calendar.getInstance(), this, null, 31, false, true);
+                Calendar.getInstance(), this, null,
+                31, false, true, selectedItemName); // ask for 1 month data
     }
 
     private void initIdealChartData(Context context, String dbName) {
@@ -339,15 +344,80 @@ public class ChartActivity extends AppCompatActivity {
         chart.animateY(2000);
     }
 
-    public static void fillChartMom(GridItemArrayAdapter adapter) {
-        //todo
-//        switch (value)
-//        {
-//            case "Сон":{}
-//            case "Шаги":{}
-//            case "Калории":{}
-//            case "Питание":{}
-//            case "Вес":{}
-//        }
+    public static void fillChartMom(GridItemArrayAdapter adapter, Context context, String selectedItemName) {
+        entries = new ArrayList<>();
+        labels = new ArrayList<>();
+        if (adapter.getCount() == 1 && adapter.getItem(0).getItemDate() == null) {
+            ToastShow.show(context, adapter.getItem(0).getItemDesc());
+            LineData lineData = new LineData(labels, dataSets);
+            chart.setData(lineData);
+            makeVisible();
+            return;
+        }
+        int counter = 0;
+        for (int i = 0; i < adapter.getCount(); i++) {
+            GridItem it = adapter.getItem(i);
+            Entry e = null;
+            String ItemName = it.getItemImgName();
+            String ItemDateLabel = it.getItemDate();
+            String allText = it.getItemDesc();
+            switch (selectedItemName) {
+                case "Сон": {
+                    if(ItemName.equals("R.mipmap.sleep")) {
+                        e = new Entry((float)Double.parseDouble(allText), counter);
+                        counter++;
+                    }
+                    break;
+                }
+                case "Шаги": {
+                    if(ItemName.equals("R.mipmap.steps")) {
+                        e = new Entry((float)Double.parseDouble(allText), counter);
+                        counter++;
+                    }
+                    break;
+                }
+                case "Калории": {
+                    if(ItemName.equals("R.mipmap.calories")) {
+                        e = new Entry((float)Double.parseDouble(allText), counter);
+                        counter++;
+                    }
+                    break;
+                }
+                case "Вес": {
+                    if(ItemName.equals("R.mipmap.weight")) {
+                        e = new Entry((float)Double.parseDouble(allText), counter);
+                        counter++;
+                    }
+                    break;
+                }
+            }
+            entries.add(e);
+            labels.add(ItemDateLabel);
+        }
+        LineDataSet lineDataSet = new LineDataSet(entries, selectedItemName);
+        lineDataSet.setColors(new int[]{R.color.colorPrimary}, context);
+        dataSets.add(lineDataSet);
+        LineData lineData = new LineData(labels, dataSets);
+        makeVisible();
+        chart.setData(lineData);
+        chart.animateY(2000);
+    }
+
+    private static void makeVisible()
+    {
+        ProgressBar progressBar = (ProgressBar) activity.findViewById(R.id.progressBar);
+        progressBar.setVisibility(ProgressBar.GONE);
+        Spinner s = (Spinner)activity.findViewById(R.id.spinner);
+        s.setVisibility(View.VISIBLE);
+        chart.setVisibility(View.VISIBLE);
+    }
+
+    private static void makeInvisible()
+    {
+        ProgressBar progressBar = (ProgressBar) activity.findViewById(R.id.progressBar);
+        progressBar.setVisibility(ProgressBar.VISIBLE);
+        Spinner s = (Spinner)activity.findViewById(R.id.spinner);
+        s.setVisibility(View.GONE);
+        chart.setVisibility(View.GONE);
     }
 }

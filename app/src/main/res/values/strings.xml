@@ -130,10 +130,10 @@
     </string-array>
 
     <string-array name="parametersMom">
-        <item>Вес</item>
-        <item>Питание</item>
+        <item>Шаги</item>
         <item>Сон</item>
-        <item>Google Fit</item>
+        <item>Вес</item>
+        <item>Калории</item>
     </string-array>
 
     <string-array name="vaccinations">

@@ -33,6 +33,7 @@ import com.repina.anastasia.momandbaby.Helpers.FormattedDate;
 import com.repina.anastasia.momandbaby.Helpers.SendEmail;
 import com.repina.anastasia.momandbaby.Helpers.SharedConstants;
 import com.repina.anastasia.momandbaby.Helpers.Processing.StatsProcessing;
+import com.repina.anastasia.momandbaby.Helpers.ToastShow;
 import com.repina.anastasia.momandbaby.R;
 
 import java.util.Calendar;
@@ -199,15 +200,17 @@ public class FragmentTab extends Fragment implements SwipeListView.SwipeListView
         final View v = inflater.inflate(R.layout.fragment_mom, container, false);
 
         FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.floatingActionButton);
+        fab.setImageResource(R.mipmap.google_fit);
         fab.setVisibility(View.VISIBLE);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                momArrayAdapter.clear();
-                Intent intent = new Intent(v.getContext(), ChooseFeatureActivity.class);
-                intent.putExtra("requestCode", MOM_NEW_FEATURE);
-                startActivityForResult(intent, MOM_NEW_FEATURE);
+//                momArrayAdapter.clear();
+//                Intent intent = new Intent(v.getContext(), ChooseFeatureActivity.class);
+//                intent.putExtra("requestCode", MOM_NEW_FEATURE);
+//                startActivityForResult(intent, MOM_NEW_FEATURE);
+                ToastShow.show(getContext(), getString(R.string.need_to_sync));
             }
         });
 
@@ -253,7 +256,9 @@ public class FragmentTab extends Fragment implements SwipeListView.SwipeListView
 
         babyArrayAdapter = new GridItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row);
         StatsProcessing.getBabyStatsForOneDay(babyArrayAdapter, calendar, getContext(), listViewBaby);// Load today add's from Firebase for baby
+
         FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.floatingActionButton);
+        fab.setImageResource(R.mipmap.plus);
         fab.setVisibility(View.VISIBLE);
 
         fab.setOnClickListener(new View.OnClickListener() {

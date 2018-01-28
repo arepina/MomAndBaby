@@ -16,8 +16,6 @@ import com.repina.anastasia.momandbaby.Connectors.FirebaseConnection;
 import com.repina.anastasia.momandbaby.DataBase.DatabaseNames;
 import com.repina.anastasia.momandbaby.Helpers.FormattedDate;
 import com.repina.anastasia.momandbaby.Helpers.GoogleFit;
-import com.repina.anastasia.momandbaby.Helpers.Processing.ImageProcessing;
-import com.repina.anastasia.momandbaby.Helpers.Processing.TextProcessing;
 import com.repina.anastasia.momandbaby.Helpers.SharedConstants;
 import com.repina.anastasia.momandbaby.R;
 
@@ -93,20 +91,20 @@ public class StatsProcessing {
             extra.add(Calendar.MINUTE, 1439);
             extra.add(Calendar.SECOND, 59);
             //one second is not in the review
-            googleFit.getPeriodData(dateClone, extra, activity, adapter, listViewMom, isEmail, false);
+            googleFit.getPeriodData(dateClone, extra, activity, adapter, listViewMom, isEmail, false, null);
         }
     }
 
     public static void getMomStatsForPeriod(GoogleFit googleFit, final GridItemArrayAdapter adapter,
                                             final Calendar endDate, FragmentActivity activity,
                                             ListView listViewMom, int length,
-                                            boolean isEmail, boolean isChart) {
+                                            boolean isEmail, boolean isChart, String selectedItemName) {
         Calendar startDate = Calendar.getInstance();
         startDate.setTime(endDate.getTime());
         if (length == 7) // - 7 days
             startDate.add(Calendar.WEEK_OF_YEAR, -1);
         else
             startDate.add(Calendar.MONTH, -1); // - 1 month
-        googleFit.getPeriodData(startDate, endDate, activity, adapter, listViewMom, isEmail, isChart);
+        googleFit.getPeriodData(startDate, endDate, activity, adapter, listViewMom, isEmail, isChart, selectedItemName);
     }
 }
