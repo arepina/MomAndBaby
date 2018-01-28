@@ -88,12 +88,13 @@
     <string name="reports">Отчеты</string>
     <string name="report_error">Возникла проблема при создании отчета, проверьте наличие SD карты в вашем устройстве</string>
     <string name="no_data">Нет доступных данных. Попробуйте выбрать другой временной период.</string>
-    <string name="no_data_today">Записей нет</string>
+    <string name="no_data_today">Записей нет. Вы можете добавить их, нажав кнопку плюс внизу этой вкладки</string>
 
     <!--Google Fit-->
     <string name="need_to_sync">Требуется синхронизировать носимое устройство с Google Fit, чтобы данные появились в приложении</string>
     <string name="google_fit_notification">Для корректной работы требуется разрешить доступ к Google Fit и войти в свой аккаунт</string>
     <string name="google_fit">Google Fit</string>
+    <string name="google_fit_no_data">Данные недоступны</string>
 
     <!--Vaccination-->
     <string name="vaccinations">Прививки</string>
@@ -116,6 +117,7 @@
     <string name="sleep_legend">Часы сна</string>
     <string name="stool_legend">Оценка стула</string>
     <string name="add_new_other">Введите информацию о событии</string>
+    <string name="google_fit_load">Идет загрузка данных из Google Fit. Пожалуйста, подождите!</string>
 
     <string-array name="parametersBaby">
         <item>Рост</item>

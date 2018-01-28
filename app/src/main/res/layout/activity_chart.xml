@@ -13,6 +13,13 @@
         android:visibility="gone"
         android:background="@color/colorPrimary"/>
 
+    <TextView
+        android:id="@+id/loadText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:text="@string/google_fit_load"/>
+
     <Spinner
         android:visibility="visible"
         android:id="@+id/spinner"

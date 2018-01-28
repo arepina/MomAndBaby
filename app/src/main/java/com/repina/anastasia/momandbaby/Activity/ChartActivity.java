@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
@@ -407,6 +408,8 @@ public class ChartActivity extends AppCompatActivity {
     {
         ProgressBar progressBar = (ProgressBar) activity.findViewById(R.id.progressBar);
         progressBar.setVisibility(ProgressBar.GONE);
+        TextView textView = (TextView) activity.findViewById(R.id.loadText);
+        textView.setVisibility(View.GONE);
         Spinner s = (Spinner)activity.findViewById(R.id.spinner);
         s.setVisibility(View.VISIBLE);
         chart.setVisibility(View.VISIBLE);
@@ -416,6 +419,8 @@ public class ChartActivity extends AppCompatActivity {
     {
         ProgressBar progressBar = (ProgressBar) activity.findViewById(R.id.progressBar);
         progressBar.setVisibility(ProgressBar.VISIBLE);
+        TextView textView = (TextView) activity.findViewById(R.id.loadText);
+        textView.setVisibility(View.VISIBLE);
         Spinner s = (Spinner)activity.findViewById(R.id.spinner);
         s.setVisibility(View.GONE);
         chart.setVisibility(View.GONE);

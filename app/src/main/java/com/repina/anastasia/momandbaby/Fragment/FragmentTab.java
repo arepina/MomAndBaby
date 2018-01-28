@@ -26,6 +26,7 @@ import com.repina.anastasia.momandbaby.Activity.ChartActivity;
 import com.repina.anastasia.momandbaby.Activity.ChooseFeatureActivity;
 import com.repina.anastasia.momandbaby.Activity.SignupActivity;
 import com.repina.anastasia.momandbaby.Activity.StatsActivity;
+import com.repina.anastasia.momandbaby.Adapters.GridItem;
 import com.repina.anastasia.momandbaby.Adapters.GridItemArrayAdapter;
 import com.repina.anastasia.momandbaby.Adapters.SwipeListView;
 import com.repina.anastasia.momandbaby.Connectors.ConnectionDetector;
@@ -227,7 +228,13 @@ public class FragmentTab extends Fragment implements SwipeListView.SwipeListView
                 if (ConnectionDetector.isConnected(getContext())) {
                     momArrayAdapter.clear();
                     goYesterday(headerDate);
-                    StatsProcessing.getMomStatsForOneDay(googleFit, momArrayAdapter, calendar, getActivity(), listViewMom, false);
+                    if (Calendar.getInstance().after(calendar))
+                        StatsProcessing.getMomStatsForOneDay(googleFit, momArrayAdapter, calendar, getActivity(), listViewMom, false);
+                    else{
+                        GridItem item = new GridItem(R.mipmap.cross, "R.mipmap.cross", getResources().getString(R.string.google_fit_no_data), null, null);
+                        momArrayAdapter.add(item);
+                        listViewMom.setAdapter(momArrayAdapter);
+                    }
                 }
             }
         });
@@ -239,7 +246,13 @@ public class FragmentTab extends Fragment implements SwipeListView.SwipeListView
                 if (ConnectionDetector.isConnected(getContext())) {
                     momArrayAdapter.clear();
                     goTomorrow(headerDate);
-                    StatsProcessing.getMomStatsForOneDay(googleFit, momArrayAdapter, calendar, getActivity(), listViewMom, false);
+                    if(Calendar.getInstance().after(calendar))
+                        StatsProcessing.getMomStatsForOneDay(googleFit, momArrayAdapter, calendar, getActivity(), listViewMom, false);
+                    else {
+                        GridItem item = new GridItem(R.mipmap.cross, "R.mipmap.cross", getResources().getString(R.string.google_fit_no_data), null, null);
+                        momArrayAdapter.add(item);
+                        listViewMom.setAdapter(momArrayAdapter);
+                    }
                 }
             }
         });
@@ -280,7 +293,13 @@ public class FragmentTab extends Fragment implements SwipeListView.SwipeListView
                 if (ConnectionDetector.isConnected(getContext())) {
                     babyArrayAdapter.clear();
                     goYesterday(headerDate);
-                    StatsProcessing.getBabyStatsForOneDay(babyArrayAdapter, calendar, getContext(), listViewBaby);
+                    if (Calendar.getInstance().after(calendar))
+                        StatsProcessing.getBabyStatsForOneDay(babyArrayAdapter, calendar, getContext(), listViewBaby);
+                    else{
+                        GridItem item = new GridItem(R.mipmap.cross, "R.mipmap.cross", getResources().getString(R.string.need_to_sync), null, null);
+                        babyArrayAdapter.add(item);
+                        listViewBaby.setAdapter(babyArrayAdapter);
+                    }
                 }
             }
         });
@@ -292,7 +311,13 @@ public class FragmentTab extends Fragment implements SwipeListView.SwipeListView
                 if (ConnectionDetector.isConnected(getContext())) {
                     babyArrayAdapter.clear();
                     goTomorrow(headerDate);
-                    StatsProcessing.getBabyStatsForOneDay(babyArrayAdapter, calendar, getContext(), listViewBaby);
+                    if (Calendar.getInstance().after(calendar))
+                        StatsProcessing.getBabyStatsForOneDay(babyArrayAdapter, calendar, getContext(), listViewBaby);
+                    else{
+                        GridItem item = new GridItem(R.mipmap.cross, "R.mipmap.cross", getResources().getString(R.string.need_to_sync), null, null);
+                        babyArrayAdapter.add(item);
+                        listViewBaby.setAdapter(babyArrayAdapter);
+                    }
                 }
 
             }
@@ -378,7 +403,6 @@ public class FragmentTab extends Fragment implements SwipeListView.SwipeListView
     public void onItemClickListener(ListAdapter adapter, int position) {
         // do nothing
     }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
