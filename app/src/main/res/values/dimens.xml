@@ -19,4 +19,6 @@
     <dimen name="card_bottom_margin">25dp</dimen>
     <dimen name="link_card_height">40dp</dimen>
     <dimen name="main_padding">10dp</dimen>
+    <dimen name="question_width">75dp</dimen>
+    <dimen name="question_height">70dp</dimen>
 </resources>

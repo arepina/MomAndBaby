@@ -1,10 +1,17 @@
 package com.repina.anastasia.momandbaby.Activity;
 
 
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AlertDialog;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -13,22 +20,46 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.repina.anastasia.momandbaby.Adapters.ListViewArrayAdapter;
 import com.repina.anastasia.momandbaby.Adapters.ListViewItem;
-import com.repina.anastasia.momandbaby.Helpers.SharedConstants;
-import com.repina.anastasia.momandbaby.Helpers.ToastShow;
 import com.repina.anastasia.momandbaby.Connectors.FirebaseConnection;
 import com.repina.anastasia.momandbaby.DataBase.DatabaseNames;
 import com.repina.anastasia.momandbaby.DataBase.Vaccination;
+import com.repina.anastasia.momandbaby.Helpers.SharedConstants;
+import com.repina.anastasia.momandbaby.Helpers.ToastShow;
 import com.repina.anastasia.momandbaby.R;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class VaccinationsActivity extends AppCompatActivity {
+public class VaccinationsActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vaccination);
+
+        Button question = (Button) findViewById(R.id.question);
+        question.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                View view = getLayoutInflater().inflate(R.layout.vaccinations_list, null);
+                ListView listView = (ListView)view.findViewById(R.id.vaccinationsList);
+                String[] dates = getResources().getStringArray(R.array.vaccinationsDates);
+                ArrayAdapter<String> adapter = new ArrayAdapter(VaccinationsActivity.this,
+                        R.layout.custom_textview, dates);
+                listView.setAdapter(adapter);
+                AlertDialog.Builder builder =
+                        new AlertDialog.Builder(VaccinationsActivity.this, R.style.AlertDialogCustom).
+                                setTitle(R.string.vaccinations_info).
+                                setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                }).
+                                setView(view);
+                builder.create().show();
+            }
+        });
 
         loadVaccinations();
     }

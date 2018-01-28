@@ -17,8 +17,20 @@
         android:textColor="@color/colorPrimaryDark"
         android:textStyle="bold" />
 
+    <Button
+        android:id="@+id/question"
+        android:layout_width="@dimen/question_width"
+        android:layout_height="@dimen/question_height"
+        android:layout_gravity="center_horizontal"
+        android:background="@mipmap/faq"
+        android:gravity="center_horizontal" />
+
     <ListView
         android:id="@+id/vaccinations"
+        android:layout_marginLeft="@dimen/main_margin"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent" >
+    </ListView>
+
+
 </LinearLayout>

@@ -42,7 +42,7 @@
     <string name="send_report_mom">Отправить отчет о здоровье мамы на почту</string>
     <string name="send_report_baby">Отправить отчет о здоровье малыша на почту</string>
     <string name="app_description">Приложение разработано Репиной А.А. в рамках выполнения дипломной работы и предназначено для мониторинга здоровья малыша до 1 года и помощи его маме. Научный руководитель Ахметсафина Р.З. Комментарии, пожелания и предложения привествуются!</string>
-    <string name="licenses">Все изображения в приложении используются по Flaticon Basic License. Изображения являются частью пакетов, созданных Freepik, Smashicons, Nikita Golubev, Vectors Market, Maxim Basinski, Scott de Jonge</string>
+    <string name="licenses">Все изображения в приложении используются по Flaticon Basic License. Изображения являются частью пакетов, созданных Freepik, Smashicons, Nikita Golubev, Vectors Market, Maxim Basinski, Scott de Jonge, Eucalyp</string>
 
     <!--New data-->
     <string name="add_new_data">Введите новое значение</string>
@@ -118,6 +118,7 @@
     <string name="stool_legend">Оценка стула</string>
     <string name="add_new_other">Введите информацию о событии</string>
     <string name="google_fit_load">Идет загрузка данных из Google Fit. Пожалуйста, подождите!</string>
+    <string name="vaccinations_info">О прививках</string>
 
     <string-array name="parametersBaby">
         <item>Рост</item>
@@ -149,6 +150,23 @@
         <item>Эпидемический паротит</item>
         <item>Краснуха</item>
         <item>Корь</item>
+    </string-array>
+
+    <string-array name="vaccinationsDates">
+        <item>1 день\t\t\t\tI-Вирусный гепатит В</item>
+        <item>1 неделя\t\t\tТуберкулез</item>
+        <item>1 месяц\t\t\tII-Вирусный гепатит В</item>
+        <item>3 месяца\t\tI-Коклюш, столбняк, дифтерия</item>
+        <item>\t\t\t\t\t\t\t\tI-полиомиелит</item>
+        <item>\t\t\t\t\t\t\t\tI-гемофильная инфекция</item>
+        <item>5 месяцев\t\tII-Коклюш, столбняк, дифтерия</item>
+        <item>\t\t\t\t\t\t\t\tII-полиомиелит</item>
+        <item>\t\t\t\t\t\t\t\tII-гемофильная инфекция</item>
+        <item>6 месяцев\t\tIII-Коклюш, столбняк, дифтерия</item>
+        <item>\t\t\t\t\t\t\t\tIII-полиомиелит</item>
+        <item>\t\t\t\t\t\t\t\tIII-гемофильная инфекция</item>
+        <item>\t\t\t\t\t\t\t\tIII-Вирусный гепатит В</item>
+        <item>год\t\t\t\t\t\tПаротит, краснуха, корь</item>
     </string-array>
 
     <string-array name="heightBoyNorm">
