@@ -119,6 +119,7 @@
     <string name="add_new_other">Введите информацию о событии</string>
     <string name="google_fit_load">Идет загрузка данных из Google Fit. Пожалуйста, подождите!</string>
     <string name="vaccinations_info">О прививках</string>
+    <string name="for_custom">Выбрать период</string>
 
     <string-array name="parametersBaby">
         <item>Рост</item>

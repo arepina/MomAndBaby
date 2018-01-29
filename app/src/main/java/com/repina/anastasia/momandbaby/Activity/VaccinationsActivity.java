@@ -5,13 +5,11 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -37,7 +35,7 @@ public class VaccinationsActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vaccination);
 
-        Button question = (Button) findViewById(R.id.question);
+        FloatingActionButton question = (FloatingActionButton) findViewById(R.id.question);
         question.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

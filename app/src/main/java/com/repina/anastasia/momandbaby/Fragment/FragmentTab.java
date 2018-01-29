@@ -230,7 +230,7 @@ public class FragmentTab extends Fragment implements SwipeListView.SwipeListView
                     goYesterday(headerDate);
                     if (Calendar.getInstance().after(calendar))
                         StatsProcessing.getMomStatsForOneDay(googleFit, momArrayAdapter, calendar, getActivity(), listViewMom, false);
-                    else{
+                    else {
                         GridItem item = new GridItem(R.mipmap.cross, "R.mipmap.cross", getResources().getString(R.string.google_fit_no_data), null, null);
                         momArrayAdapter.add(item);
                         listViewMom.setAdapter(momArrayAdapter);
@@ -246,7 +246,7 @@ public class FragmentTab extends Fragment implements SwipeListView.SwipeListView
                 if (ConnectionDetector.isConnected(getContext())) {
                     momArrayAdapter.clear();
                     goTomorrow(headerDate);
-                    if(Calendar.getInstance().after(calendar))
+                    if (Calendar.getInstance().after(calendar))
                         StatsProcessing.getMomStatsForOneDay(googleFit, momArrayAdapter, calendar, getActivity(), listViewMom, false);
                     else {
                         GridItem item = new GridItem(R.mipmap.cross, "R.mipmap.cross", getResources().getString(R.string.google_fit_no_data), null, null);
@@ -295,7 +295,7 @@ public class FragmentTab extends Fragment implements SwipeListView.SwipeListView
                     goYesterday(headerDate);
                     if (Calendar.getInstance().after(calendar))
                         StatsProcessing.getBabyStatsForOneDay(babyArrayAdapter, calendar, getContext(), listViewBaby);
-                    else{
+                    else {
                         GridItem item = new GridItem(R.mipmap.cross, "R.mipmap.cross", getResources().getString(R.string.need_to_sync), null, null);
                         babyArrayAdapter.add(item);
                         listViewBaby.setAdapter(babyArrayAdapter);
@@ -313,7 +313,7 @@ public class FragmentTab extends Fragment implements SwipeListView.SwipeListView
                     goTomorrow(headerDate);
                     if (Calendar.getInstance().after(calendar))
                         StatsProcessing.getBabyStatsForOneDay(babyArrayAdapter, calendar, getContext(), listViewBaby);
-                    else{
+                    else {
                         GridItem item = new GridItem(R.mipmap.cross, "R.mipmap.cross", getResources().getString(R.string.need_to_sync), null, null);
                         babyArrayAdapter.add(item);
                         listViewBaby.setAdapter(babyArrayAdapter);
@@ -351,35 +351,32 @@ public class FragmentTab extends Fragment implements SwipeListView.SwipeListView
     }
 
     private void showAlertDialog(final boolean whoFlag) {
-
+        //todo change text color
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.AlertDialogCustom);
-
         builder.setTitle(R.string.choose_period);
-        builder.setMessage("");
+        builder.setItems(new CharSequence[]
+                        {getString(R.string.for_day), getString(R.string.for_week), getString(R.string.for_month), getString(R.string.for_custom)},
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                SendEmail.createEmail(getContext(), 0, whoFlag, getActivity(), new GridItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row));
+                                break;
+                            case 1:
+                                SendEmail.createEmail(getContext(), 1, whoFlag, getActivity(), new GridItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row));
+                                break;
+                            case 2:
+                                SendEmail.createEmail(getContext(), 2, whoFlag, getActivity(), new GridItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row));
+                                break;
+                            case 3:
+                                //todo
+                                SendEmail.createEmail(getContext(), 3, whoFlag, getActivity(), new GridItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row));
+                                break;
+                        }
+                    }
+                });
 
-        builder.setPositiveButton(R.string.for_day, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                SendEmail.createEmail(getContext(), 0, whoFlag, getActivity(), new GridItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row));
-            }
-        });
-
-        builder.setNegativeButton(R.string.for_week, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                SendEmail.createEmail(getContext(), 1, whoFlag, getActivity(), new GridItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row));
-            }
-        });
-
-        builder.setNeutralButton(R.string.for_month, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                SendEmail.createEmail(getContext(), 2, whoFlag, getActivity(), new GridItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row));
-            }
-        });
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        builder.create().show();
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.repina.anastasia.momandbaby.Helpers;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -40,12 +41,15 @@ public class GoogleFit implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
-    private GoogleApiClient mGoogleApiClient;
-    private GridItemArrayAdapter adapter;
-    private ListView listView;
-    private FragmentActivity activity;
+    private static GoogleApiClient mGoogleApiClient;
+    private static GridItemArrayAdapter adapter;
+    @SuppressLint("StaticFieldLeak")
+    private static ListView listView;
+    @SuppressLint("StaticFieldLeak")
+    private static FragmentActivity activity;
 
-    private String start, end;
+    private static String start;
+    private static String end;
 
     public GoogleFit(Activity activity) {
         FragmentActivity fragmentActivity = (FragmentActivity) activity;
@@ -78,32 +82,34 @@ public class GoogleFit implements
     public void getPeriodData(Calendar startDate, Calendar endDate, FragmentActivity activity,
                               GridItemArrayAdapter adapter, ListView listView,
                               boolean isEmail, boolean isChart, String selectedItemName) {
-        this.start = FormattedDate.getFormattedDateWithoutTime(startDate);
-        this.end = FormattedDate.getFormattedDateWithoutTime(endDate);
-        this.adapter = adapter;
-        this.listView = listView;
-        this.activity = activity;
+        start = FormattedDate.getFormattedDateWithoutTime(startDate);
+        end = FormattedDate.getFormattedDateWithoutTime(endDate);
+        GoogleFit.adapter = adapter;
+        GoogleFit.listView = listView;
+        GoogleFit.activity = activity;
         new ViewPeriodTask(isEmail, isChart, selectedItemName).execute(startDate, endDate);
     }
 
     public void getOneDayData(Calendar date, FragmentActivity activity, GridItemArrayAdapter adapter,
                               ListView listView, boolean isEmail) {
-        this.start = FormattedDate.getFormattedDateWithoutTime(date);
-        this.end = FormattedDate.getFormattedDateWithoutTime(date);
-        this.adapter = adapter;
-        this.listView = listView;
-        this.activity = activity;
+        start = FormattedDate.getFormattedDateWithoutTime(date);
+        end = FormattedDate.getFormattedDateWithoutTime(date);
+        GoogleFit.adapter = adapter;
+        GoogleFit.listView = listView;
+        GoogleFit.activity = activity;
         new ViewTodayTask(isEmail).execute(date);
     }
 
-    private ArrayList<Pair<DataType, Pair<String, Double>>> dataForToday(DataType type) {
+    private static ArrayList<Pair<DataType, Pair<String, Double>>> dataForToday(DataType type) {
         DailyTotalResult result = Fitness.HistoryApi
                 .readDailyTotal(mGoogleApiClient, type)
                 .await(5, TimeUnit.SECONDS);
-        return parseData(result.getTotal(), type);
+        if(result.getTotal() != null)
+            return parseData(result.getTotal(), type);
+        return new ArrayList<>();
     }
 
-    private ArrayList<Pair<DataType, Pair<String, Double>>> periodData(Calendar startDate, Calendar endDate, DataType type, DataType agrType) {
+    private static ArrayList<Pair<DataType, Pair<String, Double>>> periodData(Calendar startDate, Calendar endDate, DataType type, DataType agrType) {
         Calendar startDateClone = Calendar.getInstance();
         startDateClone.setTime(startDate.getTime());
 
@@ -146,7 +152,7 @@ public class GoogleFit implements
         return sumData;
     }
 
-    private ArrayList<Pair<DataType, Pair<String, Double>>> parseData(DataSet dataSet, DataType type) {
+    private static ArrayList<Pair<DataType, Pair<String, Double>>> parseData(DataSet dataSet, DataType type) {
         DateFormat dateFormat = DateFormat.getDateInstance();
         DateFormat timeFormat = DateFormat.getTimeInstance();
         ArrayList<Pair<DataType, Pair<String, Double>>> parsedData = new ArrayList<>();
@@ -160,18 +166,16 @@ public class GoogleFit implements
                 Log.e("History", "\tEnd: " + endDate + " " + endTime);
                 double value = 0;
                 if (type.equals(DataType.TYPE_ACTIVITY_SEGMENT)) {
-                    dp.getValue(Field.FIELD_ACTIVITY).setActivity(FitnessActivities.SLEEP);
-                    String activity = dp.getValue(Field.FIELD_ACTIVITY).asActivity();
-                    value = dp.getValue(Field.FIELD_DURATION).asInt();
-
-                    Calendar cal = Calendar.getInstance();
-                    Date now = new Date();
-                    cal.setTime(now);
-                    long endTime1 = cal.getTimeInMillis();
-                    cal.add(Calendar.WEEK_OF_YEAR, -1);
-                    long startTime1 = cal.getTimeInMillis();
-
-
+//                    dp.getValue(Field.FIELD_ACTIVITY).setActivity(FitnessActivities.SLEEP);
+//                    String activity = dp.getValue(Field.FIELD_ACTIVITY).asActivity();
+//                    value = dp.getValue(Field.FIELD_DURATION).asInt();
+//
+//                    Calendar cal = Calendar.getInstance();
+//                    Date now = new Date();
+//                    cal.setTime(now);
+//                    long endTime1 = cal.getTimeInMillis();
+//                    cal.add(Calendar.WEEK_OF_YEAR, -1);
+//                    long startTime1 = cal.getTimeInMillis();
 //                    final SessionReadRequest.Builder sessionBuilder = new SessionReadRequest.Builder()
 //
 //                            .setTimeInterval(startTime1, endTime1, TimeUnit.MILLISECONDS)
@@ -200,7 +204,7 @@ public class GoogleFit implements
         return parsedData;
     }
 
-    private class ViewPeriodTask extends AsyncTask<Calendar, ArrayList<Pair<DataType, Pair<String, Double>>>, ArrayList<Pair<DataType, Pair<String, Double>>>> {
+    private static class ViewPeriodTask extends AsyncTask<Calendar, ArrayList<Pair<DataType, Pair<String, Double>>>, ArrayList<Pair<DataType, Pair<String, Double>>>> {
         private boolean isEmail;
         private boolean isChart;
         private String selectedItemName;
@@ -272,12 +276,12 @@ public class GoogleFit implements
                 TextProcessing.formMomReport(adapter, activity.getApplicationContext(), start, end);
             if(isChart)
                 ChartActivity.fillChartMom(adapter, activity.getApplicationContext(), selectedItemName);
-            else if(adapter != null)
+            else if(listView != null)
                 listView.setAdapter(adapter);
         }
     }
 
-    private class ViewTodayTask extends AsyncTask<Calendar, ArrayList<Pair<DataType, Pair<String, Double>>>, ArrayList<Pair<DataType, Pair<String, Double>>>> {
+    private static class ViewTodayTask extends AsyncTask<Calendar, ArrayList<Pair<DataType, Pair<String, Double>>>, ArrayList<Pair<DataType, Pair<String, Double>>>> {
 
         private boolean isEmail;
 
@@ -336,7 +340,7 @@ public class GoogleFit implements
                 adapter.add(item);
             }
             if (!isEmail)
-                if(adapter != null)
+                if(listView != null)
                     listView.setAdapter(adapter);
             else
                 TextProcessing.formMomReport(adapter, activity.getApplicationContext(), start, end);
