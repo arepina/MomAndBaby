@@ -73,31 +73,31 @@ public class SendEmail {
 
     private static void createBabyEmail(final Context context, int length, Calendar from, Calendar to) {
         Calendar calendar = Calendar.getInstance();
-        String startTemp = FormattedDate.getFormattedDateWithoutTime(calendar);
-        String end = "";
+        String start = "";
+        String end = FormattedDate.getFormattedDateWithoutTime(calendar);
 
         switch (length) {
             case 0: {
-                end = startTemp;
+                start = end;
                 break;
             }
             case 1: {
                 calendar.add(Calendar.DAY_OF_MONTH, -7);
-                end = FormattedDate.getFormattedDateWithoutTime(calendar);
+                start = FormattedDate.getFormattedDateWithoutTime(calendar);
                 break;
             }
             case 2: {
                 calendar.add(Calendar.DAY_OF_MONTH, -31);
-                end = FormattedDate.getFormattedDateWithoutTime(calendar);
+                start = FormattedDate.getFormattedDateWithoutTime(calendar);
                 break;
             }
             case 3: {
                 long days = daysBetween(from, to);
                 if (days == 0) {
+                    start = FormattedDate.getFormattedDateWithoutTime(from);
                     end = FormattedDate.getFormattedDateWithoutTime(from);
-                    startTemp = FormattedDate.getFormattedDateWithoutTime(from);
                 } else {
-                    startTemp = FormattedDate.getFormattedDateWithoutTime(from);
+                    start = FormattedDate.getFormattedDateWithoutTime(from);
                     calendar.setTime(from.getTime());
                     calendar.add(Calendar.DAY_OF_MONTH, (int) days);
                     end = FormattedDate.getFormattedDateWithoutTime(calendar);
@@ -106,7 +106,6 @@ public class SendEmail {
             }
         }
 
-        final String start = startTemp;
         FirebaseConnection connection = new FirebaseConnection();
         FirebaseDatabase database = connection.getDatabase();
 
@@ -116,6 +115,7 @@ public class SendEmail {
         final String babyID = sp.getString(SharedConstants.BABY_ID_KEY, "");
 
         final String finalEnd = end;
+        final String finalStart = start;
         databaseReference
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -131,8 +131,8 @@ public class SendEmail {
                                         HashMap<String, String> value = entry.getValue();
                                         String date = value.get("date").substring(0, 10);
                                         try {
-                                            Date endDate = FormattedDate.stringToDate(start);
-                                            Date startDate = FormattedDate.stringToDate(finalEnd);
+                                            Date endDate = FormattedDate.stringToDate(finalEnd);
+                                            Date startDate = FormattedDate.stringToDate(finalStart);
                                             Date current = FormattedDate.stringToDate(date);
                                             long daysStartDif = Math.abs(getUnitBetweenDates(startDate, current, TimeUnit.DAYS));
                                             long daysEndDif = Math.abs(getUnitBetweenDates(current, endDate, TimeUnit.DAYS));
@@ -151,7 +151,7 @@ public class SendEmail {
                             if (report.length() == 0)
                                 ToastShow.show(context, context.getString(R.string.no_data));
                             else
-                                FileProcessing.sendFile(report.toString(), context, start, finalEnd);
+                                FileProcessing.sendFile(report.toString(), context, finalStart, finalEnd);
                         }
                     }
 
@@ -166,7 +166,7 @@ public class SendEmail {
         return unit.convert(timeDiff, TimeUnit.MILLISECONDS);
     }
 
-    public static long daysBetween(Calendar startDate, Calendar endDate) {
+    private static long daysBetween(Calendar startDate, Calendar endDate) {
         long end = endDate.getTimeInMillis();
         long start = startDate.getTimeInMillis();
         return TimeUnit.MILLISECONDS.toDays(Math.abs(end - start));

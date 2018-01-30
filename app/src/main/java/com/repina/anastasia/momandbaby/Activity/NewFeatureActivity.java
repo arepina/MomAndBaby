@@ -118,26 +118,26 @@ public class NewFeatureActivity extends AppCompatActivity {
             databaseReference.push().setValue(m);
         }
         if (featureName.equals(features[2])) {
-            Stool s = new Stool(babyId, currentDate, dataValue3.getText().toString(), ratingBar.getNumStars());
+            Stool s = new Stool(babyId, currentDate, dataValue3.getText().toString().replace("\n", " "), ratingBar.getNumStars());
             databaseReference = database.getReference().child(DatabaseNames.STOOL);
             databaseReference.push().setValue(s);
         }
         if (featureName.equals(features[3])) {
             String vaccinationName = vaccinationsData.getSelectedItem().toString();
-            Vaccination v = new Vaccination(babyId, currentDate, vaccinationName, dataValue2.getText().toString());
+            Vaccination v = new Vaccination(babyId, currentDate, vaccinationName, dataValue2.getText().toString().replace("\n", " "));
             databaseReference = database.getReference().child(DatabaseNames.VACCINATION);
             databaseReference.push().setValue(v);
         }
         if (featureName.equals(features[4])) {
-            String symptoms = dataValue2.getText().toString();
-            String pills = dataValue3.getText().toString();
+            String symptoms = dataValue2.getText().toString().replace("\n", " ");
+            String pills = dataValue3.getText().toString().replace("\n", " ");
             double temperature = Double.parseDouble(dataValue1.getText().toString());
             Illness i = new Illness(babyId, currentDate, symptoms, pills, temperature);
             databaseReference = database.getReference().child(DatabaseNames.ILLNESS);
             databaseReference.push().setValue(i);
         }
         if (featureName.equals(features[5])) {
-            Food f = new Food(babyId, currentDate, dataValue3.getText().toString(), ratingBar.getNumStars());
+            Food f = new Food(babyId, currentDate, dataValue3.getText().toString().replace("\n", " "), ratingBar.getNumStars());
             databaseReference = database.getReference().child(DatabaseNames.FOOD);
             databaseReference.push().setValue(f);
         }
@@ -154,7 +154,7 @@ public class NewFeatureActivity extends AppCompatActivity {
             databaseReference.push().setValue(s);
         }
         if (featureName.equals(features[8])) {
-            String desc = dataValue1.getText().toString();
+            String desc = dataValue1.getText().toString().replace("\n", " ");
             Other o = new Other(babyId, currentDate, desc);
             databaseReference = database.getReference().child(DatabaseNames.OTHER);
             databaseReference.push().setValue(o);

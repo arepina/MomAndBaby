@@ -236,8 +236,6 @@ public class GoogleFit implements
             result.addAll(result1);
 
             //todo sleep
-            //datapoint
-            //dp.getValue(Field.FIELD_ACTIVITY).setActivity(FitnessActivities.SLEEP);
 //            type = DataType.TYPE_ACTIVITY_SEGMENT;
 //            agrType = DataType.AGGREGATE_ACTIVITY_SUMMARY;
 //            result1 = periodData(params[0], params[1], type, agrType);
@@ -248,6 +246,7 @@ public class GoogleFit implements
 
         @Override
         protected void onPostExecute(ArrayList<Pair<DataType, Pair<String, Double>>> result) {
+            adapter.clear();
             for (Pair<DataType, Pair<String, Double>> pair : result) {
                 DataType type = pair.first;
                 Pair<String, Double> entry = pair.second;
@@ -315,6 +314,7 @@ public class GoogleFit implements
 
         @Override
         protected void onPostExecute(ArrayList<Pair<DataType, Pair<String, Double>>> result) {
+            adapter.clear();
             for (Pair<DataType, Pair<String, Double>> pair : result) {
                 DataType type = pair.first;
                 Pair<String, Double> entry = pair.second;

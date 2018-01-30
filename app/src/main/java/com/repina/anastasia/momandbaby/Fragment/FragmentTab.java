@@ -359,6 +359,7 @@ public class FragmentTab extends Fragment implements SwipeListView.SwipeListView
         day.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                alert.cancel();
                 SendEmail.createEmail(getContext(), 0, null, null,
                         whoFlag, getActivity(),
                         new GridItemArrayAdapter(getActivity().getApplicationContext(),
@@ -369,6 +370,7 @@ public class FragmentTab extends Fragment implements SwipeListView.SwipeListView
         week.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                alert.cancel();
                 SendEmail.createEmail(getContext(), 1, null, null,
                         whoFlag, getActivity(),
                         new GridItemArrayAdapter(getActivity().getApplicationContext(),
@@ -379,6 +381,7 @@ public class FragmentTab extends Fragment implements SwipeListView.SwipeListView
         month.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                alert.cancel();
                 SendEmail.createEmail(getContext(), 2, null, null,
                         whoFlag, getActivity(),
                         new GridItemArrayAdapter(getActivity().getApplicationContext(),
@@ -408,7 +411,7 @@ public class FragmentTab extends Fragment implements SwipeListView.SwipeListView
                         to.set(Calendar.YEAR, toPicker.getYear());
                         to.set(Calendar.MONTH, toPicker.getMonth());
                         to.set(Calendar.DATE, toPicker.getDayOfMonth());
-                        if(from.after(to))
+                        if(from.after(to) || Calendar.getInstance().before(to))
                             ToastShow.show(getContext(), getString(R.string.incorrect_dates));
                         else {
                             calendarAlert.cancel();
