@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/colorAccent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/main_margin"
+        android:layout_marginRight="@dimen/main_margin"
+        android:layout_marginTop="@dimen/main_margin"
+        android:text="@string/choose_period"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="@dimen/text_size"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/day"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/main_margin"
+        android:background="@android:color/transparent"
+        android:text="@string/for_day"
+        android:textColor="@color/colorTextDark"
+        android:textSize="@dimen/text_size_small" />
+
+    <Button
+        android:id="@+id/week"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/main_margin"
+        android:background="@android:color/transparent"
+        android:text="@string/for_week"
+        android:textColor="@color/colorTextDark"
+        android:textSize="@dimen/text_size_small" />
+
+    <Button
+        android:id="@+id/month"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/main_margin"
+        android:background="@android:color/transparent"
+        android:text="@string/for_month"
+        android:textColor="@color/colorTextDark"
+        android:textSize="@dimen/text_size_small" />
+
+    <Button
+        android:id="@+id/custom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/main_margin"
+        android:background="@android:color/transparent"
+        android:text="@string/for_custom"
+        android:textColor="@color/colorTextDark"
+        android:textSize="@dimen/text_size_small" />
+</LinearLayout>

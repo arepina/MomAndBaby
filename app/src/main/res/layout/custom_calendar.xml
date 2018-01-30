@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorAccent"
+    android:gravity="center_horizontal">
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/from"
+        android:layout_alignTop="@+id/from"
+        android:layout_marginLeft="@dimen/main_margin"
+        android:gravity="center_vertical"
+        android:text="@string/from"
+        android:textColor="@color/colorTextDark" />
+
+    <DatePicker
+        android:id="@+id/from"
+        android:layout_width="@dimen/date_width"
+        android:layout_height="@dimen/date_height"
+        android:layout_marginLeft="@dimen/main_margin"
+        android:layout_marginTop="@dimen/main_margin"
+        android:layout_toEndOf="@+id/textView2"
+        android:calendarViewShown="false"
+        android:datePickerMode="spinner"
+        android:theme="@style/MyDatePickerTheme" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/to"
+        android:layout_alignStart="@+id/textView2"
+        android:layout_alignTop="@+id/to"
+        android:layout_marginTop="@dimen/main_margin"
+        android:gravity="center_vertical"
+        android:text="@string/to"
+        android:textColor="@color/colorTextDark" />
+
+    <DatePicker
+        android:id="@+id/to"
+        android:layout_width="@dimen/date_width"
+        android:layout_height="@dimen/date_height"
+        android:layout_below="@id/from"
+        android:layout_marginTop="@dimen/main_margin"
+        android:layout_toEndOf="@+id/textView3"
+        android:calendarViewShown="false"
+        android:datePickerMode="spinner"
+        android:theme="@style/MyDatePickerTheme" />
+
+    <Button
+        android:id="@+id/submit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/textView3"
+        android:layout_alignRight="@id/to"
+        android:layout_below="@+id/to"
+        android:layout_marginBottom="@dimen/main_margin"
+        android:layout_marginLeft="@dimen/main_margin"
+        android:layout_marginRight="@dimen/main_margin"
+        android:layout_marginTop="@dimen/main_margin"
+        android:background="@color/colorPrimaryDark"
+        android:text="@string/ok"
+        android:textColor="@color/colorText" />
+</RelativeLayout>

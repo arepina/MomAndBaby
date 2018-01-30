@@ -43,7 +43,7 @@ public class VaccinationsActivity extends Activity {
                 ListView listView = (ListView)view.findViewById(R.id.vaccinationsList);
                 String[] dates = getResources().getStringArray(R.array.vaccinationsDates);
                 ArrayAdapter<String> adapter = new ArrayAdapter(VaccinationsActivity.this,
-                        R.layout.custom_textview, dates);
+                        R.layout.custom_dates_textview, dates);
                 listView.setAdapter(adapter);
                 AlertDialog.Builder builder =
                         new AlertDialog.Builder(VaccinationsActivity.this, R.style.AlertDialogCustom).

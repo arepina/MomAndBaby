@@ -29,15 +29,18 @@ import static com.repina.anastasia.momandbaby.Activity.TabsActivity.googleFit;
 
 public class SendEmail {
 
-    public static void createEmail(final Context context, int length, boolean whoFlag, FragmentActivity activity, GridItemArrayAdapter adapter) {
+    public static void createEmail(final Context context, int length, Calendar from, Calendar to,
+                                   boolean whoFlag, FragmentActivity activity,
+                                   GridItemArrayAdapter adapter) {
         // logic depends on the who flag
         if (whoFlag) // baby
             createBabyEmail(context, length);
         else //mom
-            createMomEmail(length, adapter, activity);
+            createMomEmail(length, adapter, activity, from, to);
     }
 
-    private static void createMomEmail(int length, GridItemArrayAdapter adapter, FragmentActivity activity) {
+    private static void createMomEmail(int length, GridItemArrayAdapter adapter,
+                                       FragmentActivity activity, Calendar from, Calendar to) {
         Calendar today = Calendar.getInstance();
         switch (length) {
             case 0: {
@@ -53,6 +56,12 @@ public class SendEmail {
             case 2: {
                 StatsProcessing.getMomStatsForPeriod(googleFit, adapter, today, activity,
                         null, 31, true, false, null); // 1 month
+                break;
+            }
+            case 3: {
+                //todo add from and to from params
+                StatsProcessing.getMomStatsForPeriod(googleFit, adapter, today, activity,
+                        null, 31, true, false, null); // custom
                 break;
             }
         }

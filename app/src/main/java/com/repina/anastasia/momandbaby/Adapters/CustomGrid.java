@@ -42,7 +42,7 @@ public class CustomGrid extends BaseAdapter {
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         if (convertView == null) {
-            grid = inflater.inflate(R.layout.grid_single, parent, false);
+            grid = inflater.inflate(R.layout.custom_grid_single, parent, false);
             TextView textView = (TextView) grid.findViewById(R.id.grid_text);
             ImageView imageView = (ImageView) grid.findViewById(R.id.grid_image);
             textView.setText(web[position]);

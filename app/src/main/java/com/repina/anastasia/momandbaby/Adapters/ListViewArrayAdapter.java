@@ -19,7 +19,7 @@ public class ListViewArrayAdapter extends ArrayAdapter<ListViewItem> {
     private Context context;
 
     public ListViewArrayAdapter(Context context, ArrayList<ListViewItem> resource) {
-        super(context, R.layout.listview_single, resource);
+        super(context, R.layout.custom_vaccination_row, resource);
         this.context = context;
         this.modelItems = resource;
     }
@@ -29,7 +29,7 @@ public class ListViewArrayAdapter extends ArrayAdapter<ListViewItem> {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.listview_single, parent, false);
+            convertView = LayoutInflater.from(context).inflate(R.layout.custom_vaccination_row, parent, false);
             TextView name = (TextView) convertView.findViewById(R.id.textView);
             CheckBox cb = (CheckBox) convertView.findViewById(R.id.checkBox);
             name.setText(modelItems.get(position).getName());

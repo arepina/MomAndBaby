@@ -1,7 +1,6 @@
 package com.repina.anastasia.momandbaby.Fragment;
 
 import android.Manifest;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -17,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -351,30 +351,69 @@ public class FragmentTab extends Fragment implements SwipeListView.SwipeListView
     }
 
     private void showAlertDialog(final boolean whoFlag) {
-        //todo change text color
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.AlertDialogCustom);
-        builder.setTitle(R.string.choose_period);
-        builder.setItems(new CharSequence[]
-                        {getString(R.string.for_day), getString(R.string.for_week), getString(R.string.for_month), getString(R.string.for_custom)},
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case 0:
-                                SendEmail.createEmail(getContext(), 0, whoFlag, getActivity(), new GridItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row));
-                                break;
-                            case 1:
-                                SendEmail.createEmail(getContext(), 1, whoFlag, getActivity(), new GridItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row));
-                                break;
-                            case 2:
-                                SendEmail.createEmail(getContext(), 2, whoFlag, getActivity(), new GridItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row));
-                                break;
-                            case 3:
-                                //todo
-                                SendEmail.createEmail(getContext(), 3, whoFlag, getActivity(), new GridItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row));
-                                break;
-                        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        View view = getActivity().getLayoutInflater().inflate(R.layout.custom_alert_dialog, null);
+        builder.setView(view);
+        Button day = (Button) view.findViewById(R.id.day);
+        day.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SendEmail.createEmail(getContext(), 0, null, null,
+                        whoFlag, getActivity(),
+                        new GridItemArrayAdapter(getActivity().getApplicationContext(),
+                                R.layout.custom_row));
+            }
+        });
+        Button week = (Button) view.findViewById(R.id.week);
+        week.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SendEmail.createEmail(getContext(), 1, null, null,
+                        whoFlag, getActivity(),
+                        new GridItemArrayAdapter(getActivity().getApplicationContext(),
+                                R.layout.custom_row));
+            }
+        });
+        Button month = (Button) view.findViewById(R.id.month);
+        month.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SendEmail.createEmail(getContext(), 2, null, null,
+                        whoFlag, getActivity(),
+                        new GridItemArrayAdapter(getActivity().getApplicationContext(),
+                                R.layout.custom_row));
+            }
+        });
+        Button custom = (Button) view.findViewById(R.id.custom);
+        custom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder calendarBuilder = new AlertDialog.Builder(getContext());
+                final View view = getActivity().getLayoutInflater().inflate(R.layout.custom_calendar, null);
+                calendarBuilder.setView(view);
+                calendarBuilder.create().show();
+                Button submit = (Button) view.findViewById(R.id.submit);
+                submit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        DatePicker fromPicker = (DatePicker) view.findViewById(R.id.from);
+                        Calendar from = Calendar.getInstance();
+                        from.set(Calendar.YEAR, fromPicker.getYear());
+                        from.set(Calendar.MONTH, fromPicker.getMonth());
+                        from.set(Calendar.DATE, fromPicker.getDayOfMonth());
+                        DatePicker toPicker = (DatePicker) view.findViewById(R.id.to);
+                        Calendar to = Calendar.getInstance();
+                        to.set(Calendar.YEAR, toPicker.getYear());
+                        to.set(Calendar.MONTH, toPicker.getMonth());
+                        to.set(Calendar.DATE, toPicker.getDayOfMonth());
+                        SendEmail.createEmail(getContext(), 3, from, to,
+                                whoFlag, getActivity(),
+                                new GridItemArrayAdapter(getActivity().getApplicationContext(),
+                                        R.layout.custom_row));
                     }
                 });
+            }
+        });
 
         builder.create().show();
     }

@@ -120,6 +120,9 @@
     <string name="google_fit_load">Идет загрузка данных из Google Fit. Пожалуйста, подождите!</string>
     <string name="vaccinations_info">О прививках</string>
     <string name="for_custom">Выбрать период</string>
+    <string name="from">С</string>
+    <string name="to">По</string>
+    <string name="ok">OK</string>
 
     <string-array name="parametersBaby">
         <item>Рост</item>
