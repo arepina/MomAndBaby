@@ -97,14 +97,16 @@ public class StatsProcessing {
 
     public static void getMomStatsForPeriod(GoogleFit googleFit, final GridItemArrayAdapter adapter,
                                             final Calendar endDate, FragmentActivity activity,
-                                            ListView listViewMom, int length,
+                                            ListView listViewMom, long length,
                                             boolean isEmail, boolean isChart, String selectedItemName) {
         Calendar startDate = Calendar.getInstance();
         startDate.setTime(endDate.getTime());
         if (length == 7) // - 7 days
             startDate.add(Calendar.WEEK_OF_YEAR, -1);
+        else if(length == 31) // - 1 month
+            startDate.add(Calendar.MONTH, -1);
         else
-            startDate.add(Calendar.MONTH, -1); // - 1 month
+            startDate.add(Calendar.DAY_OF_YEAR, (int) -length); // custom
         googleFit.getPeriodData(startDate, endDate, activity, adapter, listViewMom, isEmail, isChart, selectedItemName);
     }
 }

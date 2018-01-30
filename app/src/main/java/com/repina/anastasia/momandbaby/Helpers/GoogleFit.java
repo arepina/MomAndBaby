@@ -104,7 +104,7 @@ public class GoogleFit implements
         DailyTotalResult result = Fitness.HistoryApi
                 .readDailyTotal(mGoogleApiClient, type)
                 .await(5, TimeUnit.SECONDS);
-        if(result.getTotal() != null)
+        if (result.getTotal() != null)
             return parseData(result.getTotal(), type);
         return new ArrayList<>();
     }
@@ -274,9 +274,9 @@ public class GoogleFit implements
             }
             if (isEmail)
                 TextProcessing.formMomReport(adapter, activity.getApplicationContext(), start, end);
-            if(isChart)
+            if (isChart)
                 ChartActivity.fillChartMom(adapter, activity.getApplicationContext(), selectedItemName);
-            else if(listView != null)
+            else if (listView != null)
                 listView.setAdapter(adapter);
         }
     }
@@ -339,11 +339,10 @@ public class GoogleFit implements
                 GridItem item = new GridItem(R.mipmap.cross, "R.mipmap.cross", activity.getResources().getString(R.string.need_to_sync), null, null);
                 adapter.add(item);
             }
-            if (!isEmail)
-                if(listView != null)
-                    listView.setAdapter(adapter);
-            else
+            if (isEmail)
                 TextProcessing.formMomReport(adapter, activity.getApplicationContext(), start, end);
+            else if (listView != null)
+                listView.setAdapter(adapter);
         }
     }
 }

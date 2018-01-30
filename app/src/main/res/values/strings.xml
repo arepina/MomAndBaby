@@ -123,6 +123,7 @@
     <string name="from">С</string>
     <string name="to">По</string>
     <string name="ok">OK</string>
+    <string name="incorrect_dates">Неверно выбран диапазон дат. Попробуйте еще раз!</string>
 
     <string-array name="parametersBaby">
         <item>Рост</item>

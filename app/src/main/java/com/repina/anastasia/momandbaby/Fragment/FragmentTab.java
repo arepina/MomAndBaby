@@ -351,9 +351,10 @@ public class FragmentTab extends Fragment implements SwipeListView.SwipeListView
     }
 
     private void showAlertDialog(final boolean whoFlag) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         View view = getActivity().getLayoutInflater().inflate(R.layout.custom_alert_dialog, null);
         builder.setView(view);
+        final AlertDialog alert = builder.create();
         Button day = (Button) view.findViewById(R.id.day);
         day.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -391,7 +392,8 @@ public class FragmentTab extends Fragment implements SwipeListView.SwipeListView
                 AlertDialog.Builder calendarBuilder = new AlertDialog.Builder(getContext());
                 final View view = getActivity().getLayoutInflater().inflate(R.layout.custom_calendar, null);
                 calendarBuilder.setView(view);
-                calendarBuilder.create().show();
+                final AlertDialog calendarAlert = calendarBuilder.create();
+                calendarAlert.show();
                 Button submit = (Button) view.findViewById(R.id.submit);
                 submit.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -406,16 +408,21 @@ public class FragmentTab extends Fragment implements SwipeListView.SwipeListView
                         to.set(Calendar.YEAR, toPicker.getYear());
                         to.set(Calendar.MONTH, toPicker.getMonth());
                         to.set(Calendar.DATE, toPicker.getDayOfMonth());
-                        SendEmail.createEmail(getContext(), 3, from, to,
-                                whoFlag, getActivity(),
-                                new GridItemArrayAdapter(getActivity().getApplicationContext(),
-                                        R.layout.custom_row));
+                        if(from.after(to))
+                            ToastShow.show(getContext(), getString(R.string.incorrect_dates));
+                        else {
+                            calendarAlert.cancel();
+                            alert.cancel();
+                            SendEmail.createEmail(getContext(), 3, from, to,
+                                    whoFlag, getActivity(),
+                                    new GridItemArrayAdapter(getActivity().getApplicationContext(),
+                                            R.layout.custom_row));
+                        }
                     }
                 });
             }
         });
-
-        builder.create().show();
+        alert.show();
     }
 
     @Override
