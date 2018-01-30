@@ -1,6 +1,5 @@
 package com.repina.anastasia.momandbaby.Helpers;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,12 +9,10 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.util.Pair;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.fitness.Fitness;
-import com.google.android.gms.fitness.FitnessActivities;
 import com.google.android.gms.fitness.data.Bucket;
 import com.google.android.gms.fitness.data.DataPoint;
 import com.google.android.gms.fitness.data.DataSet;
@@ -30,10 +27,10 @@ import com.repina.anastasia.momandbaby.Adapters.GridItemArrayAdapter;
 import com.repina.anastasia.momandbaby.Helpers.Processing.TextProcessing;
 import com.repina.anastasia.momandbaby.R;
 
+import java.lang.ref.WeakReference;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -43,10 +40,6 @@ public class GoogleFit implements
 
     private static GoogleApiClient mGoogleApiClient;
     private static GridItemArrayAdapter adapter;
-    @SuppressLint("StaticFieldLeak")
-    private static ListView listView;
-    @SuppressLint("StaticFieldLeak")
-    private static FragmentActivity activity;
 
     private static String start;
     private static String end;
@@ -85,9 +78,7 @@ public class GoogleFit implements
         start = FormattedDate.getFormattedDateWithoutTime(startDate);
         end = FormattedDate.getFormattedDateWithoutTime(endDate);
         GoogleFit.adapter = adapter;
-        GoogleFit.listView = listView;
-        GoogleFit.activity = activity;
-        new ViewPeriodTask(isEmail, isChart, selectedItemName).execute(startDate, endDate);
+        new ViewPeriodTask(isEmail, isChart, selectedItemName, activity, listView).execute(startDate, endDate);
     }
 
     public void getOneDayData(Calendar date, FragmentActivity activity, GridItemArrayAdapter adapter,
@@ -95,21 +86,23 @@ public class GoogleFit implements
         start = FormattedDate.getFormattedDateWithoutTime(date);
         end = FormattedDate.getFormattedDateWithoutTime(date);
         GoogleFit.adapter = adapter;
-        GoogleFit.listView = listView;
-        GoogleFit.activity = activity;
-        new ViewTodayTask(isEmail).execute(date);
+        new ViewTodayTask(isEmail, activity, listView).execute(date);
     }
 
-    private static ArrayList<Pair<DataType, Pair<String, Double>>> dataForToday(DataType type) {
+    private static ArrayList<Pair<DataType, Pair<String, Double>>> dataForToday(DataType type, FragmentActivity activity) {
         DailyTotalResult result = Fitness.HistoryApi
                 .readDailyTotal(mGoogleApiClient, type)
                 .await(5, TimeUnit.SECONDS);
         if (result.getTotal() != null)
-            return parseData(result.getTotal(), type);
+            return parseData(result.getTotal(), type, activity);
         return new ArrayList<>();
     }
 
-    private static ArrayList<Pair<DataType, Pair<String, Double>>> periodData(Calendar startDate, Calendar endDate, DataType type, DataType agrType) {
+    private static ArrayList<Pair<DataType, Pair<String, Double>>> periodData(Calendar startDate,
+                                                                              Calendar endDate,
+                                                                              DataType type,
+                                                                              DataType agrType,
+                                                                              FragmentActivity activity) {
         Calendar startDateClone = Calendar.getInstance();
         startDateClone.setTime(startDate.getTime());
 
@@ -136,7 +129,7 @@ public class GoogleFit implements
                 List<DataSet> dataSets = bucket.getDataSets();
                 for (DataSet dataSet : dataSets) {
                     startDateClone.add(Calendar.DAY_OF_YEAR, 1);
-                    ArrayList<Pair<DataType, Pair<String, Double>>> dataForADay = parseData(dataSet, type);
+                    ArrayList<Pair<DataType, Pair<String, Double>>> dataForADay = parseData(dataSet, type, activity);
                     sumData.addAll(dataForADay);
                 }
             }
@@ -144,7 +137,7 @@ public class GoogleFit implements
         //Used for non-aggregated data
         else if (dataReadResult.getDataSets().size() > 0) {
             for (DataSet dataSet : dataReadResult.getDataSets()) {
-                ArrayList<Pair<DataType, Pair<String, Double>>> dataForADay = parseData(dataSet, type);
+                ArrayList<Pair<DataType, Pair<String, Double>>> dataForADay = parseData(dataSet, type, activity);
                 sumData.addAll(dataForADay);
             }
         }
@@ -152,7 +145,7 @@ public class GoogleFit implements
         return sumData;
     }
 
-    private static ArrayList<Pair<DataType, Pair<String, Double>>> parseData(DataSet dataSet, DataType type) {
+    private static ArrayList<Pair<DataType, Pair<String, Double>>> parseData(DataSet dataSet, DataType type, FragmentActivity activity) {
         DateFormat dateFormat = DateFormat.getDateInstance();
         DateFormat timeFormat = DateFormat.getTimeInstance();
         ArrayList<Pair<DataType, Pair<String, Double>>> parsedData = new ArrayList<>();
@@ -208,37 +201,43 @@ public class GoogleFit implements
         private boolean isEmail;
         private boolean isChart;
         private String selectedItemName;
+        private WeakReference<FragmentActivity> activityWeakReference;
+        private WeakReference<ListView> listViewWeakReference;
 
-        ViewPeriodTask(boolean isEmail, boolean isChart, String selectedItemName) {
+        ViewPeriodTask(boolean isEmail, boolean isChart, String selectedItemName, FragmentActivity activity, ListView listView) {
             this.isEmail = isEmail;
             this.isChart = isChart;
             this.selectedItemName = selectedItemName;
+            this.activityWeakReference = new WeakReference<>(activity);
+            this.listViewWeakReference = new WeakReference<>(listView);
         }
 
         protected ArrayList<Pair<DataType, Pair<String, Double>>> doInBackground(Calendar... params) {
             DataType type = DataType.TYPE_STEP_COUNT_DELTA;
             DataType agrType = DataType.AGGREGATE_STEP_COUNT_DELTA;
-            ArrayList<Pair<DataType, Pair<String, Double>>> result = periodData(params[0], params[1], type, agrType);
+            ArrayList<Pair<DataType, Pair<String, Double>>> result = periodData(params[0], params[1],
+                    type, agrType, activityWeakReference.get());
 
             type = DataType.TYPE_CALORIES_EXPENDED;
             agrType = DataType.AGGREGATE_CALORIES_EXPENDED;
-            ArrayList<Pair<DataType, Pair<String, Double>>> result1 = periodData(params[0], params[1], type, agrType);
+            ArrayList<Pair<DataType, Pair<String, Double>>> result1 = periodData(params[0], params[1],
+                    type, agrType, activityWeakReference.get());
             result.addAll(result1);
 
             type = DataType.TYPE_WEIGHT;
             agrType = DataType.AGGREGATE_WEIGHT_SUMMARY;
-            result1 = periodData(params[0], params[1], type, agrType);
+            result1 = periodData(params[0], params[1], type, agrType, activityWeakReference.get());
             result.addAll(result1);
 
             type = DataType.TYPE_NUTRITION;
             agrType = DataType.AGGREGATE_NUTRITION_SUMMARY;
-            result1 = periodData(params[0], params[1], type, agrType);
+            result1 = periodData(params[0], params[1], type, agrType, activityWeakReference.get());
             result.addAll(result1);
 
             //todo sleep
 //            type = DataType.TYPE_ACTIVITY_SEGMENT;
 //            agrType = DataType.AGGREGATE_ACTIVITY_SUMMARY;
-//            result1 = periodData(params[0], params[1], type, agrType);
+//            result1 = periodData(params[0], params[1], type, agrType, activityWeakReference.get());
 //            result.addAll(result1);
 
             return result;
@@ -268,45 +267,49 @@ public class GoogleFit implements
             }
             if (adapter.getCount() == 0)//no data for today
             {
-                GridItem item = new GridItem(R.mipmap.cross, "R.mipmap.cross", activity.getResources().getString(R.string.need_to_sync), null, null);
+                GridItem item = new GridItem(R.mipmap.cross, "R.mipmap.cross", activityWeakReference.get().getResources().getString(R.string.need_to_sync), null, null);
                 adapter.add(item);
             }
             if (isEmail)
-                TextProcessing.formMomReport(adapter, activity.getApplicationContext(), start, end);
+                TextProcessing.formMomReport(adapter, activityWeakReference.get().getApplicationContext(), start, end);
             if (isChart)
-                ChartActivity.fillChartMom(adapter, activity.getApplicationContext(), selectedItemName);
-            else if (listView != null)
-                listView.setAdapter(adapter);
+                ChartActivity.fillChartMom(adapter, activityWeakReference.get().getApplicationContext(), selectedItemName);
+            else if (listViewWeakReference.get() != null)
+                listViewWeakReference.get().setAdapter(adapter);
         }
     }
 
     private static class ViewTodayTask extends AsyncTask<Calendar, ArrayList<Pair<DataType, Pair<String, Double>>>, ArrayList<Pair<DataType, Pair<String, Double>>>> {
 
         private boolean isEmail;
+        private WeakReference<FragmentActivity> activityWeakReference;
+        private WeakReference<ListView> listViewWeakReference;
 
-        ViewTodayTask(boolean isEmail) {
+        ViewTodayTask(boolean isEmail, FragmentActivity activity, ListView listView) {
             this.isEmail = isEmail;
+            this.activityWeakReference = new WeakReference<>(activity);
+            this.listViewWeakReference = new WeakReference<>(listView);
         }
 
         protected ArrayList<Pair<DataType, Pair<String, Double>>> doInBackground(Calendar... params) {
             DataType type = DataType.TYPE_STEP_COUNT_DELTA;
-            ArrayList<Pair<DataType, Pair<String, Double>>> result = dataForToday(type);
+            ArrayList<Pair<DataType, Pair<String, Double>>> result = dataForToday(type, activityWeakReference.get());
 
             type = DataType.TYPE_CALORIES_EXPENDED;
-            ArrayList<Pair<DataType, Pair<String, Double>>> result1 = dataForToday(type);
+            ArrayList<Pair<DataType, Pair<String, Double>>> result1 = dataForToday(type, activityWeakReference.get());
             result.addAll(result1);
 
             type = DataType.TYPE_WEIGHT;
-            result1 = dataForToday(type);
+            result1 = dataForToday(type, activityWeakReference.get());
             result.addAll(result1);
 
             type = DataType.TYPE_NUTRITION;
-            result1 = dataForToday(type);
+            result1 = dataForToday(type, activityWeakReference.get());
             result.addAll(result1);
 
             //todo sleep
 //            type = DataType.TYPE_ACTIVITY_SEGMENT;
-//            result1 = dataForToday(type);
+//            result1 = dataForToday(type, activityWeakReference.get());
 //            result.addAll(result1);
 
             return result;
@@ -336,13 +339,13 @@ public class GoogleFit implements
             }
             if (adapter.getCount() == 0)//no data for today
             {
-                GridItem item = new GridItem(R.mipmap.cross, "R.mipmap.cross", activity.getResources().getString(R.string.need_to_sync), null, null);
+                GridItem item = new GridItem(R.mipmap.cross, "R.mipmap.cross", activityWeakReference.get().getResources().getString(R.string.need_to_sync), null, null);
                 adapter.add(item);
             }
             if (isEmail)
-                TextProcessing.formMomReport(adapter, activity.getApplicationContext(), start, end);
-            else if (listView != null)
-                listView.setAdapter(adapter);
+                TextProcessing.formMomReport(adapter, activityWeakReference.get().getApplicationContext(), start, end);
+            else if (listViewWeakReference.get() != null)
+                listViewWeakReference.get().setAdapter(adapter);
         }
     }
 }
