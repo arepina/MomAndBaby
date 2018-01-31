@@ -108,30 +108,7 @@ public class GoogleFit implements
                 Log.e("History", "\tEnd: " + endDate + " " + endTime);
                 double value = 0;
                 if (type.equals(DataType.TYPE_ACTIVITY_SEGMENT)) {
-//                    dp.getValue(Field.FIELD_ACTIVITY).setActivity(FitnessActivities.SLEEP);
-//                    String activity = dp.getValue(Field.FIELD_ACTIVITY).asActivity();
-//                    value = dp.getValue(Field.FIELD_DURATION).asInt();
-//
-//                    Calendar cal = Calendar.getInstance();
-//                    Date now = new Date();
-//                    cal.setTime(now);
-//                    long endTime1 = cal.getTimeInMillis();
-//                    cal.add(Calendar.WEEK_OF_YEAR, -1);
-//                    long startTime1 = cal.getTimeInMillis();
-//                    final SessionReadRequest.Builder sessionBuilder = new SessionReadRequest.Builder()
-//
-//                            .setTimeInterval(startTime1, endTime1, TimeUnit.MILLISECONDS)
-//                            .read(DataType.TYPE_ACTIVITY_SEGMENT)
-//                            .readSessionsFromAllApps()
-//                            .enableServerQueries();
-//
-//                    final SessionReadRequest readRequest = sessionBuilder.build();
-//
-//                    SessionReadResult sessionReadResult =
-//                            SessionsApi.readSession(mGoogleApiClient, readRequest).await(120, TimeUnit.SECONDS);
-//
-//                    Status status = sessionReadResult.getStatus();
-
+                    //todo sleep
                     Log.e("History", "\tField: " + activity + " Value: " + value);
                 } else {
                     Field field = dp.getDataType().getFields().get(0);
