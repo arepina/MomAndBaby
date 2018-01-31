@@ -8,7 +8,7 @@ import android.os.Environment;
 import android.util.Log;
 
 import com.repina.anastasia.momandbaby.Helpers.SharedConstants;
-import com.repina.anastasia.momandbaby.Helpers.ToastShow;
+import com.repina.anastasia.momandbaby.Helpers.NotificationsShow;
 import com.repina.anastasia.momandbaby.R;
 
 import java.io.File;
@@ -35,7 +35,7 @@ public class FileProcessing {
                 i.putExtra(Intent.EXTRA_STREAM, path);
                 context.startActivity(Intent.createChooser(i, context.getString(R.string.report_sending)).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             } else
-                ToastShow.show(context, context.getString(R.string.report_error));
+                NotificationsShow.showToast(context, context.getString(R.string.report_error));
         } catch (IOException e) {
             e.printStackTrace();
         }

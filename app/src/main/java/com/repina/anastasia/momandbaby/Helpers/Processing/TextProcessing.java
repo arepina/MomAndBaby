@@ -6,7 +6,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.repina.anastasia.momandbaby.Adapters.GridItem;
 import com.repina.anastasia.momandbaby.Adapters.GridItemArrayAdapter;
 import com.repina.anastasia.momandbaby.DataBase.DatabaseNames;
-import com.repina.anastasia.momandbaby.Helpers.ToastShow;
+import com.repina.anastasia.momandbaby.Helpers.NotificationsShow;
 import com.repina.anastasia.momandbaby.R;
 
 import java.util.ArrayList;
@@ -45,7 +45,7 @@ public class TextProcessing {
             report.append(ImageProcessing.imageToString(it.getItemImgName())).append(" ").append(it.getItemDate()).append(" ").append(it.getItemDesc()).append("\n");
         }
         if (report.length() == 0)
-            ToastShow.show(context, context.getString(R.string.no_data));
+            NotificationsShow.showToast(context, context.getString(R.string.no_data));
         else
             FileProcessing.sendFile(report.toString(), context, start, end);
     }

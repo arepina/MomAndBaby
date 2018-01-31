@@ -10,7 +10,7 @@ import android.widget.GridView;
 
 import com.repina.anastasia.momandbaby.Connectors.ConnectionDetector;
 import com.repina.anastasia.momandbaby.Adapters.CustomGrid;
-import com.repina.anastasia.momandbaby.Helpers.ToastShow;
+import com.repina.anastasia.momandbaby.Helpers.NotificationsShow;
 import com.repina.anastasia.momandbaby.R;
 
 public class ChooseFeatureActivity extends Activity {
@@ -60,7 +60,7 @@ public class ChooseFeatureActivity extends Activity {
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 if(features[position].equals(getString(R.string.google_fit))) {
-                    ToastShow.show(v.getContext(), getString(R.string.google_fit_notification));
+                    NotificationsShow.showToast(v.getContext(), getString(R.string.google_fit_notification));
                     finish();//back to main screen
                 }
                 else if (ConnectionDetector.isConnected(getApplicationContext())) {

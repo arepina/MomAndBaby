@@ -25,7 +25,6 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import static android.content.Context.MODE_PRIVATE;
-import static com.repina.anastasia.momandbaby.Activity.TabsActivity.googleFit;
 
 public class SendEmail {
 
@@ -44,27 +43,27 @@ public class SendEmail {
         Calendar today = Calendar.getInstance();
         switch (length) {
             case 0: {
-                StatsProcessing.getMomStatsForOneDay(googleFit, adapter, today, activity,
+                StatsProcessing.getMomStatsForOneDay(adapter, today, activity,
                         null, true); // 1 day
                 break;
             }
             case 1: {
-                StatsProcessing.getMomStatsForPeriod(googleFit, adapter, today, activity,
+                StatsProcessing.getMomStatsForPeriod(adapter, today, activity,
                         null, 7, true, false, null); // 1 week
                 break;
             }
             case 2: {
-                StatsProcessing.getMomStatsForPeriod(googleFit, adapter, today, activity,
+                StatsProcessing.getMomStatsForPeriod(adapter, today, activity,
                         null, 31, true, false, null); // 1 month
                 break;
             }
             case 3: {
                 long days = daysBetween(from, to);
                 if (days == 0)
-                    StatsProcessing.getMomStatsForOneDay(googleFit, adapter, from, activity,
+                    StatsProcessing.getMomStatsForOneDay(adapter, from, activity,
                             null, true); // 1 day
                 else
-                    StatsProcessing.getMomStatsForPeriod(googleFit, adapter, to, activity,
+                    StatsProcessing.getMomStatsForPeriod(adapter, to, activity,
                             null, days, true, false, null); // custom
                 break;
             }
@@ -149,7 +148,7 @@ public class SendEmail {
                                 }
                             }
                             if (report.length() == 0)
-                                ToastShow.show(context, context.getString(R.string.no_data));
+                                NotificationsShow.showToast(context, context.getString(R.string.no_data));
                             else
                                 FileProcessing.sendFile(report.toString(), context, finalStart, finalEnd);
                         }

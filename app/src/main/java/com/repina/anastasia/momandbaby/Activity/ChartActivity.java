@@ -27,7 +27,7 @@ import com.repina.anastasia.momandbaby.Adapters.GridItemArrayAdapter;
 import com.repina.anastasia.momandbaby.Helpers.FormattedDate;
 import com.repina.anastasia.momandbaby.Helpers.SharedConstants;
 import com.repina.anastasia.momandbaby.Helpers.Processing.StatsProcessing;
-import com.repina.anastasia.momandbaby.Helpers.ToastShow;
+import com.repina.anastasia.momandbaby.Helpers.NotificationsShow;
 import com.repina.anastasia.momandbaby.Connectors.ConnectionDetector;
 import com.repina.anastasia.momandbaby.Connectors.FirebaseConnection;
 import com.repina.anastasia.momandbaby.DataBase.DatabaseNames;
@@ -46,7 +46,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
-import static com.repina.anastasia.momandbaby.Activity.TabsActivity.googleFit;
 
 
 public class ChartActivity extends AppCompatActivity {
@@ -142,14 +141,14 @@ public class ChartActivity extends AppCompatActivity {
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-                        ToastShow.show(getApplicationContext(), R.string.unpredicted_error);
+                        NotificationsShow.showToast(getApplicationContext(), R.string.unpredicted_error);
                     }
                 });
     }
 
     private void getValuesFromGoogleFit(String selectedItemName) {
         makeInvisible();
-        StatsProcessing.getMomStatsForPeriod(googleFit,
+        StatsProcessing.getMomStatsForPeriod(
                 new GridItemArrayAdapter(getApplicationContext(), R.layout.custom_row),
                 Calendar.getInstance(), this, null,
                 31, false, true, selectedItemName); // ask for 1 month data
@@ -349,7 +348,7 @@ public class ChartActivity extends AppCompatActivity {
         entries = new ArrayList<>();
         labels = new ArrayList<>();
         if (adapter.getCount() == 1 && adapter.getItem(0).getItemDate() == null) {
-            ToastShow.show(context, adapter.getItem(0).getItemDesc());
+            NotificationsShow.showToast(context, adapter.getItem(0).getItemDesc());
             LineData lineData = new LineData(labels, dataSets);
             chart.setData(lineData);
             makeVisible();
@@ -406,10 +405,6 @@ public class ChartActivity extends AppCompatActivity {
 
     private static void makeVisible()
     {
-        ProgressBar progressBar = (ProgressBar) activity.findViewById(R.id.progressBar);
-        progressBar.setVisibility(ProgressBar.GONE);
-        TextView textView = (TextView) activity.findViewById(R.id.loadText);
-        textView.setVisibility(View.GONE);
         Spinner s = (Spinner)activity.findViewById(R.id.spinner);
         s.setVisibility(View.VISIBLE);
         chart.setVisibility(View.VISIBLE);
@@ -417,10 +412,6 @@ public class ChartActivity extends AppCompatActivity {
 
     private static void makeInvisible()
     {
-        ProgressBar progressBar = (ProgressBar) activity.findViewById(R.id.progressBar);
-        progressBar.setVisibility(ProgressBar.VISIBLE);
-        TextView textView = (TextView) activity.findViewById(R.id.loadText);
-        textView.setVisibility(View.VISIBLE);
         Spinner s = (Spinner)activity.findViewById(R.id.spinner);
         s.setVisibility(View.GONE);
         chart.setVisibility(View.GONE);

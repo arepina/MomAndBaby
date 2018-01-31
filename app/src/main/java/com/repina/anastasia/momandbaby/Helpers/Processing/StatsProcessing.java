@@ -14,8 +14,9 @@ import com.repina.anastasia.momandbaby.Adapters.GridItem;
 import com.repina.anastasia.momandbaby.Adapters.GridItemArrayAdapter;
 import com.repina.anastasia.momandbaby.Connectors.FirebaseConnection;
 import com.repina.anastasia.momandbaby.DataBase.DatabaseNames;
+import com.repina.anastasia.momandbaby.Async.ViewPeriodTask;
+import com.repina.anastasia.momandbaby.Async.ViewTodayTask;
 import com.repina.anastasia.momandbaby.Helpers.FormattedDate;
-import com.repina.anastasia.momandbaby.Helpers.GoogleFit;
 import com.repina.anastasia.momandbaby.Helpers.SharedConstants;
 import com.repina.anastasia.momandbaby.R;
 
@@ -76,12 +77,12 @@ public class StatsProcessing {
                 });
     }
 
-    public static void getMomStatsForOneDay(GoogleFit googleFit, final GridItemArrayAdapter adapter, final Calendar dateAndTime, FragmentActivity activity, ListView listViewMom, boolean isEmail) {
+    public static void getMomStatsForOneDay(final GridItemArrayAdapter adapter, final Calendar dateAndTime, FragmentActivity activity, ListView listViewMom, boolean isEmail) {
         Calendar today = Calendar.getInstance();
         Calendar dateClone = Calendar.getInstance();
         dateClone.setTime(dateAndTime.getTime());
         if (today.get(Calendar.DAY_OF_YEAR) == (dateClone.get(Calendar.DAY_OF_YEAR)) && today.get(Calendar.YEAR) == (dateClone.get(Calendar.YEAR)))
-            googleFit.getOneDayData(dateClone, adapter, listViewMom, isEmail);
+            getOneDayData(dateClone, adapter, listViewMom, isEmail, activity);
         else { // not today
             dateClone.set(Calendar.HOUR_OF_DAY, 0);
             dateClone.set(Calendar.MINUTE, 0);
@@ -91,11 +92,11 @@ public class StatsProcessing {
             extra.add(Calendar.MINUTE, 1439);
             extra.add(Calendar.SECOND, 59);
             //one second is not in the review
-            googleFit.getPeriodData(dateClone, extra, adapter, listViewMom, isEmail, false, null);
+            getPeriodData(dateClone, extra, adapter, listViewMom, isEmail, false, null, activity);
         }
     }
 
-    public static void getMomStatsForPeriod(GoogleFit googleFit, final GridItemArrayAdapter adapter,
+    public static void getMomStatsForPeriod(final GridItemArrayAdapter adapter,
                                             final Calendar endDate, FragmentActivity activity,
                                             ListView listViewMom, long length,
                                             boolean isEmail, boolean isChart, String selectedItemName) {
@@ -107,6 +108,21 @@ public class StatsProcessing {
             startDate.add(Calendar.MONTH, -1);
         else
             startDate.add(Calendar.DAY_OF_YEAR, (int) -length); // custom
-        googleFit.getPeriodData(startDate, endDate, adapter, listViewMom, isEmail, isChart, selectedItemName);
+        getPeriodData(startDate, endDate, adapter, listViewMom, isEmail, isChart, selectedItemName, activity);
+    }
+
+    private static void getPeriodData(Calendar startDate, Calendar endDate,
+                                      GridItemArrayAdapter adapter, ListView listView,
+                                      boolean isEmail, boolean isChart, String selectedItemName, FragmentActivity activity) {
+        String start = FormattedDate.getFormattedDateWithoutTime(startDate);
+        String end = FormattedDate.getFormattedDateWithoutTime(endDate);
+        new ViewPeriodTask(isEmail, isChart, selectedItemName, activity, listView, adapter, start, end).execute(startDate, endDate);
+    }
+
+    private static void getOneDayData(Calendar date, GridItemArrayAdapter adapter,
+                               ListView listView, boolean isEmail, FragmentActivity activity) {
+        String start = FormattedDate.getFormattedDateWithoutTime(date);
+        String end = FormattedDate.getFormattedDateWithoutTime(date);
+        new ViewTodayTask(isEmail, activity, listView, adapter, start, end).execute(date);
     }
 }

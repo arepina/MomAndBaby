@@ -15,7 +15,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.repina.anastasia.momandbaby.Connectors.ConnectionDetector;
-import com.repina.anastasia.momandbaby.Helpers.ToastShow;
+import com.repina.anastasia.momandbaby.Helpers.NotificationsShow;
 import com.repina.anastasia.momandbaby.DataBase.DatabaseNames;
 import com.repina.anastasia.momandbaby.DataBase.User;
 import com.repina.anastasia.momandbaby.Connectors.FirebaseConnection;
@@ -48,13 +48,13 @@ public class RegisterActivity extends AppCompatActivity {
                                 if(password.equals(passwordAgain))
                                     isEmailAlreadyInUse(email, password, name);
                                 else
-                                    ToastShow.show(getApplicationContext(), R.string.different_passwords);
+                                    NotificationsShow.showToast(getApplicationContext(), R.string.different_passwords);
                             else
-                                ToastShow.show(getApplicationContext(), R.string.invalid_name);
+                                NotificationsShow.showToast(getApplicationContext(), R.string.invalid_name);
                         } else
-                            ToastShow.show(getApplicationContext(), R.string.invalid_password);
+                            NotificationsShow.showToast(getApplicationContext(), R.string.invalid_password);
                     } else
-                        ToastShow.show(getApplicationContext(), R.string.invalid_email);
+                        NotificationsShow.showToast(getApplicationContext(), R.string.invalid_email);
                 }
             }
         });
@@ -94,12 +94,12 @@ public class RegisterActivity extends AppCompatActivity {
                         if (!dataSnapshot.exists())
                             createNewAccount(email, password, name);
                         else
-                            ToastShow.show(getApplicationContext(), R.string.email_already_used);
+                            NotificationsShow.showToast(getApplicationContext(), R.string.email_already_used);
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-                        ToastShow.show(getApplicationContext(), R.string.unpredicted_error);
+                        NotificationsShow.showToast(getApplicationContext(), R.string.unpredicted_error);
                     }
                 });
     }

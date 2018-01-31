@@ -22,7 +22,7 @@ import com.repina.anastasia.momandbaby.Connectors.FirebaseConnection;
 import com.repina.anastasia.momandbaby.DataBase.DatabaseNames;
 import com.repina.anastasia.momandbaby.DataBase.Vaccination;
 import com.repina.anastasia.momandbaby.Helpers.SharedConstants;
-import com.repina.anastasia.momandbaby.Helpers.ToastShow;
+import com.repina.anastasia.momandbaby.Helpers.NotificationsShow;
 import com.repina.anastasia.momandbaby.R;
 
 import java.util.ArrayList;
@@ -96,7 +96,7 @@ public class VaccinationsActivity extends Activity {
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-                        ToastShow.show(getApplicationContext(), R.string.unpredicted_error);
+                        NotificationsShow.showToast(getApplicationContext(), R.string.unpredicted_error);
                     }
                 });
     }

@@ -15,7 +15,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.repina.anastasia.momandbaby.Connectors.ConnectionDetector;
-import com.repina.anastasia.momandbaby.Helpers.ToastShow;
+import com.repina.anastasia.momandbaby.Helpers.NotificationsShow;
 import com.repina.anastasia.momandbaby.DataBase.Baby;
 import com.repina.anastasia.momandbaby.DataBase.DatabaseNames;
 import com.repina.anastasia.momandbaby.DataBase.User;
@@ -39,7 +39,7 @@ public class SignupActivity extends AppCompatActivity {
                     final String email = ((EditText) findViewById(R.id.input_email)).getText().toString();
                     final String password = ((EditText) findViewById(R.id.input_password)).getText().toString();
                     if (email.length() == 0 || password.length() == 0) {//email and password should be entered
-                        ToastShow.show(getApplicationContext(), R.string.enter_email_and_password);
+                        NotificationsShow.showToast(getApplicationContext(), R.string.enter_email_and_password);
                         return;
                     }
 
@@ -69,14 +69,14 @@ public class SignupActivity extends AppCompatActivity {
 
                                             checkBabyIdInFirebase(momId);//try to find the baby if DB if we have an already existing account
                                         } else
-                                            ToastShow.show(getApplicationContext(), R.string.wrong_password_or_login);
+                                            NotificationsShow.showToast(getApplicationContext(), R.string.wrong_password_or_login);
                                     } else
-                                        ToastShow.show(getApplicationContext(), R.string.wrong_password_or_login);
+                                        NotificationsShow.showToast(getApplicationContext(), R.string.wrong_password_or_login);
                                 }
 
                                 @Override
                                 public void onCancelled(DatabaseError databaseError) {
-                                    ToastShow.show(getApplicationContext(), R.string.unpredicted_error);
+                                    NotificationsShow.showToast(getApplicationContext(), R.string.unpredicted_error);
                                 }
                             });
                 }
@@ -124,7 +124,7 @@ public class SignupActivity extends AppCompatActivity {
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-                        ToastShow.show(getApplicationContext(), R.string.unpredicted_error);
+                        NotificationsShow.showToast(getApplicationContext(), R.string.unpredicted_error);
                     }
                 });
     }

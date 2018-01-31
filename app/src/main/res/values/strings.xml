@@ -124,6 +124,7 @@
     <string name="to">По</string>
     <string name="ok">OK</string>
     <string name="incorrect_dates">Неверно выбран диапазон дат. Попробуйте еще раз!</string>
+    <string name="data_load_stop">Загрузка данных была прервана</string>
 
     <string-array name="parametersBaby">
         <item>Рост</item>
