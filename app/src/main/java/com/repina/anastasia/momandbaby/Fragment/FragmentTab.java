@@ -54,7 +54,6 @@ public class FragmentTab extends Fragment implements SwipeListView.SwipeListView
     private ListView listViewMom;
 
     private final int BABY_NEW_FEATURE = 0;
-    private final int MOM_NEW_FEATURE = 1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

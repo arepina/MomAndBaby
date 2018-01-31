@@ -10,6 +10,7 @@ import android.util.Log;
 import android.util.Pair;
 import android.widget.ListView;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.fitness.Fitness;
@@ -20,7 +21,9 @@ import com.google.android.gms.fitness.data.DataType;
 import com.google.android.gms.fitness.data.Field;
 import com.google.android.gms.fitness.request.DataReadRequest;
 import com.google.android.gms.fitness.result.DailyTotalResult;
+import com.google.android.gms.fitness.result.DataReadResponse;
 import com.google.android.gms.fitness.result.DataReadResult;
+import com.google.android.gms.tasks.Task;
 import com.repina.anastasia.momandbaby.Activity.ChartActivity;
 import com.repina.anastasia.momandbaby.Adapters.GridItem;
 import com.repina.anastasia.momandbaby.Adapters.GridItemArrayAdapter;
@@ -44,8 +47,10 @@ public class GoogleFit implements
     private static String start;
     private static String end;
 
+    private FragmentActivity fragmentActivity;
+
     public GoogleFit(Activity activity) {
-        FragmentActivity fragmentActivity = (FragmentActivity) activity;
+        fragmentActivity = (FragmentActivity) activity;
         mGoogleApiClient = new GoogleApiClient.Builder(activity.getApplicationContext())
                 .addApi(Fitness.HISTORY_API)
                 .addApi(Fitness.SESSIONS_API)
@@ -72,77 +77,21 @@ public class GoogleFit implements
         Log.e("HistoryAPI", "onConnectionFailed");
     }
 
-    public void getPeriodData(Calendar startDate, Calendar endDate, FragmentActivity activity,
+    public void getPeriodData(Calendar startDate, Calendar endDate,
                               GridItemArrayAdapter adapter, ListView listView,
                               boolean isEmail, boolean isChart, String selectedItemName) {
         start = FormattedDate.getFormattedDateWithoutTime(startDate);
         end = FormattedDate.getFormattedDateWithoutTime(endDate);
         GoogleFit.adapter = adapter;
-        new ViewPeriodTask(isEmail, isChart, selectedItemName, activity, listView).execute(startDate, endDate);
+        new ViewPeriodTask(isEmail, isChart, selectedItemName, fragmentActivity, listView).execute(startDate, endDate);
     }
 
-    public void getOneDayData(Calendar date, FragmentActivity activity, GridItemArrayAdapter adapter,
+    public void getOneDayData(Calendar date, GridItemArrayAdapter adapter,
                               ListView listView, boolean isEmail) {
         start = FormattedDate.getFormattedDateWithoutTime(date);
         end = FormattedDate.getFormattedDateWithoutTime(date);
         GoogleFit.adapter = adapter;
-        new ViewTodayTask(isEmail, activity, listView).execute(date);
-    }
-
-    private static ArrayList<Pair<DataType, Pair<String, Double>>> dataForToday(DataType type, FragmentActivity activity) {
-        DailyTotalResult result = Fitness.HistoryApi
-                .readDailyTotal(mGoogleApiClient, type)
-                .await(5, TimeUnit.SECONDS);
-        if (result.getTotal() != null)
-            return parseData(result.getTotal(), type, activity);
-        return new ArrayList<>();
-    }
-
-    private static ArrayList<Pair<DataType, Pair<String, Double>>> periodData(Calendar startDate,
-                                                                              Calendar endDate,
-                                                                              DataType type,
-                                                                              DataType agrType,
-                                                                              FragmentActivity activity) {
-        Calendar startDateClone = Calendar.getInstance();
-        startDateClone.setTime(startDate.getTime());
-
-        long endTime = endDate.getTimeInMillis();
-        long startTime = startDateClone.getTimeInMillis();
-
-        DateFormat dateFormat = DateFormat.getDateInstance();
-        Log.e("History", "Range Start: " + dateFormat.format(startTime));
-        Log.e("History", "Range End: " + dateFormat.format(endTime));
-
-        DataReadRequest readRequest = new DataReadRequest.Builder()
-                .aggregate(type, agrType)
-                .bucketByTime(1, TimeUnit.DAYS)
-                .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
-                .build();
-
-        DataReadResult dataReadResult = Fitness.HistoryApi.readData(mGoogleApiClient, readRequest).await(5, TimeUnit.SECONDS);
-
-        ArrayList<Pair<DataType, Pair<String, Double>>> sumData = new ArrayList<>();
-
-        //Used for aggregated data
-        if (dataReadResult.getBuckets().size() > 0) {
-            for (Bucket bucket : dataReadResult.getBuckets()) {
-                List<DataSet> dataSets = bucket.getDataSets();
-                for (DataSet dataSet : dataSets) {
-                    startDateClone.add(Calendar.DAY_OF_YEAR, 1);
-                    ArrayList<Pair<DataType, Pair<String, Double>>> dataForADay = parseData(dataSet, type, activity);
-                    sumData.addAll(dataForADay);
-                }
-            }
-        }
-        //Used for non-aggregated data
-        else if (dataReadResult.getDataSets().size() > 0) {
-            for (DataSet dataSet : dataReadResult.getDataSets()) {
-                ArrayList<Pair<DataType, Pair<String, Double>>> dataForADay = parseData(dataSet, type, activity);
-                sumData.addAll(dataForADay);
-            }
-        }
-
-        return sumData;
+        new ViewTodayTask(isEmail, fragmentActivity, listView).execute(date);
     }
 
     private static ArrayList<Pair<DataType, Pair<String, Double>>> parseData(DataSet dataSet, DataType type, FragmentActivity activity) {
@@ -243,6 +192,53 @@ public class GoogleFit implements
             return result;
         }
 
+        private static ArrayList<Pair<DataType, Pair<String, Double>>> periodData(Calendar startDate,
+                                                                                  Calendar endDate,
+                                                                                  DataType type,
+                                                                                  DataType agrType,
+                                                                                  FragmentActivity activity) {
+            Calendar startDateClone = Calendar.getInstance();
+            startDateClone.setTime(startDate.getTime());
+
+            long endTime = endDate.getTimeInMillis();
+            long startTime = startDateClone.getTimeInMillis();
+
+            DateFormat dateFormat = DateFormat.getDateInstance();
+            Log.e("History", "Range Start: " + dateFormat.format(startTime));
+            Log.e("History", "Range End: " + dateFormat.format(endTime));
+
+            DataReadRequest readRequest = new DataReadRequest.Builder()
+                    .aggregate(type, agrType)
+                    .bucketByTime(1, TimeUnit.DAYS)
+                    .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
+                    .build();
+
+            DataReadResult dataReadResult = Fitness.HistoryApi.readData(mGoogleApiClient, readRequest).await(1, TimeUnit.MINUTES);
+
+            ArrayList<Pair<DataType, Pair<String, Double>>> sumData = new ArrayList<>();
+
+            //Used for aggregated data
+            if (dataReadResult.getBuckets().size() > 0) {
+                for (Bucket bucket : dataReadResult.getBuckets()) {
+                    List<DataSet> dataSets = bucket.getDataSets();
+                    for (DataSet dataSet : dataSets) {
+                        startDateClone.add(Calendar.DAY_OF_YEAR, 1);
+                        ArrayList<Pair<DataType, Pair<String, Double>>> dataForADay = parseData(dataSet, type, activity);
+                        sumData.addAll(dataForADay);
+                    }
+                }
+            }
+            //Used for non-aggregated data
+            else if (dataReadResult.getDataSets().size() > 0) {
+                for (DataSet dataSet : dataReadResult.getDataSets()) {
+                    ArrayList<Pair<DataType, Pair<String, Double>>> dataForADay = parseData(dataSet, type, activity);
+                    sumData.addAll(dataForADay);
+                }
+            }
+
+            return sumData;
+        }
+
         @Override
         protected void onPostExecute(ArrayList<Pair<DataType, Pair<String, Double>>> result) {
             adapter.clear();
@@ -313,6 +309,15 @@ public class GoogleFit implements
 //            result.addAll(result1);
 
             return result;
+        }
+
+        private static ArrayList<Pair<DataType, Pair<String, Double>>> dataForToday(DataType type, FragmentActivity activity) {
+            DailyTotalResult result = Fitness.HistoryApi
+                    .readDailyTotal(mGoogleApiClient, type)
+                    .await(5, TimeUnit.SECONDS);
+            if (result.getTotal() != null)
+                return parseData(result.getTotal(), type, activity);
+            return new ArrayList<>();
         }
 
         @Override

@@ -1,7 +1,6 @@
 package com.repina.anastasia.momandbaby.Helpers.Processing;
 
 import android.content.Context;
-import android.text.TextUtils;
 
 import com.google.firebase.database.DataSnapshot;
 import com.repina.anastasia.momandbaby.Adapters.GridItem;
@@ -131,7 +130,7 @@ public class TextProcessing {
         }
     }
 
-    public static String dbNameToString(String dbName) {
+    private static String dbNameToString(String dbName) {
         switch (dbName) {
             case DatabaseNames.METRICS:
                 return "Метрики";

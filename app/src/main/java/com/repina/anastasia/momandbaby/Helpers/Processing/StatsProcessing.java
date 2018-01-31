@@ -81,7 +81,7 @@ public class StatsProcessing {
         Calendar dateClone = Calendar.getInstance();
         dateClone.setTime(dateAndTime.getTime());
         if (today.get(Calendar.DAY_OF_YEAR) == (dateClone.get(Calendar.DAY_OF_YEAR)) && today.get(Calendar.YEAR) == (dateClone.get(Calendar.YEAR)))
-            googleFit.getOneDayData(dateClone, activity, adapter, listViewMom, isEmail);
+            googleFit.getOneDayData(dateClone, adapter, listViewMom, isEmail);
         else { // not today
             dateClone.set(Calendar.HOUR_OF_DAY, 0);
             dateClone.set(Calendar.MINUTE, 0);
@@ -91,7 +91,7 @@ public class StatsProcessing {
             extra.add(Calendar.MINUTE, 1439);
             extra.add(Calendar.SECOND, 59);
             //one second is not in the review
-            googleFit.getPeriodData(dateClone, extra, activity, adapter, listViewMom, isEmail, false, null);
+            googleFit.getPeriodData(dateClone, extra, adapter, listViewMom, isEmail, false, null);
         }
     }
 
@@ -107,6 +107,6 @@ public class StatsProcessing {
             startDate.add(Calendar.MONTH, -1);
         else
             startDate.add(Calendar.DAY_OF_YEAR, (int) -length); // custom
-        googleFit.getPeriodData(startDate, endDate, activity, adapter, listViewMom, isEmail, isChart, selectedItemName);
+        googleFit.getPeriodData(startDate, endDate, adapter, listViewMom, isEmail, isChart, selectedItemName);
     }
 }
