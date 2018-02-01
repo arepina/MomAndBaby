@@ -1,5 +1,6 @@
 package com.repina.anastasia.momandbaby.Activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -42,6 +43,8 @@ public class TabsActivity extends AppCompatActivity {
     public static GoogleApiClient mClient;
     private static final int GOOGLE_FIT_PERMISSIONS_REQUEST_CODE = 0;
 
+    public static ProgressDialog dialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +59,12 @@ public class TabsActivity extends AppCompatActivity {
             } else
                 buildFitnessClient();
 
+            dialog = new ProgressDialog(this);
+            dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            dialog.setMessage(getString(R.string.google_fit_load));
+            dialog.setIndeterminate(true);
+            dialog.setCanceledOnTouchOutside(false);
+
             SharedPreferences sp = getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
             String babyID = sp.getString(SharedConstants.BABY_ID_KEY, "");
 
@@ -64,33 +73,37 @@ public class TabsActivity extends AppCompatActivity {
                 startActivity(nextActivity);
                 finish();
             } else {
-                FragmentTabHost mTabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
-                mTabHost.setup(this, getSupportFragmentManager(), android.R.id.tabcontent);
-
-                mTabHost.addTab(
-                        mTabHost.newTabSpec("Analytics").setIndicator("", null),
-                        FragmentAnalytics.class, null);
-                mTabHost.addTab(
-                        mTabHost.newTabSpec("Baby").setIndicator("", null),
-                        FragmentBaby.class, null);
-                mTabHost.addTab(
-                        mTabHost.newTabSpec("Mom").setIndicator("", null),
-                        FragmentMom.class, null);
-                mTabHost.addTab(
-                        mTabHost.newTabSpec("Settings").setIndicator("", null),
-                        FragmentSettings.class, null);
-
-                setTabIcon(mTabHost, 0, R.mipmap.analytics); //for Tab 1
-                setTabIcon(mTabHost, 1, R.mipmap.baby); //for Tab 2
-                setTabIcon(mTabHost, 2, R.mipmap.mother); //for Tab 3
-                setTabIcon(mTabHost, 3, R.mipmap.settings); //for Tab 4
-
-                mTabHost.setCurrentTab(1);
-
+                buildTabs();
                 checkForBirthday();
             }
         } else
             finish();
+    }
+
+    private void buildTabs()
+    {
+        FragmentTabHost mTabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
+        mTabHost.setup(this, getSupportFragmentManager(), android.R.id.tabcontent);
+
+        mTabHost.addTab(
+                mTabHost.newTabSpec("Analytics").setIndicator("", null),
+                FragmentAnalytics.class, null);
+        mTabHost.addTab(
+                mTabHost.newTabSpec("Baby").setIndicator("", null),
+                FragmentBaby.class, null);
+        mTabHost.addTab(
+                mTabHost.newTabSpec("Mom").setIndicator("", null),
+                FragmentMom.class, null);
+        mTabHost.addTab(
+                mTabHost.newTabSpec("Settings").setIndicator("", null),
+                FragmentSettings.class, null);
+
+        setTabIcon(mTabHost, 0, R.mipmap.analytics); //for Tab 1
+        setTabIcon(mTabHost, 1, R.mipmap.baby); //for Tab 2
+        setTabIcon(mTabHost, 2, R.mipmap.mother); //for Tab 3
+        setTabIcon(mTabHost, 3, R.mipmap.settings); //for Tab 4
+
+        mTabHost.setCurrentTab(1);
     }
 
     private void setTabIcon(TabHost tabHost, int tabIndex, int iconResource) {
@@ -121,6 +134,9 @@ public class TabsActivity extends AppCompatActivity {
                     .addApi(Fitness.HISTORY_API)
                     .addApi(Fitness.SESSIONS_API)
                     .addScope(new Scope(Scopes.FITNESS_LOCATION_READ))
+                    .addScope(new Scope(Scopes.FITNESS_ACTIVITY_READ))
+                    .addScope(new Scope(Scopes.FITNESS_BODY_READ))
+                    .addScope(new Scope(Scopes.FITNESS_NUTRITION_READ))
                     .addScope(Fitness.SCOPE_LOCATION_READ)
                     .addScope(Fitness.SCOPE_ACTIVITY_READ)
                     .addScope(Fitness.SCOPE_BODY_READ)
@@ -159,12 +175,9 @@ public class TabsActivity extends AppCompatActivity {
         }
     }
 
-
     @Override
     public void onResume() {
         super.onResume();
-        // This ensures that if the user denies the permissions then uses Settings to re-enable
-        // them, the app will start working.
         buildFitnessClient();
     }
 

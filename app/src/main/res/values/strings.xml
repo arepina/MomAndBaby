@@ -95,10 +95,12 @@
     <string name="google_fit_notification">Для корректной работы требуется разрешить доступ к Google Fit и войти в свой аккаунт</string>
     <string name="google_fit">Google Fit</string>
     <string name="google_fit_no_data">Данные недоступны</string>
+    <string name="google_fit_load">Идет загрузка данных из Google Fit. Пожалуйста, подождите!</string>
 
     <!--Vaccination-->
     <string name="vaccinations">Прививки</string>
     <string name="vaccinations_list">Список прививок</string>
+    <string name="vaccinations_info">О прививках</string>
 
     <!--Chart-->
     <string name="ideal_height">Средний рост</string>
@@ -117,13 +119,15 @@
     <string name="sleep_legend">Часы сна</string>
     <string name="stool_legend">Оценка стула</string>
     <string name="add_new_other">Введите информацию о событии</string>
-    <string name="google_fit_load">Идет загрузка данных из Google Fit. Пожалуйста, подождите!</string>
-    <string name="vaccinations_info">О прививках</string>
+
+    <!--Custom report-->
     <string name="for_custom">Выбрать период</string>
     <string name="from">С</string>
     <string name="to">По</string>
     <string name="ok">OK</string>
     <string name="incorrect_dates">Неверно выбран диапазон дат. Попробуйте еще раз!</string>
+
+    <!--Load-->
     <string name="data_load_stop">Загрузка данных была прервана</string>
 
     <string-array name="parametersBaby">

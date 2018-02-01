@@ -6,11 +6,14 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.util.Pair;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import com.google.android.gms.fitness.Fitness;
 import com.google.android.gms.fitness.data.Bucket;
+import com.google.android.gms.fitness.data.DataPoint;
 import com.google.android.gms.fitness.data.DataSet;
 import com.google.android.gms.fitness.data.DataType;
+import com.google.android.gms.fitness.data.Field;
 import com.google.android.gms.fitness.request.DataReadRequest;
 import com.google.android.gms.fitness.result.DataReadResult;
 import com.repina.anastasia.momandbaby.Activity.ChartActivity;
@@ -18,8 +21,9 @@ import com.repina.anastasia.momandbaby.Activity.TabsActivity;
 import com.repina.anastasia.momandbaby.Adapters.GridItem;
 import com.repina.anastasia.momandbaby.Adapters.GridItemArrayAdapter;
 import com.repina.anastasia.momandbaby.Fragment.FragmentMom;
+import com.repina.anastasia.momandbaby.Helpers.GoogleFitDataParser;
 import com.repina.anastasia.momandbaby.Helpers.NotificationsShow;
-import com.repina.anastasia.momandbaby.Helpers.Processing.TextProcessing;
+import com.repina.anastasia.momandbaby.Processing.TextProcessing;
 import com.repina.anastasia.momandbaby.R;
 
 import java.lang.ref.WeakReference;
@@ -29,7 +33,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class ViewPeriodTask extends AsyncTask<Calendar, ArrayList<Pair<DataType, Pair<String, Double>>>, ArrayList<Pair<DataType, Pair<String, Double>>>> {
+public class ViewPeriodTask extends AsyncTask<Calendar, ArrayList<Pair<DataType, Pair<String, String>>>, ArrayList<Pair<DataType, Pair<String, String>>>> {
     private boolean isEmail;
     private boolean isChart;
     private String selectedItemName;
@@ -37,7 +41,6 @@ public class ViewPeriodTask extends AsyncTask<Calendar, ArrayList<Pair<DataType,
     private WeakReference<ListView> listViewWeakReference;
     private GridItemArrayAdapter adapter;
     private String start, end;
-    private ProgressDialog dialog;
 
     public ViewPeriodTask(boolean isEmail, boolean isChart, String selectedItemName,
                           FragmentActivity activity, ListView listView, GridItemArrayAdapter adapter,
@@ -55,35 +58,34 @@ public class ViewPeriodTask extends AsyncTask<Calendar, ArrayList<Pair<DataType,
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        dialog = new ProgressDialog(activityWeakReference.get());
-        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        dialog.setMessage(activityWeakReference.get().getString(R.string.google_fit_load));
-        dialog.setIndeterminate(true);
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.show();
+        TabsActivity.dialog.show();
     }
 
-    protected ArrayList<Pair<DataType, Pair<String, Double>>> doInBackground(Calendar... params) {
+    protected ArrayList<Pair<DataType, Pair<String, String>>> doInBackground(Calendar... params) {
         DataType type = DataType.TYPE_STEP_COUNT_DELTA;
         DataType agrType = DataType.AGGREGATE_STEP_COUNT_DELTA;
-        ArrayList<Pair<DataType, Pair<String, Double>>> result = periodData(params[0], params[1],
+        ArrayList<Pair<DataType, Pair<String, String>>> result = periodData(params[0], params[1],
                 type, agrType, activityWeakReference.get());
+        Log.e("History", "steps");
 
         type = DataType.TYPE_CALORIES_EXPENDED;
         agrType = DataType.AGGREGATE_CALORIES_EXPENDED;
-        ArrayList<Pair<DataType, Pair<String, Double>>> result1 = periodData(params[0], params[1],
+        ArrayList<Pair<DataType, Pair<String, String>>> result1 = periodData(params[0], params[1],
                 type, agrType, activityWeakReference.get());
         result.addAll(result1);
+        Log.e("History", "calories");
 
         type = DataType.TYPE_WEIGHT;
         agrType = DataType.AGGREGATE_WEIGHT_SUMMARY;
         result1 = periodData(params[0], params[1], type, agrType, activityWeakReference.get());
         result.addAll(result1);
+        Log.e("History", "weight");
 
         type = DataType.TYPE_NUTRITION;
         agrType = DataType.AGGREGATE_NUTRITION_SUMMARY;
         result1 = periodData(params[0], params[1], type, agrType, activityWeakReference.get());
         result.addAll(result1);
+        Log.e("History", "nutrition");
 
         //todo sleep
 //            type = DataType.TYPE_ACTIVITY_SEGMENT;
@@ -94,7 +96,7 @@ public class ViewPeriodTask extends AsyncTask<Calendar, ArrayList<Pair<DataType,
         return result;
     }
 
-    private ArrayList<Pair<DataType, Pair<String, Double>>> periodData(Calendar startDate,
+    private ArrayList<Pair<DataType, Pair<String, String>>> periodData(Calendar startDate,
                                                                        Calendar endDate,
                                                                        DataType type,
                                                                        DataType agrType,
@@ -117,7 +119,7 @@ public class ViewPeriodTask extends AsyncTask<Calendar, ArrayList<Pair<DataType,
 
         DataReadResult dataReadResult = Fitness.HistoryApi.readData(TabsActivity.mClient, readRequest).await(1, TimeUnit.MINUTES);
 
-        ArrayList<Pair<DataType, Pair<String, Double>>> sumData = new ArrayList<>();
+        ArrayList<Pair<DataType, Pair<String, String>>> sumData = new ArrayList<>();
 
         //Used for aggregated data
         if (dataReadResult.getBuckets().size() > 0) {
@@ -125,7 +127,7 @@ public class ViewPeriodTask extends AsyncTask<Calendar, ArrayList<Pair<DataType,
                 List<DataSet> dataSets = bucket.getDataSets();
                 for (DataSet dataSet : dataSets) {
                     startDateClone.add(Calendar.DAY_OF_YEAR, 1);
-                    ArrayList<Pair<DataType, Pair<String, Double>>> dataForADay = FragmentMom.parseData(dataSet, type, activity);
+                    ArrayList<Pair<DataType, Pair<String, String>>> dataForADay = GoogleFitDataParser.parseData(dataSet, type, activity);
                     sumData.addAll(dataForADay);
                 }
             }
@@ -133,7 +135,7 @@ public class ViewPeriodTask extends AsyncTask<Calendar, ArrayList<Pair<DataType,
         //Used for non-aggregated data
         else if (dataReadResult.getDataSets().size() > 0) {
             for (DataSet dataSet : dataReadResult.getDataSets()) {
-                ArrayList<Pair<DataType, Pair<String, Double>>> dataForADay = FragmentMom.parseData(dataSet, type, activity);
+                ArrayList<Pair<DataType, Pair<String, String>>> dataForADay = GoogleFitDataParser.parseData(dataSet, type, activity);
                 sumData.addAll(dataForADay);
             }
         }
@@ -142,28 +144,28 @@ public class ViewPeriodTask extends AsyncTask<Calendar, ArrayList<Pair<DataType,
     }
 
     @Override
-    protected void onPostExecute(ArrayList<Pair<DataType, Pair<String, Double>>> result) {
+    protected void onPostExecute(ArrayList<Pair<DataType, Pair<String, String>>> result) {
         adapter.clear();
-        for (Pair<DataType, Pair<String, Double>> pair : result) {
+        for (Pair<DataType, Pair<String, String>> pair : result) {
             DataType type = pair.first;
-            Pair<String, Double> entry = pair.second;
+            Pair<String, String> entry = pair.second;
             String date = entry.first;
-            Double value = entry.second;
+            String value = entry.second;
             GridItem item = null;
             if (type.equals(DataType.TYPE_STEP_COUNT_DELTA))
-                item = new GridItem(R.mipmap.steps, "R.mipmap.steps", value.toString(), date);
+                item = new GridItem(R.mipmap.steps, "R.mipmap.steps", value, date);
             if (type.equals(DataType.TYPE_CALORIES_EXPENDED))
-                item = new GridItem(R.mipmap.calories, "R.mipmap.calories", value.toString(), date);
+                item = new GridItem(R.mipmap.calories, "R.mipmap.calories", value, date);
             if (type.equals(DataType.TYPE_WEIGHT))
-                item = new GridItem(R.mipmap.weight, "R.mipmap.weight", value.toString(), date);
+                item = new GridItem(R.mipmap.weight, "R.mipmap.weight", value, date);
             if (type.equals(DataType.TYPE_NUTRITION))
-                item = new GridItem(R.mipmap.nutrition, "R.mipmap.nutrition", value.toString(), date);
+                item = new GridItem(R.mipmap.nutrition, "R.mipmap.nutrition", value, date);
             if (type.equals(DataType.TYPE_ACTIVITY_SEGMENT))
-                item = new GridItem(R.mipmap.rest, "R.mipmap.rest", value.toString(), date);
+                item = new GridItem(R.mipmap.rest, "R.mipmap.rest", value, date);
             if (!adapter.hasItem(item))
                 adapter.add(item);
         }
-        dialog.dismiss();
+        TabsActivity.dialog.dismiss();
         if (adapter.getCount() == 0)//no data for today
         {
             GridItem item = new GridItem(R.mipmap.cross, "R.mipmap.cross", activityWeakReference.get().getResources().getString(R.string.need_to_sync), null, null);

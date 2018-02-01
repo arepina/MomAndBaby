@@ -12,9 +12,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.repina.anastasia.momandbaby.Adapters.GridItemArrayAdapter;
 import com.repina.anastasia.momandbaby.Connectors.FirebaseConnection;
 import com.repina.anastasia.momandbaby.DataBase.DatabaseNames;
-import com.repina.anastasia.momandbaby.Helpers.Processing.FileProcessing;
-import com.repina.anastasia.momandbaby.Helpers.Processing.StatsProcessing;
-import com.repina.anastasia.momandbaby.Helpers.Processing.TextProcessing;
+import com.repina.anastasia.momandbaby.Processing.FileProcessing;
+import com.repina.anastasia.momandbaby.Processing.StatsProcessing;
+import com.repina.anastasia.momandbaby.Processing.TextProcessing;
 import com.repina.anastasia.momandbaby.R;
 
 import java.text.ParseException;

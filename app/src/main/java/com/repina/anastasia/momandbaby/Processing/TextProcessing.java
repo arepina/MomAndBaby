@@ -1,4 +1,4 @@
-package com.repina.anastasia.momandbaby.Helpers.Processing;
+package com.repina.anastasia.momandbaby.Processing;
 
 import android.content.Context;
 
@@ -42,7 +42,19 @@ public class TextProcessing {
         StringBuilder report = new StringBuilder();
         for (int i = 0; i < adapter.getCount(); i++) {
             GridItem it = adapter.getItem(i);
-            report.append(ImageProcessing.imageToString(it.getItemImgName())).append(" ").append(it.getItemDate()).append(" ").append(it.getItemDesc()).append("\n");
+            String imageName = ImageProcessing.imageToString(it.getItemImgName());
+            String date = it.getItemDate();
+            StringBuilder desc = new StringBuilder(it.getItemDesc());
+            if("R.mipmap.nutrition".equals(it.getItemImgName())) {
+                desc = new StringBuilder("");
+                for(String item : it.getItemDesc().split(", ")) {
+                    String key = translateWord(item.substring(0, item.indexOf("=")));
+                    String value = item.substring(item.indexOf("=") + 1, item.length());
+                    desc.append(key).append("=").append(value).append(", ");
+                }
+                desc = new StringBuilder(desc.substring(0, desc.length() - 2));
+            }
+            report.append(imageName).append(" ").append(date).append(" ").append(desc).append("\n");
         }
         if (report.length() == 0)
             NotificationsShow.showToast(context, context.getString(R.string.no_data));
@@ -125,6 +137,38 @@ public class TextProcessing {
                 return "Название прививки";
             case "date":
                 return "Дата";
+            case "calcium":
+                return "Кальций";
+            case "calories":
+                return "Калории";
+            case "carbs.total":
+                return "Углеводы";
+            case "cholesterol":
+                return "Холестерин";
+            case "dietary_fiber":
+                return "Пищевые волокна";
+            case "fat.monounsaturated":
+                return "Мононенасыщенные жиры";
+            case "fat.polyunsaturated":
+                return "Полиненасыщенные жиры";
+            case "fat.saturated":
+                return "Жиры насыщенные";
+            case "fat.total":
+                return "Общие жиры";
+            case "fat.trans":
+                return "Трансжиры";
+            case "iron":
+                return "Железо";
+            case "potassium":
+                return "Калий";
+            case "protein":
+                return "Протеин";
+            case "sodium":
+                return "Натрий";
+            case "sugar":
+                return "Сахар";
+            case "vitamin_c":
+                return "Витамин С";
             default:
                 return word;
         }

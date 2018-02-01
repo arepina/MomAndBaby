@@ -192,4 +192,11 @@ public class FragmentSettings extends Fragment {
         });
         alert.show();
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(TabsActivity.dialog != null)
+            TabsActivity.dialog.dismiss();
+    }
 }

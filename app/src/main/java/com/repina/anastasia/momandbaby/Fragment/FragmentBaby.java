@@ -17,7 +17,7 @@ import com.repina.anastasia.momandbaby.Adapters.GridItemArrayAdapter;
 import com.repina.anastasia.momandbaby.Adapters.SwipeListView;
 import com.repina.anastasia.momandbaby.Connectors.ConnectionDetector;
 import com.repina.anastasia.momandbaby.Helpers.FormattedDate;
-import com.repina.anastasia.momandbaby.Helpers.Processing.StatsProcessing;
+import com.repina.anastasia.momandbaby.Processing.StatsProcessing;
 import com.repina.anastasia.momandbaby.R;
 
 import java.util.Calendar;

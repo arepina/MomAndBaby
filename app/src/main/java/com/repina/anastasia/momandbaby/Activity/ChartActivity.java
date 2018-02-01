@@ -8,9 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
@@ -26,7 +24,7 @@ import com.repina.anastasia.momandbaby.Adapters.GridItem;
 import com.repina.anastasia.momandbaby.Adapters.GridItemArrayAdapter;
 import com.repina.anastasia.momandbaby.Helpers.FormattedDate;
 import com.repina.anastasia.momandbaby.Helpers.SharedConstants;
-import com.repina.anastasia.momandbaby.Helpers.Processing.StatsProcessing;
+import com.repina.anastasia.momandbaby.Processing.StatsProcessing;
 import com.repina.anastasia.momandbaby.Helpers.NotificationsShow;
 import com.repina.anastasia.momandbaby.Connectors.ConnectionDetector;
 import com.repina.anastasia.momandbaby.Connectors.FirebaseConnection;
@@ -415,5 +413,12 @@ public class ChartActivity extends AppCompatActivity {
         Spinner s = (Spinner)activity.findViewById(R.id.spinner);
         s.setVisibility(View.GONE);
         chart.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(TabsActivity.dialog != null)
+            TabsActivity.dialog.dismiss();
     }
 }
