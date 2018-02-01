@@ -13,6 +13,10 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <service
+            android:name=".Helpers.GoogleFitService"
+            android:exported="false" >
+        </service>
         <activity
             android:name=".Activity.SplashActivity"
             android:theme="@style/SplashTheme">

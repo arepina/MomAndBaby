@@ -20,8 +20,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Scope;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.fitness.Fitness;
+import com.google.android.gms.fitness.FitnessStatusCodes;
+import com.google.android.gms.fitness.data.DataType;
 import com.repina.anastasia.momandbaby.Adapters.GridItemArrayAdapter;
 import com.repina.anastasia.momandbaby.Connectors.ConnectionDetector;
 import com.repina.anastasia.momandbaby.Fragment.FragmentAnalytics;
@@ -29,6 +33,7 @@ import com.repina.anastasia.momandbaby.Fragment.FragmentBaby;
 import com.repina.anastasia.momandbaby.Fragment.FragmentMom;
 import com.repina.anastasia.momandbaby.Fragment.FragmentSettings;
 import com.repina.anastasia.momandbaby.Helpers.FormattedDate;
+import com.repina.anastasia.momandbaby.Helpers.GoogleFitService;
 import com.repina.anastasia.momandbaby.Helpers.SendEmail;
 import com.repina.anastasia.momandbaby.Helpers.SharedConstants;
 import com.repina.anastasia.momandbaby.Helpers.NotificationsShow;
@@ -40,7 +45,6 @@ import static android.content.ContentValues.TAG;
 
 public class TabsActivity extends AppCompatActivity {
 
-    public static GoogleApiClient mClient;
     private static final int GOOGLE_FIT_PERMISSIONS_REQUEST_CODE = 0;
 
     public static ProgressDialog dialog;
@@ -57,7 +61,11 @@ public class TabsActivity extends AppCompatActivity {
                         GOOGLE_FIT_PERMISSIONS_REQUEST_CODE,
                         GoogleSignIn.getLastSignedInAccount(getApplicationContext()));
             } else
-                buildFitnessClient();
+            {
+                // Starting Google Fit Service
+                Intent googleFitIntent = new Intent(getApplicationContext(), GoogleFitService.class);
+                getApplicationContext().startService(googleFitIntent);
+            }
 
             dialog = new ProgressDialog(this);
             dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -125,75 +133,6 @@ public class TabsActivity extends AppCompatActivity {
             else birthdayText += getResources().getString(R.string.mrs);
             birthdayText += " " + name + "!";
             NotificationsShow.showToast(getApplicationContext(), birthdayText);
-        }
-    }
-
-    private void buildFitnessClient() {
-        if (mClient == null) {
-            mClient = new GoogleApiClient.Builder(TabsActivity.this)
-                    .addApi(Fitness.HISTORY_API)
-                    .addApi(Fitness.SESSIONS_API)
-                    .addScope(new Scope(Scopes.FITNESS_LOCATION_READ))
-                    .addScope(new Scope(Scopes.FITNESS_ACTIVITY_READ))
-                    .addScope(new Scope(Scopes.FITNESS_BODY_READ))
-                    .addScope(new Scope(Scopes.FITNESS_NUTRITION_READ))
-                    .addScope(Fitness.SCOPE_LOCATION_READ)
-                    .addScope(Fitness.SCOPE_ACTIVITY_READ)
-                    .addScope(Fitness.SCOPE_BODY_READ)
-                    .addScope(Fitness.SCOPE_NUTRITION_READ)
-                    .addConnectionCallbacks(
-                            new GoogleApiClient.ConnectionCallbacks() {
-                                @Override
-                                public void onConnected(Bundle bundle) {
-                                    Log.i(TAG, "Connected!!!");
-                                    // Now you can make calls to the Fitness APIs.
-                                    //new VerifyDataTask().execute(null, null, null);
-                                }
-
-                                @Override
-                                public void onConnectionSuspended(int i) {
-                                    // If your connection to the sensor gets lost at some point,
-                                    // you'll be able to determine the reason and react to it here.
-                                    if (i == GoogleApiClient.ConnectionCallbacks.CAUSE_NETWORK_LOST) {
-                                        Log.i(TAG, "Connection lost.  Cause: Network Lost.");
-                                    } else if (i
-                                            == GoogleApiClient.ConnectionCallbacks.CAUSE_SERVICE_DISCONNECTED) {
-                                        Log.i(TAG,
-                                                "Connection lost.  Reason: Service Disconnected");
-                                    }
-                                }
-                            }
-                    )
-                    .enableAutoManage(TabsActivity.this, 0, new GoogleApiClient.OnConnectionFailedListener() {
-                        @Override
-                        public void onConnectionFailed(ConnectionResult result) {
-                            Log.i(TAG, "Google Play services connection failed. Cause: " +
-                                    result.toString());
-                        }
-                    })
-                    .build();
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        buildFitnessClient();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mClient.stopAutoManage(TabsActivity.this);
-        mClient.disconnect();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (mClient != null && mClient.isConnected()) {
-            mClient.stopAutoManage(TabsActivity.this);
-            mClient.disconnect();
         }
     }
 }

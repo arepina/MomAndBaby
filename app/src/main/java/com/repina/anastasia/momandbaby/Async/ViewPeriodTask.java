@@ -117,8 +117,8 @@ public class ViewPeriodTask extends AsyncTask<Calendar, ArrayList<Pair<DataType,
                 .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
                 .build();
 
-        DataReadResult dataReadResult = Fitness.HistoryApi.readData(TabsActivity.mClient, readRequest).await(1, TimeUnit.MINUTES);
-
+//        DataReadResult dataReadResult = Fitness.HistoryApi.readData(TabsActivity.mClient, readRequest).await(1, TimeUnit.MINUTES);
+        DataReadResult dataReadResult = null;
         ArrayList<Pair<DataType, Pair<String, String>>> sumData = new ArrayList<>();
 
         //Used for aggregated data
@@ -174,7 +174,7 @@ public class ViewPeriodTask extends AsyncTask<Calendar, ArrayList<Pair<DataType,
         if (isEmail)
             TextProcessing.formMomReport(adapter, activityWeakReference.get().getApplicationContext(), start, end);
         if (isChart)
-            ChartActivity.fillChartMom(adapter, activityWeakReference.get().getApplicationContext(), selectedItemName);
+            ChartActivity.fillChartMom(adapter, activityWeakReference.get().getApplicationContext(), selectedItemName, activityWeakReference.get());
         else if (listViewWeakReference.get() != null)
             listViewWeakReference.get().setAdapter(adapter);
     }

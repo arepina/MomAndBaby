@@ -78,11 +78,11 @@ public class ViewTodayTask extends AsyncTask<Calendar, ArrayList<Pair<DataType, 
     }
 
     private ArrayList<Pair<DataType, Pair<String, String>>> dataForToday(DataType type, FragmentActivity activity) {
-        DailyTotalResult result = Fitness.HistoryApi
-                .readDailyTotal(TabsActivity.mClient, type)
-                .await(5, TimeUnit.SECONDS);
-        if (result.getTotal() != null)
-            return GoogleFitDataParser.parseData(result.getTotal(), type, activity);
+//        DailyTotalResult result = Fitness.HistoryApi
+//                .readDailyTotal(TabsActivity.mClient, type)
+//                .await(5, TimeUnit.SECONDS);
+//        if (result.getTotal() != null)
+//            return GoogleFitDataParser.parseData(result.getTotal(), type, activity);
         return new ArrayList<>();
     }
 
