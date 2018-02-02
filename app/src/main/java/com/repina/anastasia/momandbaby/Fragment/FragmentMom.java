@@ -37,6 +37,7 @@ import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.FIT_EXTRA_N
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.FIT_EXTRA_NOTIFY_FAILED_STATUS_CODE;
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.FIT_NOTIFY_INTENT;
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.FROM;
+import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.HISTORY_DATE;
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.HISTORY_EXTRA_CALORIES_TODAY;
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.HISTORY_EXTRA_NUTRITION_TODAY;
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.HISTORY_EXTRA_SLEEP_TODAY;
@@ -56,7 +57,7 @@ import java.util.Calendar;
 
 public class FragmentMom extends Fragment {
 
-    private GridItemArrayAdapter momArrayAdapter;
+    public static GridItemArrayAdapter momArrayAdapter;
     private ListView listViewMom;
     private FloatingActionButton fab;
     private Calendar calendar;
@@ -71,9 +72,6 @@ public class FragmentMom extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         calendar = Calendar.getInstance();
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mFitStatusReceiver, new IntentFilter(FIT_NOTIFY_INTENT));
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mFitDataReceiver, new IntentFilter(HISTORY_INTENT));
-        requestFitConnection();
         return initMom(inflater, container);
     }
 
@@ -156,6 +154,10 @@ public class FragmentMom extends Fragment {
             }
         });
 
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mFitStatusReceiver, new IntentFilter(FIT_NOTIFY_INTENT));
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mFitDataReceiver, new IntentFilter(HISTORY_INTENT));
+        requestFitConnection();
+
         return v;
     }
 
@@ -171,6 +173,7 @@ public class FragmentMom extends Fragment {
         service.putExtra(SERVICE_REQUEST_TYPE, TYPE_REQUEST_CONNECTION);
         getActivity().startService(service);
         // Load today data for mom from google fit
+        momArrayAdapter.clear();
         StatsProcessing.getMomStats(calendar, 0, getActivity(), 0); // same day, all types
     }
 
@@ -197,28 +200,40 @@ public class FragmentMom extends Fragment {
     private BroadcastReceiver mFitDataReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            //todo
             // Get extra data included in the Intent
+            String date = intent.getStringExtra(HISTORY_DATE);
             if (intent.hasExtra(HISTORY_EXTRA_STEPS_TODAY)) {
                 final int totalSteps = intent.getIntExtra(HISTORY_EXTRA_STEPS_TODAY, 0);
-                Toast.makeText(getContext(), "Total Steps: " + totalSteps, Toast.LENGTH_SHORT).show();
+                GridItem item = new GridItem(R.mipmap.steps, "R.mipmap.steps", String.valueOf(totalSteps), date);
+                momArrayAdapter.add(item);
             }
             if (intent.hasExtra(HISTORY_EXTRA_CALORIES_TODAY)) {
                 final int totalCalories = (int)intent.getDoubleExtra(HISTORY_EXTRA_CALORIES_TODAY, 0);
-                Toast.makeText(getContext(), "Total calories: " + totalCalories, Toast.LENGTH_SHORT).show();
+                GridItem item = new GridItem(R.mipmap.calories, "R.mipmap.calories", String.valueOf(totalCalories), date);
+                momArrayAdapter.add(item);
             }
             if (intent.hasExtra(HISTORY_EXTRA_WEIGHT_TODAY)) {
                 final int totalWeight = (int)intent.getDoubleExtra(HISTORY_EXTRA_WEIGHT_TODAY, 0);
-                Toast.makeText(getContext(), "Total weight: " + totalWeight, Toast.LENGTH_SHORT).show();
+                if(totalWeight != 0) {
+                    GridItem item = new GridItem(R.mipmap.weight, "R.mipmap.weight", String.valueOf(totalWeight), date);
+                    momArrayAdapter.add(item);
+                }
             }
             if (intent.hasExtra(HISTORY_EXTRA_NUTRITION_TODAY)) {
                 final String totalNutrition = intent.getStringExtra(HISTORY_EXTRA_NUTRITION_TODAY);
-                Toast.makeText(getContext(), "Total nutrition: " + totalNutrition, Toast.LENGTH_SHORT).show();
+                if(totalNutrition.length() != 0) {
+                    GridItem item = new GridItem(R.mipmap.nutrition, "R.mipmap.nutrition", String.valueOf(totalNutrition), date);
+                    momArrayAdapter.add(item);
+                }
             }
             if (intent.hasExtra(HISTORY_EXTRA_SLEEP_TODAY)) {
                 final String totalSleep = intent.getStringExtra(HISTORY_EXTRA_SLEEP_TODAY);
-                Toast.makeText(getContext(), "Total sleep: " + totalSleep, Toast.LENGTH_SHORT).show();
+                if(totalSleep.length() != 0) {
+                    GridItem item = new GridItem(R.mipmap.sleep, "R.mipmap.sleep", String.valueOf(totalSleep), date);
+                    momArrayAdapter.add(item);
+                }
             }
+            listViewMom.setAdapter(momArrayAdapter);
         }
     };
 

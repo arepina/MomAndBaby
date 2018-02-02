@@ -11,10 +11,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.repina.anastasia.momandbaby.Activity.TabsActivity;
 import com.repina.anastasia.momandbaby.Adapters.GridItem;
 import com.repina.anastasia.momandbaby.Adapters.GridItemArrayAdapter;
 import com.repina.anastasia.momandbaby.Connectors.FirebaseConnection;
 import com.repina.anastasia.momandbaby.DataBase.DatabaseNames;
+import com.repina.anastasia.momandbaby.Fragment.FragmentMom;
 import com.repina.anastasia.momandbaby.Helpers.FormattedDate;
 import com.repina.anastasia.momandbaby.Helpers.GoogleFitService;
 import com.repina.anastasia.momandbaby.Helpers.SharedConstants;
@@ -115,5 +117,11 @@ public class StatsProcessing {
                 activity.startService(service);
             }
         }
+        if (FragmentMom.momArrayAdapter != null && FragmentMom.momArrayAdapter.getCount() == 0) // no data for today
+        {
+            GridItem item = new GridItem(R.mipmap.cross, "R.mipmap.cross", activity.getString(R.string.need_to_sync), null, null);
+            FragmentMom.momArrayAdapter.add(item);
+        }
+        TabsActivity.dialog.dismiss();
     }
 }
