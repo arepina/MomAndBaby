@@ -31,9 +31,9 @@ import com.repina.anastasia.momandbaby.DataBase.Vaccination;
 import com.repina.anastasia.momandbaby.R;
 
 import java.util.Calendar;
+import java.util.Objects;
 
-import static com.repina.anastasia.momandbaby.Helpers.FormattedDate.getFormattedDateWithTime;
-import static com.repina.anastasia.momandbaby.Helpers.FormattedDate.getFormattedDateWithoutTime;
+import static com.repina.anastasia.momandbaby.Helpers.FormattedDate.getFormattedDate;
 
 public class NewFeatureActivity extends AppCompatActivity {
 
@@ -55,7 +55,7 @@ public class NewFeatureActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_feature);
 
-        featureName = getIntent().getExtras().getString("data");
+        featureName = Objects.requireNonNull(getIntent().getExtras()).getString("data");
         features = getResources().getStringArray(R.array.parametersBaby);
 
         dataValue1 = (EditText) findViewById(R.id.dataValue1);
@@ -67,8 +67,8 @@ public class NewFeatureActivity extends AppCompatActivity {
         final Calendar dateAndTime = Calendar.getInstance();
 
         date = (EditText) findViewById(R.id.date);
-        date.setText(getFormattedDateWithoutTime(dateAndTime));
-        fullDate = getFormattedDateWithTime(dateAndTime);
+        date.setText(getFormattedDate(dateAndTime));
+        fullDate = getFormattedDate(dateAndTime);
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,8 +79,8 @@ public class NewFeatureActivity extends AppCompatActivity {
                                 dateAndTime.set(Calendar.YEAR, year);
                                 dateAndTime.set(Calendar.MONTH, monthOfYear);
                                 dateAndTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                                date.setText(getFormattedDateWithoutTime(dateAndTime));
-                                fullDate = getFormattedDateWithTime(dateAndTime);
+                                date.setText(getFormattedDate(dateAndTime));
+                                fullDate = getFormattedDate(dateAndTime);
                             }
                         }, dateAndTime.get(Calendar.YEAR), dateAndTime.get(Calendar.MONTH), dateAndTime.get(Calendar.DAY_OF_MONTH)).show();
             }

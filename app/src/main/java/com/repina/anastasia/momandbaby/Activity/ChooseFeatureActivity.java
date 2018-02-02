@@ -13,6 +13,8 @@ import com.repina.anastasia.momandbaby.Adapters.CustomGrid;
 import com.repina.anastasia.momandbaby.Helpers.NotificationsShow;
 import com.repina.anastasia.momandbaby.R;
 
+import java.util.Objects;
+
 public class ChooseFeatureActivity extends Activity {
 
     @Override
@@ -23,7 +25,7 @@ public class ChooseFeatureActivity extends Activity {
 
         this.setFinishOnTouchOutside(false);
 
-        int activityCode = getIntent().getExtras().getInt("requestCode");
+        int activityCode = Objects.requireNonNull(getIntent().getExtras()).getInt("requestCode");
 
         final String[] features;
         int[] imageId;

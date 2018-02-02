@@ -9,368 +9,331 @@ import android.util.Log;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Scope;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.fitness.Fitness;
-import com.google.android.gms.fitness.FitnessStatusCodes;
+import com.google.android.gms.fitness.data.Bucket;
 import com.google.android.gms.fitness.data.DataPoint;
 import com.google.android.gms.fitness.data.DataSet;
-import com.google.android.gms.fitness.data.DataSource;
 import com.google.android.gms.fitness.data.DataType;
 import com.google.android.gms.fitness.data.Field;
-import com.google.android.gms.fitness.data.Value;
 import com.google.android.gms.fitness.request.DataReadRequest;
-import com.google.android.gms.fitness.request.DataSourcesRequest;
-import com.google.android.gms.fitness.request.OnDataPointListener;
-import com.google.android.gms.fitness.request.SensorRequest;
+import com.google.android.gms.fitness.result.DataReadResponse;
 import com.google.android.gms.fitness.result.DataReadResult;
-import com.google.android.gms.fitness.result.DataSourcesResult;
 
+import java.lang.reflect.Constructor;
+import java.text.DateFormat;
 import java.util.Calendar;
-import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class GoogleFitService extends IntentService{
+import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.FIT_EXTRA_CONNECTION_MESSAGE;
+import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.FIT_EXTRA_NOTIFY_FAILED_INTENT;
+import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.FIT_EXTRA_NOTIFY_FAILED_STATUS_CODE;
+import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.FIT_NOTIFY_INTENT;
+import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.FROM;
+import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.HISTORY_EXTRA_CALORIES_TODAY;
+import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.HISTORY_EXTRA_NUTRITION_TODAY;
+import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.HISTORY_EXTRA_SLEEP_TODAY;
+import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.HISTORY_EXTRA_STEPS_TODAY;
+import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.HISTORY_EXTRA_WEIGHT_TODAY;
+import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.HISTORY_INTENT;
+import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.SERVICE_REQUEST_TYPE;
+import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.TO;
+import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.TYPE_GET_CALORIES_TODAY_DATA;
+import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.TYPE_GET_NUTRITION_TODAY_DATA;
+import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.TYPE_GET_SLEEP_TODAY_DATA;
+import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.TYPE_GET_STEP_TODAY_DATA;
+import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.TYPE_GET_WEIGHT_TODAY_DATA;
+import static java.text.DateFormat.getTimeInstance;
 
-    private static final String TAG = "GOOGLE-FIT-SERVICE";
-    public static final String STEP_COUNT_TODAY = "action.STEP_COUNT_TODAY";
-    public static final String STEP_COUNT_TODAY_RESULT = "action.STEP_COUNT_TODAY_RESULT";
-    public static final String STEPS_PER_SECOND_COUNT = "action.STEPS_PER_SECOND_COUNT";
-    public static final String STEPS_PER_SECOND_COUNT_RESULT = "action.STEPS_PER_SECOND_COUNT_RESULT";
-    public static final String CALORIES_EXPENDED_TODAY = "action.CALORIES_EXPENDED_TODAY";
-    public static final String CALORIES_EXPENDED_TODAY_RESULT = "action.CALORIES_EXPENDED_TODAY_RESULT";
+public class GoogleFitService extends IntentService {
 
-    public static GoogleApiClient mClient;
-    private OnDataPointListener mListener;
+    public static final String TAG = "GoogleFitService";
+    private GoogleApiClient mGoogleApiFitnessClient;
+    private boolean mTryingToConnect = false;
+
+    @Override
+    public void onDestroy() {
+        Log.d(TAG, "GoogleFitService destroyed");
+        if (mGoogleApiFitnessClient.isConnected()) {
+            Log.d(TAG, "Disconecting Google Fit.");
+            mGoogleApiFitnessClient.disconnect();
+        }
+        super.onDestroy();
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        buildFitnessClient();
+        Log.d(TAG, "GoogleFitService created");
+    }
 
     public GoogleFitService() {
         super("GoogleFitService");
     }
 
     @Override
-    public void onCreate() {
-        super.onCreate();
-        Log.d(TAG, "GoogleFitService called");
+    protected void onHandleIntent(Intent intent) {
+        int type = intent.getIntExtra(SERVICE_REQUEST_TYPE, -1);
+        if (!mGoogleApiFitnessClient.isConnected()) {
+            mTryingToConnect = true;
+            mGoogleApiFitnessClient.connect();//Wait until the service either connects or fails to connect
+            while (mTryingToConnect) {
+                try {
+                    Thread.sleep(100, 0);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
 
-        // Initializing physical fitness client for all kind of fit data
-        buildFitnessClient();
-        // Connecting the physical fitness client
-        mClient.connect();
-
-        // Initiating recording of data
-        initiateRecordingOfData(mClient);
+        long startMill = intent.getLongExtra(FROM, -1);
+        long endMill = intent.getLongExtra(TO, -1);
+        Calendar end = Calendar.getInstance();
+        Calendar start = Calendar.getInstance();
+        start.setTimeInMillis(startMill);
+        end.setTimeInMillis(endMill);
+        if (mGoogleApiFitnessClient.isConnected()) {
+            if (type == TYPE_GET_STEP_TODAY_DATA)
+                getStepsToday(start, end);
+            else if (type == TYPE_GET_CALORIES_TODAY_DATA)
+                getCaloriesToday(start, end);
+            else if (type == TYPE_GET_WEIGHT_TODAY_DATA)
+                getWeightToday(start, end);
+            else if (type == TYPE_GET_NUTRITION_TODAY_DATA)
+                getNutritionToday(start, end);
+            else if (type == TYPE_GET_SLEEP_TODAY_DATA)
+                getSleepToday(start, end);
+        } else
+            Log.w(TAG, "Fit wasn't able to connect, so the request failed.");
     }
 
-    @Override
-    protected void onHandleIntent(Intent intent) {
-        Log.d(TAG, "onHandleIntent called");
-        if (intent != null) {
-            final String action = intent.getAction();
-            if (action != null) {
-                switch (action) {
-                    case STEPS_PER_SECOND_COUNT:
-                        handleActionStepsPerSecond();
-                        break;
-                    case STEP_COUNT_TODAY:
-                        handleActionStepCountToday();
-                        break;
-                    case CALORIES_EXPENDED_TODAY:
-                        handleActionCaloriesExpendedToday();
+    private void getStepsToday(Calendar start, Calendar end) {
+        long endTime = end.getTimeInMillis();
+        long startTime = start.getTimeInMillis();
+        final DataReadRequest readRequest = new DataReadRequest.Builder()
+                .read(DataType.TYPE_STEP_COUNT_DELTA)
+                .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
+                .build();
+        DataReadResult dataReadResult =
+                Fitness.HistoryApi.readData(mGoogleApiFitnessClient, readRequest).await(1, TimeUnit.MINUTES);
+        DataSet stepData = dataReadResult.getDataSet(DataType.TYPE_STEP_COUNT_DELTA);
+        int totalSteps = 0;
+        for (DataPoint dp : stepData.getDataPoints()) {
+            for (Field field : dp.getDataType().getFields()) {
+                int steps = dp.getValue(field).asInt();
+                totalSteps += steps;
+            }
+        }
+        Intent intent = new Intent(HISTORY_INTENT);
+        intent.putExtra(HISTORY_EXTRA_STEPS_TODAY, totalSteps);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }
+
+    private void getCaloriesToday(Calendar start, Calendar end) {
+        long endTime = end.getTimeInMillis();
+        long startTime = start.getTimeInMillis();
+        final DataReadRequest readRequest = new DataReadRequest.Builder()
+                .read(DataType.TYPE_CALORIES_EXPENDED)
+                .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
+                .build();
+        double totalCalories = 0;
+        DataReadResult dataReadResult =
+                Fitness.HistoryApi.readData(mGoogleApiFitnessClient, readRequest).await(1, TimeUnit.MINUTES);
+        DataSet calData = dataReadResult.getDataSet(DataType.TYPE_CALORIES_EXPENDED);
+        for (DataPoint dp : calData.getDataPoints()) {
+            for (Field field : dp.getDataType().getFields()) {
+                double cal = dp.getValue(field).asFloat();
+                totalCalories += cal;
+            }
+        }
+        Intent intent = new Intent(HISTORY_INTENT);
+        intent.putExtra(HISTORY_EXTRA_CALORIES_TODAY, totalCalories);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }
+
+    private void getWeightToday(Calendar start, Calendar end) {
+        long endTime = end.getTimeInMillis();
+        long startTime = start.getTimeInMillis();
+        final DataReadRequest readRequest = new DataReadRequest.Builder()
+                .read(DataType.TYPE_WEIGHT)
+                .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
+                .setLimit(1)
+                .build();
+        DataReadResult dataReadResult =
+                Fitness.HistoryApi.readData(mGoogleApiFitnessClient, readRequest).await(1, TimeUnit.MINUTES);
+        DataSet weightData = dataReadResult.getDataSet(DataType.TYPE_WEIGHT);
+        double totalWeight = 0;
+        for (DataPoint dp : weightData.getDataPoints()) {
+            for (Field field : dp.getDataType().getFields()) {
+                double weight = dp.getValue(field).asFloat();
+                totalWeight += weight;
+            }
+        }
+        Intent intent = new Intent(HISTORY_INTENT);
+        intent.putExtra(HISTORY_EXTRA_WEIGHT_TODAY, totalWeight);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }
+
+    private void getNutritionToday(Calendar start, Calendar end) {
+        long endTime = end.getTimeInMillis();
+        long startTime = start.getTimeInMillis();
+        final DataReadRequest readRequest = new DataReadRequest.Builder()
+                .read(DataType.TYPE_NUTRITION)
+                .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
+                .setLimit(1)
+                .build();
+        DataReadResult dataReadResult =
+                Fitness.HistoryApi.readData(mGoogleApiFitnessClient, readRequest).await(1, TimeUnit.MINUTES);
+        DataSet nutritionData = dataReadResult.getDataSet(DataType.TYPE_NUTRITION);
+        StringBuilder result = new StringBuilder(0);
+        for (DataPoint dp : nutritionData.getDataPoints()) {
+            for (Field field : dp.getDataType().getFields()) {
+                String res = dp.getValue(field).toString().replace("{", "").replace("}", "");
+                result.append(res);
+            }
+        }
+        Intent intent = new Intent(HISTORY_INTENT);
+        intent.putExtra(HISTORY_EXTRA_NUTRITION_TODAY, result.toString());
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }
+
+    private void getSleepToday(Calendar start, Calendar end) {
+        long endTime = end.getTimeInMillis();
+        long startTime = start.getTimeInMillis();
+        final DataReadRequest readRequest = new DataReadRequest.Builder()
+                .read(DataType.TYPE_ACTIVITY_SEGMENT)
+                .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
+                .setLimit(1)
+                .build();
+        DataReadResult dataReadResult =
+                Fitness.HistoryApi.readData(mGoogleApiFitnessClient, readRequest).await(1, TimeUnit.MINUTES);
+        DataSet activityData = dataReadResult.getDataSet(DataType.TYPE_ACTIVITY_SEGMENT);
+        StringBuilder result = new StringBuilder(0);
+        for (DataPoint dp : activityData.getDataPoints()) {
+            for (Field field : dp.getDataType().getFields()) {
+                String res = dp.getValue(field).toString();
+                result.append(res);
+            }
+        }
+        Intent intent = new Intent(HISTORY_INTENT);
+        intent.putExtra(HISTORY_EXTRA_SLEEP_TODAY, result.toString());
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }
+
+    private void getWeek(Calendar start, Calendar end, DataType type, DataType agrType) {
+        long endTime = end.getTimeInMillis();
+        long startTime = start.getTimeInMillis();
+        DataReadRequest readRequest =
+                new DataReadRequest.Builder()
+                        .aggregate(type, agrType)
+                        .bucketByTime(1, TimeUnit.DAYS)
+                        .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
+                        .build();
+        DataReadResult dataReadResult = Fitness.HistoryApi
+                .readData(mGoogleApiFitnessClient, readRequest).await(1, TimeUnit.MINUTES);
+        Constructor<DataReadResponse> constructor = (Constructor<DataReadResponse>) DataReadResponse.class.getDeclaredConstructors()[1];
+        constructor.setAccessible(true);
+        DataReadResponse response = null;
+        try {
+            response = constructor.newInstance(dataReadResult);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        printData(response);
+    }
+
+    public static void printData(DataReadResponse dataReadResult) {
+        if (dataReadResult.getBuckets().size() > 0) {
+            Log.i(TAG, "Number of returned buckets of DataSets is: " + dataReadResult.getBuckets().size());
+            for (Bucket bucket : dataReadResult.getBuckets()) {
+                List<DataSet> dataSets = bucket.getDataSets();
+                for (DataSet dataSet : dataSets) {
+                    dumpDataSet(dataSet);
                 }
+            }
+        } else if (dataReadResult.getDataSets().size() > 0) {
+            Log.i(TAG, "Number of returned DataSets is: " + dataReadResult.getDataSets().size());
+            for (DataSet dataSet : dataReadResult.getDataSets()) {
+                dumpDataSet(dataSet);
+            }
+        }
+    }
+
+    private static void dumpDataSet(DataSet dataSet) {
+        Log.i(TAG, "Data returned for Data type: " + dataSet.getDataType().getName());
+        DateFormat dateFormat = getTimeInstance();
+        for (DataPoint dp : dataSet.getDataPoints()) {
+            Log.i(TAG, "Data point:");
+            Log.i(TAG, "\tType: " + dp.getDataType().getName());
+            Log.i(TAG, "\tStart: " + dateFormat.format(dp.getStartTime(TimeUnit.MILLISECONDS)));
+            Log.i(TAG, "\tEnd: " + dateFormat.format(dp.getEndTime(TimeUnit.MILLISECONDS)));
+            for (Field field : dp.getDataType().getFields()) {
+                Log.i(TAG, "\tField: " + field.getName() + " Value: " + dp.getValue(field));
             }
         }
     }
 
     private void buildFitnessClient() {
-        if (mClient == null) {
-            mClient = new GoogleApiClient.Builder(this)
-                    .addApi(Fitness.HISTORY_API)
-                    .addApi(Fitness.SESSIONS_API)
-                    .addApi(Fitness.SENSORS_API)
-                    .addApi(Fitness.RECORDING_API)
-                    .addScope(new Scope(Scopes.FITNESS_LOCATION_READ))
-                    .addScope(new Scope(Scopes.FITNESS_ACTIVITY_READ))
-                    .addScope(new Scope(Scopes.FITNESS_BODY_READ))
-                    .addScope(new Scope(Scopes.FITNESS_NUTRITION_READ))
-                    .addScope(Fitness.SCOPE_LOCATION_READ)
-                    .addScope(Fitness.SCOPE_ACTIVITY_READ)
-                    .addScope(Fitness.SCOPE_BODY_READ)
-                    .addScope(Fitness.SCOPE_NUTRITION_READ)
-                    .addConnectionCallbacks(
-                            new GoogleApiClient.ConnectionCallbacks() {
-                                @Override
-                                public void onConnected(Bundle bundle) {
-                                    Log.i(TAG, "Connected!!!");
-                                }
+        // Create the Google API Client
+        mGoogleApiFitnessClient = new GoogleApiClient.Builder(this)
+                .addApi(Fitness.HISTORY_API)
+                .addApi(Fitness.RECORDING_API)
+                .addApi(Fitness.SENSORS_API)
+                .addApi(Fitness.SESSIONS_API)
+                .addScope(new Scope(Scopes.FITNESS_BODY_READ_WRITE))
+                .addScope(new Scope(Scopes.FITNESS_ACTIVITY_READ_WRITE))
+                .addScope(new Scope(Scopes.FITNESS_LOCATION_READ_WRITE))
+                .addScope(new Scope(Scopes.FITNESS_NUTRITION_READ_WRITE))
+                .addConnectionCallbacks(
+                        new GoogleApiClient.ConnectionCallbacks() {
 
-                                @Override
-                                public void onConnectionSuspended(int i) {
-                                    if (i == GoogleApiClient.ConnectionCallbacks.CAUSE_NETWORK_LOST) {
-                                        Log.i(TAG, "Connection lost.  Cause: Network Lost.");
-                                    } else if (i == GoogleApiClient.ConnectionCallbacks.CAUSE_SERVICE_DISCONNECTED) {
-                                        Log.i(TAG, "Connection lost.  Reason: Service Disconnected");
-                                    }
-                                }
+                            @Override
+                            public void onConnected(Bundle bundle) {
+                                Log.i(TAG, "Google Fit connected.");
+                                mTryingToConnect = false;
+                                Log.d(TAG, "Notifying the UI that we're connected.");
+                                notifyUiFitConnected();
+
                             }
-                    )
-                    .addOnConnectionFailedListener(
-                            new GoogleApiClient.OnConnectionFailedListener() {
-                                @Override
-                                public void onConnectionFailed(ConnectionResult result) {
-                                    Log.i(TAG, "Connection failed. Cause: " + result.toString());
+
+                            @Override
+                            public void onConnectionSuspended(int i) {
+                                // If your connection to the sensor gets lost at some point,
+                                // you'll be able to determine the reason and react to it here.
+                                mTryingToConnect = false;
+                                if (i == GoogleApiClient.ConnectionCallbacks.CAUSE_NETWORK_LOST) {
+                                    Log.i(TAG, "Google Fit Connection lost.  Cause: Network Lost.");
+                                } else if (i == GoogleApiClient.ConnectionCallbacks.CAUSE_SERVICE_DISCONNECTED) {
+                                    Log.i(TAG, "Google Fit Connection lost.  Reason: Service Disconnected");
                                 }
                             }
-                    )
-                    .build();
-            mClient.connect();
-            subscribe(mClient);
-        }
-    }
-
-    private void subscribe(GoogleApiClient mClient) {
-        // Initiating Step Count Delta
-        Fitness.RecordingApi.subscribe(mClient, DataType.TYPE_STEP_COUNT_DELTA)
-                .setResultCallback(new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(Status status) {
-                        if (status.isSuccess()) {
-                            if (status.getStatusCode()
-                                    == FitnessStatusCodes.SUCCESS_ALREADY_SUBSCRIBED) {
-                                Log.i(TAG, "Existing subscription for activity detected. TYPE_STEP_COUNT_DELTA");
-                            } else {
-                                Log.i(TAG, "Successfully subscribed! to TYPE_STEP_COUNT_DELTA");
-                            }
-                        } else {
-                            Log.i(TAG, "There was a problem subscribing. TYPE_STEP_COUNT_DELTA");
                         }
-                    }
-                });
-
-        // Initiating TYPE_CALORIES_EXPENDED
-        Fitness.RecordingApi.subscribe(mClient, DataType.TYPE_CALORIES_EXPENDED)
-                .setResultCallback(new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(Status status) {
-                        if (status.isSuccess()) {
-                            if (status.getStatusCode()
-                                    == FitnessStatusCodes.SUCCESS_ALREADY_SUBSCRIBED) {
-                                Log.i(TAG, "Existing subscription for activity detected. TYPE_CALORIES_EXPENDED");
-                            } else {
-                                Log.i(TAG, "Successfully subscribed! to TYPE_CALORIES_EXPENDED");
-                            }
-                        } else {
-                            Log.i(TAG, "There was a problem subscribing. TYPE_CALORIES_EXPENDED");
-                        }
-                    }
-                });
-
-        // Initiating TYPE_WEIGHT
-        Fitness.RecordingApi.subscribe(mClient, DataType.TYPE_WEIGHT)
-                .setResultCallback(new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(Status status) {
-                        if (status.isSuccess()) {
-                            if (status.getStatusCode()
-                                    == FitnessStatusCodes.SUCCESS_ALREADY_SUBSCRIBED) {
-                                Log.i(TAG, "Existing subscription for activity detected. TYPE_CALORIES_EXPENDED");
-                            } else {
-                                Log.i(TAG, "Successfully subscribed! to TYPE_CALORIES_EXPENDED");
-                            }
-                        } else {
-                            Log.i(TAG, "There was a problem subscribing. TYPE_CALORIES_EXPENDED");
-                        }
-                    }
-                });
-
-        // Initiating TYPE_NUTRITION
-        Fitness.RecordingApi.subscribe(mClient, DataType.TYPE_NUTRITION)
-                .setResultCallback(new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(Status status) {
-                        if (status.isSuccess()) {
-                            if (status.getStatusCode()
-                                    == FitnessStatusCodes.SUCCESS_ALREADY_SUBSCRIBED) {
-                                Log.i(TAG, "Existing subscription for activity detected. TYPE_CALORIES_EXPENDED");
-                            } else {
-                                Log.i(TAG, "Successfully subscribed! to TYPE_CALORIES_EXPENDED");
-                            }
-                        } else {
-                            Log.i(TAG, "There was a problem subscribing. TYPE_CALORIES_EXPENDED");
-                        }
-                    }
-                });
-    }
-
-    /**
-     * Handle action STEPS_PER_SECOND_COUNT in the provided background thread with the provided
-     * parameters.
-     */
-    private void handleActionStepsPerSecond() {
-        Log.d(TAG, "Counting steps as of now.");
-
-        // [START find_data_sources]
-        Fitness.SensorsApi.findDataSources(mClient, new DataSourcesRequest.Builder()
-                .setDataTypes(DataType.TYPE_STEP_COUNT_DELTA)
-                .build())
-                .setResultCallback(new ResultCallback<DataSourcesResult>() {
-                    @Override
-                    public void onResult(DataSourcesResult dataSourcesResult) {
-                        Log.i(TAG, "Result: " + dataSourcesResult.getStatus().toString());
-                        for (DataSource dataSource : dataSourcesResult.getDataSources()) {
-                            Log.i(TAG, "Data source found: " + dataSource.toString());
-                            Log.i(TAG, "Data Source type: " + dataSource.getDataType().getName());
-                            // Checking step count delta
-                            if (dataSource.getDataType().equals(DataType.TYPE_STEP_COUNT_DELTA) && mListener == null) {
-                                Log.i(TAG, "Data source for STEP_COUNT_DELTA found!  Registering.");
-                                DataType dataType = DataType.TYPE_STEP_COUNT_DELTA;
-
-
-                                // [START register_data_listener]
-                                // Creating a listener for step count delta
-                                mListener = new OnDataPointListener() {
-                                    @Override
-                                    public void onDataPoint(DataPoint dataPoint) {
-                                        for (Field field : dataPoint.getDataType().getFields()) {
-                                            Value val = dataPoint.getValue(field);
-                                            Log.i(TAG, "Detected DataPoint field: " + field.getName());
-                                            Log.i(TAG, "Detected DataPoint value: " + val);
-
-                                            Log.d(TAG, "Broadcasting total steps for now.");
-                                            // Broadcasting step count now
-                                            Intent stepCountNowResultIntent =
-                                                    new Intent(GoogleFitService.STEPS_PER_SECOND_COUNT)
-                                                            // Puts the status into the Intent
-                                                            // Put the information received instead of a hardcoded 10
-                                                            .putExtra(GoogleFitService.STEPS_PER_SECOND_COUNT_RESULT, val.asInt());
-                                            // Broadcasts the Intent to receivers in this app.
-                                            LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(stepCountNowResultIntent);
-                                        }
-                                    }
-                                };
-
-                                Fitness.SensorsApi.add(
-                                        mClient,
-                                        new SensorRequest.Builder()
-                                                .setDataSource(dataSource) // Optional but recommended for custom data sets.
-                                                .setDataType(dataType) // Can't be omitted.
-                                                .setSamplingRate(1, TimeUnit.SECONDS)
-                                                .build(),
-                                        mListener)
-                                        .setResultCallback(new ResultCallback<Status>() {
-                                            @Override
-                                            public void onResult(Status status) {
-                                                if (status.isSuccess()) {
-                                                    Log.i(TAG, "Listener registered!");
-                                                } else {
-                                                    Log.i(TAG, "Listener not registered.");
-                                                }
-                                            }
-                                        });
-                                // [END register_data_listener]
+                )
+                .addOnConnectionFailedListener(
+                        new GoogleApiClient.OnConnectionFailedListener() {
+                            // Called whenever the API client fails to connect.
+                            @Override
+                            public void onConnectionFailed(ConnectionResult result) {
+                                mTryingToConnect = false;
+                                notifyUiFailedConnection(result);
                             }
                         }
-                    }
-                });
-        // [END find_data_sources]
-    }
-
-    /**
-     * Handle action STEP_COUNT_TODAY in the provided background thread with the provided
-     * parameters.
-     */
-    private void handleActionStepCountToday() {
-        Log.d(TAG, "Counting steps for today.");
-        Calendar cal = Calendar.getInstance();
-        Date now = new Date();
-        cal.setTime(now);
-        long endTime = cal.getTimeInMillis();
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        long startTime = cal.getTimeInMillis();
-
-        final DataReadRequest stepCountTodayReadRequest = new DataReadRequest.Builder()
-                .read(DataType.TYPE_STEP_COUNT_DELTA)
-                .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
+                )
                 .build();
-
-        Fitness.HistoryApi.readData(mClient, stepCountTodayReadRequest).setResultCallback(new ResultCallback<DataReadResult>() {
-            @Override
-            public void onResult(DataReadResult dataReadResult) {
-                // Getting step data for today
-                Log.d(TAG, "Getting step data for today");
-                DataSet stepData = dataReadResult.getDataSet(DataType.TYPE_STEP_COUNT_DELTA);
-
-                int totalSteps = 0;
-
-                for (DataPoint dp : stepData.getDataPoints()) {
-                    for(Field field : dp.getDataType().getFields()) {
-                        int steps = dp.getValue(field).asInt();
-
-                        totalSteps += steps;
-
-                    }
-                }
-
-                // Broadcasting total steps for today
-                Log.d(TAG, "Broadcasting total steps for today.");
-                Intent stepCountTodayResultIntent =
-                        new Intent(GoogleFitService.STEP_COUNT_TODAY)
-                                // Puts the status into the Intent
-                                .putExtra(GoogleFitService.STEP_COUNT_TODAY_RESULT, totalSteps);
-                Log.d(TAG, "Step count today result " + totalSteps);
-                // Broadcasts the Intent to receivers in this app.
-                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(stepCountTodayResultIntent);
-            }
-        });
     }
 
-    private void handleActionCaloriesExpendedToday() {
-        Log.d(TAG, "Counting calories expended for today.");
-        Calendar cal = Calendar.getInstance();
-        Date now = new Date();
-        cal.setTime(now);
-        long endTime = cal.getTimeInMillis();
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        long startTime = cal.getTimeInMillis();
+    private void notifyUiFitConnected() {
+        Intent intent = new Intent(FIT_NOTIFY_INTENT);
+        intent.putExtra(FIT_EXTRA_CONNECTION_MESSAGE, FIT_EXTRA_CONNECTION_MESSAGE);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }
 
-        final DataReadRequest caloriesExpendedTodayReadRequest = new DataReadRequest.Builder()
-                .read(DataType.TYPE_CALORIES_EXPENDED)
-                .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
-                .build();
-
-        Fitness.HistoryApi.readData(mClient, caloriesExpendedTodayReadRequest).setResultCallback(new ResultCallback<DataReadResult>() {
-            @Override
-            public void onResult(DataReadResult dataReadResult) {
-                // Getting calories expended for today
-                Log.d(TAG, "Getting calories expended data for today");
-                DataSet caloriesData = dataReadResult.getDataSet(DataType.TYPE_CALORIES_EXPENDED);
-
-                float totalCalories = 0;
-
-                for (DataPoint dp : caloriesData.getDataPoints()) {
-                    for(Field field : dp.getDataType().getFields()) {
-                        float calories = dp.getValue(field).asFloat();
-                        totalCalories += calories;
-                    }
-                }
-
-                totalCalories = totalCalories / 1000;
-                totalCalories = (float) (Math.round(totalCalories * 100.0) / 100.0);
-
-                // Broadcasting total miles for today
-                Log.d(TAG, "Broadcasting total calories for today.");
-                Intent caloriesExpendedTodayResultIntent =
-                        new Intent(GoogleFitService.CALORIES_EXPENDED_TODAY)
-                                // Puts the status into the Intent
-                                .putExtra(GoogleFitService.CALORIES_EXPENDED_TODAY_RESULT, totalCalories);
-                Log.d(TAG, "Miles count today result " + totalCalories);
-                // Broadcasts the Intent to receivers in this app.
-                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(caloriesExpendedTodayResultIntent);
-            }
-        });
+    private void notifyUiFailedConnection(ConnectionResult result) {
+        Intent intent = new Intent(FIT_NOTIFY_INTENT);
+        intent.putExtra(FIT_EXTRA_NOTIFY_FAILED_STATUS_CODE, result.getErrorCode());
+        intent.putExtra(FIT_EXTRA_NOTIFY_FAILED_INTENT, result.getResolution());
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 }

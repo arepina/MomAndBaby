@@ -44,7 +44,7 @@ public class RegisterActivity extends AppCompatActivity {
                     String name = ((EditText) findViewById(R.id.input_name)).getText().toString();
                     if (isValidEmailAddress(email)) {
                         if (password.length() >= 8) {
-                            if (name.length() >= 0)
+                            if (name.length() > 0)
                                 if(password.equals(passwordAgain))
                                     isEmailAlreadyInUse(email, password, name);
                                 else

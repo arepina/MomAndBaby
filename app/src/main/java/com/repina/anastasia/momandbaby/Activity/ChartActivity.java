@@ -1,6 +1,5 @@
 package com.repina.anastasia.momandbaby.Activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -22,10 +21,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.repina.anastasia.momandbaby.Adapters.GridItem;
 import com.repina.anastasia.momandbaby.Adapters.GridItemArrayAdapter;
-import com.repina.anastasia.momandbaby.Helpers.FormattedDate;
-import com.repina.anastasia.momandbaby.Helpers.SharedConstants;
-import com.repina.anastasia.momandbaby.Processing.StatsProcessing;
-import com.repina.anastasia.momandbaby.Helpers.NotificationsShow;
 import com.repina.anastasia.momandbaby.Connectors.ConnectionDetector;
 import com.repina.anastasia.momandbaby.Connectors.FirebaseConnection;
 import com.repina.anastasia.momandbaby.DataBase.DatabaseNames;
@@ -35,6 +30,10 @@ import com.repina.anastasia.momandbaby.DataBase.Metrics;
 import com.repina.anastasia.momandbaby.DataBase.Outdoor;
 import com.repina.anastasia.momandbaby.DataBase.Sleep;
 import com.repina.anastasia.momandbaby.DataBase.Stool;
+import com.repina.anastasia.momandbaby.Helpers.FormattedDate;
+import com.repina.anastasia.momandbaby.Helpers.NotificationsShow;
+import com.repina.anastasia.momandbaby.Helpers.SharedConstants;
+import com.repina.anastasia.momandbaby.Processing.StatsProcessing;
 import com.repina.anastasia.momandbaby.R;
 
 import java.text.ParseException;
@@ -43,6 +42,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 
 
 public class ChartActivity extends AppCompatActivity {
@@ -57,8 +57,7 @@ public class ChartActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chart);
-        final String type = getIntent().getExtras().getString("Type");
-
+        final String type = Objects.requireNonNull(getIntent().getExtras()).getString("Type");
 
         //https://www.android-examples.com/create-bar-chart-graph-using-mpandroidchart-library/
         //https://github.com/numetriclabz/numAndroidCharts
@@ -66,7 +65,7 @@ public class ChartActivity extends AppCompatActivity {
 
         final ArrayList<String> choose;
         ArrayAdapter<?> adapter;
-        if (type.equals("Mom")) {
+        if ("Mom".equals(type)) {
             adapter = ArrayAdapter.createFromResource(this, R.array.parametersMom, android.R.layout.simple_spinner_item);
             choose = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.parametersMom)));
         } else {
@@ -85,9 +84,8 @@ public class ChartActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 dataSets = new ArrayList<>();
-                if (type.equals("Mom")) {
-                    String selectedItemName = choose.get(position);
-                    getValuesFromGoogleFit(selectedItemName);
+                if ("Mom".equals(type)) {
+                    getValuesFromGoogleFit(position);
                 } else {
                     if (ConnectionDetector.isConnected(view.getContext())) {
                         String selectedItemName = choose.get(position);
@@ -141,11 +139,11 @@ public class ChartActivity extends AppCompatActivity {
                 });
     }
 
-    private void getValuesFromGoogleFit(String selectedItemName) {
-        StatsProcessing.getMomStatsForPeriod(
-                new GridItemArrayAdapter(getApplicationContext(), R.layout.custom_row),
-                Calendar.getInstance(), this, null,
-                31, false, true, selectedItemName); // ask for 1 month data
+    private void getValuesFromGoogleFit(int type) {
+        makeInvisible();
+        // ask for 1 month data for a curtain type
+        StatsProcessing.getMomStats(Calendar.getInstance(),31, this, type);
+        //todo think about data receiver
     }
 
     private void initIdealChartData(Context context, String dbName) {
@@ -160,10 +158,10 @@ public class ChartActivity extends AppCompatActivity {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        labelsIdeal.add(FormattedDate.getFormattedDateWithoutTime(calendar));
+        labelsIdeal.add(FormattedDate.getFormattedDate(calendar));
         for (int i = 1; i <= 12; i++) {
             calendar.add(Calendar.MONTH, 1);
-            labelsIdeal.add(FormattedDate.getFormattedDateWithoutTime(calendar));
+            labelsIdeal.add(FormattedDate.getFormattedDate(calendar));
         }
         ArrayList<LineDataSet> sets;
         if (gender.equals("boy"))
@@ -338,13 +336,14 @@ public class ChartActivity extends AppCompatActivity {
         chart.animateY(2000);
     }
 
-    public static void fillChartMom(GridItemArrayAdapter adapter, Context context, String selectedItemName, Activity activity) {
+    public void fillChartMom(GridItemArrayAdapter adapter, Context context, String selectedItemName) {
         entries = new ArrayList<>();
         labels = new ArrayList<>();
         if (adapter.getCount() == 1 && adapter.getItem(0).getItemDate() == null) {
             NotificationsShow.showToast(context, adapter.getItem(0).getItemDesc());
             LineData lineData = new LineData(labels, dataSets);
             chart.setData(lineData);
+            makeVisible();
             return;
         }
         int counter = 0;
@@ -356,29 +355,29 @@ public class ChartActivity extends AppCompatActivity {
             String allText = it.getItemDesc();
             switch (selectedItemName) {
                 case "Сон": {
-                    if (ItemName.equals("R.mipmap.sleep")) {
-                        e = new Entry((float) Double.parseDouble(allText), counter);
+                    if(ItemName.equals("R.mipmap.sleep")) {
+                        e = new Entry((float)Double.parseDouble(allText), counter);
                         counter++;
                     }
                     break;
                 }
                 case "Шаги": {
-                    if (ItemName.equals("R.mipmap.steps")) {
-                        e = new Entry((float) Double.parseDouble(allText), counter);
+                    if(ItemName.equals("R.mipmap.steps")) {
+                        e = new Entry((float)Double.parseDouble(allText), counter);
                         counter++;
                     }
                     break;
                 }
                 case "Калории": {
-                    if (ItemName.equals("R.mipmap.calories")) {
-                        e = new Entry((float) Double.parseDouble(allText), counter);
+                    if(ItemName.equals("R.mipmap.calories")) {
+                        e = new Entry((float)Double.parseDouble(allText), counter);
                         counter++;
                     }
                     break;
                 }
                 case "Вес": {
-                    if (ItemName.equals("R.mipmap.weight")) {
-                        e = new Entry((float) Double.parseDouble(allText), counter);
+                    if(ItemName.equals("R.mipmap.weight")) {
+                        e = new Entry((float)Double.parseDouble(allText), counter);
                         counter++;
                     }
                     break;
@@ -391,7 +390,22 @@ public class ChartActivity extends AppCompatActivity {
         lineDataSet.setColors(new int[]{R.color.colorPrimary}, context);
         dataSets.add(lineDataSet);
         LineData lineData = new LineData(labels, dataSets);
+        makeVisible();
         chart.setData(lineData);
         chart.animateY(2000);
+    }
+
+    private void makeVisible()
+    {
+        Spinner s = (Spinner)findViewById(R.id.spinner);
+        s.setVisibility(View.VISIBLE);
+        chart.setVisibility(View.VISIBLE);
+    }
+
+    private void makeInvisible()
+    {
+        Spinner s = (Spinner)findViewById(R.id.spinner);
+        s.setVisibility(View.GONE);
+        chart.setVisibility(View.GONE);
     }
 }

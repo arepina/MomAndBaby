@@ -40,40 +40,15 @@ public class SendEmail {
 
     private static void createMomEmail(int length, GridItemArrayAdapter adapter,
                                        FragmentActivity activity, Calendar from, Calendar to) {
-        Calendar today = Calendar.getInstance();
-        switch (length) {
-            case 0: {
-                StatsProcessing.getMomStatsForOneDay(adapter, today, activity,
-                        null, true); // 1 day
-                break;
-            }
-            case 1: {
-                StatsProcessing.getMomStatsForPeriod(adapter, today, activity,
-                        null, 7, true, false, null); // 1 week
-                break;
-            }
-            case 2: {
-                StatsProcessing.getMomStatsForPeriod(adapter, today, activity,
-                        null, 31, true, false, null); // 1 month
-                break;
-            }
-            case 3: {
-                long days = daysBetween(from, to);
-                if (days == 0)
-                    StatsProcessing.getMomStatsForOneDay(adapter, from, activity,
-                            null, true); // 1 day
-                else
-                    StatsProcessing.getMomStatsForPeriod(adapter, to, activity,
-                            null, days, true, false, null); // custom
-                break;
-            }
-        }
+        int days = daysBetween(from, to);
+        StatsProcessing.getMomStats(to, days, activity, 0); // custom length, all types
+        //todo think about data receiver
     }
 
     private static void createBabyEmail(final Context context, int length, Calendar from, Calendar to) {
         Calendar calendar = Calendar.getInstance();
         String start = "";
-        String end = FormattedDate.getFormattedDateWithoutTime(calendar);
+        String end = FormattedDate.getFormattedDate(calendar);
 
         switch (length) {
             case 0: {
@@ -82,24 +57,24 @@ public class SendEmail {
             }
             case 1: {
                 calendar.add(Calendar.DAY_OF_MONTH, -7);
-                start = FormattedDate.getFormattedDateWithoutTime(calendar);
+                start = FormattedDate.getFormattedDate(calendar);
                 break;
             }
             case 2: {
                 calendar.add(Calendar.DAY_OF_MONTH, -31);
-                start = FormattedDate.getFormattedDateWithoutTime(calendar);
+                start = FormattedDate.getFormattedDate(calendar);
                 break;
             }
             case 3: {
                 long days = daysBetween(from, to);
                 if (days == 0) {
-                    start = FormattedDate.getFormattedDateWithoutTime(from);
-                    end = FormattedDate.getFormattedDateWithoutTime(from);
+                    start = FormattedDate.getFormattedDate(from);
+                    end = FormattedDate.getFormattedDate(from);
                 } else {
-                    start = FormattedDate.getFormattedDateWithoutTime(from);
+                    start = FormattedDate.getFormattedDate(from);
                     calendar.setTime(from.getTime());
                     calendar.add(Calendar.DAY_OF_MONTH, (int) days);
-                    end = FormattedDate.getFormattedDateWithoutTime(calendar);
+                    end = FormattedDate.getFormattedDate(calendar);
                 }
                 break;
             }
@@ -165,9 +140,9 @@ public class SendEmail {
         return unit.convert(timeDiff, TimeUnit.MILLISECONDS);
     }
 
-    private static long daysBetween(Calendar startDate, Calendar endDate) {
+    private static int daysBetween(Calendar startDate, Calendar endDate) {
         long end = endDate.getTimeInMillis();
         long start = startDate.getTimeInMillis();
-        return TimeUnit.MILLISECONDS.toDays(Math.abs(end - start));
+        return (int) TimeUnit.MILLISECONDS.toDays(Math.abs(end - start));
     }
 }

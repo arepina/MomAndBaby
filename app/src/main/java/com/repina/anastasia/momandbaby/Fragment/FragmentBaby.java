@@ -48,7 +48,7 @@ public class FragmentBaby extends Fragment implements SwipeListView.SwipeListVie
         l.exec();
 
         babyArrayAdapter = new GridItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row);
-        StatsProcessing.getBabyStatsForOneDay(babyArrayAdapter, calendar, getContext(), listViewBaby);// Load today add's from Firebase for baby
+        StatsProcessing.getBabyStats(babyArrayAdapter, calendar, getContext(), listViewBaby);// Load today add's from Firebase for baby
 
         FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.floatingActionButton);
         fab.setImageResource(R.mipmap.plus);
@@ -74,7 +74,7 @@ public class FragmentBaby extends Fragment implements SwipeListView.SwipeListVie
                     babyArrayAdapter.clear();
                     goYesterday(headerDate);
                     if (Calendar.getInstance().after(calendar))
-                        StatsProcessing.getBabyStatsForOneDay(babyArrayAdapter, calendar, getContext(), listViewBaby);
+                        StatsProcessing.getBabyStats(babyArrayAdapter, calendar, getContext(), listViewBaby);
                     else {
                         GridItem item = new GridItem(R.mipmap.cross, "R.mipmap.cross", getResources().getString(R.string.no_data), null, null);
                         babyArrayAdapter.add(item);
@@ -92,7 +92,7 @@ public class FragmentBaby extends Fragment implements SwipeListView.SwipeListVie
                     babyArrayAdapter.clear();
                     goTomorrow(headerDate);
                     if (Calendar.getInstance().after(calendar))
-                        StatsProcessing.getBabyStatsForOneDay(babyArrayAdapter, calendar, getContext(), listViewBaby);
+                        StatsProcessing.getBabyStats(babyArrayAdapter, calendar, getContext(), listViewBaby);
                     else {
                         GridItem item = new GridItem(R.mipmap.cross, "R.mipmap.cross", getResources().getString(R.string.no_data), null, null);
                         babyArrayAdapter.add(item);
@@ -111,7 +111,7 @@ public class FragmentBaby extends Fragment implements SwipeListView.SwipeListVie
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case BABY_NEW_FEATURE: {
-                StatsProcessing.getBabyStatsForOneDay(babyArrayAdapter, calendar, getContext(), listViewBaby);
+                StatsProcessing.getBabyStats(babyArrayAdapter, calendar, getContext(), listViewBaby);
                 break;
             }
         }

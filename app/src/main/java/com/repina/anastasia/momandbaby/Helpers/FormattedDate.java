@@ -12,12 +12,7 @@ public class FormattedDate {
     private static SimpleDateFormat sdText = new SimpleDateFormat(
             "dd MMMM yyyy", java.util.Locale.getDefault());
 
-    public static String getFormattedDateWithTime(Calendar dateAndTime) {
-        final Date startDate = dateAndTime.getTime();
-        return sd.format(startDate);
-    }
-
-    public static String getFormattedDateWithoutTime(Calendar dateAndTime) {
+    public static String getFormattedDate(Calendar dateAndTime) {
         final Date startDate = dateAndTime.getTime();
         return sd.format(startDate);
     }
