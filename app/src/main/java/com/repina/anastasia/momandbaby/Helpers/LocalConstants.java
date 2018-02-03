@@ -16,6 +16,7 @@ public class LocalConstants {
     public static final String HISTORY_EXTRA_WEIGHT_TODAY = "weightToday";
     public static final String HISTORY_EXTRA_NUTRITION_TODAY = "nutritionToday";
     public static final String HISTORY_EXTRA_SLEEP_TODAY = "sleepToday";
+    public static final String HISTORY_EXTRA_AGGREGATED = "aggregated";
     public static final String HISTORY_DATE = "date";
 
     public static final String FIT_NOTIFY_INTENT = "fitStatusUpdateIntent";
@@ -25,4 +26,7 @@ public class LocalConstants {
 
     public static final String FROM = "from";
     public static final String TO = "to";
+    public static final String CALLING = "calling";
+    static final String CHART = "Activity.ChartActivity";
+    public static final String TABS = "Activity.TabsActivity";
 }

@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static android.content.Context.MODE_PRIVATE;
+import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.CALLING;
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.FROM;
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.SERVICE_REQUEST_TYPE;
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.TO;
@@ -86,42 +87,37 @@ public class StatsProcessing {
     public static void getMomStats(Calendar end, int length, FragmentActivity activity, int type) {
         Calendar start = Calendar.getInstance();
         start.setTime(end.getTime());
-        start.set(Calendar.HOUR_OF_DAY, 0);
-        start.set(Calendar.MINUTE, 0);
-        start.set(Calendar.SECOND, 0);
         if (length == 7) // - 7 days
             start.add(Calendar.WEEK_OF_YEAR, -1);
         else if(length == 31) // - 1 month
             start.add(Calendar.MONTH, -1);
         else
-            start.add(Calendar.DATE, (int) -length); // custom
+            start.add(Calendar.DATE, -length); // custom
+        start.set(Calendar.HOUR_OF_DAY, 0);
+        start.set(Calendar.MINUTE, 0);
+        start.set(Calendar.SECOND, 0);
+        end.set(Calendar.HOUR_OF_DAY, 23);
+        end.set(Calendar.MINUTE, 59);
+        end.set(Calendar.SECOND, 59);
         getPeriodData(start, end, activity, type);
     }
 
     private static void getPeriodData(Calendar from, Calendar to, FragmentActivity activity, int type) {
+        Intent service = new Intent(activity, GoogleFitService.class);
+        service.putExtra(FROM, from.getTimeInMillis());
+        service.putExtra(TO, to.getTimeInMillis());
+        service.putExtra(CALLING, activity.getLocalClassName());
         if(type != 0)  // custom
         {
-            Intent service = new Intent(activity, GoogleFitService.class);
             service.putExtra(SERVICE_REQUEST_TYPE, type);
-            service.putExtra(FROM, from.getTimeInMillis());
-            service.putExtra(TO, to.getTimeInMillis());
             activity.startService(service);
         }
         else{
             for(int i = 2; i <= 6; i++) // indexes of local consts
             {
-                Intent service = new Intent(activity, GoogleFitService.class);
                 service.putExtra(SERVICE_REQUEST_TYPE, i);
-                service.putExtra(FROM, from.getTimeInMillis());
-                service.putExtra(TO, to.getTimeInMillis());
                 activity.startService(service);
             }
         }
-        if (FragmentMom.momArrayAdapter != null && FragmentMom.momArrayAdapter.getCount() == 0) // no data for today
-        {
-            GridItem item = new GridItem(R.mipmap.cross, "R.mipmap.cross", activity.getString(R.string.need_to_sync), null, null);
-            FragmentMom.momArrayAdapter.add(item);
-        }
-        TabsActivity.dialog.dismiss();
     }
 }

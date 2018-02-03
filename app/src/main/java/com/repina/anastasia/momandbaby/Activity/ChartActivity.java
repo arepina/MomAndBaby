@@ -1,9 +1,18 @@
 package com.repina.anastasia.momandbaby.Activity;
 
+import android.app.Activity;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -14,13 +23,15 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.fitness.FitnessStatusCodes;
+import com.google.android.gms.fitness.data.DataType;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.repina.anastasia.momandbaby.Adapters.GridItem;
-import com.repina.anastasia.momandbaby.Adapters.GridItemArrayAdapter;
 import com.repina.anastasia.momandbaby.Connectors.ConnectionDetector;
 import com.repina.anastasia.momandbaby.Connectors.FirebaseConnection;
 import com.repina.anastasia.momandbaby.DataBase.DatabaseNames;
@@ -30,7 +41,9 @@ import com.repina.anastasia.momandbaby.DataBase.Metrics;
 import com.repina.anastasia.momandbaby.DataBase.Outdoor;
 import com.repina.anastasia.momandbaby.DataBase.Sleep;
 import com.repina.anastasia.momandbaby.DataBase.Stool;
+import com.repina.anastasia.momandbaby.Fragment.FragmentMom;
 import com.repina.anastasia.momandbaby.Helpers.FormattedDate;
+import com.repina.anastasia.momandbaby.Helpers.GoogleFitService;
 import com.repina.anastasia.momandbaby.Helpers.NotificationsShow;
 import com.repina.anastasia.momandbaby.Helpers.SharedConstants;
 import com.repina.anastasia.momandbaby.Processing.StatsProcessing;
@@ -44,6 +57,17 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
+import static com.repina.anastasia.momandbaby.Fragment.FragmentMom.AUTH_PENDING;
+import static com.repina.anastasia.momandbaby.Fragment.FragmentMom.REQUEST_OAUTH;
+import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.FIT_EXTRA_CONNECTION_MESSAGE;
+import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.FIT_EXTRA_NOTIFY_FAILED_INTENT;
+import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.FIT_EXTRA_NOTIFY_FAILED_STATUS_CODE;
+import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.FIT_NOTIFY_INTENT;
+import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.HISTORY_EXTRA_AGGREGATED;
+import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.HISTORY_INTENT;
+import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.SERVICE_REQUEST_TYPE;
+import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.TYPE_REQUEST_CONNECTION;
+
 
 public class ChartActivity extends AppCompatActivity {
 
@@ -52,6 +76,10 @@ public class ChartActivity extends AppCompatActivity {
     private static ArrayList<String> labels;
     private ArrayList<String> labelsIdeal;
     private static List<ILineDataSet> dataSets;
+    private int spinnerSelectedIndex = 0;
+
+    private ConnectionResult mFitResultResolution;
+    private boolean authInProgress = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +87,14 @@ public class ChartActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chart);
         final String type = Objects.requireNonNull(getIntent().getExtras()).getString("Type");
 
+        initChart(type);
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(mFitStatusReceiver, new IntentFilter(FIT_NOTIFY_INTENT));
+        LocalBroadcastManager.getInstance(this).registerReceiver(mFitDataReceiver, new IntentFilter(HISTORY_INTENT));
+        requestFitConnection();
+    }
+
+    void initChart(final String type) {
         //https://www.android-examples.com/create-bar-chart-graph-using-mpandroidchart-library/
         //https://github.com/numetriclabz/numAndroidCharts
         chart = (LineChart) findViewById(R.id.graph);
@@ -79,13 +115,14 @@ public class ChartActivity extends AppCompatActivity {
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
 
         spinner.setAdapter(adapter);
-        spinner.setSelection(0);
+        spinner.setSelection(spinnerSelectedIndex);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                spinnerSelectedIndex = position;
                 dataSets = new ArrayList<>();
                 if ("Mom".equals(type)) {
-                    getValuesFromGoogleFit(position);
+                    getValuesFromGoogleFit();
                 } else {
                     if (ConnectionDetector.isConnected(view.getContext())) {
                         String selectedItemName = choose.get(position);
@@ -139,11 +176,10 @@ public class ChartActivity extends AppCompatActivity {
                 });
     }
 
-    private void getValuesFromGoogleFit(int type) {
+    private void getValuesFromGoogleFit() {
         makeInvisible();
-        // ask for 1 month data for a curtain type
-        StatsProcessing.getMomStats(Calendar.getInstance(),31, this, type);
-        //todo think about data receiver
+        // ask for 1 month data for a specific type
+        StatsProcessing.getMomStats(Calendar.getInstance(), 31, this, spinnerSelectedIndex + 2); // + 2 as the vars indexing is starting from 2
     }
 
     private void initIdealChartData(Context context, String dbName) {
@@ -336,58 +372,61 @@ public class ChartActivity extends AppCompatActivity {
         chart.animateY(2000);
     }
 
-    public void fillChartMom(GridItemArrayAdapter adapter, Context context, String selectedItemName) {
+    private void fillChartMom(ArrayList<Pair<DataType, Pair<String, String>>> sumData) {
         entries = new ArrayList<>();
         labels = new ArrayList<>();
-        if (adapter.getCount() == 1 && adapter.getItem(0).getItemDate() == null) {
-            NotificationsShow.showToast(context, adapter.getItem(0).getItemDesc());
+        if (sumData.size() == 0) { // empty result list
+            NotificationsShow.showToast(getApplicationContext(), getString(R.string.no_data_chart));
             LineData lineData = new LineData(labels, dataSets);
             chart.setData(lineData);
             makeVisible();
             return;
         }
         int counter = 0;
-        for (int i = 0; i < adapter.getCount(); i++) {
-            GridItem it = adapter.getItem(i);
+        for (int i = 0; i < sumData.size(); i++) {
+            Pair<DataType, Pair<String, String>> it = sumData.get(i);
             Entry e = null;
-            String ItemName = it.getItemImgName();
-            String ItemDateLabel = it.getItemDate();
-            String allText = it.getItemDesc();
-            switch (selectedItemName) {
-                case "Сон": {
-                    if(ItemName.equals("R.mipmap.sleep")) {
-                        e = new Entry((float)Double.parseDouble(allText), counter);
+            DataType type = it.first;
+            String date = it.second.first;
+            String value = it.second.second;
+            switch (spinnerSelectedIndex) {
+                case 0: {
+                    if (type == DataType.TYPE_STEP_COUNT_DELTA) {
+                        e = new Entry((float) Double.parseDouble(value), counter);
                         counter++;
                     }
                     break;
                 }
-                case "Шаги": {
-                    if(ItemName.equals("R.mipmap.steps")) {
-                        e = new Entry((float)Double.parseDouble(allText), counter);
+                case 1: {
+                    if (type == DataType.TYPE_ACTIVITY_SEGMENT) {
+                        e = new Entry((float) Double.parseDouble(value), counter);
                         counter++;
                     }
                     break;
                 }
-                case "Калории": {
-                    if(ItemName.equals("R.mipmap.calories")) {
-                        e = new Entry((float)Double.parseDouble(allText), counter);
+                case 2: {
+                    if (type == DataType.TYPE_WEIGHT) {
+                        e = new Entry((float) Double.parseDouble(value), counter);
                         counter++;
                     }
                     break;
                 }
-                case "Вес": {
-                    if(ItemName.equals("R.mipmap.weight")) {
-                        e = new Entry((float)Double.parseDouble(allText), counter);
+                case 3: {
+                    if (type == DataType.TYPE_CALORIES_EXPENDED) {
+                        e = new Entry((float) Double.parseDouble(value), counter);
                         counter++;
                     }
                     break;
                 }
             }
-            entries.add(e);
-            labels.add(ItemDateLabel);
+            if(e != null) {
+                entries.add(e);
+                labels.add(date);
+            }
         }
-        LineDataSet lineDataSet = new LineDataSet(entries, selectedItemName);
-        lineDataSet.setColors(new int[]{R.color.colorPrimary}, context);
+
+        LineDataSet lineDataSet = new LineDataSet(entries, getChartName());
+        lineDataSet.setColors(new int[]{R.color.colorPrimary}, getApplicationContext());
         dataSets.add(lineDataSet);
         LineData lineData = new LineData(labels, dataSets);
         makeVisible();
@@ -395,17 +434,133 @@ public class ChartActivity extends AppCompatActivity {
         chart.animateY(2000);
     }
 
-    private void makeVisible()
+    private String getChartName()
     {
-        Spinner s = (Spinner)findViewById(R.id.spinner);
+        switch (spinnerSelectedIndex)
+        {
+            case 0:{return "Шаги";}
+            case 1:{return "Сон";}
+            case 2:{return "Вес";}
+            case 3:{return "Калории";}
+        }
+        return "";
+    }
+
+    private void makeVisible() {
+        Spinner s = (Spinner) findViewById(R.id.spinner);
         s.setVisibility(View.VISIBLE);
         chart.setVisibility(View.VISIBLE);
     }
 
-    private void makeInvisible()
-    {
-        Spinner s = (Spinner)findViewById(R.id.spinner);
+    private void makeInvisible() {
+        Spinner s = (Spinner) findViewById(R.id.spinner);
         s.setVisibility(View.GONE);
         chart.setVisibility(View.GONE);
+    }
+
+    private void requestFitConnection() {
+        Intent service = new Intent(this, GoogleFitService.class);
+        service.putExtra(SERVICE_REQUEST_TYPE, TYPE_REQUEST_CONNECTION);
+        startService(service);
+        getValuesFromGoogleFit();
+    }
+
+    private BroadcastReceiver mFitStatusReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Get extra data included in the Intent
+            if (intent.hasExtra(FIT_EXTRA_NOTIFY_FAILED_STATUS_CODE) &&
+                    intent.hasExtra(FIT_EXTRA_NOTIFY_FAILED_STATUS_CODE)) {
+                //Recreate the connection result
+                int statusCode = intent.getIntExtra(FIT_EXTRA_NOTIFY_FAILED_STATUS_CODE, 0);
+                PendingIntent pendingIntent = intent.getParcelableExtra(FIT_EXTRA_NOTIFY_FAILED_INTENT);
+                ConnectionResult result = new ConnectionResult(statusCode, pendingIntent);
+                Log.d(FragmentMom.TAG, "Fit connection failed - opening connect screen");
+                fitHandleFailedConnection(result);
+            }
+            if (intent.hasExtra(FIT_EXTRA_CONNECTION_MESSAGE)) {
+                Log.d(FragmentMom.TAG, "Fit connection successful - closing connect screen if it's open");
+                fitHandleConnection();
+            }
+        }
+    };
+
+    private BroadcastReceiver mFitDataReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Get extra data included in the Intent
+            if (intent.hasExtra(HISTORY_EXTRA_AGGREGATED)) {
+                ArrayList<Pair<DataType, Pair<String, String>>> sumData = (ArrayList<Pair<DataType, Pair<String, String>>>) intent.getSerializableExtra(HISTORY_EXTRA_AGGREGATED);
+                fillChartMom(sumData);
+            }
+        }
+    };
+
+
+    private void fitHandleConnection() {
+        Log.i(FragmentMom.TAG, "Fit connected");
+//        fab.setEnabled(false);
+    }
+
+    private void fitHandleFailedConnection(ConnectionResult result) {
+        Log.i(FragmentMom.TAG, "Activity Thread Google Fit Connection failed. Cause: " + result.toString());
+        if (!result.hasResolution()) {
+            GooglePlayServicesUtil.getErrorDialog(result.getErrorCode(), this, 0).show();
+            return;
+        }
+        // The failure has a resolution. Resolve it.
+        // Called typically when the app is not yet authorized, and an authorization dialog is displayed to the user.
+        if (!authInProgress) {
+            if (result.getErrorCode() == FitnessStatusCodes.NEEDS_OAUTH_PERMISSIONS) {
+                try {
+                    Log.d(FragmentMom.TAG, "Google Fit connection failed with OAuth failure.  Trying to ask for consent (again)");
+                    result.startResolutionForResult(this, REQUEST_OAUTH);
+                } catch (IntentSender.SendIntentException e) {
+                    Log.e(FragmentMom.TAG, "Activity Thread Google Fit Exception while starting resolution activity", e);
+                }
+            } else {
+                Log.i(FragmentMom.TAG, "Activity Thread Google Fit Attempting to resolve failed connection");
+                mFitResultResolution = result;
+            }
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        fitSaveInstanceState(outState);
+    }
+
+    private void fitSaveInstanceState(Bundle outState) {
+        outState.putBoolean(AUTH_PENDING, authInProgress);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        fitActivityResult(requestCode, resultCode);
+    }
+
+    private void fitActivityResult(int requestCode, int resultCode) {
+        if (requestCode == REQUEST_OAUTH) {
+            authInProgress = false;
+            if (resultCode == Activity.RESULT_OK) {
+                Log.d(FragmentMom.TAG, "Fit auth completed. Asking for reconnect");
+                requestFitConnection();
+            } else {
+                try {
+                    authInProgress = true;
+                    mFitResultResolution.startResolutionForResult(this, REQUEST_OAUTH);
+                } catch (IntentSender.SendIntentException e) {
+                    Log.e(FragmentMom.TAG, "Activity Thread Google Fit Exception while starting resolution activity", e);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mFitStatusReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mFitDataReceiver);
+        super.onDestroy();
     }
 }

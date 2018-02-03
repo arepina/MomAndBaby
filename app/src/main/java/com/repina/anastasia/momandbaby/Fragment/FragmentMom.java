@@ -64,9 +64,9 @@ public class FragmentMom extends Fragment {
 
     public final static String TAG = "GoogleFitService";
     private ConnectionResult mFitResultResolution;
-    private static final String AUTH_PENDING = "auth_state_pending";
+    public static final String AUTH_PENDING = "auth_state_pending";
     private boolean authInProgress = false;
-    private static final int REQUEST_OAUTH = 1431;
+    public static final int REQUEST_OAUTH = 1431;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -240,7 +240,6 @@ public class FragmentMom extends Fragment {
     private void fitHandleConnection() {
         Log.i(TAG, "Fit connected");
         fab.setEnabled(false);
-        NotificationsShow.showToast(getContext(), getString(R.string.google_fit_already_synced));
     }
 
     private void fitHandleFailedConnection(ConnectionResult result) {
