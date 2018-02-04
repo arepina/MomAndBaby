@@ -462,7 +462,6 @@ public class ChartActivity extends AppCompatActivity {
         Intent service = new Intent(this, GoogleFitService.class);
         service.putExtra(SERVICE_REQUEST_TYPE, TYPE_REQUEST_CONNECTION);
         startService(service);
-        getValuesFromGoogleFit();
     }
 
     private BroadcastReceiver mFitStatusReceiver = new BroadcastReceiver() {
