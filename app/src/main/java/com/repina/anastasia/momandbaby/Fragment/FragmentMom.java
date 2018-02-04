@@ -161,13 +161,6 @@ public class FragmentMom extends Fragment {
         return v;
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        if(TabsActivity.dialog != null)
-            TabsActivity.dialog.dismiss();
-    }
-
     private void requestFitConnection() {
         Intent service = new Intent(getContext(), GoogleFitService.class);
         service.putExtra(SERVICE_REQUEST_TYPE, TYPE_REQUEST_CONNECTION);

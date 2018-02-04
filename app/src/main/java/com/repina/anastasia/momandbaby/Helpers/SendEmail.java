@@ -42,7 +42,6 @@ public class SendEmail {
                                        FragmentActivity activity, Calendar from, Calendar to) {
         int days = daysBetween(from, to);
         StatsProcessing.getMomStats(to, days, activity, 0); // custom length, all types
-        //todo think about data receiver
     }
 
     private static void createBabyEmail(final Context context, int length, Calendar from, Calendar to) {

@@ -2,6 +2,7 @@ package com.repina.anastasia.momandbaby.Activity;
 
 import android.app.Activity;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -76,7 +77,9 @@ public class ChartActivity extends AppCompatActivity {
     private static ArrayList<String> labels;
     private ArrayList<String> labelsIdeal;
     private static List<ILineDataSet> dataSets;
+    private ProgressDialog dialog;
     private int spinnerSelectedIndex = 0;
+    private static ArrayList<String> features;
 
     private ConnectionResult mFitResultResolution;
     private boolean authInProgress = false;
@@ -94,22 +97,29 @@ public class ChartActivity extends AppCompatActivity {
         requestFitConnection();
     }
 
+    //region Init Chart
+
     void initChart(final String type) {
         //https://www.android-examples.com/create-bar-chart-graph-using-mpandroidchart-library/
         //https://github.com/numetriclabz/numAndroidCharts
         chart = (LineChart) findViewById(R.id.graph);
 
-        final ArrayList<String> choose;
         ArrayAdapter<?> adapter;
         if ("Mom".equals(type)) {
             adapter = ArrayAdapter.createFromResource(this, R.array.parametersMom, android.R.layout.simple_spinner_item);
-            choose = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.parametersMom)));
+            features = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.parametersMom)));
         } else {
-            choose = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.parametersBaby)));
-            choose.remove(3);//no vaccinations
-            choose.remove(7);//no other
-            adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, choose);
+            features = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.parametersBaby)));
+            features.remove(3);//no vaccinations
+            features.remove(7);//no other
+            adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, features);
         }
+
+        dialog = new ProgressDialog(this);
+        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        dialog.setMessage(getString(R.string.fit_data_load));
+        dialog.setIndeterminate(true);
+        dialog.setCanceledOnTouchOutside(false);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
@@ -125,14 +135,15 @@ public class ChartActivity extends AppCompatActivity {
                     getValuesFromGoogleFit();
                 } else {
                     if (ConnectionDetector.isConnected(view.getContext())) {
-                        String selectedItemName = choose.get(position);
+                        String selectedItemName = features.get(position);
                         SharedPreferences sp = view.getContext().getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
                         String babyId = sp.getString(SharedConstants.BABY_ID_KEY, "");
                         FirebaseConnection connection = new FirebaseConnection();
                         FirebaseDatabase database = connection.getDatabase();
-                        initIdealChartData(getApplicationContext(), selectedItemName); // add the ideal data to chart
+                        if(selectedItemName.equals(features.get(0)) || selectedItemName.equals(features.get(1))) // height and weight only
+                            initIdealChartData(getApplicationContext(), selectedItemName); // add the ideal data to chart
                         getValuesFromFirebase(database,
-                                valueToDBNameConvert(selectedItemName, choose),
+                                getBabyChartName(selectedItemName),
                                 babyId,
                                 selectedItemName);
                     }
@@ -146,7 +157,7 @@ public class ChartActivity extends AppCompatActivity {
         });
     }
 
-    public static String valueToDBNameConvert(String value, ArrayList<String> features) {
+    public static String getBabyChartName(String value) {
         if (value.equals(features.get(0))) return DatabaseNames.METRICS;
         if (value.equals(features.get(1))) return DatabaseNames.METRICS;
         if (value.equals(features.get(2))) return DatabaseNames.STOOL;
@@ -157,8 +168,25 @@ public class ChartActivity extends AppCompatActivity {
         return "";
     }
 
+    private String getMomChartName()
+    {
+        switch (spinnerSelectedIndex)
+        {
+            case 0:{return features.get(0);}
+            case 1:{return features.get(1);}
+            case 2:{return features.get(2);}
+            case 3:{return features.get(3);}
+        }
+        return "";
+    }
+
+    //endregion
+
+    // region Get chart data from Firebase and Google Fit
+
     void getValuesFromFirebase(final FirebaseDatabase database, final String dbName,
                                final String id, final String selectedItemName) {
+        dialog.show();
         DatabaseReference databaseReference = database.getReference().child(dbName);
         databaseReference.orderByChild("babyId").
                 equalTo(id).
@@ -167,20 +195,26 @@ public class ChartActivity extends AppCompatActivity {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists())
                             fillChartBaby(dataSnapshot, dbName, selectedItemName);
+                        dialog.dismiss();
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
+                        dialog.dismiss();
                         NotificationsShow.showToast(getApplicationContext(), R.string.unpredicted_error);
                     }
                 });
     }
 
     private void getValuesFromGoogleFit() {
-        makeInvisible();
+        dialog.show();
         // ask for 1 month data for a specific type
         StatsProcessing.getMomStats(Calendar.getInstance(), 31, this, spinnerSelectedIndex + 2); // + 2 as the vars indexing is starting from 2
     }
+
+    //endregion
+
+    //region Fill charts with ideal data
 
     private void initIdealChartData(Context context, String dbName) {
         SharedPreferences sp = context.getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
@@ -296,6 +330,10 @@ public class ChartActivity extends AppCompatActivity {
         return setsList;
     }
 
+    //endregion
+
+    //region Fill charts with data
+
     private void fillChartBaby(DataSnapshot dataSnapshot, String dbName, String selectedItemName) {
         entries = new ArrayList<>();
         labels = new ArrayList<>();
@@ -379,7 +417,6 @@ public class ChartActivity extends AppCompatActivity {
             NotificationsShow.showToast(getApplicationContext(), getString(R.string.no_data_chart));
             LineData lineData = new LineData(labels, dataSets);
             chart.setData(lineData);
-            makeVisible();
             return;
         }
         int counter = 0;
@@ -425,38 +462,18 @@ public class ChartActivity extends AppCompatActivity {
             }
         }
 
-        LineDataSet lineDataSet = new LineDataSet(entries, getChartName());
+        LineDataSet lineDataSet = new LineDataSet(entries, getMomChartName());
         lineDataSet.setColors(new int[]{R.color.colorPrimary}, getApplicationContext());
         dataSets.add(lineDataSet);
         LineData lineData = new LineData(labels, dataSets);
-        makeVisible();
         chart.setData(lineData);
         chart.animateY(2000);
+        dialog.dismiss();
     }
 
-    private String getChartName()
-    {
-        switch (spinnerSelectedIndex)
-        {
-            case 0:{return "Шаги";}
-            case 1:{return "Сон";}
-            case 2:{return "Вес";}
-            case 3:{return "Калории";}
-        }
-        return "";
-    }
+    //endregion
 
-    private void makeVisible() {
-        Spinner s = (Spinner) findViewById(R.id.spinner);
-        s.setVisibility(View.VISIBLE);
-        chart.setVisibility(View.VISIBLE);
-    }
-
-    private void makeInvisible() {
-        Spinner s = (Spinner) findViewById(R.id.spinner);
-        s.setVisibility(View.GONE);
-        chart.setVisibility(View.GONE);
-    }
+    //region Fit service connection
 
     private void requestFitConnection() {
         Intent service = new Intent(this, GoogleFitService.class);
@@ -479,7 +496,6 @@ public class ChartActivity extends AppCompatActivity {
             }
             if (intent.hasExtra(FIT_EXTRA_CONNECTION_MESSAGE)) {
                 Log.d(FragmentMom.TAG, "Fit connection successful - closing connect screen if it's open");
-                fitHandleConnection();
             }
         }
     };
@@ -494,12 +510,6 @@ public class ChartActivity extends AppCompatActivity {
             }
         }
     };
-
-
-    private void fitHandleConnection() {
-        Log.i(FragmentMom.TAG, "Fit connected");
-//        fab.setEnabled(false);
-    }
 
     private void fitHandleFailedConnection(ConnectionResult result) {
         Log.i(FragmentMom.TAG, "Activity Thread Google Fit Connection failed. Cause: " + result.toString());
@@ -561,5 +571,14 @@ public class ChartActivity extends AppCompatActivity {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mFitStatusReceiver);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mFitDataReceiver);
         super.onDestroy();
+    }
+
+    //endregion
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(dialog != null)
+            dialog.dismiss();
     }
 }

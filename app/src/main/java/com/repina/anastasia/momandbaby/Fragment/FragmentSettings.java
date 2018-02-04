@@ -2,7 +2,12 @@ package com.repina.anastasia.momandbaby.Fragment;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -11,18 +16,24 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.fitness.FitnessStatusCodes;
 import com.repina.anastasia.momandbaby.Activity.AppInfoActivity;
 import com.repina.anastasia.momandbaby.Activity.SignupActivity;
 import com.repina.anastasia.momandbaby.Activity.TabsActivity;
 import com.repina.anastasia.momandbaby.Adapters.GridItemArrayAdapter;
 import com.repina.anastasia.momandbaby.Connectors.ConnectionDetector;
+import com.repina.anastasia.momandbaby.Helpers.GoogleFitService;
 import com.repina.anastasia.momandbaby.Helpers.NotificationsShow;
 import com.repina.anastasia.momandbaby.Helpers.SendEmail;
 import com.repina.anastasia.momandbaby.Helpers.SharedConstants;
@@ -31,8 +42,21 @@ import com.repina.anastasia.momandbaby.R;
 import java.util.Calendar;
 
 import static android.content.Context.MODE_PRIVATE;
+import static com.repina.anastasia.momandbaby.Fragment.FragmentMom.AUTH_PENDING;
+import static com.repina.anastasia.momandbaby.Fragment.FragmentMom.REQUEST_OAUTH;
+import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.FIT_EXTRA_CONNECTION_MESSAGE;
+import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.FIT_EXTRA_NOTIFY_FAILED_INTENT;
+import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.FIT_EXTRA_NOTIFY_FAILED_STATUS_CODE;
+import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.FIT_NOTIFY_INTENT;
+import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.HISTORY_EXTRA_AGGREGATED;
+import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.HISTORY_INTENT;
+import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.SERVICE_REQUEST_TYPE;
+import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.TYPE_REQUEST_CONNECTION;
 
 public class FragmentSettings extends Fragment {
+
+    private ConnectionResult mFitResultResolution;
+    private boolean authInProgress = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -111,6 +135,10 @@ public class FragmentSettings extends Fragment {
                         showAlertDialog(false, getActivity());
             }
         });
+
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(mFitStatusReceiver, new IntentFilter(FIT_NOTIFY_INTENT));
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(mFitDataReceiver, new IntentFilter(HISTORY_INTENT));
+        requestFitConnection();
 
         return v;
     }
@@ -193,10 +221,96 @@ public class FragmentSettings extends Fragment {
         alert.show();
     }
 
+    private void requestFitConnection() {
+        Intent service = new Intent(getContext(), GoogleFitService.class);
+        service.putExtra(SERVICE_REQUEST_TYPE, TYPE_REQUEST_CONNECTION);
+        getActivity().startService(service);
+    }
+
+    private BroadcastReceiver mFitStatusReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Get extra data included in the Intent
+            if (intent.hasExtra(FIT_EXTRA_NOTIFY_FAILED_STATUS_CODE) &&
+                    intent.hasExtra(FIT_EXTRA_NOTIFY_FAILED_STATUS_CODE)) {
+                //Recreate the connection result
+                int statusCode = intent.getIntExtra(FIT_EXTRA_NOTIFY_FAILED_STATUS_CODE, 0);
+                PendingIntent pendingIntent = intent.getParcelableExtra(FIT_EXTRA_NOTIFY_FAILED_INTENT);
+                ConnectionResult result = new ConnectionResult(statusCode, pendingIntent);
+                Log.d(FragmentMom.TAG, "Fit connection failed - opening connect screen");
+                fitHandleFailedConnection(result);
+            }
+            if (intent.hasExtra(FIT_EXTRA_CONNECTION_MESSAGE)) {
+                Log.d(FragmentMom.TAG, "Fit connection successful - closing connect screen if it's open");
+            }
+        }
+    };
+
+    private BroadcastReceiver mFitDataReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Get extra data included in the Intent
+            if (intent.hasExtra(HISTORY_EXTRA_AGGREGATED)) {
+//                ArrayList<Pair<DataType, Pair<String, String>>> sumData = (ArrayList<Pair<DataType, Pair<String, String>>>) intent.getSerializableExtra(HISTORY_EXTRA_AGGREGATED);
+//                fillChartMom(sumData);
+                //todo
+            }
+            //todo
+        }
+    };
+
+    private void fitHandleFailedConnection(ConnectionResult result) {
+        Log.i(FragmentMom.TAG, "Activity Thread Google Fit Connection failed. Cause: " + result.toString());
+        if (!result.hasResolution()) {
+            GooglePlayServicesUtil.getErrorDialog(result.getErrorCode(), getActivity(), 0).show();
+            return;
+        }
+        // The failure has a resolution. Resolve it.
+        // Called typically when the app is not yet authorized, and an authorization dialog is displayed to the user.
+        if (!authInProgress) {
+            if (result.getErrorCode() == FitnessStatusCodes.NEEDS_OAUTH_PERMISSIONS) {
+                try {
+                    Log.d(FragmentMom.TAG, "Google Fit connection failed with OAuth failure.  Trying to ask for consent (again)");
+                    result.startResolutionForResult(getActivity(), REQUEST_OAUTH);
+                } catch (IntentSender.SendIntentException e) {
+                    Log.e(FragmentMom.TAG, "Activity Thread Google Fit Exception while starting resolution activity", e);
+                }
+            } else {
+                Log.i(FragmentMom.TAG, "Activity Thread Google Fit Attempting to resolve failed connection");
+                mFitResultResolution = result;
+            }
+        }
+    }
+
     @Override
-    public void onPause() {
-        super.onPause();
-        if(TabsActivity.dialog != null)
-            TabsActivity.dialog.dismiss();
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        fitSaveInstanceState(outState);
+    }
+
+    private void fitSaveInstanceState(Bundle outState) {
+        outState.putBoolean(AUTH_PENDING, authInProgress);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        fitActivityResult(requestCode, resultCode);
+    }
+
+    private void fitActivityResult(int requestCode, int resultCode) {
+        if (requestCode == REQUEST_OAUTH) {
+            authInProgress = false;
+            if (resultCode == Activity.RESULT_OK) {
+                Log.d(FragmentMom.TAG, "Fit auth completed. Asking for reconnect");
+                requestFitConnection();
+            } else {
+                try {
+                    authInProgress = true;
+                    mFitResultResolution.startResolutionForResult(getActivity(), REQUEST_OAUTH);
+                } catch (IntentSender.SendIntentException e) {
+                    Log.e(FragmentMom.TAG, "Activity Thread Google Fit Exception while starting resolution activity", e);
+                }
+            }
+        }
     }
 }

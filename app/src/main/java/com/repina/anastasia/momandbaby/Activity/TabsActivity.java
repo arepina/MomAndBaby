@@ -24,19 +24,12 @@ import java.util.Calendar;
 
 public class TabsActivity extends AppCompatActivity {
 
-    public static ProgressDialog dialog;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tabs);
 
         if (ConnectionDetector.isConnected(getApplicationContext())) { // the app will not work without internet
-            dialog = new ProgressDialog(this);
-            dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            dialog.setMessage(getString(R.string.google_fit_load));
-            dialog.setIndeterminate(true);
-            dialog.setCanceledOnTouchOutside(false);
 
             SharedPreferences sp = getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
             String babyID = sp.getString(SharedConstants.BABY_ID_KEY, "");

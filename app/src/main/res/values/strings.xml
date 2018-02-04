@@ -95,7 +95,6 @@
     <string name="google_fit_notification">Для корректной работы требуется разрешить доступ к Google Fit и войти в свой аккаунт</string>
     <string name="google_fit">Google Fit</string>
     <string name="google_fit_no_data">Данные недоступны</string>
-    <string name="google_fit_load">Идет загрузка данных из Google Fit. Пожалуйста, подождите!</string>
 
     <!--Vaccination-->
     <string name="vaccinations">Прививки</string>
@@ -110,6 +109,7 @@
     <string name="max_height">Максимальный рост</string>
     <string name="max_weight">Максимальный вес</string>
     <string name="no_data_chart">Нет данных</string>
+    <string name="fit_data_load">Идет загрузка данных. Пожалуйста, подождите!</string>
 
     <!--Legend desc-->
     <string name="height_legend">Данные роста</string>
