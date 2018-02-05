@@ -29,19 +29,17 @@ import static android.content.Context.MODE_PRIVATE;
 public class SendEmail {
 
     public static void createEmail(final Context context, int length, Calendar from, Calendar to,
-                                   boolean whoFlag, FragmentActivity activity,
-                                   GridItemArrayAdapter adapter) {
+                                   boolean whoFlag, FragmentActivity activity, String callingKey) {
         // logic depends on the who flag
         if (whoFlag) // baby
             createBabyEmail(context, length, from, to);
         else //mom
-            createMomEmail(length, adapter, activity, from, to);
+            createMomEmail(activity, from, to, callingKey);
     }
 
-    private static void createMomEmail(int length, GridItemArrayAdapter adapter,
-                                       FragmentActivity activity, Calendar from, Calendar to) {
+    private static void createMomEmail(FragmentActivity activity, Calendar from, Calendar to, String callingKey) {
         int days = daysBetween(from, to);
-        StatsProcessing.getMomStats(to, days, activity, 0); // custom length, all types
+        StatsProcessing.getMomStats(to, days, activity, 0, callingKey); // custom length, all types
     }
 
     private static void createBabyEmail(final Context context, int length, Calendar from, Calendar to) {
@@ -124,7 +122,7 @@ public class SendEmail {
                             if (report.length() == 0)
                                 NotificationsShow.showToast(context, context.getString(R.string.no_data));
                             else
-                                FileProcessing.sendFile(report.toString(), context, finalStart, finalEnd);
+                                FileProcessing.sendFile(report.toString(), context, finalStart, finalEnd); // send baby report
                         }
                     }
 

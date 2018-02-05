@@ -1,7 +1,9 @@
 package com.repina.anastasia.momandbaby.Processing;
 
 import android.content.Context;
+import android.util.Pair;
 
+import com.google.android.gms.fitness.data.DataType;
 import com.google.firebase.database.DataSnapshot;
 import com.repina.anastasia.momandbaby.Adapters.GridItem;
 import com.repina.anastasia.momandbaby.Adapters.GridItemArrayAdapter;
@@ -38,23 +40,24 @@ public class TextProcessing {
         return line.toString();
     }
 
-    public static void formMomReport(GridItemArrayAdapter adapter, Context context, String start, String end) {
+    public static void formMomReport(ArrayList<Pair<DataType, Pair<String, String>>> sumData, Context context, String start, String end) {
         StringBuilder report = new StringBuilder();
-        for (int i = 0; i < adapter.getCount(); i++) {
-            GridItem it = adapter.getItem(i);
-            String imageName = ImageProcessing.imageToString(it.getItemImgName());
-            String date = it.getItemDate();
-            StringBuilder desc = new StringBuilder(it.getItemDesc());
-            if("R.mipmap.nutrition".equals(it.getItemImgName())) {
-                desc = new StringBuilder("");
-                for(String item : it.getItemDesc().split(", ")) {
-                    String key = translateWord(item.substring(0, item.indexOf("=")));
-                    String value = item.substring(item.indexOf("=") + 1, item.length());
-                    desc.append(key).append("=").append(value).append(", ");
-                }
-                desc = new StringBuilder(desc.substring(0, desc.length() - 2));
-            }
-            report.append(imageName).append(" ").append(date).append(" ").append(desc).append("\n");
+        for (int i = 0; i < sumData.size(); i++) {
+            Pair<DataType, Pair<String, String>> it = sumData.get(i);
+            DataType type = it.first;
+            //String imageName = ImageProcessing.imageToString(it.getItemImgName());
+            String date = it.second.first;
+            String value = it.second.second;
+//            if("R.mipmap.nutrition".equals(it.getItemImgName())) {
+//                desc = new StringBuilder("");
+//                for(String item : it.getItemDesc().split(", ")) {
+//                    String key = translateWord(item.substring(0, item.indexOf("=")));
+//                    String value = item.substring(item.indexOf("=") + 1, item.length());
+//                    desc.append(key).append("=").append(value).append(", ");
+//                }
+//                desc = new StringBuilder(desc.substring(0, desc.length() - 2));
+//            }
+//            report.append(imageName).append(" ").append(date).append(" ").append(desc).append("\n");
         }
         if (report.length() == 0)
             NotificationsShow.showToast(context, context.getString(R.string.no_data));

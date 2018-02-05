@@ -209,7 +209,7 @@ public class ChartActivity extends AppCompatActivity {
     private void getValuesFromGoogleFit() {
         dialog.show();
         // ask for 1 month data for a specific type
-        StatsProcessing.getMomStats(Calendar.getInstance(), 31, this, spinnerSelectedIndex + 2); // + 2 as the vars indexing is starting from 2
+        StatsProcessing.getMomStats(Calendar.getInstance(), 31, this, spinnerSelectedIndex + 2, ChartActivity.class.toString()); // + 2 as the vars indexing is starting from 2
     }
 
     //endregion

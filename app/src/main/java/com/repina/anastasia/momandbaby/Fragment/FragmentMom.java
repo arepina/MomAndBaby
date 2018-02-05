@@ -118,7 +118,7 @@ public class FragmentMom extends Fragment {
                         headerDate.setText(date);
                     }
                     if (Calendar.getInstance().after(calendar))
-                        StatsProcessing.getMomStats(calendar, 0, getActivity(), 0);
+                        StatsProcessing.getMomStats(calendar, 0, getActivity(), 0, FragmentMom.class.toString());
                     else {
                         GridItem item = new GridItem(R.mipmap.cross, "R.mipmap.cross", getResources().getString(R.string.google_fit_no_data), null, null);
                         momArrayAdapter.add(item);
@@ -144,7 +144,7 @@ public class FragmentMom extends Fragment {
                         headerDate.setText(date);
                     }
                     if (Calendar.getInstance().after(calendar))
-                        StatsProcessing.getMomStats(calendar, 0, getActivity(), 0);
+                        StatsProcessing.getMomStats(calendar, 0, getActivity(), 0, FragmentMom.class.toString());
                     else {
                         GridItem item = new GridItem(R.mipmap.cross, "R.mipmap.cross", getResources().getString(R.string.google_fit_no_data), null, null);
                         momArrayAdapter.add(item);
@@ -167,7 +167,7 @@ public class FragmentMom extends Fragment {
         getActivity().startService(service);
         // Load today data for mom from google fit
         momArrayAdapter.clear();
-        StatsProcessing.getMomStats(calendar, 0, getActivity(), 0); // same day, all types
+        StatsProcessing.getMomStats(calendar, 0, getActivity(), 0, FragmentMom.class.toString()); // same day, all types
     }
 
     private BroadcastReceiver mFitStatusReceiver = new BroadcastReceiver() {

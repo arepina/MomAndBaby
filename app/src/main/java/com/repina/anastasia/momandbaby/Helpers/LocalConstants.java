@@ -27,6 +27,4 @@ public class LocalConstants {
     public static final String FROM = "from";
     public static final String TO = "to";
     public static final String CALLING = "calling";
-    static final String CHART = "Activity.ChartActivity";
-    public static final String TABS = "Activity.TabsActivity";
 }

@@ -84,7 +84,7 @@ public class StatsProcessing {
                 });
     }
 
-    public static void getMomStats(Calendar end, int length, FragmentActivity activity, int type) {
+    public static void getMomStats(Calendar end, int length, FragmentActivity activity, int type, String callingKey) {
         Calendar start = Calendar.getInstance();
         start.setTime(end.getTime());
         if (length == 7) // - 7 days
@@ -99,14 +99,14 @@ public class StatsProcessing {
         end.set(Calendar.HOUR_OF_DAY, 23);
         end.set(Calendar.MINUTE, 59);
         end.set(Calendar.SECOND, 59);
-        getPeriodData(start, end, activity, type);
+        getPeriodData(start, end, activity, type, callingKey);
     }
 
-    private static void getPeriodData(Calendar from, Calendar to, FragmentActivity activity, int type) {
+    private static void getPeriodData(Calendar from, Calendar to, FragmentActivity activity, int type, String callingKey) {
         Intent service = new Intent(activity, GoogleFitService.class);
         service.putExtra(FROM, from.getTimeInMillis());
         service.putExtra(TO, to.getTimeInMillis());
-        service.putExtra(CALLING, activity.getLocalClassName());
+        service.putExtra(CALLING, callingKey);
         if(type != 0)  // custom
         {
             service.putExtra(SERVICE_REQUEST_TYPE, type);

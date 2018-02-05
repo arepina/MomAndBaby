@@ -19,6 +19,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,17 +29,22 @@ import android.widget.DatePicker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.fitness.FitnessStatusCodes;
+import com.google.android.gms.fitness.data.DataType;
 import com.repina.anastasia.momandbaby.Activity.AppInfoActivity;
 import com.repina.anastasia.momandbaby.Activity.SignupActivity;
 import com.repina.anastasia.momandbaby.Activity.TabsActivity;
 import com.repina.anastasia.momandbaby.Adapters.GridItemArrayAdapter;
 import com.repina.anastasia.momandbaby.Connectors.ConnectionDetector;
+import com.repina.anastasia.momandbaby.Helpers.FormattedDate;
 import com.repina.anastasia.momandbaby.Helpers.GoogleFitService;
 import com.repina.anastasia.momandbaby.Helpers.NotificationsShow;
 import com.repina.anastasia.momandbaby.Helpers.SendEmail;
 import com.repina.anastasia.momandbaby.Helpers.SharedConstants;
+import com.repina.anastasia.momandbaby.Processing.FileProcessing;
+import com.repina.anastasia.momandbaby.Processing.TextProcessing;
 import com.repina.anastasia.momandbaby.R;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -57,6 +63,8 @@ public class FragmentSettings extends Fragment {
 
     private ConnectionResult mFitResultResolution;
     private boolean authInProgress = false;
+    private Calendar from;
+    private Calendar to;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -152,33 +160,38 @@ public class FragmentSettings extends Fragment {
         day.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                from = Calendar.getInstance();
+                to = Calendar.getInstance();
+                to.setTime(from.getTime());
                 alert.cancel();
-                SendEmail.createEmail(activity.getApplicationContext(), 0, null, null,
-                        whoFlag, (FragmentActivity) activity,
-                        new GridItemArrayAdapter(activity.getApplicationContext(),
-                                R.layout.custom_row));
+                SendEmail.createEmail(activity.getApplicationContext(), 0, from, to,
+                        whoFlag, (FragmentActivity) activity, FragmentSettings.class.toString());
             }
         });
         Button week = (Button) view.findViewById(R.id.week);
         week.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                from = Calendar.getInstance();
+                to = Calendar.getInstance();
+                to.setTime(from.getTime());
+                from.add(Calendar.WEEK_OF_YEAR, -1);
                 alert.cancel();
-                SendEmail.createEmail(activity.getApplicationContext(), 1, null, null,
-                        whoFlag, (FragmentActivity) activity,
-                        new GridItemArrayAdapter(activity.getApplicationContext(),
-                                R.layout.custom_row));
+                SendEmail.createEmail(activity.getApplicationContext(), 1, from, to,
+                        whoFlag, (FragmentActivity) activity, FragmentSettings.class.toString());
             }
         });
         Button month = (Button) view.findViewById(R.id.month);
         month.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                from = Calendar.getInstance();
+                to = Calendar.getInstance();
+                to.setTime(from.getTime());
+                from.add(Calendar.MONTH, -1);
                 alert.cancel();
-                SendEmail.createEmail(activity.getApplicationContext(), 2, null, null,
-                        whoFlag, (FragmentActivity) activity,
-                        new GridItemArrayAdapter(activity.getApplicationContext(),
-                                R.layout.custom_row));
+                SendEmail.createEmail(activity.getApplicationContext(), 2, from, to,
+                        whoFlag, (FragmentActivity) activity, FragmentSettings.class.toString());
             }
         });
         Button custom = (Button) view.findViewById(R.id.custom);
@@ -195,24 +208,22 @@ public class FragmentSettings extends Fragment {
                     @Override
                     public void onClick(View v) {
                         DatePicker fromPicker = (DatePicker) view.findViewById(R.id.from);
-                        Calendar from = Calendar.getInstance();
+                        from = Calendar.getInstance();
                         from.set(Calendar.YEAR, fromPicker.getYear());
                         from.set(Calendar.MONTH, fromPicker.getMonth());
                         from.set(Calendar.DATE, fromPicker.getDayOfMonth());
                         DatePicker toPicker = (DatePicker) view.findViewById(R.id.to);
-                        Calendar to = Calendar.getInstance();
+                        to = Calendar.getInstance();
                         to.set(Calendar.YEAR, toPicker.getYear());
                         to.set(Calendar.MONTH, toPicker.getMonth());
                         to.set(Calendar.DATE, toPicker.getDayOfMonth());
-                        if(from.after(to) || Calendar.getInstance().before(to))
+                        if (from.after(to) || Calendar.getInstance().before(to))
                             NotificationsShow.showToast(activity.getApplicationContext(), getString(R.string.incorrect_dates));
                         else {
                             calendarAlert.cancel();
                             alert.cancel();
                             SendEmail.createEmail(activity.getApplicationContext(), 3, from, to,
-                                    whoFlag, (FragmentActivity) activity,
-                                    new GridItemArrayAdapter(activity.getApplicationContext(),
-                                            R.layout.custom_row));
+                                    whoFlag, (FragmentActivity) activity, FragmentSettings.class.toString());
                         }
                     }
                 });
@@ -220,6 +231,8 @@ public class FragmentSettings extends Fragment {
         });
         alert.show();
     }
+
+    //region Fit service connection
 
     private void requestFitConnection() {
         Intent service = new Intent(getContext(), GoogleFitService.class);
@@ -251,11 +264,11 @@ public class FragmentSettings extends Fragment {
         public void onReceive(Context context, Intent intent) {
             // Get extra data included in the Intent
             if (intent.hasExtra(HISTORY_EXTRA_AGGREGATED)) {
-//                ArrayList<Pair<DataType, Pair<String, String>>> sumData = (ArrayList<Pair<DataType, Pair<String, String>>>) intent.getSerializableExtra(HISTORY_EXTRA_AGGREGATED);
-//                fillChartMom(sumData);
-                //todo
+                ArrayList<Pair<DataType, Pair<String, String>>> sumData = (ArrayList<Pair<DataType, Pair<String, String>>>) intent.getSerializableExtra(HISTORY_EXTRA_AGGREGATED);
+                String fromStr = FormattedDate.getFormattedDate(from);
+                String toStr = FormattedDate.getFormattedDate(to);
+                TextProcessing.formMomReport(sumData, context, fromStr, toStr);
             }
-            //todo
         }
     };
 
@@ -313,4 +326,6 @@ public class FragmentSettings extends Fragment {
             }
         }
     }
+
+    //endregion
 }

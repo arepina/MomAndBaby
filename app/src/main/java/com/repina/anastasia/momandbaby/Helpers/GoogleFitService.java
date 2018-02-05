@@ -20,6 +20,8 @@ import com.google.android.gms.fitness.data.Field;
 import com.google.android.gms.fitness.request.DataReadRequest;
 import com.google.android.gms.fitness.result.DataReadResponse;
 import com.google.android.gms.fitness.result.DataReadResult;
+import com.repina.anastasia.momandbaby.Activity.ChartActivity;
+import com.repina.anastasia.momandbaby.Fragment.FragmentSettings;
 
 import java.lang.reflect.Constructor;
 import java.text.DateFormat;
@@ -29,7 +31,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.CALLING;
-import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.CHART;
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.FIT_EXTRA_CONNECTION_MESSAGE;
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.FIT_EXTRA_NOTIFY_FAILED_INTENT;
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.FIT_EXTRA_NOTIFY_FAILED_STATUS_CODE;
@@ -100,7 +101,9 @@ public class GoogleFitService extends IntentService {
         start.setTimeInMillis(startMill);
         end.setTimeInMillis(endMill);
         if (mGoogleApiFitnessClient.isConnected()) {
-            if(callingActivity != null && callingActivity.equals(CHART)) // need non aggregated buckets data
+            if(callingActivity != null &&  // need non aggregated buckets data
+                    (callingActivity.equals(ChartActivity.class.toString())  // charts
+                            ||  callingActivity.equals(FragmentSettings.class.toString()))) // or email
                 getWeek(start, end, getMainType(type), getAggregationType(type));
             else {
                 if (type == TYPE_GET_STEP_TODAY_DATA) // need aggregated non buckets data
