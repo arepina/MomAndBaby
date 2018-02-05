@@ -101,13 +101,20 @@ public class GoogleFitService extends IntentService {
         start.setTimeInMillis(startMill);
         end.setTimeInMillis(endMill);
         if (mGoogleApiFitnessClient.isConnected()) {
-            if(callingActivity != null &&  // need non aggregated buckets data
+            if (callingActivity != null &&  // need non aggregated buckets data
                     (callingActivity.equals(ChartActivity.class.toString())  // charts
-                            ||  callingActivity.equals(FragmentSettings.class.toString()))) // or email
-                if(type == 0) // need aggregated data for all types in sum=
-                    getWeek(start, end, getMainType(type), getAggregationType(type), true);
-                else // need aggregated data for all types in parts
-                    getWeek(start, end, getMainType(type), getAggregationType(type), false);
+                            || callingActivity.equals(FragmentSettings.class.toString()))) // or email
+                if (type == 0) // need aggregated data for all types in sum
+                {
+                    ArrayList<Pair<DataType, Pair<String, String>>> sumData =
+                            iterateTypes(start, end, getMainType(type), getAggregationType(type));
+                    returnValues(sumData);
+                } else // need aggregated data for all types in parts
+                {
+                    ArrayList<Pair<DataType, Pair<String, String>>> sumData =
+                            getWeek(start, end, getMainType(type), getAggregationType(type));
+                    returnValues(sumData);
+                }
             else {
                 if (type == TYPE_GET_STEP_TODAY_DATA) // need aggregated non buckets data
                     getStepsToday(start, end);
@@ -126,8 +133,7 @@ public class GoogleFitService extends IntentService {
 
     //region Get Types
 
-    private DataType getAggregationType(int type)
-    {
+    private DataType getAggregationType(int type) {
         if (type == TYPE_GET_STEP_TODAY_DATA)
             return DataType.AGGREGATE_STEP_COUNT_DELTA;
         else if (type == TYPE_GET_CALORIES_TODAY_DATA)
@@ -135,14 +141,13 @@ public class GoogleFitService extends IntentService {
         else if (type == TYPE_GET_WEIGHT_TODAY_DATA)
             return DataType.AGGREGATE_WEIGHT_SUMMARY;
         else if (type == TYPE_GET_NUTRITION_TODAY_DATA)
-           return DataType.AGGREGATE_NUTRITION_SUMMARY;
+            return DataType.AGGREGATE_NUTRITION_SUMMARY;
         else if (type == TYPE_GET_SLEEP_TODAY_DATA)
             return DataType.AGGREGATE_ACTIVITY_SUMMARY;
         return null;
     }
 
-    private DataType getMainType(int type)
-    {
+    private DataType getMainType(int type) {
         if (type == TYPE_GET_STEP_TODAY_DATA)
             return DataType.TYPE_STEP_COUNT_DELTA;
         else if (type == TYPE_GET_CALORIES_TODAY_DATA)
@@ -251,6 +256,7 @@ public class GoogleFitService extends IntentService {
     }
 
     private void getSleepToday(Calendar start, Calendar end) {
+        //todo
         long endTime = end.getTimeInMillis();
         long startTime = start.getTimeInMillis();
         final DataReadRequest readRequest = new DataReadRequest.Builder()
@@ -265,8 +271,9 @@ public class GoogleFitService extends IntentService {
         for (DataPoint dp : activityData.getDataPoints()) {
             for (Field field : dp.getDataType().getFields()) {
                 String res = dp.getValue(field).toString();
-                result.append(res);
+                result.append(field.getName()).append(" = ").append(res).append(", ");
             }
+            result = new StringBuilder(result.toString().substring(0, result.length() - 2));
         }
         Intent intent = new Intent(HISTORY_INTENT);
         intent.putExtra(HISTORY_EXTRA_SLEEP_TODAY, result.toString());
@@ -277,8 +284,15 @@ public class GoogleFitService extends IntentService {
 
     //region Period data
 
-    private void getWeek(Calendar start, Calendar end, DataType type, DataType agrType, boolean isSumData) {
-        //todo
+    private ArrayList<Pair<DataType, Pair<String, String>>> iterateTypes(Calendar start, Calendar end, DataType type, DataType agrType) {
+        ArrayList<Pair<DataType, Pair<String, String>>> sumData = new ArrayList<>();
+        for (int i = 2; i <= 6; i++) {
+            sumData.addAll(getWeek(start, end, getMainType(i), getAggregationType(i)));
+        }
+        return sumData;
+    }
+
+    private ArrayList<Pair<DataType, Pair<String, String>>> getWeek(Calendar start, Calendar end, DataType type, DataType agrType) {
         long endTime = end.getTimeInMillis();
         long startTime = start.getTimeInMillis();
         DataReadRequest readRequest =
@@ -310,9 +324,7 @@ public class GoogleFitService extends IntentService {
                 sumData.addAll(dumpDataSet(dataSet, type));
             }
         }
-        Intent intent = new Intent(HISTORY_INTENT);
-        intent.putExtra(HISTORY_EXTRA_AGGREGATED, sumData);
-        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+        return sumData;
     }
 
     private static ArrayList<Pair<DataType, Pair<String, String>>> dumpDataSet(DataSet dataSet, DataType type) {
@@ -330,24 +342,36 @@ public class GoogleFitService extends IntentService {
             Log.e("History", "\tStart: " + startDate + " " + startTime);
             Log.e("History", "\tEnd: " + endDate + " " + endTime);
             double doubleValue = 0;
-            String stringValue = "";
+            StringBuilder stringValue = new StringBuilder();
             if (type.equals(DataType.TYPE_ACTIVITY_SEGMENT)) {
-                //todo sleep
-                Log.e("History", "\tno data");
+                //todo
+                for (Field field : dp.getDataType().getFields()) {
+                    String res = dp.getValue(field).toString();
+                    stringValue.append(field.getName()).append(" = ").append(res).append(", ");
+                    Log.e("History", "\tField: " + field.getName() + " Value: " + dp.getValue(field));
+                }
+                stringValue = new StringBuilder(stringValue.toString().substring(0, stringValue.length() - 2));
             } else {
                 Field field = dp.getDataType().getFields().get(0);
                 Log.e("History", "\tField: " + field.getName() + " Value: " + dp.getValue(field));
-                if(field.getName().equals("nutrients")) // nutrition
-                    stringValue = dp.getValue(field).toString().replace("{", "").replace("}", "");
+                if (field.getName().equals("nutrients")) // nutrition
+                    stringValue = new StringBuilder(dp.getValue(field).toString().replace("{", "").replace("}", ""));
                 else // steps, calories, weight
                     doubleValue = Double.parseDouble(dp.getValue(field).toString());
             }
-            if(stringValue.length() == 0) stringValue = String.valueOf(doubleValue);
-            Pair<String, String> newDataEntry = new Pair<>(startDate, stringValue);
+            if (stringValue.length() == 0)
+                stringValue = new StringBuilder(String.valueOf(doubleValue));
+            Pair<String, String> newDataEntry = new Pair<>(startDate, stringValue.toString());
             Pair<DataType, Pair<String, String>> entry = new Pair<>(type, newDataEntry);
             parsedData.add(entry);
         }
         return parsedData;
+    }
+
+    private void returnValues(ArrayList<Pair<DataType, Pair<String, String>>> sumData) {
+        Intent intent = new Intent(HISTORY_INTENT);
+        intent.putExtra(HISTORY_EXTRA_AGGREGATED, sumData);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
     //endregion

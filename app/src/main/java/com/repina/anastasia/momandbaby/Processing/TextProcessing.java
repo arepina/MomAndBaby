@@ -50,14 +50,15 @@ public class TextProcessing {
             String translatedType = typeToString(type);
             String date = it.second.first;
             StringBuilder data = new StringBuilder(it.second.second);
-            if(DataType.TYPE_NUTRITION.equals(type)) {
-                data = new StringBuilder();
+            if(DataType.TYPE_NUTRITION.equals(type) || DataType.TYPE_ACTIVITY_SEGMENT.equals(type)) {
+                StringBuilder translatedData = new StringBuilder();
                 for(String item : data.toString().split(", ")) {
-                    String key = translateWord(item.substring(0, item.indexOf("=")));
-                    String value = item.substring(item.indexOf("=") + 1, item.length());
-                    data.append(key).append("=").append(value).append(", ");
+                    String key = translateWord(item.substring(0, item.indexOf("=")).replace(" ", ""));
+                    String value = item.substring(item.indexOf("=") + 1, item.length()).replace(" ", "");
+                    translatedData.append(key).append("=").append(value).append(", ");
                 }
-                data = new StringBuilder(data.substring(0, data.length() - 2));
+                translatedData = new StringBuilder(translatedData.substring(0, translatedData.length() - 2));
+                data = translatedData;
             }
             report.append(translatedType).append(" ").append(date).append(" ").append(data).append("\n");
         }
@@ -174,6 +175,12 @@ public class TextProcessing {
                 return "Сахар";
             case "vitamin_c":
                 return "Витамин С";
+            case "activity":
+                return "Активность";
+            case "duration":
+                return "Продолжительность";
+            case "num_segments":
+                return "Количество сегментов";
             default:
                 return word;
         }

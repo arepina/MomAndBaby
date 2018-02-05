@@ -90,7 +90,7 @@ public class StatsProcessing {
         start.setTime(end.getTime());
         if (length == 7) // - 7 days
             start.add(Calendar.WEEK_OF_YEAR, -1);
-        else if(length == 31) // - 1 month
+        else if (length == 31) // - 1 month
             start.add(Calendar.MONTH, -1);
         else
             start.add(Calendar.DATE, -length); // custom
@@ -108,19 +108,17 @@ public class StatsProcessing {
         service.putExtra(FROM, from.getTimeInMillis());
         service.putExtra(TO, to.getTimeInMillis());
         service.putExtra(CALLING, callingKey);
-        if(type != 0)  // custom
+        if (type != 0)  // custom
         {
             // need aggregated data for a concrete type
             service.putExtra(SERVICE_REQUEST_TYPE, type);
             activity.startService(service);
-        }
-        else{
-            if(callingKey.equals(FragmentSettings.class.toString())) // need aggregated data for all types in sum
+        } else {
+            if (callingKey.equals(FragmentSettings.class.toString())) // need aggregated data for all types in sum
             {
                 service.putExtra(SERVICE_REQUEST_TYPE, 0);
                 activity.startService(service);
-            }
-            else {  // need aggregated data for all types in parts
+            } else {  // need aggregated data for all types in parts
                 for (int i = 2; i <= 6; i++) // indexes of local consts
                 {
                     service.putExtra(SERVICE_REQUEST_TYPE, i);
