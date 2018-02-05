@@ -1,5 +1,8 @@
 package com.repina.anastasia.momandbaby.Processing;
 
+import android.renderscript.Element;
+
+import com.google.android.gms.fitness.data.DataType;
 import com.repina.anastasia.momandbaby.DataBase.DatabaseNames;
 import com.repina.anastasia.momandbaby.R;
 
@@ -87,5 +90,17 @@ public class ImageProcessing {
             default:
                 return "";
         }
+    }
+
+    public static String typeToString(DataType type) {
+        if(type.equals(DataType.TYPE_STEP_COUNT_DELTA))
+                return "Шаги";
+        if(type.equals(DataType.TYPE_CALORIES_EXPENDED))
+                return "Калории";
+        if(type.equals(DataType.TYPE_NUTRITION))
+                return "Питание";
+        if(type.equals(DataType.TYPE_ACTIVITY_SEGMENT))
+                return "Сон";
+         return type.toString();
     }
 }

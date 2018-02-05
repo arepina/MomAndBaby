@@ -61,7 +61,7 @@ public class GoogleFitService extends IntentService {
     public void onDestroy() {
         Log.d(TAG, "GoogleFitService destroyed");
         if (mGoogleApiFitnessClient.isConnected()) {
-            Log.d(TAG, "Disconecting Google Fit.");
+            Log.d(TAG, "Disconnecting Google Fit.");
             mGoogleApiFitnessClient.disconnect();
         }
         super.onDestroy();
@@ -104,7 +104,10 @@ public class GoogleFitService extends IntentService {
             if(callingActivity != null &&  // need non aggregated buckets data
                     (callingActivity.equals(ChartActivity.class.toString())  // charts
                             ||  callingActivity.equals(FragmentSettings.class.toString()))) // or email
-                getWeek(start, end, getMainType(type), getAggregationType(type));
+                if(type == 0) // need aggregated data for all types in sum=
+                    getWeek(start, end, getMainType(type), getAggregationType(type), true);
+                else // need aggregated data for all types in parts
+                    getWeek(start, end, getMainType(type), getAggregationType(type), false);
             else {
                 if (type == TYPE_GET_STEP_TODAY_DATA) // need aggregated non buckets data
                     getStepsToday(start, end);
@@ -120,6 +123,8 @@ public class GoogleFitService extends IntentService {
         } else
             Log.w(TAG, "Fit wasn't able to connect, so the request failed.");
     }
+
+    //region Get Types
 
     private DataType getAggregationType(int type)
     {
@@ -150,6 +155,10 @@ public class GoogleFitService extends IntentService {
             return DataType.TYPE_ACTIVITY_SEGMENT;
         return null;
     }
+
+    //endregion
+
+    //region Today data
 
     private void getStepsToday(Calendar start, Calendar end) {
         long endTime = end.getTimeInMillis();
@@ -264,7 +273,12 @@ public class GoogleFitService extends IntentService {
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
-    private void getWeek(Calendar start, Calendar end, DataType type, DataType agrType) {
+    //endregion
+
+    //region Period data
+
+    private void getWeek(Calendar start, Calendar end, DataType type, DataType agrType, boolean isSumData) {
+        //todo
         long endTime = end.getTimeInMillis();
         long startTime = start.getTimeInMillis();
         DataReadRequest readRequest =
@@ -336,6 +350,8 @@ public class GoogleFitService extends IntentService {
         return parsedData;
     }
 
+    //endregion
+
     private void buildFitnessClient() {
         // Create the Google API Client
         mGoogleApiFitnessClient = new GoogleApiClient.Builder(this)
@@ -385,6 +401,8 @@ public class GoogleFitService extends IntentService {
                 .build();
     }
 
+    //region Notifiers
+
     private void notifyUiFitConnected() {
         Intent intent = new Intent(FIT_NOTIFY_INTENT);
         intent.putExtra(FIT_EXTRA_CONNECTION_MESSAGE, FIT_EXTRA_CONNECTION_MESSAGE);
@@ -397,4 +415,6 @@ public class GoogleFitService extends IntentService {
         intent.putExtra(FIT_EXTRA_NOTIFY_FAILED_INTENT, result.getResolution());
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
+
+    //endregion
 }

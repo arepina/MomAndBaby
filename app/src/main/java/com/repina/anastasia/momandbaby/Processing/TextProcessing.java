@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.repina.anastasia.momandbaby.Processing.ImageProcessing.typeToString;
+
 public class TextProcessing {
 
     public static String formBabyDescription(HashMap<String, String> value) {
@@ -45,19 +47,19 @@ public class TextProcessing {
         for (int i = 0; i < sumData.size(); i++) {
             Pair<DataType, Pair<String, String>> it = sumData.get(i);
             DataType type = it.first;
-            //String imageName = ImageProcessing.imageToString(it.getItemImgName());
+            String translatedType = typeToString(type);
             String date = it.second.first;
-            String value = it.second.second;
-//            if("R.mipmap.nutrition".equals(it.getItemImgName())) {
-//                desc = new StringBuilder("");
-//                for(String item : it.getItemDesc().split(", ")) {
-//                    String key = translateWord(item.substring(0, item.indexOf("=")));
-//                    String value = item.substring(item.indexOf("=") + 1, item.length());
-//                    desc.append(key).append("=").append(value).append(", ");
-//                }
-//                desc = new StringBuilder(desc.substring(0, desc.length() - 2));
-//            }
-//            report.append(imageName).append(" ").append(date).append(" ").append(desc).append("\n");
+            StringBuilder data = new StringBuilder(it.second.second);
+            if(DataType.TYPE_NUTRITION.equals(type)) {
+                data = new StringBuilder();
+                for(String item : data.toString().split(", ")) {
+                    String key = translateWord(item.substring(0, item.indexOf("=")));
+                    String value = item.substring(item.indexOf("=") + 1, item.length());
+                    data.append(key).append("=").append(value).append(", ");
+                }
+                data = new StringBuilder(data.substring(0, data.length() - 2));
+            }
+            report.append(translatedType).append(" ").append(date).append(" ").append(data).append("\n");
         }
         if (report.length() == 0)
             NotificationsShow.showToast(context, context.getString(R.string.no_data));

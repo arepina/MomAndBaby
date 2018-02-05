@@ -17,6 +17,7 @@ import com.repina.anastasia.momandbaby.Adapters.GridItemArrayAdapter;
 import com.repina.anastasia.momandbaby.Connectors.FirebaseConnection;
 import com.repina.anastasia.momandbaby.DataBase.DatabaseNames;
 import com.repina.anastasia.momandbaby.Fragment.FragmentMom;
+import com.repina.anastasia.momandbaby.Fragment.FragmentSettings;
 import com.repina.anastasia.momandbaby.Helpers.FormattedDate;
 import com.repina.anastasia.momandbaby.Helpers.GoogleFitService;
 import com.repina.anastasia.momandbaby.Helpers.SharedConstants;
@@ -109,14 +110,22 @@ public class StatsProcessing {
         service.putExtra(CALLING, callingKey);
         if(type != 0)  // custom
         {
+            // need aggregated data for a concrete type
             service.putExtra(SERVICE_REQUEST_TYPE, type);
             activity.startService(service);
         }
         else{
-            for(int i = 2; i <= 6; i++) // indexes of local consts
+            if(callingKey.equals(FragmentSettings.class.toString())) // need aggregated data for all types in sum
             {
-                service.putExtra(SERVICE_REQUEST_TYPE, i);
+                service.putExtra(SERVICE_REQUEST_TYPE, 0);
                 activity.startService(service);
+            }
+            else {  // need aggregated data for all types in parts
+                for (int i = 2; i <= 6; i++) // indexes of local consts
+                {
+                    service.putExtra(SERVICE_REQUEST_TYPE, i);
+                    activity.startService(service);
+                }
             }
         }
     }
