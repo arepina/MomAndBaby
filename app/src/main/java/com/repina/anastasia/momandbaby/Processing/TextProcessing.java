@@ -121,7 +121,7 @@ public class TextProcessing {
         return dbNameToString(singleSnapshot.getKey()) + " " + dateValue + "; " + line + "\n";
     }
 
-    private static String translateWord(String word) {
+    public static String translateWord(String word) {
         switch (word) {
             case "weight":
                 return "Вес";

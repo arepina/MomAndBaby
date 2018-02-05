@@ -50,6 +50,7 @@ import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.TYPE_GET_NU
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.TYPE_GET_SLEEP_TODAY_DATA;
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.TYPE_GET_STEP_TODAY_DATA;
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.TYPE_GET_WEIGHT_TODAY_DATA;
+import static com.repina.anastasia.momandbaby.Processing.TextProcessing.translateWord;
 
 public class GoogleFitService extends IntentService {
 
@@ -271,7 +272,7 @@ public class GoogleFitService extends IntentService {
         for (DataPoint dp : activityData.getDataPoints()) {
             for (Field field : dp.getDataType().getFields()) {
                 String res = dp.getValue(field).toString();
-                result.append(field.getName()).append(" = ").append(res).append(", ");
+                result.append(translateWord(field.getName())).append("=").append(res).append(", ");
             }
             result = new StringBuilder(result.toString().substring(0, result.length() - 2));
         }
@@ -347,7 +348,7 @@ public class GoogleFitService extends IntentService {
                 //todo
                 for (Field field : dp.getDataType().getFields()) {
                     String res = dp.getValue(field).toString();
-                    stringValue.append(field.getName()).append(" = ").append(res).append(", ");
+                    stringValue.append(field.getName()).append("=").append(res).append(", ");
                     Log.e("History", "\tField: " + field.getName() + " Value: " + dp.getValue(field));
                 }
                 stringValue = new StringBuilder(stringValue.toString().substring(0, stringValue.length() - 2));

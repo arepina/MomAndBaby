@@ -92,7 +92,7 @@ public class ImageProcessing {
         }
     }
 
-    public static String typeToString(DataType type) {
+    static String typeToString(DataType type) {
         if(type.equals(DataType.TYPE_STEP_COUNT_DELTA))
                 return "Шаги";
         if(type.equals(DataType.TYPE_CALORIES_EXPENDED))
@@ -101,6 +101,8 @@ public class ImageProcessing {
                 return "Питание";
         if(type.equals(DataType.TYPE_ACTIVITY_SEGMENT))
                 return "Сон";
+        if(type.equals(DataType.TYPE_WEIGHT))
+            return "Вес";
          return type.toString();
     }
 }
