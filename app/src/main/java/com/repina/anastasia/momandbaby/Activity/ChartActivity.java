@@ -140,7 +140,7 @@ public class ChartActivity extends AppCompatActivity {
                         String babyId = sp.getString(SharedConstants.BABY_ID_KEY, "");
                         FirebaseConnection connection = new FirebaseConnection();
                         FirebaseDatabase database = connection.getDatabase();
-                        if(selectedItemName.equals(features.get(0)) || selectedItemName.equals(features.get(1))) // height and weight only
+                        if (selectedItemName.equals(features.get(0)) || selectedItemName.equals(features.get(1))) // height and weight only
                             initIdealChartData(getApplicationContext(), selectedItemName); // add the ideal data to chart
                         getValuesFromFirebase(database,
                                 getBabyChartName(selectedItemName),
@@ -168,14 +168,20 @@ public class ChartActivity extends AppCompatActivity {
         return "";
     }
 
-    private String getMomChartName()
-    {
-        switch (spinnerSelectedIndex)
-        {
-            case 0:{return features.get(0);}
-            case 1:{return features.get(1);}
-            case 2:{return features.get(2);}
-            case 3:{return features.get(3);}
+    private String getMomChartName() {
+        switch (spinnerSelectedIndex) {
+            case 0: {
+                return features.get(0);
+            }
+            case 1: {
+                return features.get(1);
+            }
+            case 2: {
+                return features.get(2);
+            }
+            case 3: {
+                return features.get(3);
+            }
         }
         return "";
     }
@@ -456,7 +462,7 @@ public class ChartActivity extends AppCompatActivity {
                     break;
                 }
             }
-            if(e != null) {
+            if (e != null) {
                 entries.add(e);
                 labels.add(date);
             }
@@ -578,7 +584,7 @@ public class ChartActivity extends AppCompatActivity {
     @Override
     public void onPause() {
         super.onPause();
-        if(dialog != null)
+        if (dialog != null)
             dialog.dismiss();
     }
 }

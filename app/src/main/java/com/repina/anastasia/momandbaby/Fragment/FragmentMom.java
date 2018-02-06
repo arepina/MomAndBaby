@@ -17,18 +17,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.fitness.FitnessStatusCodes;
-import com.repina.anastasia.momandbaby.Activity.TabsActivity;
 import com.repina.anastasia.momandbaby.Adapters.GridItem;
 import com.repina.anastasia.momandbaby.Adapters.GridItemArrayAdapter;
 import com.repina.anastasia.momandbaby.Connectors.ConnectionDetector;
 import com.repina.anastasia.momandbaby.Helpers.FormattedDate;
 import com.repina.anastasia.momandbaby.Helpers.GoogleFitService;
-import com.repina.anastasia.momandbaby.Helpers.NotificationsShow;
 import com.repina.anastasia.momandbaby.Processing.StatsProcessing;
 import com.repina.anastasia.momandbaby.R;
 
@@ -36,7 +33,6 @@ import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.FIT_EXTRA_C
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.FIT_EXTRA_NOTIFY_FAILED_INTENT;
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.FIT_EXTRA_NOTIFY_FAILED_STATUS_CODE;
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.FIT_NOTIFY_INTENT;
-import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.FROM;
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.HISTORY_DATE;
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.HISTORY_EXTRA_CALORIES_TODAY;
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.HISTORY_EXTRA_NUTRITION_TODAY;
@@ -45,12 +41,6 @@ import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.HISTORY_EXT
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.HISTORY_EXTRA_WEIGHT_TODAY;
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.HISTORY_INTENT;
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.SERVICE_REQUEST_TYPE;
-import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.TO;
-import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.TYPE_GET_CALORIES_TODAY_DATA;
-import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.TYPE_GET_NUTRITION_TODAY_DATA;
-import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.TYPE_GET_SLEEP_TODAY_DATA;
-import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.TYPE_GET_STEP_TODAY_DATA;
-import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.TYPE_GET_WEIGHT_TODAY_DATA;
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.TYPE_REQUEST_CONNECTION;
 
 import java.util.Calendar;
@@ -67,6 +57,8 @@ public class FragmentMom extends Fragment {
     public static final String AUTH_PENDING = "auth_state_pending";
     private boolean authInProgress = false;
     public static final int REQUEST_OAUTH = 1431;
+
+    public static boolean isActivityAlreadyCreated = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -154,12 +146,17 @@ public class FragmentMom extends Fragment {
             }
         });
 
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mFitStatusReceiver, new IntentFilter(FIT_NOTIFY_INTENT));
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mFitDataReceiver, new IntentFilter(HISTORY_INTENT));
+        if (!isActivityAlreadyCreated) { // we do need to establish the connection only once
+            LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mFitStatusReceiver, new IntentFilter(FIT_NOTIFY_INTENT));
+            LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mFitDataReceiver, new IntentFilter(HISTORY_INTENT));
+        }
         requestFitConnection();
+
+        isActivityAlreadyCreated = true;
 
         return v;
     }
+
 
     private void requestFitConnection() {
         Intent service = new Intent(getContext(), GoogleFitService.class);
@@ -201,27 +198,27 @@ public class FragmentMom extends Fragment {
                 momArrayAdapter.add(item);
             }
             if (intent.hasExtra(HISTORY_EXTRA_CALORIES_TODAY)) {
-                final int totalCalories = (int)intent.getDoubleExtra(HISTORY_EXTRA_CALORIES_TODAY, 0);
+                final int totalCalories = (int) intent.getDoubleExtra(HISTORY_EXTRA_CALORIES_TODAY, 0);
                 GridItem item = new GridItem(R.mipmap.calories, "R.mipmap.calories", String.valueOf(totalCalories), date);
                 momArrayAdapter.add(item);
             }
             if (intent.hasExtra(HISTORY_EXTRA_WEIGHT_TODAY)) {
-                final int totalWeight = (int)intent.getDoubleExtra(HISTORY_EXTRA_WEIGHT_TODAY, 0);
-                if(totalWeight != 0) {
+                final int totalWeight = (int) intent.getDoubleExtra(HISTORY_EXTRA_WEIGHT_TODAY, 0);
+                if (totalWeight != 0) {
                     GridItem item = new GridItem(R.mipmap.weight, "R.mipmap.weight", String.valueOf(totalWeight), date);
                     momArrayAdapter.add(item);
                 }
             }
             if (intent.hasExtra(HISTORY_EXTRA_NUTRITION_TODAY)) {
                 final String totalNutrition = intent.getStringExtra(HISTORY_EXTRA_NUTRITION_TODAY);
-                if(totalNutrition.length() != 0) {
+                if (totalNutrition.length() != 0) {
                     GridItem item = new GridItem(R.mipmap.nutrition, "R.mipmap.nutrition", String.valueOf(totalNutrition), date);
                     momArrayAdapter.add(item);
                 }
             }
             if (intent.hasExtra(HISTORY_EXTRA_SLEEP_TODAY)) {
                 final String totalSleep = intent.getStringExtra(HISTORY_EXTRA_SLEEP_TODAY);
-                if(totalSleep.length() != 0) {
+                if (totalSleep.length() != 0) {
                     GridItem item = new GridItem(R.mipmap.sleep, "R.mipmap.sleep", String.valueOf(totalSleep), date);
                     momArrayAdapter.add(item);
                 }

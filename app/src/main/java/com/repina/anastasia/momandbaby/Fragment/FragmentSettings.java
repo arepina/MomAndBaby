@@ -66,6 +66,8 @@ public class FragmentSettings extends Fragment {
     private Calendar from;
     private Calendar to;
 
+    public static boolean isActivityAlreadyCreated = false;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -144,9 +146,14 @@ public class FragmentSettings extends Fragment {
             }
         });
 
-        LocalBroadcastManager.getInstance(getContext()).registerReceiver(mFitStatusReceiver, new IntentFilter(FIT_NOTIFY_INTENT));
-        LocalBroadcastManager.getInstance(getContext()).registerReceiver(mFitDataReceiver, new IntentFilter(HISTORY_INTENT));
+
+        if (!isActivityAlreadyCreated) { // we do need to establish the connection only once
+            LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mFitStatusReceiver, new IntentFilter(FIT_NOTIFY_INTENT));
+            LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mFitDataReceiver, new IntentFilter(HISTORY_INTENT));
+        }
         requestFitConnection();
+
+        isActivityAlreadyCreated = true;
 
         return v;
     }

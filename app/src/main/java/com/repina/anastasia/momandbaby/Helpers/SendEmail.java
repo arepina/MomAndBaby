@@ -30,7 +30,7 @@ public class SendEmail {
 
     public static void createEmail(final Context context, int length, Calendar from, Calendar to,
                                    boolean whoFlag, FragmentActivity activity, String callingKey) {
-        // logic depends on the who flag
+        // logic depends on the who isActivityAlreadyCreated
         if (whoFlag) // baby
             createBabyEmail(context, length, from, to);
         else //mom

@@ -36,6 +36,7 @@ import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.FIT_EXTRA_N
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.FIT_EXTRA_NOTIFY_FAILED_STATUS_CODE;
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.FIT_NOTIFY_INTENT;
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.FROM;
+import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.HISTORY_DATE;
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.HISTORY_EXTRA_AGGREGATED;
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.HISTORY_EXTRA_CALORIES_TODAY;
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.HISTORY_EXTRA_NUTRITION_TODAY;
@@ -185,6 +186,7 @@ public class GoogleFitService extends IntentService {
         }
         Intent intent = new Intent(HISTORY_INTENT);
         intent.putExtra(HISTORY_EXTRA_STEPS_TODAY, totalSteps);
+        intent.putExtra(HISTORY_DATE, FormattedDate.getFormattedDate(start));
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
@@ -207,6 +209,7 @@ public class GoogleFitService extends IntentService {
         }
         Intent intent = new Intent(HISTORY_INTENT);
         intent.putExtra(HISTORY_EXTRA_CALORIES_TODAY, totalCalories);
+        intent.putExtra(HISTORY_DATE, FormattedDate.getFormattedDate(start));
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
@@ -230,6 +233,7 @@ public class GoogleFitService extends IntentService {
         }
         Intent intent = new Intent(HISTORY_INTENT);
         intent.putExtra(HISTORY_EXTRA_WEIGHT_TODAY, totalWeight);
+        intent.putExtra(HISTORY_DATE, FormattedDate.getFormattedDate(start));
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
@@ -253,6 +257,7 @@ public class GoogleFitService extends IntentService {
         }
         Intent intent = new Intent(HISTORY_INTENT);
         intent.putExtra(HISTORY_EXTRA_NUTRITION_TODAY, result.toString());
+        intent.putExtra(HISTORY_DATE, FormattedDate.getFormattedDate(start));
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
@@ -278,6 +283,7 @@ public class GoogleFitService extends IntentService {
         }
         Intent intent = new Intent(HISTORY_INTENT);
         intent.putExtra(HISTORY_EXTRA_SLEEP_TODAY, result.toString());
+        intent.putExtra(HISTORY_DATE, FormattedDate.getFormattedDate(start));
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
