@@ -46,8 +46,7 @@ public class TabsActivity extends AppCompatActivity {
             finish();
     }
 
-    private void buildTabs()
-    {
+    private void buildTabs() {
         FragmentTabHost mTabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
         mTabHost.setup(this, getSupportFragmentManager(), android.R.id.tabcontent);
 

@@ -67,6 +67,8 @@ public class FragmentMom extends Fragment {
         return initMom(inflater, container);
     }
 
+    //region Init layout
+
     private View initMom(LayoutInflater inflater, ViewGroup container) {
         final View v = inflater.inflate(R.layout.fragment_mom, container, false);
 
@@ -92,6 +94,22 @@ public class FragmentMom extends Fragment {
         momArrayAdapter.add(item);
         listViewMom.setAdapter(momArrayAdapter);
 
+        initTodayAndTomorrow(v);
+
+        if (!isActivityAlreadyCreated) { // we do need to establish the connection only once
+            LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mFitStatusReceiver, new IntentFilter(FIT_NOTIFY_INTENT));
+            LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mFitDataReceiver, new IntentFilter(HISTORY_INTENT));
+        }
+        if(ConnectionDetector.isConnected(getContext()))
+            requestFitConnection();
+
+        isActivityAlreadyCreated = true;
+
+        return v;
+    }
+
+    private void initTodayAndTomorrow(View v)
+    {
         final TextView headerDate = (TextView) v.findViewById(R.id.headerMom);
 
         TextView yesterday = (TextView) v.findViewById(R.id.yesterdayMom);
@@ -145,18 +163,11 @@ public class FragmentMom extends Fragment {
                 }
             }
         });
-
-        if (!isActivityAlreadyCreated) { // we do need to establish the connection only once
-            LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mFitStatusReceiver, new IntentFilter(FIT_NOTIFY_INTENT));
-            LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mFitDataReceiver, new IntentFilter(HISTORY_INTENT));
-        }
-        requestFitConnection();
-
-        isActivityAlreadyCreated = true;
-
-        return v;
     }
 
+    //endregion
+
+    //region Fit service connection
 
     private void requestFitConnection() {
         Intent service = new Intent(getContext(), GoogleFitService.class);
@@ -182,7 +193,7 @@ public class FragmentMom extends Fragment {
             }
             if (intent.hasExtra(FIT_EXTRA_CONNECTION_MESSAGE)) {
                 Log.d(TAG, "Fit connection successful - closing connect screen if it's open");
-                fitHandleConnection();
+                fab.setEnabled(false);
             }
         }
     };
@@ -226,11 +237,6 @@ public class FragmentMom extends Fragment {
             listViewMom.setAdapter(momArrayAdapter);
         }
     };
-
-    private void fitHandleConnection() {
-        Log.i(TAG, "Fit connected");
-        fab.setEnabled(false);
-    }
 
     private void fitHandleFailedConnection(ConnectionResult result) {
         Log.i(TAG, "Activity Thread Google Fit Connection failed. Cause: " + result.toString());
@@ -294,4 +300,6 @@ public class FragmentMom extends Fragment {
         LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(mFitDataReceiver);
         super.onDestroy();
     }
+
+    //endregion
 }

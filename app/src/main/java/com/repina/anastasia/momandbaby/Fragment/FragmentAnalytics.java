@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.repina.anastasia.momandbaby.Activity.ChartActivity;
 import com.repina.anastasia.momandbaby.Activity.StatsActivity;
+import com.repina.anastasia.momandbaby.Connectors.ConnectionDetector;
 import com.repina.anastasia.momandbaby.R;
 
 public class FragmentAnalytics extends Fragment {
@@ -31,9 +32,11 @@ public class FragmentAnalytics extends Fragment {
         cardViewMom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent nextActivity = new Intent(v.getContext(), ChartActivity.class);
-                nextActivity.putExtra("Type", "Mom");
-                startActivity(nextActivity);
+                if(ConnectionDetector.isConnected(getContext())) {
+                    Intent nextActivity = new Intent(v.getContext(), ChartActivity.class);
+                    nextActivity.putExtra("Type", "Mom");
+                    startActivity(nextActivity);
+                }
             }
         });
 
@@ -41,8 +44,10 @@ public class FragmentAnalytics extends Fragment {
         cardViewBaby.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent nextActivity = new Intent(v.getContext(), StatsActivity.class);
-                startActivity(nextActivity);
+                if(ConnectionDetector.isConnected(getContext())) {
+                    Intent nextActivity = new Intent(v.getContext(), StatsActivity.class);
+                    startActivity(nextActivity);
+                }
             }
         });
 

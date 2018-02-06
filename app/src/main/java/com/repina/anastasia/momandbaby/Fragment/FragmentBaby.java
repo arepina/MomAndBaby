@@ -40,6 +40,8 @@ public class FragmentBaby extends Fragment implements SwipeListView.SwipeListVie
         return initBaby(inflater, container);
     }
 
+    //region Init layout
+
     private View initBaby(LayoutInflater inflater, ViewGroup container) {
         final View v = inflater.inflate(R.layout.fragment_baby, container, false);
 
@@ -48,7 +50,14 @@ public class FragmentBaby extends Fragment implements SwipeListView.SwipeListVie
         l.exec();
 
         babyArrayAdapter = new GridItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row);
-        StatsProcessing.getBabyStats(babyArrayAdapter, calendar, getContext(), listViewBaby);// Load today add's from Firebase for baby
+        GridItem item = new GridItem(R.mipmap.cross, "R.mipmap.cross", getResources().getString(R.string.no_data_today), null, null);
+        babyArrayAdapter.add(item);
+        listViewBaby.setAdapter(babyArrayAdapter);
+        if(ConnectionDetector.isConnected(getContext())) {
+            // Load today add's from Firebase for baby
+            babyArrayAdapter.clear();
+            StatsProcessing.getBabyStats(babyArrayAdapter, calendar, getContext(), listViewBaby);
+        }
 
         FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.floatingActionButton);
         fab.setImageResource(R.mipmap.plus);
@@ -57,13 +66,22 @@ public class FragmentBaby extends Fragment implements SwipeListView.SwipeListVie
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                babyArrayAdapter.clear();
-                Intent intent = new Intent(v.getContext(), ChooseFeatureActivity.class);
-                intent.putExtra("requestCode", BABY_NEW_FEATURE);
-                startActivityForResult(intent, BABY_NEW_FEATURE);
+                if(ConnectionDetector.isConnected(getContext())) {
+                    babyArrayAdapter.clear();
+                    Intent intent = new Intent(v.getContext(), ChooseFeatureActivity.class);
+                    intent.putExtra("requestCode", BABY_NEW_FEATURE);
+                    startActivityForResult(intent, BABY_NEW_FEATURE);
+                }
             }
         });
 
+        initYesterdayAndTomorrow(v);
+
+        return v;
+    }
+
+    private void initYesterdayAndTomorrow(View v)
+    {
         final TextView headerDate = (TextView) v.findViewById(R.id.headerBaby);
 
         TextView yesterday = (TextView) v.findViewById(R.id.yesterdayBaby);
@@ -102,8 +120,6 @@ public class FragmentBaby extends Fragment implements SwipeListView.SwipeListVie
 
             }
         });
-
-        return v;
     }
 
     @Override
@@ -116,6 +132,10 @@ public class FragmentBaby extends Fragment implements SwipeListView.SwipeListVie
             }
         }
     }
+
+    //endregion
+
+    //region Delete by swipe
 
     @Override
     public ListView getListView() {
@@ -136,6 +156,10 @@ public class FragmentBaby extends Fragment implements SwipeListView.SwipeListVie
     public void onItemClickListener(ListAdapter adapter, int position) {
         // do nothing
     }
+
+    //endregion
+
+    //region Tomorrow and yesterday
 
     private void goYesterday(TextView headerDate) {
         calendar.add(Calendar.DAY_OF_MONTH, -1);
@@ -160,4 +184,6 @@ public class FragmentBaby extends Fragment implements SwipeListView.SwipeListVie
             headerDate.setText(date);
         }
     }
+
+    //endregion
 }

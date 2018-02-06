@@ -21,7 +21,7 @@ public class StatsActivity extends AppCompatActivity {
         cardViewMom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(ConnectionDetector.isConnected(getApplicationContext())) {
+                if (ConnectionDetector.isConnected(getApplicationContext())) {
                     Intent nextActivity = new Intent(v.getContext(), ChartActivity.class);
                     nextActivity.putExtra("Type", "Baby");
                     startActivity(nextActivity);
@@ -33,7 +33,7 @@ public class StatsActivity extends AppCompatActivity {
         cardViewBaby.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(ConnectionDetector.isConnected(getApplicationContext())) {
+                if (ConnectionDetector.isConnected(getApplicationContext())) {
                     Intent nextActivity = new Intent(v.getContext(), VaccinationsActivity.class);
                     startActivity(nextActivity);
                 }
