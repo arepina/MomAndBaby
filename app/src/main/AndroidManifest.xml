@@ -32,13 +32,14 @@
         <activity android:name=".Activity.StatsActivity" />
         <activity android:name=".Activity.NewFeatureActivity" />
         <activity android:name=".Activity.AppInfoActivity" />
-        <activity android:name=".Activity.ChartActivity"/>
-        <activity android:name=".Activity.VaccinationsActivity"/>
+        <activity android:name=".Activity.ChartActivity" />
+        <activity android:name=".Activity.VaccinationsActivity" />
+
         <service
             android:name=".Helpers.GoogleFitService"
-            android:enabled="true" >
-        </service>
+            android:enabled="true"></service>
 
+        <activity android:name=".TeethActivity"></activity>
     </application>
 
 </manifest>

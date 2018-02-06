@@ -130,6 +130,8 @@
 
     <!--Load-->
     <string name="data_load_stop">Загрузка данных была прервана</string>
+    <string name="up_teeth">Верхняя челюсть</string>
+    <string name="down_teeth">Нижняя челюсть</string>
 
     <string-array name="parametersBaby">
         <item>Рост</item>

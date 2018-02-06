@@ -74,6 +74,8 @@ public class FragmentSettings extends Fragment {
         return initSettings(inflater, container);
     }
 
+    //region Init layout
+
     private View initSettings(LayoutInflater inflater, ViewGroup container) {
         View v = inflater.inflate(R.layout.fragment_settings, container, false);
 
@@ -238,6 +240,8 @@ public class FragmentSettings extends Fragment {
         });
         alert.show();
     }
+
+    //endregion
 
     //region Fit service connection
 
