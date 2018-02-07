@@ -17,8 +17,8 @@ public class StatsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stats);
 
-        CardView cardViewMom = (CardView) findViewById(R.id.chartAnalytics);
-        cardViewMom.setOnClickListener(new View.OnClickListener() {
+        CardView cardViewChart = (CardView) findViewById(R.id.chartAnalytics);
+        cardViewChart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (ConnectionDetector.isConnected(getApplicationContext())) {
@@ -29,12 +29,23 @@ public class StatsActivity extends AppCompatActivity {
             }
         });
 
-        CardView cardViewBaby = (CardView) findViewById(R.id.vaccinationsAnalytics);
-        cardViewBaby.setOnClickListener(new View.OnClickListener() {
+        CardView cardViewVaccination = (CardView) findViewById(R.id.vaccinationsAnalytics);
+        cardViewVaccination.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (ConnectionDetector.isConnected(getApplicationContext())) {
                     Intent nextActivity = new Intent(v.getContext(), VaccinationsActivity.class);
+                    startActivity(nextActivity);
+                }
+            }
+        });
+
+        CardView cardViewTeeth = (CardView) findViewById(R.id.teethAnalytics);
+        cardViewTeeth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ConnectionDetector.isConnected(getApplicationContext())) {
+                    Intent nextActivity = new Intent(v.getContext(), TeethActivity.class);
                     startActivity(nextActivity);
                 }
             }

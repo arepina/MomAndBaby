@@ -43,6 +43,8 @@ public class TeethActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_teeth);
 
+        //todo change the layout depends on the calling activity new feature or teeth analysis
+
         FirebaseConnection connection = new FirebaseConnection();
         final FirebaseDatabase database = connection.getDatabase();
         SharedPreferences sp = getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
@@ -347,10 +349,13 @@ public class TeethActivity extends AppCompatActivity {
     //region Firebase
 
     private void addNewValueToFirebase(FirebaseDatabase database) {
-        if(teeth.getBabyId() != null) {
+        if (teeth.getBabyId() != null) {
+            Calendar today = Calendar.getInstance();
+            String lastUpdateDate = FormattedDate.getFormattedDate(today);
+            teeth.setDate(lastUpdateDate);
             DatabaseReference databaseReference = database.getReference().child(DatabaseNames.TEETH);
             databaseReference.push().setValue(teeth);
-        }else
+        } else
             NotificationsShow.showToast(getApplicationContext(), getString(R.string.add_any_data));
     }
 
