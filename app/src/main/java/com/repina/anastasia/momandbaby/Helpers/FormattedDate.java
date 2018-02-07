@@ -22,7 +22,7 @@ public class FormattedDate {
         return sdText.format(startDate);
     }
 
-    static Date stringToDate(String str) throws ParseException {
+    public static Date stringToDate(String str) throws ParseException {
         return sd.parse(str);
     }
 }

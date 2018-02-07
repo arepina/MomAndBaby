@@ -133,6 +133,7 @@
     <string name="up_teeth">Верхняя челюсть</string>
     <string name="down_teeth">Нижняя челюсть</string>
     <string name="press_teeth">Нажмите на зуб, который прорезался у вашего малыша</string>
+    <string name="add_any_data">Сначала добавьте какие-то данные, чтобы их сохранить</string>
 
     <string-array name="parametersBaby">
         <item>Рост</item>

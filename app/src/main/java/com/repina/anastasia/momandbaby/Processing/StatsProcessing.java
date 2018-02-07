@@ -59,6 +59,7 @@ public class StatsProcessing {
                                     for (Map.Entry<String, HashMap<String, String>> entry : items.entrySet()) {
                                         HashMap<String, String> value = entry.getValue();
                                         String date = value.get("date");
+                                        //todo fix the teeth parsing
                                         if (date.substring(0, 10).equals(FormattedDate.getFormattedDate(dateAndTime))
                                                 & value.get("babyId").equals(babyID)) {
                                             int imageId = ImageProcessing.getImageId(singleSnapshot.getKey(), value);
