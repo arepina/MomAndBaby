@@ -19,7 +19,7 @@ import static com.repina.anastasia.momandbaby.Processing.ImageProcessing.typeToS
 
 public class TextProcessing {
 
-    public static String formBabyDescription(HashMap<String, String> value) {
+    public static String formBabyDescription(HashMap<String, String> value, String dbName) {
         StringBuilder line = new StringBuilder();
         value.remove("babyId");
         value.remove("date");
@@ -33,6 +33,7 @@ public class TextProcessing {
                         line.append("\n");
                 }
             } catch (NumberFormatException e) { // not a number
+                if(dbName.equals(DatabaseNames.TEETH)) return "У малыша прорезался зуб!";
                 line.append(translateWord(entry.getKey())).append(": ").append(val);
                 if (!"\n".equals(String.valueOf(line.charAt(line.length() - 1))))
                     line.append("\n");

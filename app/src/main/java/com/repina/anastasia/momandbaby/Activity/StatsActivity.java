@@ -10,6 +10,8 @@ import android.view.View;
 import com.repina.anastasia.momandbaby.Connectors.ConnectionDetector;
 import com.repina.anastasia.momandbaby.R;
 
+import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.CALLING;
+
 public class StatsActivity extends AppCompatActivity {
 
     @Override
@@ -46,6 +48,7 @@ public class StatsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (ConnectionDetector.isConnected(getApplicationContext())) {
                     Intent nextActivity = new Intent(v.getContext(), TeethActivity.class);
+                    nextActivity.putExtra(CALLING, StatsActivity.class.toString());
                     startActivity(nextActivity);
                 }
             }

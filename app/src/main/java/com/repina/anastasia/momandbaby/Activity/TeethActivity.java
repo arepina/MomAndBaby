@@ -31,6 +31,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import static android.graphics.Paint.ANTI_ALIAS_FLAG;
+import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.CALLING;
 
 public class TeethActivity extends AppCompatActivity {
 
@@ -38,12 +39,14 @@ public class TeethActivity extends AppCompatActivity {
     private String birthday;
     private String babyId;
 
+    private String calling;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_teeth);
 
-        //todo change the layout depends on the calling activity new feature or teeth analysis
+        calling = getIntent().getStringExtra(CALLING);
 
         FirebaseConnection connection = new FirebaseConnection();
         final FirebaseDatabase database = connection.getDatabase();
@@ -63,6 +66,9 @@ public class TeethActivity extends AppCompatActivity {
         });
 
         initFABs();
+
+        if (calling.equals(StatsActivity.class.toString())) // the user just watch the teeth
+            makeEnabledFalse();
 
         getTeethFromFirebase(database, babyId);
     }
@@ -98,15 +104,15 @@ public class TeethActivity extends AppCompatActivity {
     }
 
     private void initLists() {
-        ArrayList<Pair<Integer, Boolean>> doesHave = teeth.getDoesHave();
-        ArrayList<Pair<Integer, String>> whenHave = teeth.getWhenHave();
+        ArrayList<Boolean> doesHave = teeth.getDoesHave();
+        ArrayList<Integer> whenHave = teeth.getWhenHave();
         if (doesHave == null) // we have not added the teeth data before
         {
             doesHave = new ArrayList<>();
             whenHave = new ArrayList<>();
             for (int i = 0; i < 20; i++) {
-                doesHave.add(new Pair<>(i, false));
-                whenHave.add(new Pair<>(i, ""));
+                doesHave.add(false);
+                whenHave.add(-1);
             }
             teeth.setDoesHave(doesHave);
             teeth.setWhenHave(whenHave);
@@ -114,12 +120,12 @@ public class TeethActivity extends AppCompatActivity {
         }
     }
 
-    private void updateListsInfo(int i) {
+    private void updateListsInfo(int i, int value) {
         initLists();
-        ArrayList<Pair<Integer, Boolean>> doesHave = teeth.getDoesHave();
-        ArrayList<Pair<Integer, String>> whenHave = teeth.getWhenHave();
-        doesHave.set(i, new Pair<>(i, true));
-        whenHave.set(i, new Pair<>(i, FormattedDate.getFormattedDate(Calendar.getInstance())));
+        ArrayList<Boolean> doesHave = teeth.getDoesHave();
+        ArrayList<Integer> whenHave = teeth.getWhenHave();
+        doesHave.set(i, true);
+        whenHave.set(i, value);
     }
 
     //endregion
@@ -134,6 +140,14 @@ public class TeethActivity extends AppCompatActivity {
         initPurple();
     }
 
+    private void makeEnabledFalse() {
+        for (int i = 1; i <= 20; i++) {
+            FloatingActionButton button = (FloatingActionButton) findViewById(getResources().getIdentifier("q" + i, "id",
+                    this.getPackageName()));
+            button.setEnabled(false);
+        }
+    }
+
     private void initRed() {
         final FloatingActionButton q1 = (FloatingActionButton) findViewById(R.id.q1);
         q1.setOnClickListener(new View.OnClickListener() {
@@ -141,7 +155,7 @@ public class TeethActivity extends AppCompatActivity {
             public void onClick(View v) {
                 int months = getMonthBetween();
                 q1.setImageBitmap(textAsBitmap(String.valueOf(months) + "M", 40, Color.WHITE));
-                updateListsInfo(0);
+                updateListsInfo(0, months);
             }
         });
 
@@ -151,7 +165,7 @@ public class TeethActivity extends AppCompatActivity {
             public void onClick(View v) {
                 int months = getMonthBetween();
                 q2.setImageBitmap(textAsBitmap(String.valueOf(months) + "M", 40, Color.WHITE));
-                updateListsInfo(1);
+                updateListsInfo(1, months);
             }
         });
 
@@ -161,7 +175,7 @@ public class TeethActivity extends AppCompatActivity {
             public void onClick(View v) {
                 int months = getMonthBetween();
                 q11.setImageBitmap(textAsBitmap(String.valueOf(months) + "M", 40, Color.WHITE));
-                updateListsInfo(10);
+                updateListsInfo(10, months);
             }
         });
 
@@ -171,7 +185,7 @@ public class TeethActivity extends AppCompatActivity {
             public void onClick(View v) {
                 int months = getMonthBetween();
                 q12.setImageBitmap(textAsBitmap(String.valueOf(months) + "M", 40, Color.WHITE));
-                updateListsInfo(11);
+                updateListsInfo(11, months);
             }
         });
     }
@@ -183,7 +197,7 @@ public class TeethActivity extends AppCompatActivity {
             public void onClick(View v) {
                 int months = getMonthBetween();
                 q3.setImageBitmap(textAsBitmap(String.valueOf(months) + "M", 40, Color.WHITE));
-                updateListsInfo(2);
+                updateListsInfo(2, months);
             }
         });
 
@@ -193,7 +207,7 @@ public class TeethActivity extends AppCompatActivity {
             public void onClick(View v) {
                 int months = getMonthBetween();
                 q4.setImageBitmap(textAsBitmap(String.valueOf(months) + "M", 40, Color.WHITE));
-                updateListsInfo(3);
+                updateListsInfo(3, months);
             }
         });
 
@@ -203,7 +217,7 @@ public class TeethActivity extends AppCompatActivity {
             public void onClick(View v) {
                 int months = getMonthBetween();
                 q13.setImageBitmap(textAsBitmap(String.valueOf(months) + "M", 40, Color.WHITE));
-                updateListsInfo(12);
+                updateListsInfo(12, months);
             }
         });
 
@@ -213,7 +227,7 @@ public class TeethActivity extends AppCompatActivity {
             public void onClick(View v) {
                 int months = getMonthBetween();
                 q14.setImageBitmap(textAsBitmap(String.valueOf(months) + "M", 40, Color.WHITE));
-                updateListsInfo(13);
+                updateListsInfo(13, months);
             }
         });
     }
@@ -225,7 +239,7 @@ public class TeethActivity extends AppCompatActivity {
             public void onClick(View v) {
                 int months = getMonthBetween();
                 q5.setImageBitmap(textAsBitmap(String.valueOf(months) + "M", 40, Color.WHITE));
-                updateListsInfo(4);
+                updateListsInfo(4, months);
             }
         });
 
@@ -235,7 +249,7 @@ public class TeethActivity extends AppCompatActivity {
             public void onClick(View v) {
                 int months = getMonthBetween();
                 q6.setImageBitmap(textAsBitmap(String.valueOf(months) + "M", 40, Color.WHITE));
-                updateListsInfo(5);
+                updateListsInfo(5, months);
             }
         });
 
@@ -245,7 +259,7 @@ public class TeethActivity extends AppCompatActivity {
             public void onClick(View v) {
                 int months = getMonthBetween();
                 q15.setImageBitmap(textAsBitmap(String.valueOf(months) + "M", 40, Color.WHITE));
-                updateListsInfo(14);
+                updateListsInfo(14, months);
             }
         });
 
@@ -255,7 +269,7 @@ public class TeethActivity extends AppCompatActivity {
             public void onClick(View v) {
                 int months = getMonthBetween();
                 q16.setImageBitmap(textAsBitmap(String.valueOf(months) + "M", 40, Color.WHITE));
-                updateListsInfo(15);
+                updateListsInfo(15, months);
             }
         });
     }
@@ -267,7 +281,7 @@ public class TeethActivity extends AppCompatActivity {
             public void onClick(View v) {
                 int months = getMonthBetween();
                 q7.setImageBitmap(textAsBitmap(String.valueOf(months) + "M", 40, Color.WHITE));
-                updateListsInfo(6);
+                updateListsInfo(6, months);
             }
         });
 
@@ -277,7 +291,7 @@ public class TeethActivity extends AppCompatActivity {
             public void onClick(View v) {
                 int months = getMonthBetween();
                 q8.setImageBitmap(textAsBitmap(String.valueOf(months) + "M", 40, Color.WHITE));
-                updateListsInfo(7);
+                updateListsInfo(7, months);
             }
         });
 
@@ -287,7 +301,7 @@ public class TeethActivity extends AppCompatActivity {
             public void onClick(View v) {
                 int months = getMonthBetween();
                 q17.setImageBitmap(textAsBitmap(String.valueOf(months) + "M", 40, Color.WHITE));
-                updateListsInfo(16);
+                updateListsInfo(16, months);
             }
         });
 
@@ -297,7 +311,7 @@ public class TeethActivity extends AppCompatActivity {
             public void onClick(View v) {
                 int months = getMonthBetween();
                 q18.setImageBitmap(textAsBitmap(String.valueOf(months) + "M", 40, Color.WHITE));
-                updateListsInfo(17);
+                updateListsInfo(17, months);
             }
         });
     }
@@ -309,7 +323,7 @@ public class TeethActivity extends AppCompatActivity {
             public void onClick(View v) {
                 int months = getMonthBetween();
                 q9.setImageBitmap(textAsBitmap(String.valueOf(months) + "M", 40, Color.WHITE));
-                updateListsInfo(8);
+                updateListsInfo(8, months);
             }
         });
 
@@ -319,7 +333,7 @@ public class TeethActivity extends AppCompatActivity {
             public void onClick(View v) {
                 int months = getMonthBetween();
                 q10.setImageBitmap(textAsBitmap(String.valueOf(months) + "M", 40, Color.WHITE));
-                updateListsInfo(9);
+                updateListsInfo(9, months);
             }
         });
 
@@ -329,7 +343,7 @@ public class TeethActivity extends AppCompatActivity {
             public void onClick(View v) {
                 int months = getMonthBetween();
                 q19.setImageBitmap(textAsBitmap(String.valueOf(months) + "M", 40, Color.WHITE));
-                updateListsInfo(18);
+                updateListsInfo(18, months);
             }
         });
 
@@ -339,7 +353,7 @@ public class TeethActivity extends AppCompatActivity {
             public void onClick(View v) {
                 int months = getMonthBetween();
                 q20.setImageBitmap(textAsBitmap(String.valueOf(months) + "M", 40, Color.WHITE));
-                updateListsInfo(19);
+                updateListsInfo(19, months);
             }
         });
     }
@@ -349,6 +363,7 @@ public class TeethActivity extends AppCompatActivity {
     //region Firebase
 
     private void addNewValueToFirebase(FirebaseDatabase database) {
+        //todo check if we have already added teeth values for aby to firebase, so we can just update them
         if (teeth.getBabyId() != null) {
             Calendar today = Calendar.getInstance();
             String lastUpdateDate = FormattedDate.getFormattedDate(today);
@@ -370,7 +385,17 @@ public class TeethActivity extends AppCompatActivity {
                         if (dataSnapshot.exists()) {
                             DataSnapshot snapshot = dataSnapshot.getChildren().iterator().next();
                             teeth = snapshot.getValue(Teeth.class);
-                            //todo iterate all the teeth and make the true once enabled
+                            int number = 1;
+                            for (Boolean have : teeth.getDoesHave()) {
+                                if (have) { // user should not change teeth which were already added
+                                    FloatingActionButton button = (FloatingActionButton) findViewById(getResources().getIdentifier("q" + number, "id",
+                                            getApplication().getPackageName()));
+                                    int months = teeth.getWhenHave().get(number - 1);
+                                    button.setImageBitmap(textAsBitmap(String.valueOf(months) + "M", 40, Color.WHITE));
+                                    button.setEnabled(false);
+                                }
+                                number++;
+                            }
                         } else
                             teeth = new Teeth();
                     }

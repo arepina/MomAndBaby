@@ -12,6 +12,8 @@ import com.repina.anastasia.momandbaby.Connectors.ConnectionDetector;
 import com.repina.anastasia.momandbaby.Adapters.CustomGrid;
 import com.repina.anastasia.momandbaby.R;
 
+import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.CALLING;
+
 public class ChooseFeatureActivity extends Activity {
 
     @Override
@@ -50,6 +52,7 @@ public class ChooseFeatureActivity extends Activity {
                     {
                         Intent nextActivity = new Intent(getApplicationContext(), TeethActivity.class);
                         nextActivity.putExtra("data", features[position]);
+                        nextActivity.putExtra(CALLING, ChooseFeatureActivity.class.toString());
                         startActivity(nextActivity);
                         finish();//back to main screen
                     }else { // all the others

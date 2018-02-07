@@ -1,8 +1,6 @@
 package com.repina.anastasia.momandbaby.Adapters;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -96,13 +94,6 @@ public class GridItemArrayAdapter extends ArrayAdapter<GridItem> {
         return 0;
     }
 
-    public boolean hasItem(GridItem item) {
-        for (GridItem i : itemList)
-            if (i.getItemDesc().equals(item.getItemDesc()) && i.getItemImg() == item.getItemImg())
-                return true;
-        return false;
-    }
-
     @NonNull
     @Override
     public View getView(final int position, View convertView, @NonNull ViewGroup parent) {
@@ -127,10 +118,6 @@ public class GridItemArrayAdapter extends ArrayAdapter<GridItem> {
         itemImg.setImageResource(item.getItemImg());
         itemDesc.setText(item.getItemDesc());
         return convertView;
-    }
-
-    public Bitmap decodeToBitmap(byte[] decodedByte) {
-        return BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.length);
     }
 }
 

@@ -1,20 +1,18 @@
 package com.repina.anastasia.momandbaby.DataBase;
 
-import android.util.Pair;
-
 import java.util.ArrayList;
 
 public class Teeth {
 
     private String babyId;
     private String date;
-    private ArrayList<Pair<Integer, Boolean>> doesHave;
-    private ArrayList<Pair<Integer, String>> whenHave;
+    private ArrayList<Boolean> doesHave;
+    private ArrayList<Integer> whenHave;
 
     public Teeth() {
     }
 
-    public Teeth(String babyId, ArrayList<Pair<Integer, Boolean>> doesHave, ArrayList<Pair<Integer, String>> whenHave, String date) {
+    public Teeth(String babyId, ArrayList<Boolean> doesHave, ArrayList<Integer> whenHave, String date) {
         this.babyId = babyId;
         this.doesHave = doesHave;
         this.whenHave = whenHave;
@@ -29,19 +27,19 @@ public class Teeth {
         this.babyId = babyId;
     }
 
-    public ArrayList<Pair<Integer, Boolean>> getDoesHave() {
+    public ArrayList<Boolean> getDoesHave() {
         return doesHave;
     }
 
-    public void setDoesHave(ArrayList<Pair<Integer, Boolean>> doesHave) {
+    public void setDoesHave(ArrayList<Boolean> doesHave) {
         this.doesHave = doesHave;
     }
 
-    public ArrayList<Pair<Integer, String>> getWhenHave() {
+    public ArrayList<Integer> getWhenHave() {
         return whenHave;
     }
 
-    public void setWhenHave(ArrayList<Pair<Integer, String>> whenHave) {
+    public void setWhenHave(ArrayList<Integer> whenHave) {
         this.whenHave = whenHave;
     }
 

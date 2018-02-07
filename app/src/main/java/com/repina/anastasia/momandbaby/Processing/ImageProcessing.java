@@ -31,6 +31,8 @@ public class ImageProcessing {
             return R.mipmap.sleep;
         if (name.equals(DatabaseNames.OTHER))
             return R.mipmap.other;
+        if (name.equals(DatabaseNames.TEETH))
+            return R.mipmap.teeth;
         return -1;
     }
 
@@ -56,40 +58,9 @@ public class ImageProcessing {
             return "R.mipmap.sleep";
         if (name.equals(DatabaseNames.OTHER))
             return "R.mipmap.other";
+        if (name.equals(DatabaseNames.TEETH))
+            return "R.mipmap.teeth";
         return "";
-    }
-
-    public static String imageToString(String imageName) {
-        switch (imageName) {
-            case "R.mipmap.height":
-                return "Рост";
-            case "R.mipmap.weight":
-                return "Вес";
-            case "R.mipmap.diapers":
-                return "Стул";
-            case "R.mipmap.vaccination":
-                return "Прививки";
-            case "R.mipmap.illness":
-                return "Болезни";
-            case "R.mipmap.food":
-                return "Питание";
-            case "R.mipmap.outdoor":
-                return "Прогулки";
-            case "R.mipmap.sleep":
-                return "Сон";
-            case "R.mipmap.other":
-                return "Другое";
-            case "R.mipmap.steps":
-                return "Шаги";
-            case "R.mipmap.calories":
-                return "Калории";
-            case "R.mipmap.nutrition":
-                return "Питание";
-            case "R.mipmap.rest":
-                return "Сон";
-            default:
-                return "";
-        }
     }
 
     static String typeToString(DataType type) {
