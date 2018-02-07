@@ -10,10 +10,7 @@ import android.widget.GridView;
 
 import com.repina.anastasia.momandbaby.Connectors.ConnectionDetector;
 import com.repina.anastasia.momandbaby.Adapters.CustomGrid;
-import com.repina.anastasia.momandbaby.Helpers.NotificationsShow;
 import com.repina.anastasia.momandbaby.R;
-
-import java.util.Objects;
 
 public class ChooseFeatureActivity extends Activity {
 
@@ -25,35 +22,22 @@ public class ChooseFeatureActivity extends Activity {
 
         this.setFinishOnTouchOutside(false);
 
-        int activityCode = Objects.requireNonNull(getIntent().getExtras()).getInt("requestCode");
-
         final String[] features;
         int[] imageId;
 
-        if (activityCode == 0) // baby
-        {
-            imageId = new int[]{
-                    R.mipmap.height,
-                    R.mipmap.weight,
-                    R.mipmap.diapers,
-                    R.mipmap.vaccination,
-                    R.mipmap.illness,
-                    R.mipmap.food,
-                    R.mipmap.outdoor,
-                    R.mipmap.sleep,
-                    R.mipmap.other
-            };
-            features = getResources().getStringArray(R.array.parametersBaby);
-        } else // mom
-        {
-            imageId = new int[]{
-                    R.mipmap.weight,
-                    R.mipmap.food,
-                    R.mipmap.sleep,
-                    R.mipmap.google_fit
-            };
-            features = getResources().getStringArray(R.array.parametersMom);
-        }
+        imageId = new int[]{
+                R.mipmap.height,
+                R.mipmap.weight,
+                R.mipmap.diapers,
+                R.mipmap.vaccination,
+                R.mipmap.illness,
+                R.mipmap.food,
+                R.mipmap.outdoor,
+                R.mipmap.sleep,
+                R.mipmap.other,
+                R.mipmap.tooth
+        };
+        features = getResources().getStringArray(R.array.parametersBaby);
 
         CustomGrid adapter = new CustomGrid(ChooseFeatureActivity.this, features, imageId);
 
@@ -61,15 +45,19 @@ public class ChooseFeatureActivity extends Activity {
         grid.setAdapter(adapter);
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                if(features[position].equals(getString(R.string.google_fit))) {
-                    NotificationsShow.showToast(v.getContext(), getString(R.string.google_fit_notification));
-                    finish();//back to main screen
-                }
-                else if (ConnectionDetector.isConnected(getApplicationContext())) {
-                    Intent nextActivity = new Intent(getApplicationContext(), NewFeatureActivity.class);
-                    nextActivity.putExtra("data", features[position]);
-                    startActivity(nextActivity);
-                    finish();//back to main screen
+                if (ConnectionDetector.isConnected(getApplicationContext())) {
+                    if(features[position].equals(features[9])) // teeth
+                    {
+                        Intent nextActivity = new Intent(getApplicationContext(), TeethActivity.class);
+                        nextActivity.putExtra("data", features[position]);
+                        startActivity(nextActivity);
+                        finish();//back to main screen
+                    }else { // all the others
+                        Intent nextActivity = new Intent(getApplicationContext(), NewFeatureActivity.class);
+                        nextActivity.putExtra("data", features[position]);
+                        startActivity(nextActivity);
+                        finish();//back to main screen
+                    }
                 }
             }
         });

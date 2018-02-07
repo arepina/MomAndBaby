@@ -69,7 +69,6 @@ public class FragmentBaby extends Fragment implements SwipeListView.SwipeListVie
                 if(ConnectionDetector.isConnected(getContext())) {
                     babyArrayAdapter.clear();
                     Intent intent = new Intent(v.getContext(), ChooseFeatureActivity.class);
-                    intent.putExtra("requestCode", BABY_NEW_FEATURE);
                     startActivityForResult(intent, BABY_NEW_FEATURE);
                 }
             }

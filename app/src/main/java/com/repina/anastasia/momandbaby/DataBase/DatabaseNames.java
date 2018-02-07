@@ -1,8 +1,6 @@
 package com.repina.anastasia.momandbaby.DataBase;
 
 
-import java.util.ArrayList;
-
 public class DatabaseNames {
     public static final String USER = "USERS";
     public static final String BABY = "BABY";
@@ -13,5 +11,6 @@ public class DatabaseNames {
     public static final String SLEEP = "SLEEP";
     public static final String STOOL = "STOOL";
     public static final String VACCINATION = "VACCINATION";
+    public static final String TEETH = "TEETH";
     public static final String OTHER = "OTHER";
 }

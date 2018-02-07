@@ -39,7 +39,7 @@
             android:name=".Helpers.GoogleFitService"
             android:enabled="true"></service>
 
-        <activity android:name=".TeethActivity"></activity>
+        <activity android:name=".Activity.TeethActivity"></activity>
     </application>
 
 </manifest>
