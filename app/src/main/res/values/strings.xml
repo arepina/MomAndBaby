@@ -135,6 +135,7 @@
     <string name="press_teeth">Нажмите на зуб, который прорезался у вашего малыша</string>
     <string name="add_any_data">Сначала добавьте какие-то данные, чтобы их сохранить</string>
     <string name="teeth">Зубы</string>
+    <string name="teeth_map">Это карта зубов вашего малыша</string>
 
     <string-array name="parametersBaby">
         <item>Рост</item>

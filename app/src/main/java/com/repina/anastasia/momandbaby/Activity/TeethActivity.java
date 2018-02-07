@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -38,15 +39,14 @@ public class TeethActivity extends AppCompatActivity {
     private Teeth teeth;
     private String birthday;
     private String babyId;
-
-    private String calling;
+    private String firebaseKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_teeth);
 
-        calling = getIntent().getStringExtra(CALLING);
+        String calling = getIntent().getStringExtra(CALLING);
 
         FirebaseConnection connection = new FirebaseConnection();
         final FirebaseDatabase database = connection.getDatabase();
@@ -68,7 +68,11 @@ public class TeethActivity extends AppCompatActivity {
         initFABs();
 
         if (calling.equals(StatsActivity.class.toString())) // the user just watch the teeth
+        {
+            TextView textView = (TextView) findViewById(R.id.task);
+            textView.setText(getString(R.string.teeth_map));
             makeEnabledFalse();
+        }
 
         getTeethFromFirebase(database, babyId);
     }
@@ -363,13 +367,16 @@ public class TeethActivity extends AppCompatActivity {
     //region Firebase
 
     private void addNewValueToFirebase(FirebaseDatabase database) {
-        //todo check if we have already added teeth values for aby to firebase, so we can just update them
         if (teeth.getBabyId() != null) {
             Calendar today = Calendar.getInstance();
             String lastUpdateDate = FormattedDate.getFormattedDate(today);
             teeth.setDate(lastUpdateDate);
-            DatabaseReference databaseReference = database.getReference().child(DatabaseNames.TEETH);
-            databaseReference.push().setValue(teeth);
+            if(firebaseKey.length() != 0) // we have data for that babyId, so just update it
+                FirebaseDatabase.getInstance().getReference().child(DatabaseNames.TEETH).child(firebaseKey).setValue(teeth);
+            else {
+                DatabaseReference databaseReference = database.getReference().child(DatabaseNames.TEETH);
+                databaseReference.push().setValue(teeth);
+            }
         } else
             NotificationsShow.showToast(getApplicationContext(), getString(R.string.add_any_data));
     }
@@ -385,6 +392,7 @@ public class TeethActivity extends AppCompatActivity {
                         if (dataSnapshot.exists()) {
                             DataSnapshot snapshot = dataSnapshot.getChildren().iterator().next();
                             teeth = snapshot.getValue(Teeth.class);
+                            firebaseKey = snapshot.getKey();
                             int number = 1;
                             for (Boolean have : teeth.getDoesHave()) {
                                 if (have) { // user should not change teeth which were already added
@@ -396,8 +404,10 @@ public class TeethActivity extends AppCompatActivity {
                                 }
                                 number++;
                             }
-                        } else
+                        } else {
                             teeth = new Teeth();
+                            firebaseKey = "";
+                        }
                     }
 
                     @Override

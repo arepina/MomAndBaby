@@ -191,6 +191,7 @@ public class GoogleFitService extends IntentService {
     }
 
     private void getCaloriesToday(Calendar start, Calendar end) {
+        //todo fix
         long endTime = end.getTimeInMillis();
         long startTime = start.getTimeInMillis();
         final DataReadRequest readRequest = new DataReadRequest.Builder()
