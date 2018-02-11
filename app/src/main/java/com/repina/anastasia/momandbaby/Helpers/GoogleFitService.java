@@ -22,6 +22,7 @@ import com.google.android.gms.fitness.request.DataReadRequest;
 import com.google.android.gms.fitness.result.DataReadResponse;
 import com.google.android.gms.fitness.result.DataReadResult;
 import com.repina.anastasia.momandbaby.Activity.ChartActivity;
+import com.repina.anastasia.momandbaby.Fragment.FragmentMom;
 import com.repina.anastasia.momandbaby.Fragment.FragmentSettings;
 
 import java.lang.reflect.Constructor;
@@ -289,6 +290,8 @@ public class GoogleFitService extends IntentService {
         intent.putExtra(HISTORY_EXTRA_SLEEP_TODAY, result.toString());
         intent.putExtra(HISTORY_DATE, FormattedDate.getFormattedDate(start));
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+        if (FragmentMom.dialog != null)
+            FragmentMom.dialog.dismiss();
     }
 
     //endregion

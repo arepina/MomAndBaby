@@ -2,6 +2,7 @@ package com.repina.anastasia.momandbaby.Fragment;
 
 import android.app.Activity;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -51,6 +52,7 @@ public class FragmentMom extends Fragment {
     private ListView listViewMom;
     private FloatingActionButton fab;
     private Calendar calendar;
+    public static ProgressDialog dialog;
 
     public final static String TAG = "GoogleFitService";
     private ConnectionResult mFitResultResolution;
@@ -71,6 +73,12 @@ public class FragmentMom extends Fragment {
 
     private View initMom(LayoutInflater inflater, ViewGroup container) {
         final View v = inflater.inflate(R.layout.fragment_mom, container, false);
+
+        dialog = new ProgressDialog(getContext());
+        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        dialog.setMessage(getString(R.string.fit_data_load));
+        dialog.setIndeterminate(true);
+        dialog.setCanceledOnTouchOutside(false);
 
         fab = (FloatingActionButton) getActivity().findViewById(R.id.floatingActionButton);
         fab.setImageResource(R.mipmap.google_fit);
@@ -177,6 +185,7 @@ public class FragmentMom extends Fragment {
         service.putExtra(SERVICE_REQUEST_TYPE, TYPE_REQUEST_CONNECTION);
         getActivity().startService(service);
         // Load today data for mom from google fit
+        dialog.show();
         momArrayAdapter.clear();
         StatsProcessing.getMomStats(calendar, 0, getActivity(), 0, FragmentMom.class.toString()); // same day, all types
     }
@@ -263,6 +272,8 @@ public class FragmentMom extends Fragment {
                 fab.setEnabled(true);
             }
         }
+        if (dialog != null)
+            dialog.dismiss();
     }
 
     @Override
@@ -299,9 +310,18 @@ public class FragmentMom extends Fragment {
 
     @Override
     public void onDestroy() {
+        if (dialog != null)
+            dialog.dismiss();
         LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(mFitStatusReceiver);
         LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(mFitDataReceiver);
         super.onDestroy();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (dialog != null)
+            dialog.dismiss();
     }
 
     //endregion
