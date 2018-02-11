@@ -120,14 +120,17 @@ public class FragmentMom extends Fragment {
                     momArrayAdapter.clear();
                     calendar.add(Calendar.DATE, -1);
                     Calendar today = Calendar.getInstance();
+                    boolean isToday = false;
                     if (calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR)
-                            && calendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR))
+                            && calendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR)) {
                         headerDate.setText(R.string.today);
+                        isToday = true;
+                    }
                     else {
                         String date = FormattedDate.getTextDate(calendar);
                         headerDate.setText(date);
                     }
-                    if (Calendar.getInstance().after(calendar))
+                    if (Calendar.getInstance().after(calendar) || isToday)
                         StatsProcessing.getMomStats(calendar, 0, getActivity(), 0, FragmentMom.class.toString());
                     else {
                         GridItem item = new GridItem(R.mipmap.cross, "R.mipmap.cross", getResources().getString(R.string.google_fit_no_data), null, null);
@@ -146,14 +149,17 @@ public class FragmentMom extends Fragment {
                     momArrayAdapter.clear();
                     calendar.add(Calendar.DATE, 1);
                     Calendar today = Calendar.getInstance();
+                    boolean isToday = false;
                     if (calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR)
-                            && calendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR))
+                            && calendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR)) {
                         headerDate.setText(R.string.today);
+                        isToday = true;
+                    }
                     else {
                         String date = FormattedDate.getTextDate(calendar);
                         headerDate.setText(date);
                     }
-                    if (Calendar.getInstance().after(calendar))
+                    if (today.after(calendar) || isToday)
                         StatsProcessing.getMomStats(calendar, 0, getActivity(), 0, FragmentMom.class.toString());
                     else {
                         GridItem item = new GridItem(R.mipmap.cross, "R.mipmap.cross", getResources().getString(R.string.google_fit_no_data), null, null);

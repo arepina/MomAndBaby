@@ -17,6 +17,7 @@ import com.google.android.gms.fitness.data.DataPoint;
 import com.google.android.gms.fitness.data.DataSet;
 import com.google.android.gms.fitness.data.DataType;
 import com.google.android.gms.fitness.data.Field;
+import com.google.android.gms.fitness.data.Value;
 import com.google.android.gms.fitness.request.DataReadRequest;
 import com.google.android.gms.fitness.result.DataReadResponse;
 import com.google.android.gms.fitness.result.DataReadResult;
@@ -25,6 +26,7 @@ import com.repina.anastasia.momandbaby.Fragment.FragmentSettings;
 
 import java.lang.reflect.Constructor;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -52,6 +54,7 @@ import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.TYPE_GET_SL
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.TYPE_GET_STEP_TODAY_DATA;
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.TYPE_GET_WEIGHT_TODAY_DATA;
 import static com.repina.anastasia.momandbaby.Processing.TextProcessing.translateWord;
+import static java.text.DateFormat.getTimeInstance;
 
 public class GoogleFitService extends IntentService {
 
@@ -263,7 +266,6 @@ public class GoogleFitService extends IntentService {
     }
 
     private void getSleepToday(Calendar start, Calendar end) {
-        //todo
         long endTime = end.getTimeInMillis();
         long startTime = start.getTimeInMillis();
         final DataReadRequest readRequest = new DataReadRequest.Builder()
@@ -275,12 +277,16 @@ public class GoogleFitService extends IntentService {
                 Fitness.HistoryApi.readData(mGoogleApiFitnessClient, readRequest).await(1, TimeUnit.MINUTES);
         DataSet activityData = dataReadResult.getDataSet(DataType.TYPE_ACTIVITY_SEGMENT);
         StringBuilder result = new StringBuilder(0);
+        DateFormat dateFormat = getTimeInstance();
         for (DataPoint dp : activityData.getDataPoints()) {
-            for (Field field : dp.getDataType().getFields()) {
-                String res = dp.getValue(field).toString();
-                result.append(translateWord(field.getName())).append("=").append(res).append(", ");
+            if (dp.getOriginalDataSource().getAppPackageName().contains("sleep")) {
+                Log.i(TAG, "\tStart: " + dateFormat.format(dp.getStartTime(TimeUnit.MILLISECONDS)));
+                Log.i(TAG, "\tEnd: " + dateFormat.format(dp.getEndTime(TimeUnit.MILLISECONDS)));
+                DecimalFormat df = new DecimalFormat("#.0");
+                double difference = ((dp.getEndTime(TimeUnit.MILLISECONDS) - dp.getStartTime(TimeUnit.MILLISECONDS)) / 1000.0) / 3600.0;
+                result.append("Сон: ").append(df.format(difference)).append(" часа(ов)").append(" ,");
+                result = new StringBuilder(result.toString().substring(0, result.length() - 2));
             }
-            result = new StringBuilder(result.toString().substring(0, result.length() - 2));
         }
         Intent intent = new Intent(HISTORY_INTENT);
         intent.putExtra(HISTORY_EXTRA_SLEEP_TODAY, result.toString());
@@ -338,7 +344,7 @@ public class GoogleFitService extends IntentService {
     private static ArrayList<Pair<DataType, Pair<String, String>>> dumpDataSet(DataSet dataSet, DataType type) {
         Log.i(TAG, "Data returned for Data type: " + dataSet.getDataType().getName());
         DateFormat dateFormat = DateFormat.getDateInstance();
-        DateFormat timeFormat = DateFormat.getTimeInstance();
+        DateFormat timeFormat = getTimeInstance();
         ArrayList<Pair<DataType, Pair<String, String>>> parsedData = new ArrayList<>();
         for (DataPoint dp : dataSet.getDataPoints()) {
             Log.i(TAG, "Data point:");
