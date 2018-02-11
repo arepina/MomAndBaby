@@ -106,7 +106,13 @@ public class StatsProcessing {
     private static void getPeriodData(Calendar from, Calendar to, FragmentActivity activity, int type, String callingKey) {
         Intent service = new Intent(activity, GoogleFitService.class);
         service.putExtra(FROM, from.getTimeInMillis());
-        service.putExtra(TO, to.getTimeInMillis());
+        Calendar now = Calendar.getInstance();
+        if (from.get(Calendar.YEAR) == now.get(Calendar.YEAR)
+                && from.get(Calendar.DAY_OF_YEAR) == now.get(Calendar.DAY_OF_YEAR))
+            service.putExtra(TO, now.getTimeInMillis());
+        else
+            service.putExtra(TO, to.getTimeInMillis());
+
         service.putExtra(CALLING, callingKey);
         if (type != 0)  // custom
         {

@@ -194,7 +194,6 @@ public class GoogleFitService extends IntentService {
     }
 
     private void getCaloriesToday(Calendar start, Calendar end) {
-        //todo fix
         long endTime = end.getTimeInMillis();
         long startTime = start.getTimeInMillis();
         final DataReadRequest readRequest = new DataReadRequest.Builder()
@@ -247,7 +246,7 @@ public class GoogleFitService extends IntentService {
         final DataReadRequest readRequest = new DataReadRequest.Builder()
                 .read(DataType.TYPE_NUTRITION)
                 .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
-                .setLimit(1)
+
                 .build();
         DataReadResult dataReadResult =
                 Fitness.HistoryApi.readData(mGoogleApiFitnessClient, readRequest).await(1, TimeUnit.MINUTES);
@@ -279,14 +278,12 @@ public class GoogleFitService extends IntentService {
         StringBuilder result = new StringBuilder(0);
         DateFormat dateFormat = getTimeInstance();
         for (DataPoint dp : activityData.getDataPoints()) {
-            if (dp.getOriginalDataSource().getAppPackageName().contains("sleep")) {
                 Log.i(TAG, "\tStart: " + dateFormat.format(dp.getStartTime(TimeUnit.MILLISECONDS)));
                 Log.i(TAG, "\tEnd: " + dateFormat.format(dp.getEndTime(TimeUnit.MILLISECONDS)));
-                DecimalFormat df = new DecimalFormat("#.0");
+                DecimalFormat df = new DecimalFormat("0.0");
                 double difference = ((dp.getEndTime(TimeUnit.MILLISECONDS) - dp.getStartTime(TimeUnit.MILLISECONDS)) / 1000.0) / 3600.0;
                 if (difference < 24)
                     result.append("Сон: ").append(df.format(difference)).append(" часа(ов)");
-            }
         }
         Intent intent = new Intent(HISTORY_INTENT);
         intent.putExtra(HISTORY_EXTRA_SLEEP_TODAY, result.toString());
@@ -358,7 +355,7 @@ public class GoogleFitService extends IntentService {
             double doubleValue = 0;
             StringBuilder stringValue = new StringBuilder();
             if (type.equals(DataType.TYPE_ACTIVITY_SEGMENT)) {
-                DecimalFormat df = new DecimalFormat("#.0");
+                DecimalFormat df = new DecimalFormat("0.0");
                 double difference = ((dp.getEndTime(TimeUnit.MILLISECONDS) - dp.getStartTime(TimeUnit.MILLISECONDS)) / 1000.0) / 3600.0;
                 if (difference < 24)
                     stringValue.append("Сон: ").append(df.format(difference)).append(" часа(ов)");
