@@ -51,7 +51,7 @@ public class TextProcessing {
             String translatedType = typeToString(type);
             String date = it.second.first;
             StringBuilder data = new StringBuilder(it.second.second);
-            if(DataType.TYPE_NUTRITION.equals(type) || DataType.TYPE_ACTIVITY_SEGMENT.equals(type)) {
+            if(DataType.TYPE_NUTRITION.equals(type)) {
                 StringBuilder translatedData = new StringBuilder();
                 for(String item : data.toString().split(", ")) {
                     String key = translateWord(item.substring(0, item.indexOf("=")).replace(" ", ""));
@@ -61,6 +61,8 @@ public class TextProcessing {
                 translatedData = new StringBuilder(translatedData.substring(0, translatedData.length() - 2));
                 data = translatedData;
             }
+            if(DataType.TYPE_ACTIVITY_SEGMENT.equals(type) && data.toString().equals("0.0")) // ignore 0 data for sleep
+                continue;
             report.append(translatedType).append(" ").append(date).append(" ").append(data).append("\n");
         }
         if (report.length() == 0)

@@ -284,8 +284,8 @@ public class GoogleFitService extends IntentService {
                 Log.i(TAG, "\tEnd: " + dateFormat.format(dp.getEndTime(TimeUnit.MILLISECONDS)));
                 DecimalFormat df = new DecimalFormat("#.0");
                 double difference = ((dp.getEndTime(TimeUnit.MILLISECONDS) - dp.getStartTime(TimeUnit.MILLISECONDS)) / 1000.0) / 3600.0;
-                result.append("Сон: ").append(df.format(difference)).append(" часа(ов)").append(" ,");
-                result = new StringBuilder(result.toString().substring(0, result.length() - 2));
+                if (difference < 24)
+                    result.append("Сон: ").append(df.format(difference)).append(" часа(ов)");
             }
         }
         Intent intent = new Intent(HISTORY_INTENT);
@@ -358,13 +358,10 @@ public class GoogleFitService extends IntentService {
             double doubleValue = 0;
             StringBuilder stringValue = new StringBuilder();
             if (type.equals(DataType.TYPE_ACTIVITY_SEGMENT)) {
-                //todo
-                for (Field field : dp.getDataType().getFields()) {
-                    String res = dp.getValue(field).toString();
-                    stringValue.append(field.getName()).append("=").append(res).append(", ");
-                    Log.e("History", "\tField: " + field.getName() + " Value: " + dp.getValue(field));
-                }
-                stringValue = new StringBuilder(stringValue.toString().substring(0, stringValue.length() - 2));
+                DecimalFormat df = new DecimalFormat("#.0");
+                double difference = ((dp.getEndTime(TimeUnit.MILLISECONDS) - dp.getStartTime(TimeUnit.MILLISECONDS)) / 1000.0) / 3600.0;
+                if (difference < 24)
+                    stringValue.append("Сон: ").append(df.format(difference)).append(" часа(ов)");
             } else {
                 Field field = dp.getDataType().getFields().get(0);
                 Log.e("History", "\tField: " + field.getName() + " Value: " + dp.getValue(field));
