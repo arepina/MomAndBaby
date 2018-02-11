@@ -22,7 +22,7 @@ import com.repina.anastasia.momandbaby.R;
 
 import java.util.Calendar;
 
-public class FragmentBaby extends Fragment implements SwipeListView.SwipeListViewCallback{
+public class FragmentBaby extends Fragment implements SwipeListView.SwipeListViewCallback {
 
 
     private GridItemArrayAdapter babyArrayAdapter;
@@ -53,7 +53,7 @@ public class FragmentBaby extends Fragment implements SwipeListView.SwipeListVie
         GridItem item = new GridItem(R.mipmap.cross, "R.mipmap.cross", getResources().getString(R.string.no_data_today), null, null);
         babyArrayAdapter.add(item);
         listViewBaby.setAdapter(babyArrayAdapter);
-        if(ConnectionDetector.isConnected(getContext())) {
+        if (ConnectionDetector.isConnected(getContext())) {
             // Load today add's from Firebase for baby
             babyArrayAdapter.clear();
             StatsProcessing.getBabyStats(babyArrayAdapter, calendar, getContext(), listViewBaby);
@@ -66,7 +66,7 @@ public class FragmentBaby extends Fragment implements SwipeListView.SwipeListVie
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(ConnectionDetector.isConnected(getContext())) {
+                if (ConnectionDetector.isConnected(getContext())) {
                     babyArrayAdapter.clear();
                     Intent intent = new Intent(v.getContext(), ChooseFeatureActivity.class);
                     startActivityForResult(intent, BABY_NEW_FEATURE);
@@ -79,8 +79,7 @@ public class FragmentBaby extends Fragment implements SwipeListView.SwipeListVie
         return v;
     }
 
-    private void initYesterdayAndTomorrow(View v)
-    {
+    private void initYesterdayAndTomorrow(View v) {
         final TextView headerDate = (TextView) v.findViewById(R.id.headerBaby);
 
         TextView yesterday = (TextView) v.findViewById(R.id.yesterdayBaby);
@@ -89,8 +88,18 @@ public class FragmentBaby extends Fragment implements SwipeListView.SwipeListVie
             public void onClick(View v) {
                 if (ConnectionDetector.isConnected(getContext())) {
                     babyArrayAdapter.clear();
-                    goYesterday(headerDate);
-                    if (Calendar.getInstance().after(calendar))
+                    calendar.add(Calendar.DAY_OF_MONTH, -1);
+                    Calendar today = Calendar.getInstance();
+                    boolean isToday = false;
+                    if (calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR)
+                            && calendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR)) {
+                        headerDate.setText(R.string.today);
+                        isToday = true;
+                    } else {
+                        String date = FormattedDate.getTextDate(calendar);
+                        headerDate.setText(date);
+                    }
+                    if (Calendar.getInstance().after(calendar) || isToday)
                         StatsProcessing.getBabyStats(babyArrayAdapter, calendar, getContext(), listViewBaby);
                     else {
                         GridItem item = new GridItem(R.mipmap.cross, "R.mipmap.cross", getResources().getString(R.string.no_data), null, null);
@@ -107,8 +116,18 @@ public class FragmentBaby extends Fragment implements SwipeListView.SwipeListVie
             public void onClick(View v) {
                 if (ConnectionDetector.isConnected(getContext())) {
                     babyArrayAdapter.clear();
-                    goTomorrow(headerDate);
-                    if (Calendar.getInstance().after(calendar))
+                    calendar.add(Calendar.DAY_OF_MONTH, 1);
+                    Calendar today = Calendar.getInstance();
+                    boolean isToday = false;
+                    if (calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR)
+                            && calendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR)) {
+                        headerDate.setText(R.string.today);
+                        isToday = true;
+                    } else {
+                        String date = FormattedDate.getTextDate(calendar);
+                        headerDate.setText(date);
+                    }
+                    if (Calendar.getInstance().after(calendar) || isToday)
                         StatsProcessing.getBabyStats(babyArrayAdapter, calendar, getContext(), listViewBaby);
                     else {
                         GridItem item = new GridItem(R.mipmap.cross, "R.mipmap.cross", getResources().getString(R.string.no_data), null, null);
@@ -154,34 +173,6 @@ public class FragmentBaby extends Fragment implements SwipeListView.SwipeListVie
     @Override
     public void onItemClickListener(ListAdapter adapter, int position) {
         // do nothing
-    }
-
-    //endregion
-
-    //region Tomorrow and yesterday
-
-    private void goYesterday(TextView headerDate) {
-        calendar.add(Calendar.DAY_OF_MONTH, -1);
-        Calendar today = Calendar.getInstance();
-        if (calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR)
-                && calendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR))
-            headerDate.setText(R.string.today);
-        else {
-            String date = FormattedDate.getTextDate(calendar);
-            headerDate.setText(date);
-        }
-    }
-
-    private void goTomorrow(TextView headerDate) {
-        calendar.add(Calendar.DAY_OF_MONTH, 1);
-        Calendar today = Calendar.getInstance();
-        if (calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR)
-                && calendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR))
-            headerDate.setText(R.string.today);
-        else {
-            String date = FormattedDate.getTextDate(calendar);
-            headerDate.setText(date);
-        }
     }
 
     //endregion

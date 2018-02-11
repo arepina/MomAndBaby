@@ -100,7 +100,7 @@ public class FragmentMom extends Fragment {
             LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mFitStatusReceiver, new IntentFilter(FIT_NOTIFY_INTENT));
             LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mFitDataReceiver, new IntentFilter(HISTORY_INTENT));
         }
-        if(ConnectionDetector.isConnected(getContext()))
+        if (ConnectionDetector.isConnected(getContext()))
             requestFitConnection();
 
         isActivityAlreadyCreated = true;
@@ -108,8 +108,7 @@ public class FragmentMom extends Fragment {
         return v;
     }
 
-    private void initTodayAndTomorrow(View v)
-    {
+    private void initTodayAndTomorrow(View v) {
         final TextView headerDate = (TextView) v.findViewById(R.id.headerMom);
 
         TextView yesterday = (TextView) v.findViewById(R.id.yesterdayMom);
@@ -125,8 +124,7 @@ public class FragmentMom extends Fragment {
                             && calendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR)) {
                         headerDate.setText(R.string.today);
                         isToday = true;
-                    }
-                    else {
+                    } else {
                         String date = FormattedDate.getTextDate(calendar);
                         headerDate.setText(date);
                     }
@@ -154,8 +152,7 @@ public class FragmentMom extends Fragment {
                             && calendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR)) {
                         headerDate.setText(R.string.today);
                         isToday = true;
-                    }
-                    else {
+                    } else {
                         String date = FormattedDate.getTextDate(calendar);
                         headerDate.setText(date);
                     }
