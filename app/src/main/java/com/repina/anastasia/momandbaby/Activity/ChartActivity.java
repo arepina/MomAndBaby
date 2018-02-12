@@ -216,7 +216,16 @@ public class ChartActivity extends AppCompatActivity {
     private void getValuesFromGoogleFit() {
         dialog.show();
         // ask for 1 month data for a specific type
-        StatsProcessing.getMomStats(Calendar.getInstance(), 31, this, spinnerSelectedIndex + 2, ChartActivity.class.toString()); // + 2 as the vars indexing is starting from 2
+        // steps 0 - 2
+        // sleep 1 - 3
+        // weight 2 - 5
+        // calories 3 - 6
+        int index = spinnerSelectedIndex;
+        if(index == 0 || index == 1) // steps or sleep
+            index += 2;
+        else
+            index += 3; // weight or calories
+        StatsProcessing.getMomStats(Calendar.getInstance(), 31, this, index, ChartActivity.class.toString());
     }
 
     //endregion
@@ -443,6 +452,7 @@ public class ChartActivity extends AppCompatActivity {
                 }
                 case 1: {
                     if (type == DataType.TYPE_ACTIVITY_SEGMENT) {
+                        value = value.replace("Сон:", "").replace("часа(ов)", "").replace(",", ".").trim();
                         e = new Entry((float) Double.parseDouble(value), counter);
                         counter++;
                     }

@@ -335,7 +335,11 @@ public class FragmentMom extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        requestFitConnection();
+        if(authInProgress) {
+            requestFitConnection();
+            authInProgress = false;
+            fab.setEnabled(false);
+        }
     }
 
 

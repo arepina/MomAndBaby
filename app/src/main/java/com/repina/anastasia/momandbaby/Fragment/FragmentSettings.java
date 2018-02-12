@@ -106,7 +106,7 @@ public class FragmentSettings extends Fragment {
                 intent.setType("text/plain");
                 intent.putExtra(Intent.EXTRA_SUBJECT, "Mom&Baby");
                 intent.putExtra(Intent.EXTRA_TEXT, "");
-                intent.setData(Uri.parse("mailto:" + R.string.my_email));
+                intent.setData(Uri.parse("mailto:" + getString(R.string.my_email)));
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }

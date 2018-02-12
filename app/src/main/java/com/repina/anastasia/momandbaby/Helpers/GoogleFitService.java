@@ -407,7 +407,6 @@ public class GoogleFitService extends IntentService {
                                 mTryingToConnect = false;
                                 Log.d(TAG, "Notifying the UI that we're connected.");
                                 notifyUiFitConnected();
-
                             }
 
                             @Override
