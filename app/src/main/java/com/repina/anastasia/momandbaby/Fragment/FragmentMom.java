@@ -9,14 +9,19 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -72,7 +77,7 @@ public class FragmentMom extends Fragment {
     //region Init layout
 
     private View initMom(LayoutInflater inflater, ViewGroup container) {
-        final View v = inflater.inflate(R.layout.fragment_mom, container, false);
+        View v = inflater.inflate(R.layout.fragment_mom, container, false);
 
         dialog = new ProgressDialog(getContext());
         dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -201,7 +206,7 @@ public class FragmentMom extends Fragment {
                 PendingIntent pendingIntent = intent.getParcelableExtra(FIT_EXTRA_NOTIFY_FAILED_INTENT);
                 ConnectionResult result = new ConnectionResult(statusCode, pendingIntent);
                 Log.d(TAG, "Fit connection failed - opening connect screen");
-                if(momArrayAdapter.getCount() == 0) { // do not need duplicates
+                if (momArrayAdapter.getCount() == 0) { // do not need duplicates
                     GridItem item = new GridItem(R.mipmap.cross, "R.mipmap.cross", getResources().getString(R.string.need_to_sync), null, null);
                     momArrayAdapter.add(item);
                     listViewMom.setAdapter(momArrayAdapter);
@@ -284,16 +289,14 @@ public class FragmentMom extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        fitSaveInstanceState(outState);
-    }
-
-    private void fitSaveInstanceState(Bundle outState) {
         outState.putBoolean(AUTH_PENDING, authInProgress);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         fitActivityResult(requestCode, resultCode);
+        if (dialog != null)
+            dialog.dismiss();
     }
 
     private void fitActivityResult(int requestCode, int resultCode) {
@@ -328,6 +331,13 @@ public class FragmentMom extends Fragment {
         if (dialog != null)
             dialog.dismiss();
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        requestFitConnection();
+    }
+
 
     //endregion
 }
