@@ -45,10 +45,10 @@
     <string name="licenses">Все изображения в приложении используются по Flaticon Basic License. Изображения являются частью пакетов, созданных Freepik, Smashicons, Nikita Golubev, Vectors Market, Maxim Basinski, Scott de Jonge, Eucalyp</string>
 
     <!--New data-->
-    <string name="add_new_data">Введите новое значение</string>
+    <string name="add_new_data">Введите новое значение %1$s</string>
     <string name="height">роста малыша</string>
     <string name="weight">веса малыша</string>
-    <string name="rateValue">Оцените</string>
+    <string name="rateValue">Оцените %1$s</string>
     <string name="diapers"> стул малыша</string>
     <string name="food">, как малыш покушал</string>
     <string name="choose_date">Выберите дату</string>
@@ -130,6 +130,8 @@
 
     <!--Load-->
     <string name="data_load_stop">Загрузка данных была прервана</string>
+
+    <!--Teeth-->
     <string name="up_teeth">Верхняя челюсть</string>
     <string name="down_teeth">Нижняя челюсть</string>
     <string name="press_teeth">Нажмите на зуб, который прорезался у вашего малыша</string>

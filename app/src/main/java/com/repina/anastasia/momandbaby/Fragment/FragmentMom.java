@@ -201,6 +201,11 @@ public class FragmentMom extends Fragment {
                 PendingIntent pendingIntent = intent.getParcelableExtra(FIT_EXTRA_NOTIFY_FAILED_INTENT);
                 ConnectionResult result = new ConnectionResult(statusCode, pendingIntent);
                 Log.d(TAG, "Fit connection failed - opening connect screen");
+                if(momArrayAdapter.getCount() == 0) { // do not need duplicates
+                    GridItem item = new GridItem(R.mipmap.cross, "R.mipmap.cross", getResources().getString(R.string.need_to_sync), null, null);
+                    momArrayAdapter.add(item);
+                    listViewMom.setAdapter(momArrayAdapter);
+                }
                 fitHandleFailedConnection(result);
             }
             if (intent.hasExtra(FIT_EXTRA_CONNECTION_MESSAGE)) {

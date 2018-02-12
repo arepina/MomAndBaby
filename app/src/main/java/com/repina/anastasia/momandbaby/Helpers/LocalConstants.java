@@ -4,11 +4,11 @@ public class LocalConstants {
     public static final String SERVICE_REQUEST_TYPE = "requestType";
 
     public static final int TYPE_REQUEST_CONNECTION = 1;
-    public static final int TYPE_GET_STEP_TODAY_DATA = 2;
-    public static final int TYPE_GET_SLEEP_TODAY_DATA = 3;
-    public static final int TYPE_GET_WEIGHT_TODAY_DATA = 4;
-    public static final int TYPE_GET_CALORIES_TODAY_DATA = 5;
-    public static final int TYPE_GET_NUTRITION_TODAY_DATA = 6;
+    static final int TYPE_GET_STEP_TODAY_DATA = 2;
+    static final int TYPE_GET_SLEEP_TODAY_DATA = 3;
+    static final int TYPE_GET_NUTRITION_TODAY_DATA = 4;
+    static final int TYPE_GET_WEIGHT_TODAY_DATA = 5;
+    static final int TYPE_GET_CALORIES_TODAY_DATA = 6;
 
     public static final String HISTORY_INTENT = "fitHistory";
     public static final String HISTORY_EXTRA_STEPS_TODAY = "stepsToday";

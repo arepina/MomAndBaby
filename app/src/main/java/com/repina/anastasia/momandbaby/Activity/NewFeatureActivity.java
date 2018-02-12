@@ -19,6 +19,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.repina.anastasia.momandbaby.Connectors.ConnectionDetector;
 import com.repina.anastasia.momandbaby.Connectors.FirebaseConnection;
 import com.repina.anastasia.momandbaby.DataBase.Other;
+import com.repina.anastasia.momandbaby.Helpers.NotificationsShow;
 import com.repina.anastasia.momandbaby.Helpers.SharedConstants;
 import com.repina.anastasia.momandbaby.DataBase.DatabaseNames;
 import com.repina.anastasia.momandbaby.DataBase.Food;
@@ -48,7 +49,6 @@ public class NewFeatureActivity extends AppCompatActivity {
     private EditText dataValue3;
     private RatingBar ratingBar;
     private Spinner vaccinationsData;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,14 +108,20 @@ public class NewFeatureActivity extends AppCompatActivity {
         String babyId = sp.getString(SharedConstants.BABY_ID_KEY, "");
         String currentDate = fullDate;
         if (featureName.equals(features[0])) {
-            Metrics m = new Metrics(babyId, 0, Double.parseDouble(dataValue1.getText().toString()), currentDate); // no weight
-            databaseReference = database.getReference().child(DatabaseNames.METRICS);
-            databaseReference.push().setValue(m);
+            if (dataValue1.getText().length() != 0) {
+                Metrics m = new Metrics(babyId, 0, Double.parseDouble(dataValue1.getText().toString()), currentDate); // no weight
+                databaseReference = database.getReference().child(DatabaseNames.METRICS);
+                databaseReference.push().setValue(m);
+            } else
+                NotificationsShow.showToast(getApplicationContext(), getString(R.string.add_any_data));
         }
         if (featureName.equals(features[1])) {
-            Metrics m = new Metrics(babyId, Double.parseDouble(dataValue1.getText().toString()), 0, currentDate); // no height
-            databaseReference = database.getReference().child(DatabaseNames.METRICS);
-            databaseReference.push().setValue(m);
+            if (dataValue1.getText().length() != 0) {
+                Metrics m = new Metrics(babyId, Double.parseDouble(dataValue1.getText().toString()), 0, currentDate); // no height
+                databaseReference = database.getReference().child(DatabaseNames.METRICS);
+                databaseReference.push().setValue(m);
+            } else
+                NotificationsShow.showToast(getApplicationContext(), getString(R.string.add_any_data));
         }
         if (featureName.equals(features[2])) {
             Stool s = new Stool(babyId, currentDate, dataValue3.getText().toString().replace("\n", " "), ratingBar.getNumStars());
@@ -129,12 +135,15 @@ public class NewFeatureActivity extends AppCompatActivity {
             databaseReference.push().setValue(v);
         }
         if (featureName.equals(features[4])) {
-            String symptoms = dataValue2.getText().toString().replace("\n", " ");
-            String pills = dataValue3.getText().toString().replace("\n", " ");
-            double temperature = Double.parseDouble(dataValue1.getText().toString());
-            Illness i = new Illness(babyId, currentDate, symptoms, pills, temperature);
-            databaseReference = database.getReference().child(DatabaseNames.ILLNESS);
-            databaseReference.push().setValue(i);
+            if (dataValue1.getText().length() != 0) {
+                String symptoms = dataValue2.getText().toString().replace("\n", " ");
+                String pills = dataValue3.getText().toString().replace("\n", " ");
+                double temperature = Double.parseDouble(dataValue1.getText().toString());
+                Illness i = new Illness(babyId, currentDate, symptoms, pills, temperature);
+                databaseReference = database.getReference().child(DatabaseNames.ILLNESS);
+                databaseReference.push().setValue(i);
+            } else
+                NotificationsShow.showToast(getApplicationContext(), getString(R.string.add_any_data));
         }
         if (featureName.equals(features[5])) {
             Food f = new Food(babyId, currentDate, dataValue3.getText().toString().replace("\n", " "), ratingBar.getNumStars());
@@ -142,22 +151,31 @@ public class NewFeatureActivity extends AppCompatActivity {
             databaseReference.push().setValue(f);
         }
         if (featureName.equals(features[6])) {
-            double length = Double.parseDouble(dataValue1.getText().toString());
-            Outdoor o = new Outdoor(babyId, currentDate, length);
-            databaseReference = database.getReference().child(DatabaseNames.OUTDOOR);
-            databaseReference.push().setValue(o);
+            if (dataValue1.getText().length() != 0) {
+                double length = Double.parseDouble(dataValue1.getText().toString());
+                Outdoor o = new Outdoor(babyId, currentDate, length);
+                databaseReference = database.getReference().child(DatabaseNames.OUTDOOR);
+                databaseReference.push().setValue(o);
+            } else
+                NotificationsShow.showToast(getApplicationContext(), getString(R.string.add_any_data));
         }
         if (featureName.equals(features[7])) {
-            double length = Double.parseDouble(dataValue1.getText().toString());
-            Sleep s = new Sleep(babyId, currentDate, length);
-            databaseReference = database.getReference().child(DatabaseNames.SLEEP);
-            databaseReference.push().setValue(s);
+            if (dataValue1.getText().length() != 0) {
+                double length = Double.parseDouble(dataValue1.getText().toString());
+                Sleep s = new Sleep(babyId, currentDate, length);
+                databaseReference = database.getReference().child(DatabaseNames.SLEEP);
+                databaseReference.push().setValue(s);
+            } else
+                NotificationsShow.showToast(getApplicationContext(), getString(R.string.add_any_data));
         }
         if (featureName.equals(features[8])) {
-            String desc = dataValue1.getText().toString().replace("\n", " ");
-            Other o = new Other(babyId, currentDate, desc);
-            databaseReference = database.getReference().child(DatabaseNames.OTHER);
-            databaseReference.push().setValue(o);
+            if (dataValue1.getText().length() != 0) {
+                String desc = dataValue1.getText().toString().replace("\n", " ");
+                Other o = new Other(babyId, currentDate, desc);
+                databaseReference = database.getReference().child(DatabaseNames.OTHER);
+                databaseReference.push().setValue(o);
+            } else
+                NotificationsShow.showToast(getApplicationContext(), getString(R.string.add_any_data));
         }
     }
 
@@ -166,17 +184,17 @@ public class NewFeatureActivity extends AppCompatActivity {
         TextView dataName2 = (TextView) findViewById(R.id.dataName2);
         TextView dataName3 = (TextView) findViewById(R.id.dataName3);
         if (data.equals(features[0])) {
-            dataName1.setText(getString(R.string.add_new_data) + " " + getString(R.string.height));
+            dataName1.setText(String.format(getString(R.string.add_new_data), getString(R.string.height)));
             dataName1.setVisibility(View.VISIBLE);
             dataValue1.setVisibility(View.VISIBLE);
         }
         if (data.equals(features[1])) {
-            dataName1.setText(getString(R.string.add_new_data) + " " + getString(R.string.weight));
+            dataName1.setText(String.format(getString(R.string.add_new_data), getString(R.string.weight)));
             dataName1.setVisibility(View.VISIBLE);
             dataValue1.setVisibility(View.VISIBLE);
         }
         if (data.equals(features[2])) {
-            dataName2.setText(getString(R.string.rateValue) + " " + getString(R.string.diapers));
+            dataName2.setText(String.format(getString(R.string.rateValue), getString(R.string.diapers)));
             dataName2.setVisibility(View.VISIBLE);
             ratingBar.setVisibility(View.VISIBLE);
             dataName3.setText(R.string.сomment);
@@ -195,7 +213,7 @@ public class NewFeatureActivity extends AppCompatActivity {
             dataValue2.setVisibility(View.VISIBLE);
         }
         if (data.equals(features[4])) {
-            dataName1.setText(getString(R.string.add_new_data) + " " + getString(R.string.temperature));
+            dataName1.setText(String.format(getString(R.string.add_new_data), getString(R.string.temperature)));
             dataName1.setVisibility(View.VISIBLE);
             dataValue1.setVisibility(View.VISIBLE);
             dataName2.setText(getString(R.string.add_symptomes));
@@ -206,7 +224,7 @@ public class NewFeatureActivity extends AppCompatActivity {
             dataValue3.setVisibility(View.VISIBLE);
         }
         if (data.equals(features[5])) {
-            dataName2.setText(getString(R.string.rateValue) + getString(R.string.food));
+            dataName2.setText(String.format(getString(R.string.rateValue), getString(R.string.food)));
             dataName2.setVisibility(View.VISIBLE);
             ratingBar.setVisibility(View.VISIBLE);
             dataName3.setText(R.string.сomment);
@@ -214,12 +232,12 @@ public class NewFeatureActivity extends AppCompatActivity {
             dataValue3.setVisibility(View.VISIBLE);
         }
         if (data.equals(features[6])) {
-            dataName1.setText(getString(R.string.add_new_data) + " " + getString(R.string.outdoor_duration));
+            dataName1.setText(String.format(getString(R.string.add_new_data), getString(R.string.outdoor_duration)));
             dataName1.setVisibility(View.VISIBLE);
             dataValue1.setVisibility(View.VISIBLE);
         }
         if (data.equals(features[7])) {
-            dataName1.setText(getString(R.string.add_new_data) + " " + getString(R.string.sleep_duration));
+            dataName1.setText(String.format(getString(R.string.add_new_data), getString(R.string.sleep_duration)));
             dataName1.setVisibility(View.VISIBLE);
             dataValue1.setVisibility(View.VISIBLE);
         }
