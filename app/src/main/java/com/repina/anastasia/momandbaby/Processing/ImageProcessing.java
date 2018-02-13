@@ -1,7 +1,5 @@
 package com.repina.anastasia.momandbaby.Processing;
 
-import android.renderscript.Element;
-
 import com.google.android.gms.fitness.data.DataType;
 import com.repina.anastasia.momandbaby.DataBase.DatabaseNames;
 import com.repina.anastasia.momandbaby.R;

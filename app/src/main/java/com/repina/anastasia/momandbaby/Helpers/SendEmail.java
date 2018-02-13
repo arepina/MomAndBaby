@@ -9,7 +9,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.repina.anastasia.momandbaby.Adapters.GridItemArrayAdapter;
 import com.repina.anastasia.momandbaby.Connectors.FirebaseConnection;
 import com.repina.anastasia.momandbaby.DataBase.DatabaseNames;
 import com.repina.anastasia.momandbaby.Processing.FileProcessing;
@@ -95,7 +94,8 @@ public class SendEmail {
                             StringBuilder report = new StringBuilder();
                             for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
                                 if (!singleSnapshot.getKey().equals(DatabaseNames.USER)
-                                        & !singleSnapshot.getKey().equals(DatabaseNames.BABY)) {
+                                        & !singleSnapshot.getKey().equals(DatabaseNames.BABY)
+                                        &  !singleSnapshot.getKey().equals(DatabaseNames.TEETH)) {
                                     HashMap<String, HashMap<String, String>> items =
                                             (HashMap<String, HashMap<String, String>>) singleSnapshot.getValue();
                                     for (Map.Entry<String, HashMap<String, String>> entry : items.entrySet()) {

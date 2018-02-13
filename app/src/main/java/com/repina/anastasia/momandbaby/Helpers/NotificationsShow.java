@@ -2,19 +2,9 @@ package com.repina.anastasia.momandbaby.Helpers;
 
 
 import android.content.Context;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AlertDialog;
 import android.view.Gravity;
-import android.view.View;
-import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.repina.anastasia.momandbaby.Adapters.GridItemArrayAdapter;
-import com.repina.anastasia.momandbaby.R;
-
-import java.util.Calendar;
 
 
 public class NotificationsShow {

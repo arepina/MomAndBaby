@@ -5,8 +5,6 @@ import android.util.Pair;
 
 import com.google.android.gms.fitness.data.DataType;
 import com.google.firebase.database.DataSnapshot;
-import com.repina.anastasia.momandbaby.Adapters.GridItem;
-import com.repina.anastasia.momandbaby.Adapters.GridItemArrayAdapter;
 import com.repina.anastasia.momandbaby.DataBase.DatabaseNames;
 import com.repina.anastasia.momandbaby.Helpers.NotificationsShow;
 import com.repina.anastasia.momandbaby.R;

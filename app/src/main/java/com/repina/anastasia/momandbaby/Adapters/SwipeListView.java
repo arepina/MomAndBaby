@@ -45,7 +45,7 @@ public class SwipeListView {
         init(mContext, (SwipeListViewCallback) mContext);
     }
 
-    protected void init(Context mContext, SwipeListViewCallback mCallback) {
+    private void init(Context mContext, SwipeListViewCallback mCallback) {
         m_Context = mContext;
         m_Callback = mCallback;
     }

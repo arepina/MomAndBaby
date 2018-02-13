@@ -140,6 +140,7 @@
     <string name="add_any_data">Сначала добавьте какие-то данные, чтобы их сохранить</string>
     <string name="teeth">Зубы</string>
     <string name="teeth_map">Это карта зубов вашего малыша</string>
+    <string name="delete">Удалить</string>
 
     <string-array name="parametersBaby">
         <item>Рост</item>

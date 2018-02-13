@@ -123,16 +123,24 @@ public class GoogleFitService extends IntentService {
                     returnValues(sumData);
                 }
             else {
-                if (type == TYPE_GET_STEP_TODAY_DATA) // need aggregated non buckets data
-                    getStepsToday(start, end);
-                else if (type == TYPE_GET_CALORIES_TODAY_DATA)
-                    getCaloriesToday(start, end);
-                else if (type == TYPE_GET_WEIGHT_TODAY_DATA)
-                    getWeightToday(start, end);
-                else if (type == TYPE_GET_NUTRITION_TODAY_DATA)
-                    getNutritionToday(start, end);
-                else if (type == TYPE_GET_SLEEP_TODAY_DATA)
-                    getSleepToday(start, end);
+                switch (type) {// need aggregated non buckets data
+                    case TYPE_GET_STEP_TODAY_DATA:
+
+                        getStepsToday(start, end);
+                        break;
+                    case TYPE_GET_CALORIES_TODAY_DATA:
+                        getCaloriesToday(start, end);
+                        break;
+                    case TYPE_GET_WEIGHT_TODAY_DATA:
+                        getWeightToday(start, end);
+                        break;
+                    case TYPE_GET_NUTRITION_TODAY_DATA:
+                        getNutritionToday(start, end);
+                        break;
+                    case TYPE_GET_SLEEP_TODAY_DATA:
+                        getSleepToday(start, end);
+                        break;
+                }
             }
         } else
             Log.w(TAG, "Fit wasn't able to connect, so the request failed.");

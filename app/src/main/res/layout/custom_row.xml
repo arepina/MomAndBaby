@@ -36,5 +36,5 @@
         android:layout_marginTop="@dimen/main_margin"
         android:background="@color/colorPrimaryDark"
         android:gravity="center"
-        android:text="Delete" />
+        android:text="@string/delete" />
 </RelativeLayout>
