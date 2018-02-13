@@ -112,7 +112,7 @@ public class ChartActivity extends AppCompatActivity {
             features = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.parametersBaby)));
             features.remove(3);//no vaccinations
             features.remove(7);//no other
-            features.remove(8);//no teeth
+            features.remove(7);//no teeth
             adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, features);
         }
 

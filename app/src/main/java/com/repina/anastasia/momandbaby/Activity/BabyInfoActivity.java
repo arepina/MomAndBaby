@@ -48,8 +48,8 @@ public class BabyInfoActivity extends AppCompatActivity {
                     // Read entered values
                     String name = ((EditText) findViewById(R.id.name)).getText().toString();
                     String gender;
-                    if (((RadioButton) findViewById(R.id.girl)).isChecked()) gender = "girl";
-                    else gender = "boy";
+                    if (((RadioButton) findViewById(R.id.girl)).isChecked()) gender = getString(R.string.girl_eng);
+                    else gender = getString(R.string.boy_eng);
 
                     // Check the values for correctness
                     if (name.length() > 0) {

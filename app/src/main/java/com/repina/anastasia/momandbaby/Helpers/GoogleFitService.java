@@ -3,6 +3,7 @@ package com.repina.anastasia.momandbaby.Helpers;
 import android.app.IntentService;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.util.Pair;
@@ -17,7 +18,6 @@ import com.google.android.gms.fitness.data.DataPoint;
 import com.google.android.gms.fitness.data.DataSet;
 import com.google.android.gms.fitness.data.DataType;
 import com.google.android.gms.fitness.data.Field;
-import com.google.android.gms.fitness.data.Value;
 import com.google.android.gms.fitness.request.DataReadRequest;
 import com.google.android.gms.fitness.result.DataReadResponse;
 import com.google.android.gms.fitness.result.DataReadResult;
@@ -54,7 +54,6 @@ import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.TYPE_GET_NU
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.TYPE_GET_SLEEP_TODAY_DATA;
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.TYPE_GET_STEP_TODAY_DATA;
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.TYPE_GET_WEIGHT_TODAY_DATA;
-import static com.repina.anastasia.momandbaby.Processing.TextProcessing.translateWord;
 import static java.text.DateFormat.getTimeInstance;
 
 public class GoogleFitService extends IntentService {
@@ -62,6 +61,8 @@ public class GoogleFitService extends IntentService {
     public static final String TAG = "GoogleFitService";
     private GoogleApiClient mGoogleApiFitnessClient;
     private boolean mTryingToConnect = false;
+
+    private static final int hours = 24;
 
     @Override
     public void onDestroy() {
@@ -113,7 +114,7 @@ public class GoogleFitService extends IntentService {
                 if (type == 0) // need aggregated data for all types in sum
                 {
                     ArrayList<Pair<DataType, Pair<String, String>>> sumData =
-                            iterateTypes(start, end, getMainType(type), getAggregationType(type));
+                            iterateTypes(start, end);
                     returnValues(sumData);
                 } else // need aggregated data for all types in parts
                 {
@@ -283,7 +284,7 @@ public class GoogleFitService extends IntentService {
                 Log.i(TAG, "\tEnd: " + dateFormat.format(dp.getEndTime(TimeUnit.MILLISECONDS)));
                 DecimalFormat df = new DecimalFormat("0.0");
                 double difference = ((dp.getEndTime(TimeUnit.MILLISECONDS) - dp.getStartTime(TimeUnit.MILLISECONDS)) / 1000.0) / 3600.0;
-                if (difference < 24)
+                if (difference < hours)
                     result.append("Сон: ").append(df.format(difference)).append(" часа(ов)");
         }
         Intent intent = new Intent(HISTORY_INTENT);
@@ -298,7 +299,7 @@ public class GoogleFitService extends IntentService {
 
     //region Period data
 
-    private ArrayList<Pair<DataType, Pair<String, String>>> iterateTypes(Calendar start, Calendar end, DataType type, DataType agrType) {
+    private ArrayList<Pair<DataType, Pair<String, String>>> iterateTypes(Calendar start, Calendar end) {
         ArrayList<Pair<DataType, Pair<String, String>>> sumData = new ArrayList<>();
         for (int i = 2; i <= 6; i++) {
             sumData.addAll(getWeek(start, end, getMainType(i), getAggregationType(i)));
@@ -360,7 +361,7 @@ public class GoogleFitService extends IntentService {
             if (type.equals(DataType.TYPE_ACTIVITY_SEGMENT)) {
                 DecimalFormat df = new DecimalFormat("0.0");
                 double difference = ((dp.getEndTime(TimeUnit.MILLISECONDS) - dp.getStartTime(TimeUnit.MILLISECONDS)) / 1000.0) / 3600.0;
-                if (difference < 24)
+                if (difference < hours)
                     stringValue.append("Сон: ").append(df.format(difference)).append(" часа(ов)");
             } else {
                 Field field = dp.getDataType().getFields().get(0);
@@ -426,7 +427,7 @@ public class GoogleFitService extends IntentService {
                         new GoogleApiClient.OnConnectionFailedListener() {
                             // Called whenever the API client fails to connect.
                             @Override
-                            public void onConnectionFailed(ConnectionResult result) {
+                            public void onConnectionFailed(@NonNull ConnectionResult result) {
                                 mTryingToConnect = false;
                                 notifyUiFailedConnection(result);
                             }
