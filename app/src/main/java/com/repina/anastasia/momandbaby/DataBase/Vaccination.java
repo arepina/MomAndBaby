@@ -3,13 +3,17 @@ package com.repina.anastasia.momandbaby.DataBase;
 
 import com.repina.anastasia.momandbaby.R;
 
-public class Vaccination  {
+/**
+ * Vaccination
+ */
+public class Vaccination {
     private String babyId;
     private String date;
     private String vaccinationName;
     private String note;
 
-    public Vaccination(){}
+    public Vaccination() {
+    }
 
     public Vaccination(String babyId, String date, String vaccinationName, String note) {
         this.babyId = babyId;

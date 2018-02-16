@@ -2,6 +2,9 @@ package com.repina.anastasia.momandbaby.DataBase;
 
 import com.repina.anastasia.momandbaby.R;
 
+/**
+ * Outdoor
+ */
 public class Outdoor {
     private String babyId;
     private String date;

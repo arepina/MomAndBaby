@@ -10,6 +10,9 @@ import android.widget.TextView;
 
 import com.repina.anastasia.momandbaby.R;
 
+/**
+ * Custom grid
+ */
 public class CustomGrid extends BaseAdapter {
     private Context mContext;
     private final String[] web;

@@ -3,6 +3,9 @@ package com.repina.anastasia.momandbaby.Adapters;
 
 import java.io.Serializable;
 
+/**
+ * Custom grid item
+ */
 public class GridItem implements Serializable {
     private String key;
     private String type;

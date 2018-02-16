@@ -14,6 +14,9 @@ import com.repina.anastasia.momandbaby.R;
 
 import java.util.ArrayList;
 
+/**
+ * List view array adapter
+ */
 public class ListViewArrayAdapter extends ArrayAdapter<ListViewItem> {
     private ArrayList<ListViewItem> modelItems;
     private Context context;

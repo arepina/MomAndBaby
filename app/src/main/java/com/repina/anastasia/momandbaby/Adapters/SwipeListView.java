@@ -9,6 +9,9 @@ import android.view.View;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+/**
+ * Swipe ListView
+ */
 public class SwipeListView {
 
     private ListView list;
@@ -17,7 +20,6 @@ public class SwipeListView {
     private int REL_SWIPE_THRESHOLD_VELOCITY;
     private Context m_Context;
     private SwipeListViewCallback m_Callback;
-
 
     public interface SwipeListViewCallback {
         ListView getListView();
@@ -38,18 +40,20 @@ public class SwipeListView {
         init(mContext, callback);
     }
 
-    public SwipeListView(Context mContext) throws Exception {
-        if (!(mContext instanceof SwipeListViewCallback)) {
-            throw new Exception("Activity must be implement SwipeListViewCallback");
-        }
-        init(mContext, (SwipeListViewCallback) mContext);
-    }
-
+    /**
+     * Initialisation
+     *
+     * @param mContext  context
+     * @param mCallback callback
+     */
     private void init(Context mContext, SwipeListViewCallback mCallback) {
         m_Context = mContext;
         m_Callback = mCallback;
     }
 
+    /**
+     * Run swipe
+     */
     public void exec() {
         DisplayMetrics dm = m_Context.getResources().getDisplayMetrics();
         REL_SWIPE_MIN_DISTANCE = (int) (120.0f * dm.densityDpi / 160.0f + 0.5);
@@ -65,6 +69,11 @@ public class SwipeListView {
         list.setOnTouchListener(gestureListener);
     }
 
+    /**
+     * Item click
+     *
+     * @param position index
+     */
     private void myOnItemClick(int position) {
         if (position < 0)
             return;
@@ -72,6 +81,9 @@ public class SwipeListView {
 
     }
 
+    /**
+     * User gestures detection
+     */
     class MyGestureDetector extends SimpleOnGestureListener {
 
         private int temp_position = -1;

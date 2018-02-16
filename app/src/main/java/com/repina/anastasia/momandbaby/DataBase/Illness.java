@@ -3,7 +3,10 @@ package com.repina.anastasia.momandbaby.DataBase;
 
 import com.repina.anastasia.momandbaby.R;
 
-public class Illness  {
+/**
+ * Illness
+ */
+public class Illness {
     private String babyId;
     private String date;
     private String symptomes;

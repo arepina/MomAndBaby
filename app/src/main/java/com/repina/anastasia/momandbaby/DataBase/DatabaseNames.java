@@ -1,6 +1,8 @@
 package com.repina.anastasia.momandbaby.DataBase;
 
-
+/**
+ * DB names
+ */
 public class DatabaseNames {
     public static final String USER = "USERS";
     public static final String BABY = "BABY";

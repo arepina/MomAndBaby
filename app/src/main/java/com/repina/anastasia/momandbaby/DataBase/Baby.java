@@ -1,6 +1,9 @@
 package com.repina.anastasia.momandbaby.DataBase;
 
-public class Baby  {
+/**
+ * Baby
+ */
+public class Baby {
     private String momId;
     private String birthDay;
     private String gender;

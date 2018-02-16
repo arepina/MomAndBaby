@@ -22,6 +22,9 @@ import com.repina.anastasia.momandbaby.R;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Grid item delete adapter
+ */
 public class GridItemArrayAdapter extends ArrayAdapter<GridItem> {
 
     private final int invalid = -1;
@@ -52,6 +55,12 @@ public class GridItemArrayAdapter extends ArrayAdapter<GridItem> {
         return this.itemList.get(index);
     }
 
+    /**
+     * Item was swiped
+     *
+     * @param isRight  is right swipe
+     * @param position delete index
+     */
     public void onSwipeItem(boolean isRight, int position) {
         if (!isRight) {
             delete_pos = position;
@@ -61,6 +70,11 @@ public class GridItemArrayAdapter extends ArrayAdapter<GridItem> {
         notifyDataSetChanged();
     }
 
+    /**
+     * Item delete
+     *
+     * @param pos delete index
+     */
     private void deleteItem(int pos) {
         GridItem removing = itemList.get(pos);
         FirebaseConnection connection = new FirebaseConnection();
@@ -80,8 +94,7 @@ public class GridItemArrayAdapter extends ArrayAdapter<GridItem> {
                     }
                 });
         itemList.remove(pos);
-        if(itemList.size() == 0)
-        {
+        if (itemList.size() == 0) {
             GridItem it = new GridItem(R.mipmap.cross, "R.mipmap.cross", getContext().getString(R.string.no_data_today), null, null);
             itemList.add(it);
         }
@@ -121,6 +134,9 @@ public class GridItemArrayAdapter extends ArrayAdapter<GridItem> {
     }
 }
 
+/**
+ * View holder
+ */
 class ViewHolderPattern {
     @SuppressWarnings("unchecked")
     public static <T extends View> T get(View view, int id) {

@@ -2,6 +2,9 @@ package com.repina.anastasia.momandbaby.DataBase;
 
 import java.util.ArrayList;
 
+/**
+ * Teeth
+ */
 public class Teeth {
 
     private String babyId;

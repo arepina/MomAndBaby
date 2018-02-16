@@ -3,6 +3,9 @@ package com.repina.anastasia.momandbaby.DataBase;
 
 import com.repina.anastasia.momandbaby.R;
 
+/**
+ * Other feature
+ */
 public class Other {
     private String babyId;
     private String date;
@@ -43,6 +46,6 @@ public class Other {
 
     @Override
     public String toString() {
-        return "Другое " + date + " " + R.string.сomment + " " + note + " " + R.string.rate_feature ;
+        return "Другое " + date + " " + R.string.сomment + " " + note + " " + R.string.rate_feature;
     }
 }

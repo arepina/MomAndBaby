@@ -3,6 +3,9 @@ package com.repina.anastasia.momandbaby.Adapters;
 
 import java.io.Serializable;
 
+/**
+ * ListView item for vaccinations
+ */
 public class ListViewItem implements Serializable {
     private String name;
     private int value; // 0 checkbox disable, 1  checkbox enable

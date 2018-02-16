@@ -109,5 +109,4 @@ public class VaccinationsActivity extends Activity {
                     });
         }
     }
-
 }
