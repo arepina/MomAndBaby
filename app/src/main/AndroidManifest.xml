@@ -34,12 +34,11 @@
         <activity android:name=".Activity.AppInfoActivity" />
         <activity android:name=".Activity.ChartActivity" />
         <activity android:name=".Activity.VaccinationsActivity" />
+        <activity android:name=".Activity.TeethActivity" />
 
         <service
             android:name=".Helpers.GoogleFitService"
             android:enabled="true"></service>
-
-        <activity android:name=".Activity.TeethActivity"></activity>
     </application>
 
 </manifest>

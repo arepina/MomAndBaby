@@ -335,6 +335,7 @@ public class GoogleFitService extends IntentService {
         ArrayList<Pair<DataType, Pair<String, String>>> sumData = new ArrayList<>();
         if(type.equals(DataType.TYPE_ACTIVITY_SEGMENT)) // only for sleep data, aggregation does not work
         {
+            int difference = Math.abs(end.get(Calendar.DAY_OF_YEAR) - start.get(Calendar.DAY_OF_YEAR));
             Calendar s = Calendar.getInstance();
             Calendar e = Calendar.getInstance();
             s.set(Calendar.HOUR_OF_DAY, 0);
@@ -343,9 +344,10 @@ public class GoogleFitService extends IntentService {
             e.set(Calendar.HOUR_OF_DAY, 23);
             e.set(Calendar.MINUTE, 59);
             e.set(Calendar.SECOND, 59);
-            s.add(Calendar.DATE, -31);
-            e.add(Calendar.DATE, -31);
-            for(int i = 0; i < 31; i++)
+            s.add(Calendar.DATE, -difference);
+            e.add(Calendar.DATE, -difference);
+            sumData.add(getSleepToday(s, e, true));
+            for(int i = 1; i <= difference; i++)
             {
                 s.add(Calendar.DATE, 1);
                 e.add(Calendar.DATE, 1);

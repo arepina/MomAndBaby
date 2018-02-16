@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
 
+import com.repina.anastasia.momandbaby.Fragment.FragmentSettings;
 import com.repina.anastasia.momandbaby.Helpers.SharedConstants;
 import com.repina.anastasia.momandbaby.Helpers.NotificationsShow;
 import com.repina.anastasia.momandbaby.R;

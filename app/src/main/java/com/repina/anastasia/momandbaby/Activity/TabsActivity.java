@@ -3,8 +3,8 @@ package com.repina.anastasia.momandbaby.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTabHost;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TabHost;
@@ -21,7 +21,7 @@ import com.repina.anastasia.momandbaby.R;
 
 import java.util.Calendar;
 
-public class TabsActivity extends AppCompatActivity {
+public class TabsActivity extends FragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

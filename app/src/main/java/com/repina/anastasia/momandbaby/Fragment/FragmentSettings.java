@@ -3,6 +3,7 @@ package com.repina.anastasia.momandbaby.Fragment;
 import android.Manifest;
 import android.app.Activity;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -64,6 +65,7 @@ public class FragmentSettings extends Fragment {
     private Calendar to;
 
     public static boolean isActivityAlreadyCreated = false;
+    public static ProgressDialog dialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -78,6 +80,12 @@ public class FragmentSettings extends Fragment {
 
         FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.floatingActionButton);
         fab.setVisibility(View.INVISIBLE);
+
+        dialog = new ProgressDialog(getContext());
+        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        dialog.setMessage(getString(R.string.fit_data_load));
+        dialog.setIndeterminate(true);
+        dialog.setCanceledOnTouchOutside(false);
 
         Button exit = (Button) v.findViewById(R.id.exit);
         exit.setOnClickListener(new View.OnClickListener() {
@@ -127,7 +135,7 @@ public class FragmentSettings extends Fragment {
                             getContext().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
                         requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
                     else
-                        showAlertDialog(true, getActivity());
+                        showAlertDialog(true);
                 }
             }
         });
@@ -141,7 +149,7 @@ public class FragmentSettings extends Fragment {
                             getContext().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
                         requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
                     else
-                        showAlertDialog(false, getActivity());
+                        showAlertDialog(false);
             }
         });
 
@@ -157,9 +165,9 @@ public class FragmentSettings extends Fragment {
         return v;
     }
 
-    public void showAlertDialog(final boolean whoFlag, final Activity activity) {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        View view = activity.getLayoutInflater().inflate(R.layout.custom_alert_dialog, null);
+    public void showAlertDialog(final boolean whoFlag) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        View view = getActivity().getLayoutInflater().inflate(R.layout.custom_alert_dialog, null);
         builder.setView(view);
         final AlertDialog alert = builder.create();
         Button day = (Button) view.findViewById(R.id.day);
@@ -170,8 +178,9 @@ public class FragmentSettings extends Fragment {
                 to = Calendar.getInstance();
                 to.setTime(from.getTime());
                 alert.cancel();
-                SendEmail.createEmail(activity.getApplicationContext(), 0, from, to,
-                        whoFlag, (FragmentActivity) activity, FragmentSettings.class.toString());
+                dialog.show();
+                SendEmail.createEmail(getActivity().getApplicationContext(), 0, from, to,
+                        whoFlag, getActivity(), FragmentSettings.class.toString());
             }
         });
         Button week = (Button) view.findViewById(R.id.week);
@@ -183,8 +192,9 @@ public class FragmentSettings extends Fragment {
                 to.setTime(from.getTime());
                 from.add(Calendar.WEEK_OF_YEAR, -1);
                 alert.cancel();
-                SendEmail.createEmail(activity.getApplicationContext(), 1, from, to,
-                        whoFlag, (FragmentActivity) activity, FragmentSettings.class.toString());
+                dialog.show();
+                SendEmail.createEmail(getActivity().getApplicationContext(), 1, from, to,
+                        whoFlag, getActivity(), FragmentSettings.class.toString());
             }
         });
         Button month = (Button) view.findViewById(R.id.month);
@@ -196,18 +206,18 @@ public class FragmentSettings extends Fragment {
                 to.setTime(from.getTime());
                 from.add(Calendar.MONTH, -1);
                 alert.cancel();
-                SendEmail.createEmail(activity.getApplicationContext(), 2, from, to,
-                        whoFlag, (FragmentActivity) activity, FragmentSettings.class.toString());
+                dialog.show();
+                SendEmail.createEmail(getActivity().getApplicationContext(), 2, from, to,
+                        whoFlag, getActivity(), FragmentSettings.class.toString());
             }
         });
         Button custom = (Button) view.findViewById(R.id.custom);
         custom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder calendarBuilder = new AlertDialog.Builder(activity.getApplicationContext());
-                final View view = activity.getLayoutInflater().inflate(R.layout.custom_calendar, null);
-                calendarBuilder.setView(view);
-                final AlertDialog calendarAlert = calendarBuilder.create();
+                AlertDialog.Builder calendarBuilder = new AlertDialog.Builder(getActivity().getApplicationContext());
+                final View view = getActivity().getLayoutInflater().inflate(R.layout.custom_calendar, null);
+                final AlertDialog calendarAlert = calendarBuilder.setView(view).create();
                 calendarAlert.show();
                 Button submit = (Button) view.findViewById(R.id.submit);
                 submit.setOnClickListener(new View.OnClickListener() {
@@ -223,13 +233,14 @@ public class FragmentSettings extends Fragment {
                         to.set(Calendar.YEAR, toPicker.getYear());
                         to.set(Calendar.MONTH, toPicker.getMonth());
                         to.set(Calendar.DATE, toPicker.getDayOfMonth());
+                        dialog.show();
                         if (from.after(to) || Calendar.getInstance().before(to))
-                            NotificationsShow.showToast(activity.getApplicationContext(), getString(R.string.incorrect_dates));
+                            NotificationsShow.showToast(getActivity().getApplicationContext(), getString(R.string.incorrect_dates));
                         else {
                             calendarAlert.cancel();
                             alert.cancel();
-                            SendEmail.createEmail(activity.getApplicationContext(), 3, from, to,
-                                    whoFlag, (FragmentActivity) activity, FragmentSettings.class.toString());
+                            SendEmail.createEmail(getActivity().getApplicationContext(), 3, from, to,
+                                    whoFlag, getActivity(), FragmentSettings.class.toString());
                         }
                     }
                 });
@@ -277,6 +288,8 @@ public class FragmentSettings extends Fragment {
                 String toStr = FormattedDate.getFormattedDate(to);
                 TextProcessing.formMomReport(sumData, context, fromStr, toStr);
             }
+            if(dialog != null)
+                dialog.dismiss();
         }
     };
 
@@ -333,6 +346,13 @@ public class FragmentSettings extends Fragment {
                 }
             }
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (dialog != null)
+            dialog.dismiss();
     }
 
     //endregion

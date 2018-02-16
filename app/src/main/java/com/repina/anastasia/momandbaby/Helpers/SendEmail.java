@@ -11,6 +11,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.repina.anastasia.momandbaby.Connectors.FirebaseConnection;
 import com.repina.anastasia.momandbaby.DataBase.DatabaseNames;
+import com.repina.anastasia.momandbaby.Fragment.FragmentSettings;
 import com.repina.anastasia.momandbaby.Processing.FileProcessing;
 import com.repina.anastasia.momandbaby.Processing.StatsProcessing;
 import com.repina.anastasia.momandbaby.Processing.TextProcessing;
@@ -123,6 +124,8 @@ public class SendEmail {
                                 NotificationsShow.showToast(context, context.getString(R.string.no_data));
                             else
                                 FileProcessing.sendFile(report.toString(), context, finalStart, finalEnd); // send baby report
+                            if(FragmentSettings.dialog != null)
+                                FragmentSettings.dialog.dismiss();
                         }
                     }
 
