@@ -431,6 +431,8 @@ public class ChartActivity extends AppCompatActivity {
         labels = new ArrayList<>();
         if (sumData.size() == 0) { // empty result list
             NotificationsShow.showToast(getApplicationContext(), getString(R.string.no_data_chart));
+            if(dialog != null)
+                dialog.dismiss();
             LineData lineData = new LineData(labels, dataSets);
             chart.setData(lineData);
             return;

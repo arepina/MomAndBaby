@@ -22,7 +22,7 @@
     </style>
 
     <!--Date picker-->
-    <style name="MyDatePickerTheme" parent="AppTheme">
+    <style name="MyDatePickerTheme" parent="@style/Theme.AppCompat">
         <item name="android:textColorPrimary">@color/colorPrimaryDark</item>
     </style>
 

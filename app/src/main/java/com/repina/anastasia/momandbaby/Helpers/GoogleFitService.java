@@ -354,6 +354,15 @@ public class GoogleFitService extends IntentService {
                 sumData.add(getSleepToday(s, e, true));
             }
         }else {
+            if(type == DataType.TYPE_NUTRITION)
+            {
+                Calendar e = Calendar.getInstance();
+                e.setTime(end.getTime());
+                e.set(Calendar.HOUR_OF_DAY, 23);
+                e.set(Calendar.MINUTE, 59);
+                e.set(Calendar.SECOND, 59);
+                endTime = e.getTimeInMillis();
+            }
             DataReadRequest readRequest =
                     new DataReadRequest.Builder()
                             .aggregate(type, agrType)

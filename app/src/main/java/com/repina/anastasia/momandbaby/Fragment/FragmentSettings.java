@@ -215,7 +215,7 @@ public class FragmentSettings extends Fragment {
         custom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder calendarBuilder = new AlertDialog.Builder(getActivity().getApplicationContext());
+                AlertDialog.Builder calendarBuilder = new AlertDialog.Builder(getActivity());
                 final View view = getActivity().getLayoutInflater().inflate(R.layout.custom_calendar, null);
                 final AlertDialog calendarAlert = calendarBuilder.setView(view).create();
                 calendarAlert.show();
@@ -234,8 +234,10 @@ public class FragmentSettings extends Fragment {
                         to.set(Calendar.MONTH, toPicker.getMonth());
                         to.set(Calendar.DATE, toPicker.getDayOfMonth());
                         dialog.show();
-                        if (from.after(to) || Calendar.getInstance().before(to))
+                        if (from.after(to) || Calendar.getInstance().before(to)) {
                             NotificationsShow.showToast(getActivity().getApplicationContext(), getString(R.string.incorrect_dates));
+                            dialog.dismiss();
+                        }
                         else {
                             calendarAlert.cancel();
                             alert.cancel();
