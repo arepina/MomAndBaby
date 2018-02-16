@@ -24,11 +24,14 @@ import com.google.android.gms.fitness.result.DataReadResult;
 import com.repina.anastasia.momandbaby.Activity.ChartActivity;
 import com.repina.anastasia.momandbaby.Fragment.FragmentMom;
 import com.repina.anastasia.momandbaby.Fragment.FragmentSettings;
+import com.repina.anastasia.momandbaby.Processing.TextProcessing;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -264,10 +267,15 @@ public class GoogleFitService extends IntentService {
         DataSet nutritionData = dataReadResult.getDataSet(DataType.TYPE_NUTRITION);
         StringBuilder result = new StringBuilder(0);
         for (DataPoint dp : nutritionData.getDataPoints()) {
-            for (Field field : dp.getDataType().getFields()) {
-                String res = dp.getValue(field).toString().replace("{", "").replace("}", "");
-                result.append(res);
+            Field field = dp.getDataType().getFields().get(0);
+            String temp = dp.getValue(field).toString().replace("{", "").replace("}", "");
+            ArrayList<String> tempArr = new ArrayList<>(Arrays.asList(temp.split(", ")));
+            for (String aTempArr : tempArr) {
+                String[] wordValue = aTempArr.split("=");
+                if (Double.parseDouble(wordValue[1]) != 0.0)
+                    result.append(TextProcessing.translateWord(wordValue[0])).append("=").append(wordValue[1]).append(", ");
             }
+            result = new StringBuilder(result.substring(0, result.length() - 2));
         }
         Intent intent = new Intent(HISTORY_INTENT);
         intent.putExtra(HISTORY_EXTRA_NUTRITION_TODAY, result.toString());
@@ -303,13 +311,14 @@ public class GoogleFitService extends IntentService {
         DecimalFormat df = new DecimalFormat("0.0");
         if (Math.round(sumDifference) < hours) {
             result.append("Сон: ").append(df.format(sumDifference)).append(" часа(ов)");
-            if(flag) { // from aggregate
+            if (flag) { // from aggregate
                 Pair<String, String> pair = new Pair<>(startDate, result.toString());
                 return new Pair<>(DataType.TYPE_ACTIVITY_SEGMENT, pair);
             }
         }
-        if(flag)
-            return new Pair<>(DataType.TYPE_ACTIVITY_SEGMENT, new Pair<>(startDate, ""));;
+        if (flag)
+            return new Pair<>(DataType.TYPE_ACTIVITY_SEGMENT, new Pair<>(startDate, ""));
+        ;
         Intent intent = new Intent(HISTORY_INTENT);
         intent.putExtra(HISTORY_EXTRA_SLEEP_TODAY, result.toString());
         intent.putExtra(HISTORY_DATE, FormattedDate.getFormattedDate(start));
@@ -335,7 +344,7 @@ public class GoogleFitService extends IntentService {
         long endTime = end.getTimeInMillis();
         long startTime = start.getTimeInMillis();
         ArrayList<Pair<DataType, Pair<String, String>>> sumData = new ArrayList<>();
-        if(type.equals(DataType.TYPE_ACTIVITY_SEGMENT)) // only for sleep data, aggregation does not work
+        if (type.equals(DataType.TYPE_ACTIVITY_SEGMENT)) // only for sleep data, aggregation does not work
         {
             int difference = Math.abs(end.get(Calendar.DAY_OF_YEAR) - start.get(Calendar.DAY_OF_YEAR));
             Calendar s = Calendar.getInstance();
@@ -349,15 +358,13 @@ public class GoogleFitService extends IntentService {
             s.add(Calendar.DATE, -difference);
             e.add(Calendar.DATE, -difference);
             sumData.add(getSleepToday(s, e, true));
-            for(int i = 1; i <= difference; i++)
-            {
+            for (int i = 1; i <= difference; i++) {
                 s.add(Calendar.DATE, 1);
                 e.add(Calendar.DATE, 1);
                 sumData.add(getSleepToday(s, e, true));
             }
-        }else {
-            if(type == DataType.TYPE_NUTRITION)
-            {
+        } else {
+            if (type == DataType.TYPE_NUTRITION) {
                 Calendar e = Calendar.getInstance();
                 e.setTime(end.getTime());
                 e.set(Calendar.HOUR_OF_DAY, 23);
