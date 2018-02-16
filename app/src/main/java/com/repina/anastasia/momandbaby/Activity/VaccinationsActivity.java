@@ -29,6 +29,9 @@ import com.repina.anastasia.momandbaby.R;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * Vaccinations
+ */
 public class VaccinationsActivity extends Activity {
 
     @Override
@@ -63,6 +66,9 @@ public class VaccinationsActivity extends Activity {
         loadVaccinations();
     }
 
+    /**
+     * Load vaccinations
+     */
     private void loadVaccinations() {
         SharedPreferences sp = getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
         String babyId = sp.getString(SharedConstants.BABY_ID_KEY, "");

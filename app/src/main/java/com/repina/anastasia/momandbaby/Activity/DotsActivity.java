@@ -19,6 +19,9 @@ import com.repina.anastasia.momandbaby.R;
 import java.util.ArrayList;
 import java.util.Collection;
 
+/**
+ * Dots shown on the first user entry
+ */
 public class DotsActivity extends IntroActivity {
 
     private static final int[] BACKGROUND_COLORS = {0xffC75163, 0xffFFD15D, 0xffC75163,};
@@ -79,17 +82,28 @@ public class DotsActivity extends IntroActivity {
         return new IntroButton.ProgressToNextActivity(nextActivity, pendingEdits);
     }
 
+    /**
+     * Check if introduction was completed before
+     *
+     * @return if introduction was completed before
+     */
     private boolean introductionCompletedPreviously() {
         SharedPreferences sp = getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
         return sp.getBoolean(SharedConstants.DISPLAY_ONCE_KEY, false);
     }
 
+    /**
+     * Set the transformer params
+     */
     private void configureTransformer() {
         MultiViewParallaxTransformer transformer = new MultiViewParallaxTransformer();
         transformer.withParallaxView(R.id.page_fragment_imageHolderFront, 1.2f);
         setPageTransformer(false, transformer);
     }
 
+    /**
+     * Set the background params
+     */
     private void configureBackground() {
         BackgroundManager backgroundManager = new ColorBlender(BACKGROUND_COLORS);
         setBackgroundManager(backgroundManager);

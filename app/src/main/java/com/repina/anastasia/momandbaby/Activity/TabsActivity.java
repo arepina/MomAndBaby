@@ -21,6 +21,9 @@ import com.repina.anastasia.momandbaby.R;
 
 import java.util.Calendar;
 
+/**
+ * Tabs
+ */
 public class TabsActivity extends FragmentActivity {
 
     @Override
@@ -45,6 +48,9 @@ public class TabsActivity extends FragmentActivity {
             finish();
     }
 
+    /**
+     * Build tabs
+     */
     private void buildTabs() {
         FragmentTabHost mTabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
         mTabHost.setup(this, getSupportFragmentManager(), android.R.id.tabcontent);
@@ -70,12 +76,22 @@ public class TabsActivity extends FragmentActivity {
         mTabHost.setCurrentTab(1);
     }
 
+    /**
+     * Set tabs icons
+     *
+     * @param tabHost      host tab
+     * @param tabIndex     index of tab
+     * @param iconResource icon source
+     */
     private void setTabIcon(TabHost tabHost, int tabIndex, int iconResource) {
         ImageView tabImageView = (ImageView) tabHost.getTabWidget().getChildTabViewAt(tabIndex).findViewById(android.R.id.icon);
         tabImageView.setVisibility(View.VISIBLE);
         tabImageView.setImageResource(iconResource);
     }
 
+    /**
+     * Check if baby's birthday is today
+     */
     private void checkForBirthday() {
         SharedPreferences sp = getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
         String birthday = sp.getString(SharedConstants.BABY_BIRTHDAY, "");

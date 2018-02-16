@@ -25,6 +25,9 @@ import com.repina.anastasia.momandbaby.Helpers.SharedConstants;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Register
+ */
 public class RegisterActivity extends AppCompatActivity {
 
     @Override
@@ -32,11 +35,11 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        Button signUp = (Button)findViewById(R.id.btn_signup);
+        Button signUp = (Button) findViewById(R.id.btn_signup);
         signUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(ConnectionDetector.isConnected(getApplicationContext())) {//check if internet is working
+                if (ConnectionDetector.isConnected(getApplicationContext())) {//check if internet is working
 
                     String email = ((EditText) findViewById(R.id.input_email)).getText().toString();
                     String password = ((EditText) findViewById(R.id.input_password)).getText().toString();
@@ -45,7 +48,7 @@ public class RegisterActivity extends AppCompatActivity {
                     if (isValidEmailAddress(email)) {
                         if (password.length() >= 8) {
                             if (name.length() > 0)
-                                if(password.equals(passwordAgain))
+                                if (password.equals(passwordAgain))
                                     isEmailAlreadyInUse(email, password, name);
                                 else
                                     NotificationsShow.showToast(getApplicationContext(), R.string.different_passwords);
@@ -59,7 +62,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-        TextView logIn = (TextView)findViewById(R.id.link_login);
+        TextView logIn = (TextView) findViewById(R.id.link_login);
         logIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,8 +73,14 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Validate email
+     *
+     * @param email email
+     * @return if email is valid
+     */
     public static boolean isValidEmailAddress(String email) {
-        if(email.length() < 8)
+        if (email.length() < 8)
             return false;
         String regex = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
         Pattern pattern = Pattern.compile(regex);
@@ -79,8 +88,14 @@ public class RegisterActivity extends AppCompatActivity {
         return matcher.matches();
     }
 
-    private void isEmailAlreadyInUse(final String email, final String password, final String name)
-    {
+    /**
+     * Check email for being in use
+     *
+     * @param email    email
+     * @param password password
+     * @param name     user name
+     */
+    private void isEmailAlreadyInUse(final String email, final String password, final String name) {
         FirebaseConnection connection = new FirebaseConnection();
         FirebaseDatabase database = connection.getDatabase();
 
@@ -104,8 +119,14 @@ public class RegisterActivity extends AppCompatActivity {
                 });
     }
 
-    private void createNewAccount(String email, String password, String name)
-    {
+    /**
+     * Create new account
+     *
+     * @param email    email
+     * @param password password
+     * @param name     user name
+     */
+    private void createNewAccount(String email, String password, String name) {
         FirebaseConnection connection = new FirebaseConnection();
         FirebaseDatabase database = connection.getDatabase();
 

@@ -15,7 +15,7 @@ import com.repina.anastasia.momandbaby.R;
 import java.util.ArrayList;
 
 public class ListViewArrayAdapter extends ArrayAdapter<ListViewItem> {
-    private ArrayList<ListViewItem> modelItems = null;
+    private ArrayList<ListViewItem> modelItems;
     private Context context;
 
     public ListViewArrayAdapter(Context context, ArrayList<ListViewItem> resource) {
@@ -26,7 +26,7 @@ public class ListViewArrayAdapter extends ArrayAdapter<ListViewItem> {
 
     @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
 
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.custom_vaccination_row, parent, false);

@@ -48,14 +48,14 @@ public class ChooseFeatureActivity extends Activity {
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 if (ConnectionDetector.isConnected(getApplicationContext())) {
-                    if(features[position].equals(features[9])) // teeth
+                    if (features[position].equals(features[9])) // teeth
                     {
                         Intent nextActivity = new Intent(getApplicationContext(), TeethActivity.class);
                         nextActivity.putExtra("data", features[position]);
                         nextActivity.putExtra(CALLING, ChooseFeatureActivity.class.toString());
                         startActivity(nextActivity);
                         finish();//back to main screen
-                    }else { // all the others
+                    } else { // all the others
                         Intent nextActivity = new Intent(getApplicationContext(), NewFeatureActivity.class);
                         nextActivity.putExtra("data", features[position]);
                         startActivity(nextActivity);

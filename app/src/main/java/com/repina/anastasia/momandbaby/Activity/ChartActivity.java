@@ -69,7 +69,9 @@ import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.HISTORY_INT
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.SERVICE_REQUEST_TYPE;
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.TYPE_REQUEST_CONNECTION;
 
-
+/**
+ * Charts
+ */
 public class ChartActivity extends AppCompatActivity {
 
     private static LineChart chart;
@@ -79,6 +81,7 @@ public class ChartActivity extends AppCompatActivity {
     private static List<ILineDataSet> dataSets;
     private ProgressDialog dialog;
     private int spinnerSelectedIndex = 0;
+    private int animationDuration = 2000;
     private static ArrayList<String> features;
 
     private ConnectionResult mFitResultResolution;
@@ -99,6 +102,11 @@ public class ChartActivity extends AppCompatActivity {
 
     //region Init Chart
 
+    /**
+     * Initialisation of chart
+     *
+     * @param type Mom or Baby
+     */
     void initChart(final String type) {
         //https://www.android-examples.com/create-bar-chart-graph-using-mpandroidchart-library/
         //https://github.com/numetriclabz/numAndroidCharts
@@ -144,7 +152,7 @@ public class ChartActivity extends AppCompatActivity {
                         if (selectedItemName.equals(features.get(0)) || selectedItemName.equals(features.get(1))) // height and weight only
                             initIdealChartData(getApplicationContext(), selectedItemName); // add the ideal data to chart
                         getValuesFromFirebase(database,
-                                getBabyChartName(selectedItemName),
+                                getBabyChartDBName(selectedItemName),
                                 babyId,
                                 selectedItemName);
                     }
@@ -158,7 +166,13 @@ public class ChartActivity extends AppCompatActivity {
         });
     }
 
-    public static String getBabyChartName(String value) {
+    /**
+     * Get baby chart DB name
+     *
+     * @param value russian translation of DB name
+     * @return DB name
+     */
+    public static String getBabyChartDBName(String value) {
         if (value.equals(features.get(0))) return DatabaseNames.METRICS;
         if (value.equals(features.get(1))) return DatabaseNames.METRICS;
         if (value.equals(features.get(2))) return DatabaseNames.STOOL;
@@ -169,6 +183,11 @@ public class ChartActivity extends AppCompatActivity {
         return "";
     }
 
+    /**
+     * Get mom chart name
+     *
+     * @return mom chart name
+     */
     private String getMomChartName() {
         switch (spinnerSelectedIndex) {
             case 0: {
@@ -191,6 +210,14 @@ public class ChartActivity extends AppCompatActivity {
 
     // region Get chart data from Firebase and Google Fit
 
+    /**
+     * Get values for charts in Firebase
+     *
+     * @param database         Firebase DB
+     * @param dbName           DB name
+     * @param id               baby id
+     * @param selectedItemName selected item name
+     */
     void getValuesFromFirebase(final FirebaseDatabase database, final String dbName,
                                final String id, final String selectedItemName) {
         dialog.show();
@@ -213,6 +240,9 @@ public class ChartActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * Get values from GoogleFit
+     */
     private void getValuesFromGoogleFit() {
         dialog.show();
         // ask for 1 month data for a specific type
@@ -221,7 +251,7 @@ public class ChartActivity extends AppCompatActivity {
         // weight 2 - 5
         // calories 3 - 6
         int index = spinnerSelectedIndex;
-        if(index == 0 || index == 1) // steps or sleep
+        if (index == 0 || index == 1) // steps or sleep
             index += 2;
         else
             index += 3; // weight or calories
@@ -232,6 +262,12 @@ public class ChartActivity extends AppCompatActivity {
 
     //region Fill charts with ideal data
 
+    /**
+     * Initialisation of ideal charts
+     *
+     * @param context app Context
+     * @param dbName  DB name
+     */
     private void initIdealChartData(Context context, String dbName) {
         SharedPreferences sp = context.getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
         String gender = sp.getString(SharedConstants.BABY_GENDER_KEY, "");
@@ -264,6 +300,12 @@ public class ChartActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Get entries for boys ideal chart
+     *
+     * @param dbName DB name
+     * @return entries list for ideal chart
+     */
     private ArrayList<LineDataSet> initBoy(String dbName) {
         ArrayList<LineDataSet> setsList = new ArrayList<>();
         LineDataSet lineDataSetNorm = null;
@@ -305,6 +347,12 @@ public class ChartActivity extends AppCompatActivity {
         return setsList;
     }
 
+    /**
+     * Get entries for girls ideal chart
+     *
+     * @param dbName DB name
+     * @return entries list for ideal chart
+     */
     private ArrayList<LineDataSet> initGirl(String dbName) {
         ArrayList<LineDataSet> setsList = new ArrayList<>();
         LineDataSet lineDataSetNorm = null;
@@ -350,6 +398,13 @@ public class ChartActivity extends AppCompatActivity {
 
     //region Fill charts with data
 
+    /**
+     * Fill baby chart with data
+     *
+     * @param dataSnapshot     snapshot
+     * @param dbName           DB name
+     * @param selectedItemName selected item name
+     */
     private void fillChartBaby(DataSnapshot dataSnapshot, String dbName, String selectedItemName) {
         entries = new ArrayList<>();
         labels = new ArrayList<>();
@@ -423,15 +478,20 @@ public class ChartActivity extends AppCompatActivity {
         dataSets.add(lineDataSet);
         LineData lineData = new LineData(labelsIdeal, dataSets);
         chart.setData(lineData);
-        chart.animateY(2000);
+        chart.animateY(animationDuration);
     }
 
+    /**
+     * Fill mom chart with data
+     *
+     * @param sumData aggregated 1 month long data
+     */
     private void fillChartMom(ArrayList<Pair<DataType, Pair<String, String>>> sumData) {
         entries = new ArrayList<>();
         labels = new ArrayList<>();
         if (sumData.size() == 0) { // empty result list
             NotificationsShow.showToast(getApplicationContext(), getString(R.string.no_data_chart));
-            if(dialog != null)
+            if (dialog != null)
                 dialog.dismiss();
             LineData lineData = new LineData(labels, dataSets);
             chart.setData(lineData);
@@ -486,7 +546,7 @@ public class ChartActivity extends AppCompatActivity {
         dataSets.add(lineDataSet);
         LineData lineData = new LineData(labels, dataSets);
         chart.setData(lineData);
-        chart.animateY(2000);
+        chart.animateY(animationDuration);
         dialog.dismiss();
     }
 
@@ -494,12 +554,18 @@ public class ChartActivity extends AppCompatActivity {
 
     //region Fit service connection
 
+    /**
+     * Request connection to GoogleFit
+     */
     private void requestFitConnection() {
         Intent service = new Intent(this, GoogleFitService.class);
         service.putExtra(SERVICE_REQUEST_TYPE, TYPE_REQUEST_CONNECTION);
         startService(service);
     }
 
+    /**
+     * Broadcast service status receiver
+     */
     private BroadcastReceiver mFitStatusReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -519,6 +585,9 @@ public class ChartActivity extends AppCompatActivity {
         }
     };
 
+    /**
+     * Broadcast service data receiver
+     */
     private BroadcastReceiver mFitDataReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -530,6 +599,11 @@ public class ChartActivity extends AppCompatActivity {
         }
     };
 
+    /**
+     * Connection errors handler
+     *
+     * @param result connection result
+     */
     private void fitHandleFailedConnection(ConnectionResult result) {
         Log.i(FragmentMom.TAG, "Activity Thread Google Fit Connection failed. Cause: " + result.toString());
         if (!result.hasResolution()) {
@@ -559,6 +633,11 @@ public class ChartActivity extends AppCompatActivity {
         fitSaveInstanceState(outState);
     }
 
+    /**
+     * Save the state of an instance
+     *
+     * @param outState state
+     */
     private void fitSaveInstanceState(Bundle outState) {
         outState.putBoolean(AUTH_PENDING, authInProgress);
     }
@@ -568,6 +647,12 @@ public class ChartActivity extends AppCompatActivity {
         fitActivityResult(requestCode, resultCode);
     }
 
+    /**
+     * Process the result of fit activity connection
+     *
+     * @param requestCode code
+     * @param resultCode  result
+     */
     private void fitActivityResult(int requestCode, int resultCode) {
         if (requestCode == REQUEST_OAUTH) {
             authInProgress = false;

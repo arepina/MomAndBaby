@@ -5,6 +5,9 @@ import android.os.Bundle;
 
 import com.repina.anastasia.momandbaby.R;
 
+/**
+ * Application info class
+ */
 public class AppInfoActivity extends AppCompatActivity {
 
     @Override

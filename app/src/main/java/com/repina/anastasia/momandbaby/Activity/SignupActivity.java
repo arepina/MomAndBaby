@@ -23,6 +23,9 @@ import com.repina.anastasia.momandbaby.Connectors.FirebaseConnection;
 import com.repina.anastasia.momandbaby.R;
 import com.repina.anastasia.momandbaby.Helpers.SharedConstants;
 
+/**
+ * Sign up
+ */
 public class SignupActivity extends AppCompatActivity {
 
     @Override
@@ -34,7 +37,7 @@ public class SignupActivity extends AppCompatActivity {
         logIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(ConnectionDetector.isConnected(getApplicationContext())) {//check if internet is working
+                if (ConnectionDetector.isConnected(getApplicationContext())) {//check if internet is working
 
                     final String email = ((EditText) findViewById(R.id.input_email)).getText().toString();
                     final String password = ((EditText) findViewById(R.id.input_password)).getText().toString();
@@ -94,6 +97,11 @@ public class SignupActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Get baby id in Firebase via mom id
+     *
+     * @param momId mom id
+     */
     private void checkBabyIdInFirebase(String momId) {
         FirebaseConnection connection = new FirebaseConnection();
         FirebaseDatabase database = connection.getDatabase();

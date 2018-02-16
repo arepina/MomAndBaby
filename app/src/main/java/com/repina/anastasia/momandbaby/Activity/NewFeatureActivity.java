@@ -36,6 +36,9 @@ import java.util.Objects;
 
 import static com.repina.anastasia.momandbaby.Helpers.FormattedDate.getFormattedDate;
 
+/**
+ * New feature
+ */
 public class NewFeatureActivity extends AppCompatActivity {
 
     private String[] features;
@@ -100,6 +103,9 @@ public class NewFeatureActivity extends AppCompatActivity {
         changeLayout(featureName);
     }
 
+    /**
+     * Add new value to Firebase
+     */
     private void addNewValueToFirebase() {
         FirebaseConnection connection = new FirebaseConnection();
         FirebaseDatabase database = connection.getDatabase();
@@ -179,6 +185,11 @@ public class NewFeatureActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Change the layout depends on the feature type
+     *
+     * @param data feature type
+     */
     private void changeLayout(String data) {
         TextView dataName1 = (TextView) findViewById(R.id.dataName1);
         TextView dataName2 = (TextView) findViewById(R.id.dataName2);

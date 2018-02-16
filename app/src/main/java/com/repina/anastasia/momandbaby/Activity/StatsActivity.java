@@ -12,6 +12,9 @@ import com.repina.anastasia.momandbaby.R;
 
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.CALLING;
 
+/**
+ * Statistics choose
+ */
 public class StatsActivity extends AppCompatActivity {
 
     @Override

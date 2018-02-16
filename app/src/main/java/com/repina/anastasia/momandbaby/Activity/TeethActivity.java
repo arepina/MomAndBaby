@@ -33,6 +33,9 @@ import java.util.Date;
 import static android.graphics.Paint.ANTI_ALIAS_FLAG;
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.CALLING;
 
+/**
+ * Teeth
+ */
 public class TeethActivity extends AppCompatActivity {
 
     private Teeth teeth;
@@ -63,11 +66,10 @@ public class TeethActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (ConnectionDetector.isConnected(getApplicationContext())) {
-                    if(anyChanges) {
+                    if (anyChanges) {
                         addNewValueToFirebase(database);
                         finish();//back to choosing
-                    }
-                    else
+                    } else
                         NotificationsShow.showToast(getApplicationContext(), R.string.add_any_data);
                 }
             }
@@ -88,6 +90,11 @@ public class TeethActivity extends AppCompatActivity {
 
     // region Data update
 
+    /**
+     * Get months number between two dates
+     *
+     * @return months number
+     */
     private int getMonthBetween() {
         Calendar today = Calendar.getInstance();
         Calendar birth = Calendar.getInstance();
@@ -102,6 +109,14 @@ public class TeethActivity extends AppCompatActivity {
         return numMonths;
     }
 
+    /**
+     * Create text bitmap for FAB
+     *
+     * @param text      text
+     * @param textSize  text size
+     * @param textColor text color
+     * @return bitmap
+     */
     public static Bitmap textAsBitmap(String text, float textSize, int textColor) {
         Paint paint = new Paint(ANTI_ALIAS_FLAG);
         paint.setTextSize(textSize);
@@ -116,6 +131,9 @@ public class TeethActivity extends AppCompatActivity {
         return image;
     }
 
+    /**
+     * Initialise teeth lists
+     */
     private void initLists() {
         ArrayList<Boolean> doesHave = teeth.getDoesHave();
         ArrayList<Integer> whenHave = teeth.getWhenHave();
@@ -133,6 +151,12 @@ public class TeethActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Update teeth lists info
+     *
+     * @param i     tooth number
+     * @param value month when tooth was born
+     */
     private void updateListsInfo(int i, int value) {
         initLists();
         ArrayList<Boolean> doesHave = teeth.getDoesHave();
@@ -145,6 +169,9 @@ public class TeethActivity extends AppCompatActivity {
 
     //region FABs
 
+    /**
+     * Initialise FABs
+     */
     private void initFABs() {
         initRed();
         initYellow();
@@ -153,6 +180,9 @@ public class TeethActivity extends AppCompatActivity {
         initPurple();
     }
 
+    /**
+     * Make FABs unable to click
+     */
     private void makeEnabledFalse() {
         for (int i = 1; i <= 20; i++) {
             FloatingActionButton button = (FloatingActionButton) findViewById(getResources().getIdentifier("q" + i, "id",
@@ -161,6 +191,9 @@ public class TeethActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Initialise red teeth
+     */
     private void initRed() {
         final FloatingActionButton q1 = (FloatingActionButton) findViewById(R.id.q1);
         q1.setOnClickListener(new View.OnClickListener() {
@@ -207,6 +240,9 @@ public class TeethActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Initialise yellow teeth
+     */
     private void initYellow() {
         final FloatingActionButton q3 = (FloatingActionButton) findViewById(R.id.q3);
         q3.setOnClickListener(new View.OnClickListener() {
@@ -253,6 +289,9 @@ public class TeethActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Initialise green teeth
+     */
     private void initGreen() {
         final FloatingActionButton q5 = (FloatingActionButton) findViewById(R.id.q5);
         q5.setOnClickListener(new View.OnClickListener() {
@@ -299,6 +338,9 @@ public class TeethActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Initialise blue teeth
+     */
     private void initBlue() {
         final FloatingActionButton q7 = (FloatingActionButton) findViewById(R.id.q7);
         q7.setOnClickListener(new View.OnClickListener() {
@@ -345,6 +387,9 @@ public class TeethActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Initialise purple teeth
+     */
     private void initPurple() {
         final FloatingActionButton q9 = (FloatingActionButton) findViewById(R.id.q9);
         q9.setOnClickListener(new View.OnClickListener() {
@@ -395,12 +440,15 @@ public class TeethActivity extends AppCompatActivity {
 
     //region Firebase
 
+    /**
+     * Add new value to Firebase
+     */
     private void addNewValueToFirebase(FirebaseDatabase database) {
         if (teeth.getBabyId() != null) {
             Calendar today = Calendar.getInstance();
             String lastUpdateDate = FormattedDate.getFormattedDate(today);
             teeth.setDate(lastUpdateDate);
-            if(firebaseKey.length() != 0) // we have data for that babyId, so just update it
+            if (firebaseKey.length() != 0) // we have data for that babyId, so just update it
                 FirebaseDatabase.getInstance().getReference().child(DatabaseNames.TEETH).child(firebaseKey).setValue(teeth);
             else {
                 DatabaseReference databaseReference = database.getReference().child(DatabaseNames.TEETH);
@@ -410,6 +458,12 @@ public class TeethActivity extends AppCompatActivity {
             NotificationsShow.showToast(getApplicationContext(), getString(R.string.add_any_data));
     }
 
+    /**
+     * Get teeth data from Firebase
+     *
+     * @param database DB
+     * @param babyId   baby ID
+     */
     public void getTeethFromFirebase(FirebaseDatabase database, String babyId) {
         final DatabaseReference databaseReference = database.getReference().child(DatabaseNames.TEETH);
 

@@ -25,6 +25,9 @@ import com.repina.anastasia.momandbaby.R;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+/**
+ * Baby info
+ */
 public class BabyInfoActivity extends AppCompatActivity {
 
     private String formattedDate;
@@ -40,7 +43,7 @@ public class BabyInfoActivity extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(ConnectionDetector.isConnected(getApplicationContext())) {
+                if (ConnectionDetector.isConnected(getApplicationContext())) {
                     // Get mom's id
                     SharedPreferences sp = getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
                     String momId = sp.getString(SharedConstants.MOM_ID_KEY, "");
@@ -48,7 +51,8 @@ public class BabyInfoActivity extends AppCompatActivity {
                     // Read entered values
                     String name = ((EditText) findViewById(R.id.name)).getText().toString();
                     String gender;
-                    if (((RadioButton) findViewById(R.id.girl)).isChecked()) gender = getString(R.string.girl_eng);
+                    if (((RadioButton) findViewById(R.id.girl)).isChecked())
+                        gender = getString(R.string.girl_eng);
                     else gender = getString(R.string.boy_eng);
 
                     // Check the values for correctness
