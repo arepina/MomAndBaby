@@ -125,7 +125,6 @@ public class GoogleFitService extends IntentService {
             else {
                 switch (type) {// need aggregated non buckets data
                     case TYPE_GET_STEP_TODAY_DATA:
-
                         getStepsToday(start, end);
                         break;
                     case TYPE_GET_CALORIES_TODAY_DATA:
@@ -256,7 +255,7 @@ public class GoogleFitService extends IntentService {
         final DataReadRequest readRequest = new DataReadRequest.Builder()
                 .read(DataType.TYPE_NUTRITION)
                 .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
-
+                .setLimit(1)
                 .build();
         DataReadResult dataReadResult =
                 Fitness.HistoryApi.readData(mGoogleApiFitnessClient, readRequest).await(1, TimeUnit.MINUTES);
@@ -280,21 +279,27 @@ public class GoogleFitService extends IntentService {
         final DataReadRequest readRequest = new DataReadRequest.Builder()
                 .read(DataType.TYPE_ACTIVITY_SEGMENT)
                 .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
-                .setLimit(1)
                 .build();
         DataReadResult dataReadResult =
                 Fitness.HistoryApi.readData(mGoogleApiFitnessClient, readRequest).await(1, TimeUnit.MINUTES);
         DataSet activityData = dataReadResult.getDataSet(DataType.TYPE_ACTIVITY_SEGMENT);
         StringBuilder result = new StringBuilder(0);
         DateFormat dateFormat = getTimeInstance();
+        double sumDifference = 0;
         for (DataPoint dp : activityData.getDataPoints()) {
-                Log.i(TAG, "\tStart: " + dateFormat.format(dp.getStartTime(TimeUnit.MILLISECONDS)));
-                Log.i(TAG, "\tEnd: " + dateFormat.format(dp.getEndTime(TimeUnit.MILLISECONDS)));
-                DecimalFormat df = new DecimalFormat("0.0");
+            Log.i(TAG, "\tStart: " + dateFormat.format(dp.getStartTime(TimeUnit.MILLISECONDS)));
+            Log.i(TAG, "\tEnd: " + dateFormat.format(dp.getEndTime(TimeUnit.MILLISECONDS)));
+            Log.i(TAG, "\tDataType: " + dp.getDataType());
+            Log.i(TAG, "\tDataSource: " + dp.getDataSource());
+            Log.i(TAG, "\tDataSource1: " + dp.getOriginalDataSource());
+            if(dp.getOriginalDataSource().getName() != null) {
                 double difference = ((dp.getEndTime(TimeUnit.MILLISECONDS) - dp.getStartTime(TimeUnit.MILLISECONDS)) / 1000.0) / 3600.0;
-                if (difference < hours)
-                    result.append("Сон: ").append(df.format(difference)).append(" часа(ов)");
+                sumDifference += difference;
+            }
         }
+        DecimalFormat df = new DecimalFormat("0.0");
+        if (Math.round(sumDifference) < hours)
+            result.append("Сон: ").append(df.format(sumDifference)).append(" часа(ов)");
         Intent intent = new Intent(HISTORY_INTENT);
         intent.putExtra(HISTORY_EXTRA_SLEEP_TODAY, result.toString());
         intent.putExtra(HISTORY_DATE, FormattedDate.getFormattedDate(start));
