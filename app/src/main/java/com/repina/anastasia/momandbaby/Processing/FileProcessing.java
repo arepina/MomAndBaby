@@ -17,8 +17,19 @@ import java.io.IOException;
 
 import static android.content.Context.MODE_PRIVATE;
 
+/**
+ * File processing
+ */
 public class FileProcessing {
 
+    /**
+     * Send report via email
+     *
+     * @param report   text of report
+     * @param context  context
+     * @param start    start date
+     * @param finalEnd end date
+     */
     public static void sendFile(String report, Context context, String start, String finalEnd) {
         String fileName = context.getString(R.string.report_from) + " " + start + " " + context.getString(R.string.report_to) + " " + finalEnd + ".txt";
         try {
@@ -41,6 +52,14 @@ public class FileProcessing {
         }
     }
 
+    /**
+     * Create file
+     *
+     * @param name    file name
+     * @param content file content
+     * @return created file
+     * @throws IOException
+     */
     private static File createFile(String name, String content) throws IOException {
         // get the state of your external storage
         String state = Environment.getExternalStorageState();

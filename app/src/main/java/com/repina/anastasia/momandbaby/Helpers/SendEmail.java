@@ -26,8 +26,22 @@ import java.util.concurrent.TimeUnit;
 
 import static android.content.Context.MODE_PRIVATE;
 
+/**
+ * Send email reports
+ */
 public class SendEmail {
 
+    /**
+     * Create email
+     *
+     * @param context    context
+     * @param length     duration period
+     * @param from       start
+     * @param to         end
+     * @param whoFlag    mom or baby
+     * @param activity   activity
+     * @param callingKey activity calling key
+     */
     public static void createEmail(final Context context, int length, Calendar from, Calendar to,
                                    boolean whoFlag, FragmentActivity activity, String callingKey) {
         // logic depends on the who isActivityAlreadyCreated
@@ -37,11 +51,27 @@ public class SendEmail {
             createMomEmail(activity, from, to, callingKey);
     }
 
+    /**
+     * Create mom report
+     *
+     * @param activity   activity
+     * @param from       start
+     * @param to         end
+     * @param callingKey activity calling key
+     */
     private static void createMomEmail(FragmentActivity activity, Calendar from, Calendar to, String callingKey) {
         int days = daysBetween(from, to);
         StatsProcessing.getMomStats(to, days, activity, 0, callingKey); // custom length, all types
     }
 
+    /**
+     * Create baby report
+     *
+     * @param context context
+     * @param length  duration period
+     * @param from    start
+     * @param to      end
+     */
     private static void createBabyEmail(final Context context, int length, Calendar from, Calendar to) {
         Calendar calendar = Calendar.getInstance();
         String start = "";
@@ -96,7 +126,7 @@ public class SendEmail {
                             for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
                                 if (!singleSnapshot.getKey().equals(DatabaseNames.USER)
                                         & !singleSnapshot.getKey().equals(DatabaseNames.BABY)
-                                        &  !singleSnapshot.getKey().equals(DatabaseNames.TEETH)) {
+                                        & !singleSnapshot.getKey().equals(DatabaseNames.TEETH)) {
                                     HashMap<String, HashMap<String, String>> items =
                                             (HashMap<String, HashMap<String, String>>) singleSnapshot.getValue();
                                     for (Map.Entry<String, HashMap<String, String>> entry : items.entrySet()) {
@@ -124,7 +154,7 @@ public class SendEmail {
                                 NotificationsShow.showToast(context, context.getString(R.string.no_data));
                             else
                                 FileProcessing.sendFile(report.toString(), context, finalStart, finalEnd); // send baby report
-                            if(FragmentSettings.dialog != null)
+                            if (FragmentSettings.dialog != null)
                                 FragmentSettings.dialog.dismiss();
                         }
                     }
@@ -135,11 +165,26 @@ public class SendEmail {
                 });
     }
 
+    /**
+     * Get
+     *
+     * @param startDate start
+     * @param endDate   end
+     * @param unit      time unit
+     * @return time unit in milliseconds
+     */
     private static long getUnitBetweenDates(Date startDate, Date endDate, TimeUnit unit) {
         long timeDiff = endDate.getTime() - startDate.getTime();
         return unit.convert(timeDiff, TimeUnit.MILLISECONDS);
     }
 
+    /**
+     * Get days difference
+     *
+     * @param startDate start
+     * @param endDate   end
+     * @return days difference
+     */
     private static int daysBetween(Calendar startDate, Calendar endDate) {
         long end = endDate.getTimeInMillis();
         long start = startDate.getTimeInMillis();

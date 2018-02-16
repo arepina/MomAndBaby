@@ -1,6 +1,8 @@
 package com.repina.anastasia.momandbaby.Helpers;
 
-
+/**
+ * Shared prefs
+ */
 public class SharedConstants {
 
     /**
@@ -42,7 +44,6 @@ public class SharedConstants {
      * Key to use in {@code APP_PREFS} to find baby' birthday
      */
     public static final String BABY_BIRTHDAY = "baby_birthday_spkey";
-
 
     /**
      * Key to use in {@code APP_PREFS} to prevent the intro screen from displaying again

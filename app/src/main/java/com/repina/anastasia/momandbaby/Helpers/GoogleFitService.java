@@ -60,6 +60,9 @@ import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.TYPE_GET_WE
 import static java.text.DateFormat.getDateInstance;
 import static java.text.DateFormat.getTimeInstance;
 
+/**
+ * GoogleFit service
+ */
 public class GoogleFitService extends IntentService {
 
     public static final String TAG = "GoogleFitService";

@@ -22,6 +22,9 @@ import com.repina.anastasia.momandbaby.R;
 
 import java.util.Calendar;
 
+/**
+ * Baby fragment
+ */
 public class FragmentBaby extends Fragment implements SwipeListView.SwipeListViewCallback {
 
 
@@ -42,6 +45,13 @@ public class FragmentBaby extends Fragment implements SwipeListView.SwipeListVie
 
     //region Init layout
 
+    /**
+     * Initialise baby layout
+     *
+     * @param inflater  LayoutInflater
+     * @param container ViewGroup
+     * @return View
+     */
     private View initBaby(LayoutInflater inflater, ViewGroup container) {
         final View v = inflater.inflate(R.layout.fragment_baby, container, false);
 
@@ -79,6 +89,11 @@ public class FragmentBaby extends Fragment implements SwipeListView.SwipeListVie
         return v;
     }
 
+    /**
+     * Initialise yesterday and tomorrow buttons
+     *
+     * @param v View
+     */
     private void initYesterdayAndTomorrow(View v) {
         final TextView headerDate = (TextView) v.findViewById(R.id.headerBaby);
 

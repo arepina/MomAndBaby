@@ -6,7 +6,9 @@ import android.view.Gravity;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
+/**
+ * Notifications
+ */
 public class NotificationsShow {
     public static void showToast(Context context, int textId)
     {

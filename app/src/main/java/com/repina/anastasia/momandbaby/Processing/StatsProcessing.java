@@ -31,8 +31,19 @@ import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.FROM;
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.SERVICE_REQUEST_TYPE;
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.TO;
 
+/**
+ * Stats processing
+ */
 public class StatsProcessing {
 
+    /**
+     * Baby stats
+     *
+     * @param adapter      items adapter
+     * @param dateAndTime  date
+     * @param context      context
+     * @param listViewBaby baby listview
+     */
     public static void getBabyStats(final GridItemArrayAdapter adapter, final Calendar dateAndTime, final Context context, final ListView listViewBaby) {
 
         FirebaseConnection connection = new FirebaseConnection();
@@ -82,6 +93,15 @@ public class StatsProcessing {
                 });
     }
 
+    /**
+     * Mom stats
+     *
+     * @param end        finish date
+     * @param length     period duration
+     * @param activity   activity
+     * @param type       aggregation type
+     * @param callingKey activity calling key
+     */
     public static void getMomStats(Calendar end, int length, FragmentActivity activity, int type, String callingKey) {
         Calendar start = Calendar.getInstance();
         start.setTime(end.getTime());
@@ -100,6 +120,15 @@ public class StatsProcessing {
         getPeriodData(start, end, activity, type, callingKey);
     }
 
+    /**
+     * Period data
+     *
+     * @param from       start date
+     * @param to         finish date
+     * @param activity   activity
+     * @param type       aggregation type
+     * @param callingKey activity calling key
+     */
     private static void getPeriodData(Calendar from, Calendar to, FragmentActivity activity, int type, String callingKey) {
         Intent service = new Intent(activity, GoogleFitService.class);
         service.putExtra(FROM, from.getTimeInMillis());

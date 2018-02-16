@@ -57,6 +57,9 @@ import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.HISTORY_INT
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.SERVICE_REQUEST_TYPE;
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.TYPE_REQUEST_CONNECTION;
 
+/**
+ * Settings fragment
+ */
 public class FragmentSettings extends Fragment {
 
     private ConnectionResult mFitResultResolution;
@@ -75,6 +78,13 @@ public class FragmentSettings extends Fragment {
 
     //region Init layout
 
+    /**
+     * Initialise settings layout
+     *
+     * @param inflater  LayoutInflater
+     * @param container ViewGroup
+     * @return View
+     */
     private View initSettings(LayoutInflater inflater, ViewGroup container) {
         View v = inflater.inflate(R.layout.fragment_settings, container, false);
 
@@ -165,6 +175,11 @@ public class FragmentSettings extends Fragment {
         return v;
     }
 
+    /**
+     * Show alert dialog
+     *
+     * @param whoFlag mom or baby
+     */
     public void showAlertDialog(final boolean whoFlag) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         View view = getActivity().getLayoutInflater().inflate(R.layout.custom_alert_dialog, null);
@@ -237,8 +252,7 @@ public class FragmentSettings extends Fragment {
                         if (from.after(to) || Calendar.getInstance().before(to)) {
                             NotificationsShow.showToast(getActivity().getApplicationContext(), getString(R.string.incorrect_dates));
                             dialog.dismiss();
-                        }
-                        else {
+                        } else {
                             calendarAlert.cancel();
                             alert.cancel();
                             SendEmail.createEmail(getActivity().getApplicationContext(), 3, from, to,
@@ -255,12 +269,18 @@ public class FragmentSettings extends Fragment {
 
     //region Fit service connection
 
+    /**
+     * Request connection to GoogleFit
+     */
     private void requestFitConnection() {
         Intent service = new Intent(getContext(), GoogleFitService.class);
         service.putExtra(SERVICE_REQUEST_TYPE, TYPE_REQUEST_CONNECTION);
         getActivity().startService(service);
     }
 
+    /**
+     * Broadcast service status receiver
+     */
     private BroadcastReceiver mFitStatusReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -280,6 +300,9 @@ public class FragmentSettings extends Fragment {
         }
     };
 
+    /**
+     * Broadcast service data receiver
+     */
     private BroadcastReceiver mFitDataReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -290,11 +313,16 @@ public class FragmentSettings extends Fragment {
                 String toStr = FormattedDate.getFormattedDate(to);
                 TextProcessing.formMomReport(sumData, context, fromStr, toStr);
             }
-            if(dialog != null)
+            if (dialog != null)
                 dialog.dismiss();
         }
     };
 
+    /**
+     * Connection errors handler
+     *
+     * @param result connection result
+     */
     private void fitHandleFailedConnection(ConnectionResult result) {
         Log.i(FragmentMom.TAG, "Activity Thread Google Fit Connection failed. Cause: " + result.toString());
         if (!result.hasResolution()) {
@@ -318,6 +346,11 @@ public class FragmentSettings extends Fragment {
         }
     }
 
+    /**
+     * Save the state of an instance
+     *
+     * @param outState state
+     */
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -333,6 +366,12 @@ public class FragmentSettings extends Fragment {
         fitActivityResult(requestCode, resultCode);
     }
 
+    /**
+     * Process the result of fit activity connection
+     *
+     * @param requestCode code
+     * @param resultCode  result
+     */
     private void fitActivityResult(int requestCode, int resultCode) {
         if (requestCode == REQUEST_OAUTH) {
             authInProgress = false;

@@ -5,6 +5,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * Format the dates
+ */
 public class FormattedDate {
     private static SimpleDateFormat sd = new SimpleDateFormat(
             "yyyy-MM-dd", java.util.Locale.getDefault());

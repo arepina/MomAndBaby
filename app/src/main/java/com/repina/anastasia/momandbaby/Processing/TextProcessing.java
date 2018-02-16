@@ -15,8 +15,18 @@ import java.util.Map;
 
 import static com.repina.anastasia.momandbaby.Processing.ImageProcessing.typeToString;
 
+/**
+ * Text processing
+ */
 public class TextProcessing {
 
+    /**
+     * Form baby item description
+     *
+     * @param value  values
+     * @param dbName DB name
+     * @return text of baby item
+     */
     public static String formBabyDescription(HashMap<String, String> value, String dbName) {
         StringBuilder line = new StringBuilder();
         value.remove("babyId");
@@ -31,7 +41,7 @@ public class TextProcessing {
                         line.append("\n");
                 }
             } catch (NumberFormatException e) { // not a number
-                if(dbName.equals(DatabaseNames.TEETH)) return "У малыша прорезался зуб!";
+                if (dbName.equals(DatabaseNames.TEETH)) return "У малыша прорезался зуб!";
                 line.append(translateWord(entry.getKey())).append(": ").append(val);
                 if (!"\n".equals(String.valueOf(line.charAt(line.length() - 1))))
                     line.append("\n");
@@ -41,6 +51,14 @@ public class TextProcessing {
         return line.toString();
     }
 
+    /**
+     * Form mom report
+     *
+     * @param sumData report data
+     * @param context context
+     * @param start   start date
+     * @param end     finish date
+     */
     public static void formMomReport(ArrayList<Pair<DataType, Pair<String, String>>> sumData, Context context, String start, String end) {
         StringBuilder report = new StringBuilder();
         for (int i = 0; i < sumData.size(); i++) {
@@ -49,9 +67,9 @@ public class TextProcessing {
             String translatedType = typeToString(type);
             String date = it.second.first;
             StringBuilder data = new StringBuilder(it.second.second);
-            if(DataType.TYPE_NUTRITION.equals(type)) {
+            if (DataType.TYPE_NUTRITION.equals(type)) {
                 StringBuilder translatedData = new StringBuilder();
-                for(String item : data.toString().split(", ")) {
+                for (String item : data.toString().split(", ")) {
                     String key = translateWord(item.substring(0, item.indexOf("=")).replace(" ", ""));
                     String value = item.substring(item.indexOf("=") + 1, item.length()).replace(" ", "");
                     translatedData.append(key).append("=").append(value).append(", ");
@@ -59,7 +77,7 @@ public class TextProcessing {
                 translatedData = new StringBuilder(translatedData.substring(0, translatedData.length() - 2));
                 data = translatedData;
             }
-            if(DataType.TYPE_ACTIVITY_SEGMENT.equals(type) && data.toString().equals("0.0")) // ignore 0 data for sleep
+            if (DataType.TYPE_ACTIVITY_SEGMENT.equals(type) && data.toString().equals("0.0")) // ignore 0 data for sleep
                 continue;
             report.append(translatedType).append(" ").append(date).append(" ").append(data).append("\n");
         }
@@ -69,6 +87,13 @@ public class TextProcessing {
             FileProcessing.sendFile(report.toString(), context, start, end);
     }
 
+    /**
+     * Clean data
+     *
+     * @param map            values
+     * @param singleSnapshot snapshot
+     * @return cleaned text
+     */
     public static String cleanData(HashMap<String, String> map, DataSnapshot singleSnapshot) {
         String dateValue = "";
         ArrayList<String> keys = new ArrayList<>(map.keySet());
@@ -122,6 +147,12 @@ public class TextProcessing {
         return dbNameToString(singleSnapshot.getKey()) + " " + dateValue + "; " + line + "\n";
     }
 
+    /**
+     * Words translation
+     *
+     * @param word word
+     * @return translated word
+     */
     public static String translateWord(String word) {
         switch (word) {
             case "weight":
@@ -187,6 +218,12 @@ public class TextProcessing {
         }
     }
 
+    /**
+     * DB name to String text
+     *
+     * @param dbName DB name
+     * @return String text
+     */
     private static String dbNameToString(String dbName) {
         switch (dbName) {
             case DatabaseNames.METRICS:

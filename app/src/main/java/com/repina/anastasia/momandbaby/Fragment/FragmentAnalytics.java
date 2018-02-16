@@ -14,6 +14,9 @@ import com.repina.anastasia.momandbaby.Activity.StatsActivity;
 import com.repina.anastasia.momandbaby.Connectors.ConnectionDetector;
 import com.repina.anastasia.momandbaby.R;
 
+/**
+ * Analytics fragment
+ */
 public class FragmentAnalytics extends Fragment {
 
     @Override
@@ -32,7 +35,7 @@ public class FragmentAnalytics extends Fragment {
         cardViewMom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(ConnectionDetector.isConnected(getContext())) {
+                if (ConnectionDetector.isConnected(getContext())) {
                     Intent nextActivity = new Intent(v.getContext(), ChartActivity.class);
                     nextActivity.putExtra("Type", "Mom");
                     startActivity(nextActivity);
@@ -44,7 +47,7 @@ public class FragmentAnalytics extends Fragment {
         cardViewBaby.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(ConnectionDetector.isConnected(getContext())) {
+                if (ConnectionDetector.isConnected(getContext())) {
                     Intent nextActivity = new Intent(v.getContext(), StatsActivity.class);
                     startActivity(nextActivity);
                 }

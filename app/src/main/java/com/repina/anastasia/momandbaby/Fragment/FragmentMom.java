@@ -46,6 +46,9 @@ import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.HISTORY_INT
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.SERVICE_REQUEST_TYPE;
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.TYPE_REQUEST_CONNECTION;
 
+/**
+ * Mom fragment
+ */
 public class FragmentMom extends Fragment {
 
     public static GridItemArrayAdapter momArrayAdapter;
@@ -71,6 +74,13 @@ public class FragmentMom extends Fragment {
 
     //region Init layout
 
+    /**
+     * Initialise mom layout
+     *
+     * @param inflater  LayoutInflater
+     * @param container ViewGroup
+     * @return View
+     */
     private View initMom(LayoutInflater inflater, ViewGroup container) {
         View v = inflater.inflate(R.layout.fragment_mom, container, false);
 
@@ -116,6 +126,11 @@ public class FragmentMom extends Fragment {
         return v;
     }
 
+    /**
+     * Initialise yesterday and tomorrow buttons
+     *
+     * @param v View
+     */
     private void initTodayAndTomorrow(View v) {
         final TextView headerDate = (TextView) v.findViewById(R.id.headerMom);
 
@@ -180,6 +195,9 @@ public class FragmentMom extends Fragment {
 
     //region Fit service connection
 
+    /**
+     * Request connection to GoogleFit
+     */
     private void requestFitConnection() {
         Intent service = new Intent(getContext(), GoogleFitService.class);
         service.putExtra(SERVICE_REQUEST_TYPE, TYPE_REQUEST_CONNECTION);
@@ -190,6 +208,9 @@ public class FragmentMom extends Fragment {
         StatsProcessing.getMomStats(calendar, 0, getActivity(), 0, FragmentMom.class.toString()); // same day, all types
     }
 
+    /**
+     * Broadcast service status receiver
+     */
     private BroadcastReceiver mFitStatusReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -215,6 +236,9 @@ public class FragmentMom extends Fragment {
         }
     };
 
+    /**
+     * Broadcast service data receiver
+     */
     private BroadcastReceiver mFitDataReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -255,6 +279,11 @@ public class FragmentMom extends Fragment {
         }
     };
 
+    /**
+     * Connection errors handler
+     *
+     * @param result connection result
+     */
     private void fitHandleFailedConnection(ConnectionResult result) {
         Log.i(TAG, "Activity Thread Google Fit Connection failed. Cause: " + result.toString());
         if (!result.hasResolution()) {
@@ -281,6 +310,11 @@ public class FragmentMom extends Fragment {
             dialog.dismiss();
     }
 
+    /**
+     * Save the state of an instance
+     *
+     * @param outState state
+     */
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -294,6 +328,12 @@ public class FragmentMom extends Fragment {
             dialog.dismiss();
     }
 
+    /**
+     * Process the result of fit activity connection
+     *
+     * @param requestCode code
+     * @param resultCode  result
+     */
     private void fitActivityResult(int requestCode, int resultCode) {
         if (requestCode == REQUEST_OAUTH) {
             authInProgress = false;
@@ -330,7 +370,7 @@ public class FragmentMom extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if(authInProgress) {
+        if (authInProgress) {
             requestFitConnection();
             authInProgress = false;
             fab.setEnabled(false);

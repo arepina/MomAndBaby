@@ -1,5 +1,8 @@
 package com.repina.anastasia.momandbaby.Helpers;
 
+/**
+ * Local constants
+ */
 public class LocalConstants {
     public static final String SERVICE_REQUEST_TYPE = "requestType";
 
