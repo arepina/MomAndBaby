@@ -134,9 +134,11 @@ public class GoogleFitService extends IntentService {
                     case TYPE_GET_WEIGHT_TODAY_DATA:
                         getWeightToday(start, end);
                         break;
-                    case TYPE_GET_NUTRITION_TODAY_DATA:
+                    case TYPE_GET_NUTRITION_TODAY_DATA: {
+                        end.add(Calendar.DATE, 1); // added because of google fit api bug
                         getNutritionToday(start, end);
                         break;
+                    }
                     case TYPE_GET_SLEEP_TODAY_DATA:
                         getSleepToday(start, end, false);
                         break;
@@ -361,6 +363,7 @@ public class GoogleFitService extends IntentService {
                 e.set(Calendar.HOUR_OF_DAY, 23);
                 e.set(Calendar.MINUTE, 59);
                 e.set(Calendar.SECOND, 59);
+                e.add(Calendar.DAY_OF_YEAR, 1); // added because of google fit api bug
                 endTime = e.getTimeInMillis();
             }
             DataReadRequest readRequest =
