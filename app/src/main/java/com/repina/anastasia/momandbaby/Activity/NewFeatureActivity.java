@@ -2,6 +2,7 @@ package com.repina.anastasia.momandbaby.Activity;
 
 import android.app.DatePickerDialog;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
@@ -65,6 +66,7 @@ public class NewFeatureActivity extends AppCompatActivity {
         dataValue2 = (EditText) findViewById(R.id.dataValue2);
         dataValue3 = (EditText) findViewById(R.id.dataValue3);
         ratingBar = (RatingBar) findViewById(R.id.ratingBar);
+        ratingBar.setNumStars(5);
         vaccinationsData = (Spinner) findViewById(R.id.vaccinationsData);
 
         final Calendar dateAndTime = Calendar.getInstance();
@@ -110,7 +112,7 @@ public class NewFeatureActivity extends AppCompatActivity {
         FirebaseConnection connection = new FirebaseConnection();
         FirebaseDatabase database = connection.getDatabase();
         DatabaseReference databaseReference;
-        SharedPreferences sp = getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String babyId = sp.getString(SharedConstants.BABY_ID_KEY, "");
         String currentDate = fullDate;
         if (featureName.equals(features[0])) {

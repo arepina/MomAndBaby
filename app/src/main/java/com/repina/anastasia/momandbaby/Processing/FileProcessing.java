@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.repina.anastasia.momandbaby.Helpers.NotificationsShow;
@@ -38,7 +39,7 @@ public class FileProcessing {
                 Uri path = Uri.fromFile(f);
                 Intent i = new Intent(Intent.ACTION_SEND);
                 i.setType("message/rfc822");
-                SharedPreferences sp = context.getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
+                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
                 String email = sp.getString(SharedConstants.MOM_EMAIL, "");
                 i.putExtra(Intent.EXTRA_EMAIL, new String[]{email});
                 i.putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.report_from) + " " + start + " " + context.getString(R.string.report_to) + " " + finalEnd);

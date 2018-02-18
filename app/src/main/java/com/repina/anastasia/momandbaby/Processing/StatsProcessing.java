@@ -3,6 +3,7 @@ package com.repina.anastasia.momandbaby.Processing;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.widget.ListView;
 
@@ -51,7 +52,7 @@ public class StatsProcessing {
 
         final DatabaseReference databaseReference = database.getReference();
 
-        SharedPreferences sp = context.getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         final String babyID = sp.getString(SharedConstants.BABY_ID_KEY, "");
 
         databaseReference

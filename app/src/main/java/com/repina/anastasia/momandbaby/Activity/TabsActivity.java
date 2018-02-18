@@ -3,6 +3,7 @@ package com.repina.anastasia.momandbaby.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTabHost;
 import android.view.View;
@@ -33,7 +34,7 @@ public class TabsActivity extends FragmentActivity {
 
         if (ConnectionDetector.isConnected(getApplicationContext())) { // the app will not work without internet
 
-            SharedPreferences sp = getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
+            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             String babyID = sp.getString(SharedConstants.BABY_ID_KEY, "");
 
             if (babyID.length() == 0) { // the account was created, but the baby info was not entered
@@ -93,7 +94,7 @@ public class TabsActivity extends FragmentActivity {
      * Check if baby's birthday is today
      */
     private void checkForBirthday() {
-        SharedPreferences sp = getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String birthday = sp.getString(SharedConstants.BABY_BIRTHDAY, "");
         Calendar today = Calendar.getInstance();
         String formattedTodayDate = FormattedDate.getFormattedDate(today);
@@ -106,5 +107,11 @@ public class TabsActivity extends FragmentActivity {
             birthdayText += " " + name + "!";
             NotificationsShow.showToast(getApplicationContext(), birthdayText);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finishAffinity();
     }
 }

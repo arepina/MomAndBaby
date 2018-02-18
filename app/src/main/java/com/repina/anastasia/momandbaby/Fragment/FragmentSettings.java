@@ -14,6 +14,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -101,11 +102,8 @@ public class FragmentSettings extends Fragment {
         exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences sp = v.getContext().getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
-                SharedPreferences.Editor editor = sp.edit();
-                editor.putString(SharedConstants.MOM_ID_KEY, null);
-                editor.putString(SharedConstants.MOM_NAME_KEY, null);
-                editor.apply();
+                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
+                sp.edit().clear().apply();
 
                 Intent nextActivity = new Intent(v.getContext(), SignupActivity.class);
                 startActivity(nextActivity);

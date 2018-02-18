@@ -2,6 +2,7 @@ package com.repina.anastasia.momandbaby.Activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -137,7 +138,7 @@ public class RegisterActivity extends AppCompatActivity {
         String momId = databaseReference.push().getKey();
         databaseReference.child(momId).setValue(user);
 
-        SharedPreferences sp = getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         SharedPreferences.Editor editor = sp.edit();
         editor.putString(SharedConstants.MOM_ID_KEY, momId);
         editor.putString(SharedConstants.MOM_NAME_KEY, name);
@@ -147,5 +148,11 @@ public class RegisterActivity extends AppCompatActivity {
         Intent nextActivity = new Intent(getApplicationContext(), BabyInfoActivity.class);
         startActivity(nextActivity);
         finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finishAffinity();
     }
 }

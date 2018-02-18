@@ -10,6 +10,7 @@ import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -145,7 +146,7 @@ public class ChartActivity extends AppCompatActivity {
                 } else {
                     if (ConnectionDetector.isConnected(view.getContext())) {
                         String selectedItemName = features.get(position);
-                        SharedPreferences sp = view.getContext().getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
+                        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                         String babyId = sp.getString(SharedConstants.BABY_ID_KEY, "");
                         FirebaseConnection connection = new FirebaseConnection();
                         FirebaseDatabase database = connection.getDatabase();
@@ -269,7 +270,7 @@ public class ChartActivity extends AppCompatActivity {
      * @param dbName  DB name
      */
     private void initIdealChartData(Context context, String dbName) {
-        SharedPreferences sp = context.getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         String gender = sp.getString(SharedConstants.BABY_GENDER_KEY, "");
         String birthday = sp.getString(SharedConstants.BABY_BIRTHDAY, "");
         labelsIdeal = new ArrayList<>();

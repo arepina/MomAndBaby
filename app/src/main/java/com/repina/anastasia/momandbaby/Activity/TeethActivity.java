@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -56,7 +57,7 @@ public class TeethActivity extends AppCompatActivity {
 
         FirebaseConnection connection = new FirebaseConnection();
         final FirebaseDatabase database = connection.getDatabase();
-        SharedPreferences sp = getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         babyId = sp.getString(SharedConstants.BABY_ID_KEY, "");
         birthday = sp.getString(SharedConstants.BABY_BIRTHDAY, "");
 

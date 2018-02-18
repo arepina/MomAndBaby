@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 
 import com.matthewtamlin.sliding_intro_screen_library.background.BackgroundManager;
@@ -31,7 +32,7 @@ public class DotsActivity extends IntroActivity {
         super.onCreate(savedInstanceState);
         // Skip to the next activity if the user has previously completed the introduction
         if (introductionCompletedPreviously()) {
-            SharedPreferences sp = getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
+            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             String momId = sp.getString(SharedConstants.MOM_ID_KEY, "");
             if (momId.length() != 0) {// User have already registered, go to main page
                 Intent nextActivity = new Intent(this, TabsActivity.class);
@@ -74,9 +75,8 @@ public class DotsActivity extends IntroActivity {
 
     @Override
     protected IntroButton.Behaviour generateFinalButtonBehaviour() {
-        SharedPreferences sp = getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
-        SharedPreferences.Editor pendingEdits = sp.edit().putBoolean(SharedConstants.DISPLAY_ONCE_KEY, true);
-        pendingEdits.apply();
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor pendingEdits = sp.edit();
         // Define the next activity intent and create the Behaviour to use for the final button
         Intent nextActivity = new Intent(this, SignupActivity.class);
         return new IntroButton.ProgressToNextActivity(nextActivity, pendingEdits);
@@ -88,8 +88,13 @@ public class DotsActivity extends IntroActivity {
      * @return if introduction was completed before
      */
     private boolean introductionCompletedPreviously() {
-        SharedPreferences sp = getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
-        return sp.getBoolean(SharedConstants.DISPLAY_ONCE_KEY, false);
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        boolean wasShown = sp.getBoolean(SharedConstants.DISPLAY_ONCE_KEY, false);
+        if(!wasShown) {
+            SharedPreferences.Editor pendingEdits = sp.edit().putBoolean(SharedConstants.DISPLAY_ONCE_KEY, true);
+            pendingEdits.apply();
+        }
+        return wasShown;
     }
 
     /**

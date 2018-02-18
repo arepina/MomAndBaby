@@ -110,12 +110,15 @@
 
     <RatingBar
         android:id="@+id/ratingBar"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/dataValue2"
+        android:layout_centerHorizontal="true"
         android:layout_marginLeft="@dimen/main_margin"
         android:layout_marginRight="@dimen/main_margin"
         android:layout_marginTop="@dimen/main_margin"
+        android:numStars="5"
+        android:stepSize="1.0"
         android:visibility="gone" />
 
     <TextView

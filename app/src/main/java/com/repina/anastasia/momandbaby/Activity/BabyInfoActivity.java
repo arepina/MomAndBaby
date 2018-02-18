@@ -3,6 +3,7 @@ package com.repina.anastasia.momandbaby.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -45,7 +46,7 @@ public class BabyInfoActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (ConnectionDetector.isConnected(getApplicationContext())) {
                     // Get mom's id
-                    SharedPreferences sp = getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
+                    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                     String momId = sp.getString(SharedConstants.MOM_ID_KEY, "");
 
                     // Read entered values

@@ -6,11 +6,6 @@ package com.repina.anastasia.momandbaby.Helpers;
 public class SharedConstants {
 
     /**
-     * Application shared prefs
-     */
-    public static final String APP_PREFS = "app_shared_prefs";
-
-    /**
      * Key to use in {@code APP_PREFS} to find the correct user
      */
     public static final String MOM_ID_KEY = "mom_id_spkey";

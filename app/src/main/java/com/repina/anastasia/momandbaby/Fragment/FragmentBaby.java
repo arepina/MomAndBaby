@@ -72,6 +72,7 @@ public class FragmentBaby extends Fragment implements SwipeListView.SwipeListVie
         FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.floatingActionButton);
         fab.setImageResource(R.mipmap.plus);
         fab.setVisibility(View.VISIBLE);
+        fab.setEnabled(true);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

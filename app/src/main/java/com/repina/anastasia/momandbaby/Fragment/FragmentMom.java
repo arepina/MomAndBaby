@@ -93,6 +93,7 @@ public class FragmentMom extends Fragment {
         fab = (FloatingActionButton) getActivity().findViewById(R.id.floatingActionButton);
         fab.setImageResource(R.mipmap.google_fit);
         fab.setVisibility(View.VISIBLE);
+        fab.setEnabled(true);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

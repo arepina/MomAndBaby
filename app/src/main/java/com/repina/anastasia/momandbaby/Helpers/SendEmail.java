@@ -2,6 +2,7 @@ package com.repina.anastasia.momandbaby.Helpers;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 
 import com.google.firebase.database.DataSnapshot;
@@ -112,7 +113,7 @@ public class SendEmail {
 
         final DatabaseReference databaseReference = database.getReference();
 
-        SharedPreferences sp = context.getSharedPreferences(SharedConstants.APP_PREFS, MODE_PRIVATE);
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         final String babyID = sp.getString(SharedConstants.BABY_ID_KEY, "");
 
         final String finalEnd = end;
