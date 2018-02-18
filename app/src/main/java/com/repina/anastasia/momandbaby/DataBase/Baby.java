@@ -12,7 +12,7 @@ public class Baby {
     public Baby() {
     }
 
-    public Baby(String momId, String birthDay, String name, String gender) {
+    public Baby(String momId, String name, String birthDay, String gender) {
         this.momId = momId;
         this.birthDay = birthDay;
         this.gender = gender;

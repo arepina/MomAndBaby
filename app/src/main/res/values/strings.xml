@@ -5,8 +5,8 @@
     <string name="birthday">Дата рождения</string>
     <string name="girl">Девочка</string>
     <string name="boy">Мальчик</string>
-    <string name="girl_eng">Девочка</string>
-    <string name="boy_eng">Мальчик</string>
+    <string name="girl_eng">girl</string>
+    <string name="boy_eng">boy</string>
     <string name="name">Имя</string>
     <string name="enter_the_data">Введите данные ребенка</string>
     <string name="next">Продолжить</string>
@@ -74,7 +74,7 @@
     <string name="vaccination_name">Название прививки:</string>
 
     <!--Happy birthday-->
-    <string name="happy_birthday">С днем рождения,</string>
+    <string name="happy_birthday">С днем рождения, </string>
     <string name="mr">дорогой</string>
     <string name="mrs">дорогая</string>
 

@@ -102,7 +102,7 @@ public class TabsActivity extends FragmentActivity {
             String birthdayText = getResources().getString(R.string.happy_birthday);
             String name = sp.getString(SharedConstants.BABY_NAME_KEY, "");
             String gender = sp.getString(SharedConstants.BABY_GENDER_KEY, "");
-            if (gender.equals("boy")) birthdayText += getResources().getString(R.string.mr);
+            if (gender.equals(getString(R.string.boy_eng))) birthdayText += getResources().getString(R.string.mr);
             else birthdayText += getResources().getString(R.string.mrs);
             birthdayText += " " + name + "!";
             NotificationsShow.showToast(getApplicationContext(), birthdayText);

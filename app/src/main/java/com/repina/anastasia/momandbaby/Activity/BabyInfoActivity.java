@@ -56,6 +56,9 @@ public class BabyInfoActivity extends AppCompatActivity {
                         gender = getString(R.string.girl_eng);
                     else gender = getString(R.string.boy_eng);
 
+                    if (formattedDate == null) {
+                        formattedDate = FormattedDate.getFormattedDate(Calendar.getInstance());
+                    }
                     // Check the values for correctness
                     if (name.length() > 0) {
                         FirebaseConnection connection = new FirebaseConnection();
