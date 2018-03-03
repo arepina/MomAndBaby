@@ -1,0 +1,188 @@
+<resources>
+
+    <!--Sign up and register pages-->
+    <string name="birthday">Birthday</string>
+    <string name="girl">Girl</string>
+    <string name="boy">Boy</string>
+    <string name="name">Name</string>
+    <string name="enter_the_data">Enter the baby\'s information</string>
+    <string name="next">Continue</string>
+    <string name="login">Log in</string>
+    <string name="dont_have_account">Don\'t have an account? Register</string>
+    <string name="password">Password</string>
+    <string name="already_registered">Already registered? Log in</string>
+    <string name="create_account">Create account</string>
+    <string name="unpredicted_error">Ups… An error has happened, try again</string>
+    <string name="wrong_password">The password is incorrect</string>
+    <string name="enter_email_and_password">Enter email and password to log in</string>
+    <string name="internet">Internet connection is required for application!</string>
+    <string name="invalid_email">Enter the correct email</string>
+    <string name="invalid_password">Enter the correct password, not less then 6 symbols</string>
+    <string name="invalid_name">Enter the correct name</string>
+    <string name="wrong_password_or_login">The email or password is incorrect</string>
+    <string name="password_again">Enter the password again</string>
+    <string name="different_passwords">The passwords are different</string>
+    <string name="email_already_used">The email is already used</string>
+
+    <!--Analytics-->
+    <string name="mom_health">Mother\'s health analytics</string>
+    <string name="baby_health">Baby\'s health analytics</string>
+    <string name="today">Today activities</string>
+    <string name="yesterday">Backward</string>
+    <string name="tomorrow">Forward</string>
+    <string name="charts">Charts</string>
+
+    <!--Settings-->
+    <string name="exit">Log out</string>
+    <string name="app_info">Applications information</string>
+    <string name="contact_developer">Contact the developer</string>
+    <string name="send_report_mom">Send mother\'s report to e-mail</string>
+    <string name="send_report_baby">Send baby\'s report to e-mail</string>
+    <string name="app_description">The application is developed by Repina A. as part of the research paper and is designed to monitor the health and nutrition of baby up to 1 year old and help mother. The scientific leader is Akhmetsafina R. Comments, wishes and suggestions are welcome!</string>
+    <string name="licenses">All the images are used via Flaticon Basic License. All the images are parts of packages created by Freepik, Smashicons, Nikita Golubev, Vectors Market, Maxim Basinski, Scott de Jonge, Eucalyp</string>
+
+    <!--New data-->
+    <string name="add_new_data">Enter the new value of %1$s</string>
+    <string name="height">baby\'s height</string>
+    <string name="weight">baby\'s weight</string>
+    <string name="rateValue">Rate the %1$s</string>
+    <string name="diapers"> baby\'s diapers</string>
+    <string name="food"> baby\'s nutrition</string>
+    <string name="choose_date">Choose the date</string>
+    <string name="temperature"> temperature</string>
+    <string name="add_symptomes">Enter the name and symptoms</string>
+    <string name="add_pills">Enter the pills</string>
+    <string name="outdoor_duration">outdoor duration</string>
+    <string name="sleep_duration">sleep duration</string>
+    <string name="add_vaccination">Enter the baby\'s reaction to vaccination</string>
+    <string name="vaccination">Choose the vaccination from the list</string>
+    <string name="add">Add</string>
+    <string name="сomment">Comment</string>
+    <string name="rate_feature">Rate:</string>
+    <string name="sympthomes">Name and symptoms:</string>
+    <string name="pills">Pills:</string>
+    <string name="temperature_value">Temperature:</string>
+    <string name="height_value">Height:</string>
+    <string name="weight_value">Weight:</string>
+    <string name="outdoor">Outdoor duration:</string>
+    <string name="sleep">Sleep duration:</string>
+    <string name="vaccination_name">Vaccination name:</string>
+
+    <!--Happy birthday-->
+    <string name="happy_birthday">Happy birthday, </string>
+    <string name="mr">dear</string>
+    <string name="mrs">dear</string>
+
+    <!--Report-->
+    <string name="choose_period">Choose the report period</string>
+    <string name="for_day">1 day</string>
+    <string name="for_week">1 week</string>
+    <string name="for_month">1 month</string>
+    <string name="report_from">Report from</string>
+    <string name="report_to">to</string>
+    <string name="email_text"><![CDATA[Sending the health and nutrition report. Thank you for using Mom&Baby!]]></string>
+    <string name="report_sending">Sending the report...</string>
+    <string name="reports">Reports</string>
+    <string name="report_error">An error has happened during the report creation. Check your SD card</string>
+    <string name="no_data">No data is available. Choose other period</string>
+    <string name="no_data_today">No data today. You can add an activity via the plus button below</string>
+
+    <!--Google Fit-->
+    <string name="need_to_sync">You need to sync your wearable device with Google Fit. Press the Google Fit button below to enter the system and download the data</string>
+    <string name="google_fit_notification">You need to give access to Google Fit for correct application work and log into your account</string>
+    <string name="google_fit_no_data">No data is available</string>
+
+    <!--Vaccination-->
+    <string name="vaccinations">Vaccinations</string>
+    <string name="vaccinations_list">Vaccinations list</string>
+    <string name="vaccinations_info">Vaccinations information</string>
+
+    <!--Chart-->
+    <string name="ideal_height">Ideal height</string>
+    <string name="ideal_weight">Ideal weight</string>
+    <string name="min_height">Minimum height</string>
+    <string name="min_weight">Minimum weight</string>
+    <string name="max_height">Maximum height</string>
+    <string name="max_weight">Maximum height</string>
+    <string name="no_data_chart">No chart data</string>
+    <string name="fit_data_load">Loading. Please wait!</string>
+
+    <!--Legend desc-->
+    <string name="height_legend">Height data</string>
+    <string name="weight_legend">Weight data</string>
+    <string name="food_legend">Nutrition rates</string>
+    <string name="illness_legend">Temperature</string>
+    <string name="outdoor_legend">Outdoor hours</string>
+    <string name="sleep_legend">Sleep hours</string>
+    <string name="stool_legend">Diapers rates</string>
+    <string name="add_new_other">Add the new activity information</string>
+
+    <!--Custom report-->
+    <string name="for_custom">Choose the period</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
+    <string name="ok">OK</string>
+    <string name="incorrect_dates">Incorrect dates period. Try again!</string>
+
+    <!--Load-->
+    <string name="data_load_stop">The loading was interrupted</string>
+
+    <!--Teeth-->
+    <string name="up_teeth">Upper jaw</string>
+    <string name="down_teeth">Lower jaw</string>
+    <string name="press_teeth">Press on the new tooth</string>
+    <string name="add_any_data">You need to add the data before you will save it</string>
+    <string name="teeth">Teeth</string>
+    <string name="teeth_map">Baby\'s teeth map</string>
+    <string name="delete">Delete</string>
+
+    <string-array name="parametersBaby">
+        <item>Height</item>
+        <item>Weight</item>
+        <item>Diapers</item>
+        <item>Vaccinations</item>
+        <item>Illnesses</item>
+        <item>Nutrition</item>
+        <item>Outdoor</item>
+        <item>Sleep</item>
+        <item>Other</item>
+        <item>Teeth</item>
+    </string-array>
+
+    <string-array name="parametersMom">
+        <item>Steps</item>
+        <item>Sleep</item>
+        <item>Weight</item>
+        <item>Calories</item>
+    </string-array>
+
+    <string-array name="vaccinations">
+        <item>Whooping cough</item>
+        <item>Tetanus</item>
+        <item>Tuberculosis</item>
+        <item>Poliomyelitis</item>
+        <item>Hemophilus infection</item>
+        <item>Viral hepatitis B</item>
+        <item>Diphtheria</item>
+        <item>Epidemic parotitis</item>
+        <item>Rubella</item>
+        <item>Measles</item>
+    </string-array>
+
+    <string-array name="vaccinationsDates">
+        <item>1 day\t\t\t\tI-Viral hepatitis B</item>
+        <item>1 week\t\t\tTuberculosis</item>
+        <item>1 month\t\t\tII-Viral hepatitis B</item>
+        <item>3 months\t\tI-Whooping cough, Tetanus, Diphtheria</item>
+        <item>\t\t\t\t\t\t\t\tI-Poliomyelitis</item>
+        <item>\t\t\t\t\t\t\t\tI-Hemophilus infection</item>
+        <item>5 months\t\tII-Whooping cough, Tetanus, Diphtheria</item>
+        <item>\t\t\t\t\t\t\t\tII-Poliomyelitis</item>
+        <item>\t\t\t\t\t\t\t\tII-Hemophilus infection</item>
+        <item>6 months\t\tIII-Whooping cough, Tetanus, Diphtheria</item>
+        <item>\t\t\t\t\t\t\t\tIII-Poliomyelitis</item>
+        <item>\t\t\t\t\t\t\t\tIII-Hemophilus infection</item>
+        <item>\t\t\t\t\t\t\t\tIII-Viral hepatitis B</item>
+        <item>1 year\t\t\t\t\t\tEpidemic parotitis, Rubella, Measles</item>
+    </string-array>
+</resources>

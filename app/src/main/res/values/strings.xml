@@ -1,19 +1,19 @@
 <resources>
-    <string name="app_name">MomAndBaby</string>
+    <string name="app_name" translatable="false">MomAndBaby</string>
 
     <!--Sign up and register pages-->
     <string name="birthday">Дата рождения</string>
     <string name="girl">Девочка</string>
     <string name="boy">Мальчик</string>
-    <string name="girl_eng">girl</string>
-    <string name="boy_eng">boy</string>
+    <string name="girl_eng" translatable="false">girl</string>
+    <string name="boy_eng" translatable="false">boy</string>
     <string name="name">Имя</string>
     <string name="enter_the_data">Введите данные ребенка</string>
     <string name="next">Продолжить</string>
     <string name="login">Войти</string>
     <string name="dont_have_account">Еще нет аккаунта? Зарегистрируйтесь</string>
     <string name="password">Пароль</string>
-    <string name="e_mail">E-mail</string>
+    <string name="e_mail" translatable="false">E-mail</string>
     <string name="already_registered">Уже регистрировались? Войти</string>
     <string name="create_account">Создать аккаунт</string>
     <string name="unpredicted_error">Упс… Произошла ошибка, попробуйте повторить попытку</string>
@@ -40,7 +40,7 @@
     <string name="exit">Выйти из аккаунта</string>
     <string name="app_info">О приложении</string>
     <string name="contact_developer">Связаться с разработчиком</string>
-    <string name="my_email">prostorepa@yandex.ru</string>
+    <string name="my_email" translatable="false">prostorepa@yandex.ru</string>
     <string name="send_report_mom">Отправить отчет о здоровье мамы на почту</string>
     <string name="send_report_baby">Отправить отчет о здоровье малыша на почту</string>
     <string name="app_description">Приложение разработано Репиной А.А. в рамках выполнения дипломной работы и предназначено для мониторинга здоровья малыша до 1 года и помощи его маме. Научный руководитель Ахметсафина Р.З. Комментарии, пожелания и предложения привествуются!</string>
@@ -95,7 +95,7 @@
     <!--Google Fit-->
     <string name="need_to_sync">Требуется синхронизировать носимое устройство с Google Fit, чтобы данные появились в приложении. Нажмите кнопку Google Fit внизу экрана для входа в систему и загрузки данных</string>
     <string name="google_fit_notification">Для корректной работы требуется разрешить доступ к Google Fit и войти в свой аккаунт</string>
-    <string name="google_fit">Google Fit</string>
+    <string name="google_fit" translatable="false">Google Fit</string>
     <string name="google_fit_no_data">Данные недоступны</string>
 
     <!--Vaccination-->
