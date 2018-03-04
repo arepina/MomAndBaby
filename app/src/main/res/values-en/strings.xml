@@ -88,7 +88,7 @@
     <string name="no_data_today">No data today. You can add an activity via the plus button below</string>
 
     <!--Google Fit-->
-    <string name="need_to_sync">You need to sync your wearable device with Google Fit. Press the Google Fit button below to enter the system and download the data</string>
+    <string name="need_to_sync">You need to sync your wearable device with Google Fit. Press the Google Fit button below on the mom\'s tab to enter the system and download the data</string>
     <string name="google_fit_notification">You need to give access to Google Fit for correct application work and log into your account</string>
     <string name="google_fit_no_data">No data is available</string>
 
@@ -135,6 +135,8 @@
     <string name="teeth">Teeth</string>
     <string name="teeth_map">Baby\'s teeth map</string>
     <string name="delete">Delete</string>
+    <string name="sleep_str">Sleep:</string>
+    <string name="hours_str">hour(s)</string>
 
     <string-array name="parametersBaby">
         <item>Height</item>

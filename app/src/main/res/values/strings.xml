@@ -93,7 +93,7 @@
     <string name="no_data_today">Записей нет. Вы можете добавить их, нажав кнопку плюс внизу этой вкладки</string>
 
     <!--Google Fit-->
-    <string name="need_to_sync">Требуется синхронизировать носимое устройство с Google Fit, чтобы данные появились в приложении. Нажмите кнопку Google Fit внизу экрана для входа в систему и загрузки данных</string>
+    <string name="need_to_sync">Требуется синхронизировать носимое устройство с Google Fit, чтобы данные появились в приложении. Нажмите кнопку Google Fit внизу экрана на вкладке мамы для входа в систему и загрузки данных</string>
     <string name="google_fit_notification">Для корректной работы требуется разрешить доступ к Google Fit и войти в свой аккаунт</string>
     <string name="google_fit" translatable="false">Google Fit</string>
     <string name="google_fit_no_data">Данные недоступны</string>
@@ -141,6 +141,8 @@
     <string name="teeth">Зубы</string>
     <string name="teeth_map">Это карта зубов вашего малыша</string>
     <string name="delete">Удалить</string>
+    <string name="sleep_str">Сон:</string>
+    <string name="hours_str">часа(ов)</string>
 
     <string-array name="parametersBaby">
         <item>Рост</item>

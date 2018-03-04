@@ -12,7 +12,10 @@ import android.view.ViewGroup;
 import com.repina.anastasia.momandbaby.Activity.ChartActivity;
 import com.repina.anastasia.momandbaby.Activity.StatsActivity;
 import com.repina.anastasia.momandbaby.Connectors.ConnectionDetector;
+import com.repina.anastasia.momandbaby.Helpers.NotificationsShow;
 import com.repina.anastasia.momandbaby.R;
+
+import static com.repina.anastasia.momandbaby.Fragment.FragmentMom.google_fit_connected;
 
 /**
  * Analytics fragment
@@ -36,9 +39,12 @@ public class FragmentAnalytics extends Fragment {
             @Override
             public void onClick(View v) {
                 if (ConnectionDetector.isConnected(getContext())) {
-                    Intent nextActivity = new Intent(v.getContext(), ChartActivity.class);
-                    nextActivity.putExtra("Type", "Mom");
-                    startActivity(nextActivity);
+                    if (google_fit_connected) {
+                        Intent nextActivity = new Intent(v.getContext(), ChartActivity.class);
+                        nextActivity.putExtra("Type", "Mom");
+                        startActivity(nextActivity);
+                    } else
+                        NotificationsShow.showToast(getContext(), R.string.need_to_sync);
                 }
             }
         });

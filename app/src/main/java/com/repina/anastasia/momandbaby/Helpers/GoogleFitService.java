@@ -25,6 +25,7 @@ import com.repina.anastasia.momandbaby.Activity.ChartActivity;
 import com.repina.anastasia.momandbaby.Fragment.FragmentMom;
 import com.repina.anastasia.momandbaby.Fragment.FragmentSettings;
 import com.repina.anastasia.momandbaby.Processing.TextProcessing;
+import com.repina.anastasia.momandbaby.R;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
@@ -275,8 +276,11 @@ public class GoogleFitService extends IntentService {
             ArrayList<String> tempArr = new ArrayList<>(Arrays.asList(temp.split(", ")));
             for (String aTempArr : tempArr) {
                 String[] wordValue = aTempArr.split("=");
-                if (Double.parseDouble(wordValue[1]) != 0.0)
-                    result.append(TextProcessing.translateWord(wordValue[0])).append("=").append(wordValue[1]).append(", ");
+                double val = Double.parseDouble(wordValue[1]);
+                if (val != 0.0) {
+                    DecimalFormat df = new DecimalFormat("0.00");
+                    result.append(TextProcessing.translateWord(wordValue[0])).append("=").append(df.format(val)).append(", ");
+                }
             }
             result = new StringBuilder(result.substring(0, result.length() - 2));
         }
@@ -313,7 +317,7 @@ public class GoogleFitService extends IntentService {
         String startDate = getDateInstance().format(start.getTime());
         DecimalFormat df = new DecimalFormat("0.0");
         if (Math.round(sumDifference) < hours) {
-            result.append("Сон: ").append(df.format(sumDifference)).append(" часа(ов)");
+            result.append(getString(R.string.sleep_str)).append(df.format(sumDifference)).append(getString(R.string.hours_str));
             if (flag) { // from aggregate
                 Pair<String, String> pair = new Pair<>(startDate, result.toString());
                 return new Pair<>(DataType.TYPE_ACTIVITY_SEGMENT, pair);
@@ -321,7 +325,6 @@ public class GoogleFitService extends IntentService {
         }
         if (flag)
             return new Pair<>(DataType.TYPE_ACTIVITY_SEGMENT, new Pair<>(startDate, ""));
-        ;
         Intent intent = new Intent(HISTORY_INTENT);
         intent.putExtra(HISTORY_EXTRA_SLEEP_TODAY, result.toString());
         intent.putExtra(HISTORY_DATE, FormattedDate.getFormattedDate(start));

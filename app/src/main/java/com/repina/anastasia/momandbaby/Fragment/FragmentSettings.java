@@ -49,6 +49,7 @@ import java.util.Calendar;
 import static android.content.Context.MODE_PRIVATE;
 import static com.repina.anastasia.momandbaby.Fragment.FragmentMom.AUTH_PENDING;
 import static com.repina.anastasia.momandbaby.Fragment.FragmentMom.REQUEST_OAUTH;
+import static com.repina.anastasia.momandbaby.Fragment.FragmentMom.google_fit_connected;
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.FIT_EXTRA_CONNECTION_MESSAGE;
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.FIT_EXTRA_NOTIFY_FAILED_INTENT;
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.FIT_EXTRA_NOTIFY_FAILED_STATUS_CODE;
@@ -105,6 +106,10 @@ public class FragmentSettings extends Fragment {
                 SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
                 sp.edit().clear().apply();
 
+                isActivityAlreadyCreated = false;
+                FragmentMom.isActivityAlreadyCreated = false;
+                google_fit_connected = false;
+
                 Intent nextActivity = new Intent(v.getContext(), SignupActivity.class);
                 startActivity(nextActivity);
                 getActivity().finish();
@@ -153,11 +158,14 @@ public class FragmentSettings extends Fragment {
             @Override
             public void onClick(View v) {
                 if (ConnectionDetector.isConnected(getContext()))
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
-                            getContext().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
-                        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
-                    else
-                        showAlertDialog(false);
+                    if (google_fit_connected) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
+                                getContext().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+                            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+                        else
+                            showAlertDialog(false);
+                    } else
+                        NotificationsShow.showToast(getContext(), R.string.need_to_sync);
             }
         });
 

@@ -64,6 +64,7 @@ public class FragmentMom extends Fragment {
     public static final int REQUEST_OAUTH = 1431;
 
     public static boolean isActivityAlreadyCreated = false;
+    public static boolean google_fit_connected = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -233,6 +234,7 @@ public class FragmentMom extends Fragment {
             if (intent.hasExtra(FIT_EXTRA_CONNECTION_MESSAGE)) {
                 Log.d(TAG, "Fit connection successful - closing connect screen if it's open");
                 fab.setEnabled(false);
+                google_fit_connected = true;
             }
         }
     };
@@ -247,13 +249,17 @@ public class FragmentMom extends Fragment {
             String date = intent.getStringExtra(HISTORY_DATE);
             if (intent.hasExtra(HISTORY_EXTRA_STEPS_TODAY)) {
                 final int totalSteps = intent.getIntExtra(HISTORY_EXTRA_STEPS_TODAY, 0);
-                GridItem item = new GridItem(R.mipmap.steps, "R.mipmap.steps", String.valueOf(totalSteps), date);
-                momArrayAdapter.add(item);
+                if(totalSteps != 0) {
+                    GridItem item = new GridItem(R.mipmap.steps, "R.mipmap.steps", String.valueOf(totalSteps), date);
+                    momArrayAdapter.add(item);
+                }
             }
             if (intent.hasExtra(HISTORY_EXTRA_CALORIES_TODAY)) {
                 final int totalCalories = (int) intent.getDoubleExtra(HISTORY_EXTRA_CALORIES_TODAY, 0);
-                GridItem item = new GridItem(R.mipmap.calories, "R.mipmap.calories", String.valueOf(totalCalories), date);
-                momArrayAdapter.add(item);
+                if(totalCalories != 0) {
+                    GridItem item = new GridItem(R.mipmap.calories, "R.mipmap.calories", String.valueOf(totalCalories), date);
+                    momArrayAdapter.add(item);
+                }
             }
             if (intent.hasExtra(HISTORY_EXTRA_WEIGHT_TODAY)) {
                 final int totalWeight = (int) intent.getDoubleExtra(HISTORY_EXTRA_WEIGHT_TODAY, 0);
@@ -271,7 +277,9 @@ public class FragmentMom extends Fragment {
             }
             if (intent.hasExtra(HISTORY_EXTRA_SLEEP_TODAY)) {
                 final String totalSleep = intent.getStringExtra(HISTORY_EXTRA_SLEEP_TODAY);
-                if (totalSleep.length() != 0) {
+                String temp = totalSleep.replace(getString(R.string.sleep_str), "").replace(getString(R.string.hours_str), "").replace(",", ".");
+                double hours = Double.parseDouble(temp);
+                if (totalSleep.length() != 0 && hours != 0) {
                     GridItem item = new GridItem(R.mipmap.sleep, "R.mipmap.sleep", String.valueOf(totalSleep), date);
                     momArrayAdapter.add(item);
                 }
