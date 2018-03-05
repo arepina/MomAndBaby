@@ -11,6 +11,7 @@ import com.repina.anastasia.momandbaby.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import static com.repina.anastasia.momandbaby.Processing.ImageProcessing.typeToString;
@@ -31,18 +32,25 @@ public class TextProcessing {
         StringBuilder line = new StringBuilder();
         value.remove("babyId");
         value.remove("date");
+        String lang = Locale.getDefault().getDisplayLanguage();
         for (Map.Entry<String, String> entry : value.entrySet()) {
             String val = String.valueOf(entry.getValue());
             try {
                 double number = Double.parseDouble(val);
                 if (number != 0) {
-                    line.append(translateWord(entry.getKey())).append(": ").append(val);
+                    if (lang.equals(context.getString(R.string.russian))) {
+                        line.append(translateWord(entry.getKey())).append(": ").append(val);
+                    }else
+                        line.append(entry.getKey()).append(": ").append(val);
                     if (!"\n".equals(String.valueOf(line.charAt(line.length() - 1))))
                         line.append("\n");
                 }
             } catch (NumberFormatException e) { // not a number
                 if (dbName.equals(DatabaseNames.TEETH)) return context.getString(R.string.new_teeth);
-                line.append(translateWord(entry.getKey())).append(": ").append(val);
+                if (lang.equals(context.getString(R.string.russian))) {
+                    line.append(translateWord(entry.getKey())).append(": ").append(val);
+                }else
+                    line.append(entry.getKey()).append(": ").append(val);
                 if (!"\n".equals(String.valueOf(line.charAt(line.length() - 1))))
                     line.append("\n");
             }
@@ -67,10 +75,14 @@ public class TextProcessing {
             String translatedType = typeToString(type);
             String date = it.second.first;
             StringBuilder data = new StringBuilder(it.second.second);
+            String lang = Locale.getDefault().getDisplayLanguage();
             if (DataType.TYPE_NUTRITION.equals(type)) {
                 StringBuilder translatedData = new StringBuilder();
                 for (String item : data.toString().split(", ")) {
-                    String key = translateWord(item.substring(0, item.indexOf("=")).replace(" ", ""));
+                    String key = item.substring(0, item.indexOf("=")).replace(" ", "");
+                    if (lang.equals(context.getString(R.string.russian))) {
+                        key = translateWord(key);
+                    }
                     String value = item.substring(item.indexOf("=") + 1, item.length()).replace(" ", "");
                     translatedData.append(key).append("=").append(value).append(", ");
                 }
@@ -94,10 +106,11 @@ public class TextProcessing {
      * @param singleSnapshot snapshot
      * @return cleaned text
      */
-    public static String cleanData(HashMap<String, String> map, DataSnapshot singleSnapshot) {
+    public static String cleanData(HashMap<String, String> map, DataSnapshot singleSnapshot, Context context) {
         String dateValue = "";
         ArrayList<String> keys = new ArrayList<>(map.keySet());
         ArrayList<String> values = new ArrayList<>(map.values());
+        String lang = Locale.getDefault().getDisplayLanguage();
         for (int i = 0; i < keys.size(); i++) {
             String key = String.valueOf(keys.get(i));
             String value = String.valueOf(values.get(i));
@@ -135,8 +148,11 @@ public class TextProcessing {
                 continue;
             }
 
-            //translate to russian
-            String translation = TextProcessing.translateWord(key);
+            String translation = key;
+            //translate to russian id needed
+            if (lang.equals(context.getString(R.string.russian))) {
+                translation = TextProcessing.translateWord(key);
+            }
             keys.set(i, translation);
         }
         StringBuilder line = new StringBuilder();
@@ -144,7 +160,11 @@ public class TextProcessing {
             line.append(String.valueOf(keys.get(i))).append(": ").append(String.valueOf(values.get(i))).append("; ");
         }
         line = new StringBuilder(line.toString().substring(0, line.length() - 2));
-        return dbNameToString(singleSnapshot.getKey()) + " " + dateValue + "; " + line + "\n";
+        String dbName = singleSnapshot.getKey();
+        if (lang.equals(context.getString(R.string.russian))) {
+            dbName = dbNameToString(singleSnapshot.getKey());
+        }
+        return dbName + " " + dateValue + "; " + line + "\n";
     }
 
     /**
@@ -224,7 +244,7 @@ public class TextProcessing {
      * @param dbName DB name
      * @return String text
      */
-    private static String dbNameToString(String dbName) {
+    public static String dbNameToString(String dbName) {
         switch (dbName) {
             case DatabaseNames.METRICS:
                 return "Метрики";

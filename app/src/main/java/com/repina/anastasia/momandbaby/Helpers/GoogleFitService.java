@@ -1,6 +1,7 @@
 package com.repina.anastasia.momandbaby.Helpers;
 
 import android.app.IntentService;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -35,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.CALLING;
@@ -279,7 +281,11 @@ public class GoogleFitService extends IntentService {
                 double val = Double.parseDouble(wordValue[1]);
                 if (val != 0.0) {
                     DecimalFormat df = new DecimalFormat("0.00");
-                    result.append(TextProcessing.translateWord(wordValue[0])).append("=").append(df.format(val)).append(", ");
+                    String lang = Locale.getDefault().getDisplayLanguage();
+                    if (lang.equals(getApplicationContext().getString(R.string.russian))) {
+                        result.append(TextProcessing.translateWord(wordValue[0])).append("=").append(df.format(val)).append(", ");
+                    }else
+                        result.append(wordValue[0]).append("=").append(df.format(val)).append(", ");
                 }
             }
             result = new StringBuilder(result.substring(0, result.length() - 2));

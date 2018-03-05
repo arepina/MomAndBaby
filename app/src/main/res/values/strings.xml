@@ -148,6 +148,8 @@
     <string name="hours_str">часа(ов)</string>
     <string name="new_teeth">У малыша прорезался зуб!</string>
     <string name="russian">русский</string>
+    <string name="baby_has">У Вашего малыша уже есть зубы:</string>
+    <string name="month">месяца</string>
 
     <string-array name="parametersBaby">
         <item>Рост</item>

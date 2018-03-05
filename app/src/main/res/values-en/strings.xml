@@ -140,6 +140,8 @@
     <string name="sleep_str">Sleep:</string>
     <string name="hours_str">hour(s)</string>
     <string name="new_teeth">New tooth. Congrats!</string>
+    <string name="baby_has">You baby already has teeth:</string>
+    <string name="month">months</string>
 
     <string-array name="parametersBaby">
         <item>Height</item>

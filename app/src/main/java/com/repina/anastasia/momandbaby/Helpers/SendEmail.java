@@ -18,16 +18,17 @@ import com.repina.anastasia.momandbaby.Processing.StatsProcessing;
 import com.repina.anastasia.momandbaby.Processing.TextProcessing;
 import com.repina.anastasia.momandbaby.R;
 
-import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import static android.content.Context.MODE_PRIVATE;
+import static com.repina.anastasia.momandbaby.Processing.TextProcessing.dbNameToString;
 
 /**
  * Send email reports
@@ -147,16 +148,26 @@ public class SendEmail {
                                                     (daysEndDif == 0 & daysStartDif == 0)) {
                                                 if(singleSnapshot.getKey().equals(DatabaseNames.TEETH))
                                                 {
-                                                    /*StringBuilder reportStr = new StringBuilder();
-                                                    ArrayList<String> whenHave = (new ArrayList<String>)(value.get("whenHave"));
-                                                    for(int i = 0; i < whenHave.size(); i++)
+                                                    Object s = value.get("whenHave");
+                                                    StringBuilder reportStr = new StringBuilder();
+                                                    reportStr.append(context.getString(R.string.baby_has)).append(" ");
+                                                    Object[] whenHave = ((ArrayList) s).toArray();
+                                                    for(int i = 0; i < whenHave.length; i++)
                                                     {
-                                                        if(whenHave.get(i) != -1)
-                                                            reportStr.append("№").append(i + 1).append(" ").append(whenHave.get(i)).append("M");
+                                                        if(Integer.parseInt(whenHave[i].toString()) != -1)
+                                                            reportStr.append("№").append(i + 1).append(": ")
+                                                                    .append(whenHave[i]).append(" ")
+                                                                    .append(context.getString(R.string.month)).append("; ");
                                                     }
-                                                    report.append(reportStr);*/
+                                                    reportStr = new StringBuilder(reportStr.substring(0, reportStr.length() - 2));
+                                                    String dbName = singleSnapshot.getKey();
+                                                    String lang = Locale.getDefault().getDisplayLanguage();
+                                                    if (lang.equals(context.getString(R.string.russian))) {
+                                                        dbName = dbNameToString(singleSnapshot.getKey());
+                                                    }
+                                                    report.append(dbName).append(" ").append(date).append(" ").append(reportStr).append("\n");
                                                 }else
-                                                    report.append(TextProcessing.cleanData(value, singleSnapshot));
+                                                    report.append(TextProcessing.cleanData(value, singleSnapshot, context));
                                             }
                                         } catch (ParseException ignored) {
                                         }
