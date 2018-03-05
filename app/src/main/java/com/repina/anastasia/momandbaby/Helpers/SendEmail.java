@@ -18,7 +18,9 @@ import com.repina.anastasia.momandbaby.Processing.StatsProcessing;
 import com.repina.anastasia.momandbaby.Processing.TextProcessing;
 import com.repina.anastasia.momandbaby.R;
 
+import java.lang.reflect.Array;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -126,8 +128,7 @@ public class SendEmail {
                             StringBuilder report = new StringBuilder();
                             for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
                                 if (!singleSnapshot.getKey().equals(DatabaseNames.USER)
-                                        & !singleSnapshot.getKey().equals(DatabaseNames.BABY)
-                                        & !singleSnapshot.getKey().equals(DatabaseNames.TEETH)) {
+                                        & !singleSnapshot.getKey().equals(DatabaseNames.BABY)) {
                                     HashMap<String, HashMap<String, String>> items =
                                             (HashMap<String, HashMap<String, String>>) singleSnapshot.getValue();
                                     for (Map.Entry<String, HashMap<String, String>> entry : items.entrySet()) {
@@ -144,7 +145,18 @@ public class SendEmail {
                                                     ((current.before(endDate) & (startDate.before(current) || daysStartDif == 0)) ||
                                                             (current.before(endDate) || daysEndDif == 0) & startDate.before(current)) ||
                                                     (daysEndDif == 0 & daysStartDif == 0)) {
-                                                report.append(TextProcessing.cleanData(value, singleSnapshot));
+                                                if(singleSnapshot.getKey().equals(DatabaseNames.TEETH))
+                                                {
+                                                    /*StringBuilder reportStr = new StringBuilder();
+                                                    ArrayList<String> whenHave = (new ArrayList<String>)(value.get("whenHave"));
+                                                    for(int i = 0; i < whenHave.size(); i++)
+                                                    {
+                                                        if(whenHave.get(i) != -1)
+                                                            reportStr.append("№").append(i + 1).append(" ").append(whenHave.get(i)).append("M");
+                                                    }
+                                                    report.append(reportStr);*/
+                                                }else
+                                                    report.append(TextProcessing.cleanData(value, singleSnapshot));
                                             }
                                         } catch (ParseException ignored) {
                                         }

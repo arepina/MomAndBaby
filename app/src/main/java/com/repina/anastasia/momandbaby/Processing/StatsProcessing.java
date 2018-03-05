@@ -73,7 +73,7 @@ public class StatsProcessing {
                                             int imageId = ImageProcessing.getImageId(singleSnapshot.getKey(), value);
                                             String imageName = ImageProcessing.getImageName(singleSnapshot.getKey(), value);
                                             GridItem it = new GridItem(imageId, imageName,
-                                                    TextProcessing.formBabyDescription(value, singleSnapshot.getKey()),
+                                                    TextProcessing.formBabyDescription(value, singleSnapshot.getKey(), context),
                                                     entry.getKey(), singleSnapshot.getKey());
                                             adapter.add(it);
                                         }

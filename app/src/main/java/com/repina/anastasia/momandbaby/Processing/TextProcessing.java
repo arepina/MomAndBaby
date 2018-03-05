@@ -27,7 +27,7 @@ public class TextProcessing {
      * @param dbName DB name
      * @return text of baby item
      */
-    public static String formBabyDescription(HashMap<String, String> value, String dbName) {
+    public static String formBabyDescription(HashMap<String, String> value, String dbName, Context context) {
         StringBuilder line = new StringBuilder();
         value.remove("babyId");
         value.remove("date");
@@ -41,7 +41,7 @@ public class TextProcessing {
                         line.append("\n");
                 }
             } catch (NumberFormatException e) { // not a number
-                if (dbName.equals(DatabaseNames.TEETH)) return "У малыша прорезался зуб!";
+                if (dbName.equals(DatabaseNames.TEETH)) return context.getString(R.string.new_teeth);
                 line.append(translateWord(entry.getKey())).append(": ").append(val);
                 if (!"\n".equals(String.valueOf(line.charAt(line.length() - 1))))
                     line.append("\n");

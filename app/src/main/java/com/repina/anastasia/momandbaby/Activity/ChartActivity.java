@@ -287,7 +287,7 @@ public class ChartActivity extends AppCompatActivity {
             labelsIdeal.add(FormattedDate.getFormattedDate(calendar));
         }
         ArrayList<LineDataSet> sets;
-        if (gender.equals("boy"))
+        if (gender.equals(getString(R.string.boy_eng)))
             sets = initBoy(dbName);
         else
             sets = initGirl(dbName);
@@ -332,12 +332,12 @@ public class ChartActivity extends AppCompatActivity {
             boyHeightMax.add(new Entry((float) Double.parseDouble(boyParamsHeightMax.get(i)), i));
             boyWeightMax.add(new Entry((float) Double.parseDouble(boyParamsWeightMax.get(i)), i));
         }
-        if (dbName.equals("Рост")) {
+        if (dbName.equals(getString(R.string.height_word))) {
             lineDataSetNorm = new LineDataSet(boyHeightNorm, getString(R.string.ideal_height));
             lineDataSetMin = new LineDataSet(boyHeightMin, getString(R.string.min_height));
             lineDataSetMax = new LineDataSet(boyHeightMax, getString(R.string.max_height));
         }
-        if (dbName.equals("Вес")) {
+        if (dbName.equals(getString(R.string.weight_word))) {
             lineDataSetNorm = new LineDataSet(boyWeightNorm, getString(R.string.ideal_weight));
             lineDataSetMin = new LineDataSet(boyWeightMin, getString(R.string.min_weight));
             lineDataSetMax = new LineDataSet(boyWeightMax, getString(R.string.max_weight));
@@ -379,12 +379,12 @@ public class ChartActivity extends AppCompatActivity {
             girlHeightMax.add(new Entry((float) Double.parseDouble(girlParamsHeightMax.get(i)), i));
             girlWeightMax.add(new Entry((float) Double.parseDouble(girlParamsWeightMax.get(i)), i));
         }
-        if (dbName.equals("Рост")) {
+        if (dbName.equals(getString(R.string.height_word))) {
             lineDataSetNorm = new LineDataSet(girlHeightNorm, getString(R.string.ideal_height));
             lineDataSetMin = new LineDataSet(girlHeightMin, getString(R.string.min_height));
             lineDataSetMax = new LineDataSet(girlHeightMax, getString(R.string.max_height));
         }
-        if (dbName.equals("Вес")) {
+        if (dbName.equals(getString(R.string.weight_word))) {
             lineDataSetNorm = new LineDataSet(girlWeightNorm, getString(R.string.ideal_weight));
             lineDataSetMin = new LineDataSet(girlWeightMin, getString(R.string.min_weight));
             lineDataSetMax = new LineDataSet(girlWeightMax, getString(R.string.max_weight));
@@ -416,7 +416,7 @@ public class ChartActivity extends AppCompatActivity {
                 double weight, height;
                 weight = m.getWeight();
                 height = m.getHeight();
-                if (selectedItemName.equals("Рост")) {
+                if (selectedItemName.equals(getString(R.string.height))) {
                     chart.setDescription(getString(R.string.height_legend));
                     if (height != 0) // not the weight entry
                     {
@@ -515,7 +515,7 @@ public class ChartActivity extends AppCompatActivity {
                 }
                 case 1: {
                     if (type == DataType.TYPE_ACTIVITY_SEGMENT) {
-                        value = value.replace("Сон:", "").replace("часа(ов)", "").replace(",", ".").trim();
+                        value = value.replace(getString(R.string.sleep_str), "").replace(getString(R.string.hours_str), "").replace(",", ".").trim();
                         e = new Entry((float) Double.parseDouble(value), counter);
                         counter++;
                     }

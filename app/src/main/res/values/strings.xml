@@ -71,7 +71,10 @@
     <string name="weight_value">Вес:</string>
     <string name="outdoor">Длительность прогулки:</string>
     <string name="sleep">Длительность сна:</string>
+    <string name="height_word">Рост</string>
+    <string name="weight_word">Вес</string>
     <string name="vaccination_name">Название прививки:</string>
+
 
     <!--Happy birthday-->
     <string name="happy_birthday">С днем рождения, </string>
@@ -143,6 +146,8 @@
     <string name="delete">Удалить</string>
     <string name="sleep_str">Сон:</string>
     <string name="hours_str">часа(ов)</string>
+    <string name="new_teeth">У малыша прорезался зуб!</string>
+    <string name="russian">русский</string>
 
     <string-array name="parametersBaby">
         <item>Рост</item>

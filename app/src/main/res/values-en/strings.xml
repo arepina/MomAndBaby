@@ -34,7 +34,7 @@
 
     <!--Settings-->
     <string name="exit">Log out</string>
-    <string name="app_info">Applications information</string>
+    <string name="app_info">Application\'s information</string>
     <string name="contact_developer">Contact the developer</string>
     <string name="send_report_mom">Send mother\'s report to e-mail</string>
     <string name="send_report_baby">Send baby\'s report to e-mail</string>
@@ -66,6 +66,8 @@
     <string name="weight_value">Weight:</string>
     <string name="outdoor">Outdoor duration:</string>
     <string name="sleep">Sleep duration:</string>
+    <string name="height_word">Height</string>
+    <string name="weight_word">Weight</string>
     <string name="vaccination_name">Vaccination name:</string>
 
     <!--Happy birthday-->
@@ -137,6 +139,7 @@
     <string name="delete">Delete</string>
     <string name="sleep_str">Sleep:</string>
     <string name="hours_str">hour(s)</string>
+    <string name="new_teeth">New tooth. Congrats!</string>
 
     <string-array name="parametersBaby">
         <item>Height</item>
@@ -174,17 +177,17 @@
     <string-array name="vaccinationsDates">
         <item>1 day\t\t\t\tI-Viral hepatitis B</item>
         <item>1 week\t\t\tTuberculosis</item>
-        <item>1 month\t\t\tII-Viral hepatitis B</item>
+        <item>1 month\t\tII-Viral hepatitis B</item>
         <item>3 months\t\tI-Whooping cough, Tetanus, Diphtheria</item>
-        <item>\t\t\t\t\t\t\t\tI-Poliomyelitis</item>
-        <item>\t\t\t\t\t\t\t\tI-Hemophilus infection</item>
+        <item>\t\t\t\t\t\t\tI-Poliomyelitis</item>
+        <item>\t\t\t\t\t\t\tI-Hemophilus infection</item>
         <item>5 months\t\tII-Whooping cough, Tetanus, Diphtheria</item>
-        <item>\t\t\t\t\t\t\t\tII-Poliomyelitis</item>
-        <item>\t\t\t\t\t\t\t\tII-Hemophilus infection</item>
+        <item>\t\t\t\t\t\t\tII-Poliomyelitis</item>
+        <item>\t\t\t\t\t\t\tII-Hemophilus infection</item>
         <item>6 months\t\tIII-Whooping cough, Tetanus, Diphtheria</item>
-        <item>\t\t\t\t\t\t\t\tIII-Poliomyelitis</item>
-        <item>\t\t\t\t\t\t\t\tIII-Hemophilus infection</item>
-        <item>\t\t\t\t\t\t\t\tIII-Viral hepatitis B</item>
-        <item>1 year\t\t\t\t\t\tEpidemic parotitis, Rubella, Measles</item>
+        <item>\t\t\t\t\t\t\tIII-Poliomyelitis</item>
+        <item>\t\t\t\t\t\t\tIII-Hemophilus infection</item>
+        <item>\t\t\t\t\t\t\tIII-Viral hepatitis B</item>
+        <item>1 year\t\t\t\tEpidemic parotitis, Rubella, Measles</item>
     </string-array>
 </resources>

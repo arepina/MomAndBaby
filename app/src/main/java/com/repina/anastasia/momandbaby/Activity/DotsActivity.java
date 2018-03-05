@@ -19,6 +19,7 @@ import com.repina.anastasia.momandbaby.R;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Locale;
 
 /**
  * Dots shown on the first user entry
@@ -53,20 +54,30 @@ public class DotsActivity extends IntroActivity {
         // This variable holds the pages while they are being created
         ArrayList<Fragment> pages = new ArrayList<>();
         ParallaxPage newPage = ParallaxPage.newInstance();
-        int resourceId = R.drawable.mother;
-        Bitmap mBitmap = BitmapFactory.decodeResource(getResources(), resourceId);
+        String lang = Locale.getDefault().getDisplayLanguage();
+        int resourceId1, resourceId2, resourceId3;
+        if (lang.equals(getString(R.string.russian))) {
+            resourceId1 = R.drawable.mother;
+            resourceId2 = R.drawable.baby;
+            resourceId3 = R.drawable.analytics;
+        } else {
+            resourceId1 = R.drawable.mother_eng;
+            resourceId2 = R.drawable.baby_eng;
+            resourceId3 = R.drawable.analytics_eng;
+        }
+        Bitmap mBitmap = BitmapFactory.decodeResource(getResources(), resourceId1);
         newPage.setFrontImage(mBitmap);
         pages.add(newPage);
 
         newPage = ParallaxPage.newInstance();
-        resourceId = R.drawable.baby;
-        mBitmap = BitmapFactory.decodeResource(getResources(), resourceId);
+
+        mBitmap = BitmapFactory.decodeResource(getResources(), resourceId2);
         newPage.setFrontImage(mBitmap);
         pages.add(newPage);
 
         newPage = ParallaxPage.newInstance();
-        resourceId = R.drawable.analytics;
-        mBitmap = BitmapFactory.decodeResource(getResources(), resourceId);
+
+        mBitmap = BitmapFactory.decodeResource(getResources(), resourceId3);
         newPage.setFrontImage(mBitmap);
         pages.add(newPage);
 
@@ -90,7 +101,7 @@ public class DotsActivity extends IntroActivity {
     private boolean introductionCompletedPreviously() {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         boolean wasShown = sp.getBoolean(SharedConstants.DISPLAY_ONCE_KEY, false);
-        if(!wasShown) {
+        if (!wasShown) {
             SharedPreferences.Editor pendingEdits = sp.edit().putBoolean(SharedConstants.DISPLAY_ONCE_KEY, true);
             pendingEdits.apply();
         }
