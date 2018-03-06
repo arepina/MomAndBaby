@@ -142,6 +142,7 @@
     <string name="new_teeth">New tooth. Congrats!</string>
     <string name="baby_has">You baby already has teeth:</string>
     <string name="month">months</string>
+    <string name="bad_imt">Индекс массы тела Вашего малыша не соотвествует норме, следует обратиться к специалисту</string>
 
     <string-array name="parametersBaby">
         <item>Height</item>

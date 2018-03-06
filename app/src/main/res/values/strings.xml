@@ -150,6 +150,7 @@
     <string name="russian">русский</string>
     <string name="baby_has">У Вашего малыша уже есть зубы:</string>
     <string name="month">месяца</string>
+    <string name="bad_imt">Индекс массы тела Вашего малыша не соотвествует норме, следует обратиться к специалисту</string>
 
     <string-array name="parametersBaby">
         <item>Рост</item>
@@ -391,5 +392,35 @@
         <item>9.6</item>
         <item>9.9</item>
         <item>10.1</item>
+    </string-array>
+
+    <string-array name="imtGirl">
+        <item>13.3</item>
+        <item>14.6</item>
+        <item>15.8</item>
+        <item>16.4</item>
+        <item>16.7</item>
+        <item>16.8</item>
+        <item>16.9</item>
+        <item>16.9</item>
+        <item>16.8</item>
+        <item>16.7</item>
+        <item>16.6</item>
+        <item>16.5</item>
+    </string-array>
+
+    <string-array name="imtBoy">
+        <item>13.4</item>
+        <item>14.9</item>
+        <item>16.3</item>
+        <item>16.9</item>
+        <item>17.2</item>
+        <item>17.3</item>
+        <item>17.3</item>
+        <item>17.3</item>
+        <item>17.3</item>
+        <item>17.2</item>
+        <item>17.0</item>
+        <item>16.9</item>
     </string-array>
 </resources>

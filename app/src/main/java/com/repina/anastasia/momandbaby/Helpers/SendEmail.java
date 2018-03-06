@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -146,7 +145,7 @@ public class SendEmail {
                                                     ((current.before(endDate) & (startDate.before(current) || daysStartDif == 0)) ||
                                                             (current.before(endDate) || daysEndDif == 0) & startDate.before(current)) ||
                                                     (daysEndDif == 0 & daysStartDif == 0)) {
-                                                if(singleSnapshot.getKey().equals(DatabaseNames.TEETH))
+                                                if(singleSnapshot.getKey().equals(DatabaseNames.TEETH)) // form teeth part of report
                                                 {
                                                     Object s = value.get("whenHave");
                                                     StringBuilder reportStr = new StringBuilder();
@@ -166,7 +165,7 @@ public class SendEmail {
                                                         dbName = dbNameToString(singleSnapshot.getKey());
                                                     }
                                                     report.append(dbName).append(" ").append(date).append(" ").append(reportStr).append("\n");
-                                                }else
+                                                }else // all the others parts
                                                     report.append(TextProcessing.cleanData(value, singleSnapshot, context));
                                             }
                                         } catch (ParseException ignored) {

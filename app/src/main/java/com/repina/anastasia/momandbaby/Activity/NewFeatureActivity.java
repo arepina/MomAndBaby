@@ -15,10 +15,14 @@ import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.repina.anastasia.momandbaby.Connectors.ConnectionDetector;
 import com.repina.anastasia.momandbaby.Connectors.FirebaseConnection;
+import com.repina.anastasia.momandbaby.DataBase.Baby;
 import com.repina.anastasia.momandbaby.DataBase.Other;
 import com.repina.anastasia.momandbaby.Helpers.NotificationsShow;
 import com.repina.anastasia.momandbaby.Helpers.SharedConstants;
@@ -33,8 +37,11 @@ import com.repina.anastasia.momandbaby.DataBase.Vaccination;
 import com.repina.anastasia.momandbaby.R;
 
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
+import static com.repina.anastasia.momandbaby.Activity.TeethActivity.getMonthBetween;
 import static com.repina.anastasia.momandbaby.Helpers.FormattedDate.getFormattedDate;
 
 /**
@@ -119,6 +126,7 @@ public class NewFeatureActivity extends AppCompatActivity {
             if (dataValue1.getText().length() != 0) {
                 Metrics m = new Metrics(babyId, 0, Double.parseDouble(dataValue1.getText().toString()), currentDate); // no weight
                 databaseReference = database.getReference().child(DatabaseNames.METRICS);
+                checkIMT(0, Double.parseDouble(dataValue1.getText().toString()), database);
                 databaseReference.push().setValue(m);
             } else
                 NotificationsShow.showToast(getApplicationContext(), getString(R.string.add_any_data));
@@ -127,6 +135,7 @@ public class NewFeatureActivity extends AppCompatActivity {
             if (dataValue1.getText().length() != 0) {
                 Metrics m = new Metrics(babyId, Double.parseDouble(dataValue1.getText().toString()), 0, currentDate); // no height
                 databaseReference = database.getReference().child(DatabaseNames.METRICS);
+                checkIMT(Double.parseDouble(dataValue1.getText().toString()), 0, database);
                 databaseReference.push().setValue(m);
             } else
                 NotificationsShow.showToast(getApplicationContext(), getString(R.string.add_any_data));
@@ -185,6 +194,60 @@ public class NewFeatureActivity extends AppCompatActivity {
             } else
                 NotificationsShow.showToast(getApplicationContext(), getString(R.string.add_any_data));
         }
+    }
+
+    private void checkIMT(final double weight, final double height, FirebaseDatabase database) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        final String gender = sp.getString(SharedConstants.BABY_GENDER_KEY, "");
+        String babyID = sp.getString(SharedConstants.BABY_ID_KEY, "");
+        final DatabaseReference databaseReference = database.getReference().child(DatabaseNames.METRICS);
+        databaseReference.orderByChild("babyId")
+                .equalTo(babyID)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            DataSnapshot latest = null;
+                            DataSnapshot beforeLatestWeight = null, beforeLatestHeight = null;
+                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                if(latest != null) {
+                                    if (latest.getValue(Metrics.class).getHeight() == 0)
+                                        beforeLatestWeight = latest;
+                                    else
+                                        beforeLatestHeight = latest;
+                                }
+                                latest = snapshot;
+                            }
+                            if(beforeLatestHeight != null & height == 0 || beforeLatestWeight != null & weight == 0) // more then 1 entry in DB
+                            {
+                                double imt;
+                                if (weight == 0) imt = beforeLatestWeight.getValue(Metrics.class).getWeight() / Math.pow(height / 100, 2);
+                                else imt = weight / Math.pow(beforeLatestHeight.getValue(Metrics.class).getHeight() / 100, 2);
+                                int months = getMonthBetween(getApplicationContext());
+                                if (gender.equals(getString(R.string.boy_eng))) {
+                                    String[] imtBoy = getResources().getStringArray(R.array.imtBoy);
+                                    double min = Double.parseDouble(imtBoy[months - 1]) - 1;
+                                    double max = Double.parseDouble(imtBoy[months - 1]) + 1;
+                                    if (min > imt || imt > max) {
+                                        NotificationsShow.showToast(getApplicationContext(), R.string.bad_imt);
+                                    }
+                                } else {
+                                    String[] imtGirl = getResources().getStringArray(R.array.imtGirl);
+                                    double min = Double.parseDouble(imtGirl[months - 1]) - 1;
+                                    double max = Double.parseDouble(imtGirl[months - 1]) + 1;
+                                    if (min > imt || imt > max) {
+                                        NotificationsShow.showToast(getApplicationContext(), R.string.bad_imt);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        NotificationsShow.showToast(getApplicationContext(), R.string.unpredicted_error);
+                    }
+                });
     }
 
     /**

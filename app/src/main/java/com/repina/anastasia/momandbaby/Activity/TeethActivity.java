@@ -1,5 +1,6 @@
 package com.repina.anastasia.momandbaby.Activity;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -42,7 +43,6 @@ import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.CALLING;
 public class TeethActivity extends AppCompatActivity {
 
     private Teeth teeth, teethOld;
-    private String birthday;
     private String babyId;
     private String firebaseKey;
 
@@ -57,7 +57,6 @@ public class TeethActivity extends AppCompatActivity {
         final FirebaseDatabase database = connection.getDatabase();
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         babyId = sp.getString(SharedConstants.BABY_ID_KEY, "");
-        birthday = sp.getString(SharedConstants.BABY_BIRTHDAY, "");
 
         Button addData = (Button) findViewById(R.id.addData);
         addData.setVisibility(View.VISIBLE);
@@ -104,9 +103,11 @@ public class TeethActivity extends AppCompatActivity {
      *
      * @return months number
      */
-    private int getMonthBetween() {
+    public static int getMonthBetween(Context context) {
         Calendar today = Calendar.getInstance();
         Calendar birth = Calendar.getInstance();
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        String birthday = sp.getString(SharedConstants.BABY_BIRTHDAY, "");
         Date date = null;
         try {
             date = FormattedDate.stringToDate(birthday);
@@ -212,7 +213,7 @@ public class TeethActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(q1.getDrawable() == null) {
-                    int months = getMonthBetween();
+                    int months = getMonthBetween(getApplicationContext());
                     q1.setImageBitmap(textAsBitmap(String.valueOf(months) + "M", 40, Color.WHITE));
                     updateListsInfo(0, months);
                 }else{
@@ -227,7 +228,7 @@ public class TeethActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(q2.getDrawable() == null) {
-                    int months = getMonthBetween();
+                    int months = getMonthBetween(getApplicationContext());
                     q2.setImageBitmap(textAsBitmap(String.valueOf(months) + "M", 40, Color.WHITE));
                     updateListsInfo(1, months);
                 }else{
@@ -242,7 +243,7 @@ public class TeethActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(q11.getDrawable() == null) {
-                    int months = getMonthBetween();
+                    int months = getMonthBetween(getApplicationContext());
                     q11.setImageBitmap(textAsBitmap(String.valueOf(months) + "M", 40, Color.WHITE));
                     updateListsInfo(10, months);
                 }else{
@@ -257,7 +258,7 @@ public class TeethActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(q12.getDrawable() == null) {
-                    int months = getMonthBetween();
+                    int months = getMonthBetween(getApplicationContext());
                     q12.setImageBitmap(textAsBitmap(String.valueOf(months) + "M", 40, Color.WHITE));
                     updateListsInfo(11, months);
                 }else{
@@ -277,7 +278,7 @@ public class TeethActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(q3.getDrawable() == null) {
-                    int months = getMonthBetween();
+                    int months = getMonthBetween(getApplicationContext());
                     q3.setImageBitmap(textAsBitmap(String.valueOf(months) + "M", 40, Color.WHITE));
                     updateListsInfo(2, months);
                 }else{
@@ -292,7 +293,7 @@ public class TeethActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(q4.getDrawable() == null) {
-                    int months = getMonthBetween();
+                    int months = getMonthBetween(getApplicationContext());
                     q4.setImageBitmap(textAsBitmap(String.valueOf(months) + "M", 40, Color.WHITE));
                     updateListsInfo(3, months);
                 }else{
@@ -307,7 +308,7 @@ public class TeethActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(q13.getDrawable() == null) {
-                    int months = getMonthBetween();
+                    int months = getMonthBetween(getApplicationContext());
                     q13.setImageBitmap(textAsBitmap(String.valueOf(months) + "M", 40, Color.WHITE));
                     updateListsInfo(12, months);
                 }else{
@@ -322,7 +323,7 @@ public class TeethActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(q14.getDrawable() == null) {
-                    int months = getMonthBetween();
+                    int months = getMonthBetween(getApplicationContext());
                     q14.setImageBitmap(textAsBitmap(String.valueOf(months) + "M", 40, Color.WHITE));
                     updateListsInfo(13, months);
                 }else{
@@ -342,7 +343,7 @@ public class TeethActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(q5.getDrawable() == null) {
-                    int months = getMonthBetween();
+                    int months = getMonthBetween(getApplicationContext());
                     q5.setImageBitmap(textAsBitmap(String.valueOf(months) + "M", 40, Color.WHITE));
                     updateListsInfo(4, months);
                 }else{
@@ -357,7 +358,7 @@ public class TeethActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(q6.getDrawable() == null) {
-                    int months = getMonthBetween();
+                    int months = getMonthBetween(getApplicationContext());
                     q6.setImageBitmap(textAsBitmap(String.valueOf(months) + "M", 40, Color.WHITE));
                     updateListsInfo(5, months);
                 }else{
@@ -372,7 +373,7 @@ public class TeethActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(q15.getDrawable() == null) {
-                    int months = getMonthBetween();
+                    int months = getMonthBetween(getApplicationContext());
                     q15.setImageBitmap(textAsBitmap(String.valueOf(months) + "M", 40, Color.WHITE));
                     updateListsInfo(14, months);
                 }else{
@@ -387,7 +388,7 @@ public class TeethActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(q16.getDrawable() == null) {
-                    int months = getMonthBetween();
+                    int months = getMonthBetween(getApplicationContext());
                     q16.setImageBitmap(textAsBitmap(String.valueOf(months) + "M", 40, Color.WHITE));
                     updateListsInfo(15, months);
                 }else{
@@ -407,7 +408,7 @@ public class TeethActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(q7.getDrawable() == null) {
-                    int months = getMonthBetween();
+                    int months = getMonthBetween(getApplicationContext());
                     q7.setImageBitmap(textAsBitmap(String.valueOf(months) + "M", 40, Color.WHITE));
                     updateListsInfo(6, months);
                 }else{
@@ -422,7 +423,7 @@ public class TeethActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(q8.getDrawable() == null) {
-                    int months = getMonthBetween();
+                    int months = getMonthBetween(getApplicationContext());
                     q8.setImageBitmap(textAsBitmap(String.valueOf(months) + "M", 40, Color.WHITE));
                     updateListsInfo(7, months);
                 }else{
@@ -437,7 +438,7 @@ public class TeethActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(q17.getDrawable() == null) {
-                    int months = getMonthBetween();
+                    int months = getMonthBetween(getApplicationContext());
                     q17.setImageBitmap(textAsBitmap(String.valueOf(months) + "M", 40, Color.WHITE));
                     updateListsInfo(16, months);
                 }else{
@@ -452,7 +453,7 @@ public class TeethActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(q18.getDrawable() == null) {
-                    int months = getMonthBetween();
+                    int months = getMonthBetween(getApplicationContext());
                     q18.setImageBitmap(textAsBitmap(String.valueOf(months) + "M", 40, Color.WHITE));
                     updateListsInfo(17, months);
                 }else{
@@ -472,7 +473,7 @@ public class TeethActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(q9.getDrawable() == null) {
-                    int months = getMonthBetween();
+                    int months = getMonthBetween(getApplicationContext());
                     q9.setImageBitmap(textAsBitmap(String.valueOf(months) + "M", 40, Color.WHITE));
                     updateListsInfo(8, months);
                 }else{
@@ -487,7 +488,7 @@ public class TeethActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(q10.getDrawable() == null) {
-                    int months = getMonthBetween();
+                    int months = getMonthBetween(getApplicationContext());
                     q10.setImageBitmap(textAsBitmap(String.valueOf(months) + "M", 40, Color.WHITE));
                     updateListsInfo(9, months);
                 }else{
@@ -502,7 +503,7 @@ public class TeethActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(q19.getDrawable() == null) {
-                    int months = getMonthBetween();
+                    int months = getMonthBetween(getApplicationContext());
                     q19.setImageBitmap(textAsBitmap(String.valueOf(months) + "M", 40, Color.WHITE));
                     updateListsInfo(18, months);
                 }else{
@@ -517,7 +518,7 @@ public class TeethActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(q20.getDrawable() == null) {
-                    int months = getMonthBetween();
+                    int months = getMonthBetween(getApplicationContext());
                     q20.setImageBitmap(textAsBitmap(String.valueOf(months) + "M", 40, Color.WHITE));
                     updateListsInfo(19, months);
                 }else{
