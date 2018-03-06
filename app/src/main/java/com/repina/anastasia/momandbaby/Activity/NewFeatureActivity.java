@@ -221,20 +221,23 @@ public class NewFeatureActivity extends AppCompatActivity {
                             if(beforeLatestHeight != null & height == 0 || beforeLatestWeight != null & weight == 0) // more then 1 entry in DB
                             {
                                 double imt;
-                                if (weight == 0) imt = beforeLatestWeight.getValue(Metrics.class).getWeight() / Math.pow(height / 100, 2);
-                                else imt = weight / Math.pow(beforeLatestHeight.getValue(Metrics.class).getHeight() / 100, 2);
+                                if ((int)weight == 0) {
+                                    imt = beforeLatestWeight.getValue(Metrics.class).getWeight() / Math.pow(height / 100, 2);
+                                }else {
+                                    imt = weight / Math.pow(beforeLatestHeight.getValue(Metrics.class).getHeight() / 100, 2);
+                                }
                                 int months = getMonthBetween(getApplicationContext());
                                 if (gender.equals(getString(R.string.boy_eng))) {
                                     String[] imtBoy = getResources().getStringArray(R.array.imtBoy);
-                                    double min = Double.parseDouble(imtBoy[months - 1]) - 1;
-                                    double max = Double.parseDouble(imtBoy[months - 1]) + 1;
+                                    double min = Double.parseDouble(imtBoy[months - 1]) - 1.5;
+                                    double max = Double.parseDouble(imtBoy[months - 1]) + 1.5;
                                     if (min > imt || imt > max) {
                                         NotificationsShow.showToast(getApplicationContext(), R.string.bad_imt);
                                     }
                                 } else {
                                     String[] imtGirl = getResources().getStringArray(R.array.imtGirl);
-                                    double min = Double.parseDouble(imtGirl[months - 1]) - 1;
-                                    double max = Double.parseDouble(imtGirl[months - 1]) + 1;
+                                    double min = Double.parseDouble(imtGirl[months - 1]) - 1.5;
+                                    double max = Double.parseDouble(imtGirl[months - 1]) + 1.5;
                                     if (min > imt || imt > max) {
                                         NotificationsShow.showToast(getApplicationContext(), R.string.bad_imt);
                                     }
