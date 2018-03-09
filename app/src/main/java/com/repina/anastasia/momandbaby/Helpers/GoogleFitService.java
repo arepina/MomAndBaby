@@ -3,7 +3,9 @@ package com.repina.anastasia.momandbaby.Helpers;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -69,7 +71,7 @@ import static java.text.DateFormat.getTimeInstance;
 public class GoogleFitService extends IntentService {
 
     public static final String TAG = "GoogleFitService";
-    private GoogleApiClient mGoogleApiFitnessClient;
+    public static GoogleApiClient mGoogleApiFitnessClient;
     private boolean mTryingToConnect = false;
 
     private static final int hours = 24;
@@ -475,6 +477,10 @@ public class GoogleFitService extends IntentService {
                                 Log.i(TAG, "Google Fit connected.");
                                 mTryingToConnect = false;
                                 Log.d(TAG, "Notifying the UI that we're connected.");
+                                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                                SharedPreferences.Editor editor = sp.edit();
+                                editor.putBoolean("first", true);
+                                editor.apply();
                                 notifyUiFitConnected();
                             }
 
