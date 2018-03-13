@@ -14,6 +14,7 @@
         android:allowBackup="false"
         android:theme="@style/AppTheme">
         <activity
+            android:screenOrientation="landscape"
             android:name=".Activity.SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
@@ -22,20 +23,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.DotsActivity" />
-        <activity android:name=".Activity.BabyInfoActivity" />
-        <activity android:name=".Activity.TabsActivity" />
-        <activity android:name=".Activity.SignupActivity" />
-        <activity android:name=".Activity.RegisterActivity" />
+        <activity android:screenOrientation="landscape" android:name=".Activity.DotsActivity" />
+        <activity android:screenOrientation="landscape" android:name=".Activity.BabyInfoActivity" />
+        <activity android:screenOrientation="landscape" android:name=".Activity.TabsActivity" />
+        <activity android:screenOrientation="landscape" android:name=".Activity.SignupActivity" />
+        <activity android:screenOrientation="landscape" android:name=".Activity.RegisterActivity" />
         <activity
+            android:screenOrientation="landscape"
             android:name=".Activity.ChooseFeatureActivity"
             android:theme="@android:style/Theme.Dialog" />
-        <activity android:name=".Activity.StatsActivity" />
-        <activity android:name=".Activity.NewFeatureActivity" />
-        <activity android:name=".Activity.AppInfoActivity" />
-        <activity android:name=".Activity.ChartActivity" />
-        <activity android:name=".Activity.VaccinationsActivity" />
-        <activity android:name=".Activity.TeethActivity" />
+        <activity android:screenOrientation="landscape" android:name=".Activity.StatsActivity" />
+        <activity android:screenOrientation="landscape" android:name=".Activity.NewFeatureActivity" />
+        <activity android:screenOrientation="landscape" android:name=".Activity.AppInfoActivity" />
+        <activity android:screenOrientation="landscape" android:name=".Activity.ChartActivity" />
+        <activity android:screenOrientation="landscape" android:name=".Activity.VaccinationsActivity" />
+        <activity android:screenOrientation="landscape" android:name=".Activity.TeethActivity" />
 
         <service
             android:name=".Helpers.GoogleFitService"
