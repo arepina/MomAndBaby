@@ -51,16 +51,20 @@ import com.repina.anastasia.momandbaby.Helpers.SharedConstants;
 import com.repina.anastasia.momandbaby.Processing.StatsProcessing;
 import com.repina.anastasia.momandbaby.R;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
 import static com.repina.anastasia.momandbaby.Fragment.FragmentMom.AUTH_PENDING;
 import static com.repina.anastasia.momandbaby.Fragment.FragmentMom.REQUEST_OAUTH;
+import static com.repina.anastasia.momandbaby.Helpers.FormattedDate.getFormattedDate;
+import static com.repina.anastasia.momandbaby.Helpers.FormattedDate.stringToDate;
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.FIT_EXTRA_CONNECTION_MESSAGE;
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.FIT_EXTRA_NOTIFY_FAILED_INTENT;
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.FIT_EXTRA_NOTIFY_FAILED_STATUS_CODE;
@@ -281,10 +285,10 @@ public class ChartActivity extends AppCompatActivity {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        labelsIdeal.add(FormattedDate.getFormattedDate(calendar));
+        labelsIdeal.add(getFormattedDate(calendar));
         for (int i = 1; i <= 12; i++) {
             calendar.add(Calendar.MONTH, 1);
-            labelsIdeal.add(FormattedDate.getFormattedDate(calendar));
+            labelsIdeal.add(getFormattedDate(calendar));
         }
         ArrayList<LineDataSet> sets;
         if (gender.equals(getString(R.string.boy_eng)))
@@ -416,7 +420,7 @@ public class ChartActivity extends AppCompatActivity {
                 double weight, height;
                 weight = m.getWeight();
                 height = m.getHeight();
-                if (selectedItemName.equals(getString(R.string.height))) {
+                if (selectedItemName.equals(features.get(0))) {
                     chart.setDescription(getString(R.string.height_legend));
                     if (height != 0) // not the weight entry
                     {
@@ -477,9 +481,53 @@ public class ChartActivity extends AppCompatActivity {
         LineDataSet lineDataSet = new LineDataSet(entries, dbName);
         lineDataSet.setColors(new int[]{R.color.colorPrimary}, getApplicationContext());
         dataSets.add(lineDataSet);
+        findLabelPlace();
         LineData lineData = new LineData(labelsIdeal, dataSets);
         chart.setData(lineData);
         chart.animateY(animationDuration);
+    }
+
+
+    private void findLabelPlace() {
+        for (int j = 0; j < labels.size(); j++) {
+            String label = labels.get(j);
+            for (int i = 0; i < labelsIdeal.size() - 1; i++) {
+                try {
+                    Date dBefore = stringToDate(labelsIdeal.get(i));
+                    Date dAfter = stringToDate(labelsIdeal.get(i + 1));
+                    Date newD = stringToDate(label);
+                    Calendar myCal = Calendar.getInstance();
+                    myCal.setTime(newD);
+                    if (dBefore.getTime() < newD.getTime() && newD.getTime() < dAfter.getTime()) {
+                        labelsIdeal.add(i + 1, getFormattedDate(myCal));
+                        break;
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        //change xIndexes according to new labels
+        for (int j = 0; j < entries.size(); j++) {
+            Date cur = null;
+            try {
+                cur = stringToDate(labels.get(j));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            for (int i = 0; i < labelsIdeal.size(); i++) {
+                try {
+                    Date d = stringToDate(labelsIdeal.get(i));
+                    if(d.getTime() == cur.getTime())
+                    {
+                        entries.get(j).setXIndex(i);
+                        break;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     /**
