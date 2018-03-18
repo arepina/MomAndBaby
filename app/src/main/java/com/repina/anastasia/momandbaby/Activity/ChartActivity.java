@@ -88,6 +88,7 @@ public class ChartActivity extends AppCompatActivity {
     private int spinnerSelectedIndex = 0;
     private int animationDuration = 2000;
     private static ArrayList<String> features;
+    private String selectedItemName;
 
     private ConnectionResult mFitResultResolution;
     private boolean authInProgress = false;
@@ -145,17 +146,16 @@ public class ChartActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 spinnerSelectedIndex = position;
                 dataSets = new ArrayList<>();
+                labelsIdeal = new ArrayList<>();
                 if ("Mom".equals(type)) {
                     getValuesFromGoogleFit();
                 } else {
                     if (ConnectionDetector.isConnected(view.getContext())) {
-                        String selectedItemName = features.get(position);
+                        selectedItemName = features.get(position);
                         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                         String babyId = sp.getString(SharedConstants.BABY_ID_KEY, "");
                         FirebaseConnection connection = new FirebaseConnection();
                         FirebaseDatabase database = connection.getDatabase();
-                        if (selectedItemName.equals(features.get(0)) || selectedItemName.equals(features.get(1))) // height and weight only
-                            initIdealChartData(getApplicationContext(), selectedItemName); // add the ideal data to chart
                         getValuesFromFirebase(database,
                                 getBabyChartDBName(selectedItemName),
                                 babyId,
@@ -269,15 +269,36 @@ public class ChartActivity extends AppCompatActivity {
 
     /**
      * Initialisation of ideal charts
-     *
-     * @param context app Context
+     *  @param context app Context
      * @param dbName  DB name
+     * @param labelsIdealBeforeMod
      */
-    private void initIdealChartData(Context context, String dbName) {
+    private void initIdealDataSets(Context context, String dbName, ArrayList<String> labelsIdealBeforeMod) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         String gender = sp.getString(SharedConstants.BABY_GENDER_KEY, "");
+        ArrayList<LineDataSet> sets;
+        if (gender.equals(getString(R.string.boy_eng)))
+            sets = initBoy(dbName, labelsIdealBeforeMod);
+        else
+            sets = initGirl(dbName, labelsIdealBeforeMod);
+        if (sets != null) {
+            sets.get(0).setColors(new int[]{R.color.border}, getApplicationContext());
+            sets.get(1).setColors(new int[]{R.color.norm}, getApplicationContext());
+            sets.get(2).setColors(new int[]{R.color.border}, getApplicationContext());
+            dataSets.add(sets.get(0));
+            dataSets.add(sets.get(1));
+            dataSets.add(sets.get(2));
+        }
+    }
+
+    /**
+     * Initialisation of ideal charts
+     *
+     * @param context app Context
+     */
+    private void initIdealLabels(Context context) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         String birthday = sp.getString(SharedConstants.BABY_BIRTHDAY, "");
-        labelsIdeal = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault());
         try {
@@ -290,19 +311,6 @@ public class ChartActivity extends AppCompatActivity {
             calendar.add(Calendar.MONTH, 1);
             labelsIdeal.add(getFormattedDate(calendar));
         }
-        ArrayList<LineDataSet> sets;
-        if (gender.equals(getString(R.string.boy_eng)))
-            sets = initBoy(dbName);
-        else
-            sets = initGirl(dbName);
-        if (sets != null) {
-            sets.get(0).setColors(new int[]{R.color.border}, getApplicationContext());
-            sets.get(1).setColors(new int[]{R.color.norm}, getApplicationContext());
-            sets.get(2).setColors(new int[]{R.color.border}, getApplicationContext());
-            dataSets.add(sets.get(0));
-            dataSets.add(sets.get(1));
-            dataSets.add(sets.get(2));
-        }
     }
 
     /**
@@ -311,7 +319,7 @@ public class ChartActivity extends AppCompatActivity {
      * @param dbName DB name
      * @return entries list for ideal chart
      */
-    private ArrayList<LineDataSet> initBoy(String dbName) {
+    private ArrayList<LineDataSet> initBoy(String dbName, ArrayList<String> labelsIdealBeforeMod) {
         ArrayList<LineDataSet> setsList = new ArrayList<>();
         LineDataSet lineDataSetNorm = null;
         LineDataSet lineDataSetMin = null;
@@ -329,12 +337,13 @@ public class ChartActivity extends AppCompatActivity {
         ArrayList<Entry> boyHeightMax = new ArrayList<>();
         ArrayList<Entry> boyWeightMax = new ArrayList<>();
         for (int i = 0; i < boyParamsHeightNorm.size(); i++) {
-            boyHeightNorm.add(new Entry((float) Double.parseDouble(boyParamsHeightNorm.get(i)), i));
-            boyWeightNorm.add(new Entry((float) Double.parseDouble(boyParamsWeightNorm.get(i)), i));
-            boyHeightMin.add(new Entry((float) Double.parseDouble(boyParamsHeightMin.get(i)), i));
-            boyWeightMin.add(new Entry((float) Double.parseDouble(boyParamsWeightMin.get(i)), i));
-            boyHeightMax.add(new Entry((float) Double.parseDouble(boyParamsHeightMax.get(i)), i));
-            boyWeightMax.add(new Entry((float) Double.parseDouble(boyParamsWeightMax.get(i)), i));
+            int xIndex = findNewXIndex(i,  labelsIdealBeforeMod);
+            boyHeightNorm.add(new Entry((float) Double.parseDouble(boyParamsHeightNorm.get(i)), xIndex));
+            boyWeightNorm.add(new Entry((float) Double.parseDouble(boyParamsWeightNorm.get(i)), xIndex));
+            boyHeightMin.add(new Entry((float) Double.parseDouble(boyParamsHeightMin.get(i)), xIndex));
+            boyWeightMin.add(new Entry((float) Double.parseDouble(boyParamsWeightMin.get(i)), xIndex));
+            boyHeightMax.add(new Entry((float) Double.parseDouble(boyParamsHeightMax.get(i)), xIndex));
+            boyWeightMax.add(new Entry((float) Double.parseDouble(boyParamsWeightMax.get(i)), xIndex));
         }
         if (dbName.equals(getString(R.string.height_word))) {
             lineDataSetNorm = new LineDataSet(boyHeightNorm, getString(R.string.ideal_height));
@@ -358,7 +367,7 @@ public class ChartActivity extends AppCompatActivity {
      * @param dbName DB name
      * @return entries list for ideal chart
      */
-    private ArrayList<LineDataSet> initGirl(String dbName) {
+    private ArrayList<LineDataSet> initGirl(String dbName,  ArrayList<String> labelsIdealBeforeMod) {
         ArrayList<LineDataSet> setsList = new ArrayList<>();
         LineDataSet lineDataSetNorm = null;
         LineDataSet lineDataSetMin = null;
@@ -376,12 +385,13 @@ public class ChartActivity extends AppCompatActivity {
         ArrayList<Entry> girlHeightMax = new ArrayList<>();
         ArrayList<Entry> girlWeightMax = new ArrayList<>();
         for (int i = 0; i < girlParamsHeightNorm.size(); i++) {
-            girlHeightNorm.add(new Entry((float) Double.parseDouble(girlParamsHeightNorm.get(i)), i));
-            girlWeightNorm.add(new Entry((float) Double.parseDouble(girlParamsWeightNorm.get(i)), i));
-            girlHeightMin.add(new Entry((float) Double.parseDouble(girlParamsHeightMin.get(i)), i));
-            girlWeightMin.add(new Entry((float) Double.parseDouble(girlParamsWeightMin.get(i)), i));
-            girlHeightMax.add(new Entry((float) Double.parseDouble(girlParamsHeightMax.get(i)), i));
-            girlWeightMax.add(new Entry((float) Double.parseDouble(girlParamsWeightMax.get(i)), i));
+            int xIndex = findNewXIndex(i,  labelsIdealBeforeMod);
+            girlHeightNorm.add(new Entry((float) Double.parseDouble(girlParamsHeightNorm.get(i)), xIndex));
+            girlWeightNorm.add(new Entry((float) Double.parseDouble(girlParamsWeightNorm.get(i)), xIndex));
+            girlHeightMin.add(new Entry((float) Double.parseDouble(girlParamsHeightMin.get(i)), xIndex));
+            girlWeightMin.add(new Entry((float) Double.parseDouble(girlParamsWeightMin.get(i)), xIndex));
+            girlHeightMax.add(new Entry((float) Double.parseDouble(girlParamsHeightMax.get(i)), xIndex));
+            girlWeightMax.add(new Entry((float) Double.parseDouble(girlParamsWeightMax.get(i)), xIndex));
         }
         if (dbName.equals(getString(R.string.height_word))) {
             lineDataSetNorm = new LineDataSet(girlHeightNorm, getString(R.string.ideal_height));
@@ -397,6 +407,11 @@ public class ChartActivity extends AppCompatActivity {
         setsList.add(lineDataSetNorm);
         setsList.add(lineDataSetMax);
         return setsList;
+    }
+
+    private int findNewXIndex(int i,  ArrayList<String> labelsIdealBeforeMod) {
+        String date = labelsIdealBeforeMod.get(i);
+        return labelsIdeal.indexOf(date);
     }
 
     //endregion
@@ -481,14 +496,23 @@ public class ChartActivity extends AppCompatActivity {
         LineDataSet lineDataSet = new LineDataSet(entries, dbName);
         lineDataSet.setColors(new int[]{R.color.colorPrimary}, getApplicationContext());
         dataSets.add(lineDataSet);
-        findLabelPlace();
+        if (selectedItemName.equals(features.get(0)) || selectedItemName.equals(features.get(1))) // height and weight only
+        {
+            initIdealLabels(getApplicationContext());
+            ArrayList<String> labelsIdealBeforeMod = new ArrayList<>(labelsIdeal);
+            formRightLabels();
+            initIdealDataSets(getApplicationContext(), selectedItemName, labelsIdealBeforeMod); // add the ideal data to chart
+        }else{
+            labelsIdeal = labels;
+        }
+
         LineData lineData = new LineData(labelsIdeal, dataSets);
         chart.setData(lineData);
         chart.animateY(animationDuration);
     }
 
 
-    private void findLabelPlace() {
+    private void formRightLabels() {
         for (int j = 0; j < labels.size(); j++) {
             String label = labels.get(j);
             for (int i = 0; i < labelsIdeal.size() - 1; i++) {
