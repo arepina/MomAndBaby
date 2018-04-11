@@ -2,9 +2,11 @@ package com.repina.anastasia.momandbaby.Fragment;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -45,10 +47,13 @@ import com.repina.anastasia.momandbaby.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
+import static android.content.Context.ACTIVITY_SERVICE;
 import static android.content.Context.MODE_PRIVATE;
 import static com.repina.anastasia.momandbaby.Fragment.FragmentMom.AUTH_PENDING;
 import static com.repina.anastasia.momandbaby.Fragment.FragmentMom.REQUEST_OAUTH;
+import static com.repina.anastasia.momandbaby.Fragment.FragmentMom.TAG;
 import static com.repina.anastasia.momandbaby.Fragment.FragmentMom.google_fit_connected;
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.FIT_EXTRA_CONNECTION_MESSAGE;
 import static com.repina.anastasia.momandbaby.Helpers.LocalConstants.FIT_EXTRA_NOTIFY_FAILED_INTENT;
@@ -297,11 +302,11 @@ public class FragmentSettings extends Fragment {
                 int statusCode = intent.getIntExtra(FIT_EXTRA_NOTIFY_FAILED_STATUS_CODE, 0);
                 PendingIntent pendingIntent = intent.getParcelableExtra(FIT_EXTRA_NOTIFY_FAILED_INTENT);
                 ConnectionResult result = new ConnectionResult(statusCode, pendingIntent);
-                Log.d(FragmentMom.TAG, "Fit connection failed - opening connect screen");
+                Log.d(TAG, "Fit connection failed - opening connect screen");
                 fitHandleFailedConnection(result);
             }
             if (intent.hasExtra(FIT_EXTRA_CONNECTION_MESSAGE)) {
-                Log.d(FragmentMom.TAG, "Fit connection successful - closing connect screen if it's open");
+                Log.d(TAG, "Fit connection successful - closing connect screen if it's open");
             }
         }
     };
@@ -315,9 +320,21 @@ public class FragmentSettings extends Fragment {
             // Get extra data included in the Intent
             if (intent.hasExtra(HISTORY_EXTRA_AGGREGATED)) {
                 ArrayList<Pair<DataType, Pair<String, String>>> sumData = (ArrayList<Pair<DataType, Pair<String, String>>>) intent.getSerializableExtra(HISTORY_EXTRA_AGGREGATED);
-                String fromStr = FormattedDate.getFormattedDate(from);
-                String toStr = FormattedDate.getFormattedDate(to);
-                TextProcessing.formMomReport(sumData, context, fromStr, toStr);
+                String fromStr = "", toStr = "";
+                try {
+                    fromStr = FormattedDate.getFormattedDate(from);
+                } catch (NullPointerException ignored) {
+
+                }
+                try {
+                    toStr = FormattedDate.getFormattedDate(to);
+                } catch (NullPointerException ignored) {
+
+                }
+                ActivityManager am = (ActivityManager) context.getSystemService(ACTIVITY_SERVICE);
+                Log.d(TAG, "CURRENT Activity ::" + am.getRunningTasks(1).get(0).topActivity.getClassName());
+                if(!am.getRunningTasks(1).get(0).topActivity.getClassName().equals("com.repina.anastasia.momandbaby.Activity.ChartActivity"))
+                    TextProcessing.formMomReport(sumData, context, fromStr, toStr);
             }
             if (dialog != null)
                 dialog.dismiss();
@@ -330,7 +347,7 @@ public class FragmentSettings extends Fragment {
      * @param result connection result
      */
     private void fitHandleFailedConnection(ConnectionResult result) {
-        Log.i(FragmentMom.TAG, "Activity Thread Google Fit Connection failed. Cause: " + result.toString());
+        Log.i(TAG, "Activity Thread Google Fit Connection failed. Cause: " + result.toString());
         if (!result.hasResolution()) {
             GooglePlayServicesUtil.getErrorDialog(result.getErrorCode(), getActivity(), 0).show();
             return;
@@ -340,13 +357,13 @@ public class FragmentSettings extends Fragment {
         if (!authInProgress) {
             if (result.getErrorCode() == FitnessStatusCodes.NEEDS_OAUTH_PERMISSIONS) {
                 try {
-                    Log.d(FragmentMom.TAG, "Google Fit connection failed with OAuth failure.  Trying to ask for consent (again)");
+                    Log.d(TAG, "Google Fit connection failed with OAuth failure.  Trying to ask for consent (again)");
                     result.startResolutionForResult(getActivity(), REQUEST_OAUTH);
                 } catch (IntentSender.SendIntentException e) {
-                    Log.e(FragmentMom.TAG, "Activity Thread Google Fit Exception while starting resolution activity", e);
+                    Log.e(TAG, "Activity Thread Google Fit Exception while starting resolution activity", e);
                 }
             } else {
-                Log.i(FragmentMom.TAG, "Activity Thread Google Fit Attempting to resolve failed connection");
+                Log.i(TAG, "Activity Thread Google Fit Attempting to resolve failed connection");
                 mFitResultResolution = result;
             }
         }
@@ -382,14 +399,14 @@ public class FragmentSettings extends Fragment {
         if (requestCode == REQUEST_OAUTH) {
             authInProgress = false;
             if (resultCode == Activity.RESULT_OK) {
-                Log.d(FragmentMom.TAG, "Fit auth completed. Asking for reconnect");
+                Log.d(TAG, "Fit auth completed. Asking for reconnect");
                 requestFitConnection();
             } else {
                 try {
                     authInProgress = true;
                     mFitResultResolution.startResolutionForResult(getActivity(), REQUEST_OAUTH);
                 } catch (IntentSender.SendIntentException e) {
-                    Log.e(FragmentMom.TAG, "Activity Thread Google Fit Exception while starting resolution activity", e);
+                    Log.e(TAG, "Activity Thread Google Fit Exception while starting resolution activity", e);
                 }
             }
         }

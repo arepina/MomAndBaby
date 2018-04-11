@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">MomAndBaby</string>
+    <string name="app_name" translatable="false">Mom&amp;Baby</string>
 
     <!--Sign up and register pages-->
     <string name="birthday">Дата рождения</string>
@@ -40,7 +40,7 @@
     <string name="exit">Выйти из аккаунта</string>
     <string name="app_info">О приложении</string>
     <string name="contact_developer">Связаться с разработчиком</string>
-    <string name="my_email" translatable="false">prostorepa@yandex.ru</string>
+    <string name="my_email" translatable="false">repina.developer@gmail.com</string>
     <string name="send_report_mom">Отправить отчет о здоровье мамы на почту</string>
     <string name="send_report_baby">Отправить отчет о здоровье малыша на почту</string>
     <string name="app_description">Приложение разработано Репиной А.А. в рамках выполнения дипломной работы и предназначено для мониторинга здоровья малыша до 1 года и помощи его маме. Научный руководитель Ахметсафина Р.З. Комментарии, пожелания и предложения привествуются!</string>
@@ -147,7 +147,7 @@
     <string name="sleep_str">Сон:</string>
     <string name="hours_str">часа(ов)</string>
     <string name="new_teeth">У малыша прорезался зуб!</string>
-    <string name="russian">русский</string>
+    <string name="russian" translatable="false">русский</string>
     <string name="baby_has">У Вашего малыша уже есть зубы:</string>
     <string name="month">месяца</string>
     <string name="bad_imt">Индекс массы тела Вашего малыша не соотвествует норме, следует обратиться к специалисту</string>
