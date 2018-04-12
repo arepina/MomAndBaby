@@ -1,280 +1,284 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="@color/colorAccent"
-    tools:context=".Activity.TeethActivity">
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
 
-    <TextView
-        android:id="@+id/task"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="10dp"
-        android:textColor="@color/colorTextDark"
-        android:text="@string/press_teeth"
-        android:gravity="center" >
-    </TextView>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/colorAccent"
+        tools:context=".Activity.TeethActivity">
 
-    <TextView
-        android:layout_below="@+id/task"
-        android:id="@+id/secret"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="10dp"
-        android:gravity="center" >
-    </TextView>
+        <TextView
+            android:id="@+id/task"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="10dp"
+            android:gravity="center"
+            android:text="@string/press_teeth"
+            android:textColor="@color/colorTextDark"></TextView>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/q1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/secret"
-        android:layout_alignEnd="@+id/secret"
-        android:layout_marginEnd="3dp"
-        app:backgroundTint="@color/colorPrimaryDark"
-        app:borderWidth="4dp" />
+        <TextView
+            android:id="@+id/secret"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/task"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="10dp"
+            android:gravity="center"></TextView>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/q2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/secret"
-        android:layout_alignStart="@+id/secret"
-        android:layout_marginStart="3dp"
-        app:backgroundTint="@color/colorPrimaryDark"
-        app:borderWidth="4dp" />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/q1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/secret"
+            android:layout_alignEnd="@+id/secret"
+            android:layout_marginEnd="3dp"
+            app:backgroundTint="@color/colorPrimaryDark"
+            app:borderWidth="4dp" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/q3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/secret"
-        android:layout_alignEnd="@+id/secret"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="50dp"
-        app:backgroundTint="@color/colorPrimary"
-        app:borderWidth="4dp" />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/q2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/secret"
+            android:layout_alignStart="@+id/secret"
+            android:layout_marginStart="3dp"
+            app:backgroundTint="@color/colorPrimaryDark"
+            app:borderWidth="4dp" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/q4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/secret"
-        android:layout_alignStart="@+id/secret"
-        android:layout_marginTop="25dp"
-        android:layout_marginStart="50dp"
-        app:backgroundTint="@color/colorPrimary"
-        app:borderWidth="4dp" />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/q3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/secret"
+            android:layout_alignEnd="@+id/secret"
+            android:layout_marginTop="25dp"
+            android:layout_marginEnd="50dp"
+            app:backgroundTint="@color/colorPrimary"
+            app:borderWidth="4dp" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/q5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/secret"
-        android:layout_alignEnd="@+id/secret"
-        android:layout_marginTop="65dp"
-        android:layout_marginEnd="80dp"
-        app:backgroundTint="@color/norm"
-        app:borderWidth="4dp" />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/q4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/secret"
+            android:layout_alignStart="@+id/secret"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="25dp"
+            app:backgroundTint="@color/colorPrimary"
+            app:borderWidth="4dp" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/q6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/secret"
-        android:layout_alignStart="@+id/secret"
-        android:layout_marginTop="65dp"
-        android:layout_marginStart="80dp"
-        app:backgroundTint="@color/norm"
-        app:borderWidth="4dp" />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/q5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/secret"
+            android:layout_alignEnd="@+id/secret"
+            android:layout_marginTop="65dp"
+            android:layout_marginEnd="80dp"
+            app:backgroundTint="@color/norm"
+            app:borderWidth="4dp" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/q7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/secret"
-        android:layout_alignEnd="@+id/secret"
-        android:layout_marginTop="110dp"
-        android:layout_marginEnd="90dp"
-        app:backgroundTint="@color/blue"
-        app:borderWidth="4dp" />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/q6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/secret"
+            android:layout_alignStart="@+id/secret"
+            android:layout_marginStart="80dp"
+            android:layout_marginTop="65dp"
+            app:backgroundTint="@color/norm"
+            app:borderWidth="4dp" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/q8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/secret"
-        android:layout_alignStart="@+id/secret"
-        android:layout_marginTop="110dp"
-        android:layout_marginStart="90dp"
-        app:backgroundTint="@color/blue"
-        app:borderWidth="4dp" />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/q7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/secret"
+            android:layout_alignEnd="@+id/secret"
+            android:layout_marginTop="110dp"
+            android:layout_marginEnd="90dp"
+            app:backgroundTint="@color/blue"
+            app:borderWidth="4dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/secret"
-        android:layout_centerHorizontal="true"
-        android:textStyle="bold"
-        android:layout_marginTop="110dp"
-        android:textColor="@color/colorTextDark"
-        android:textAlignment="center"
-        android:text="@string/up_teeth"/>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/q8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/secret"
+            android:layout_alignStart="@+id/secret"
+            android:layout_marginStart="90dp"
+            android:layout_marginTop="110dp"
+            app:backgroundTint="@color/blue"
+            app:borderWidth="4dp" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/q9"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/secret"
-        android:layout_alignEnd="@+id/secret"
-        android:layout_marginTop="155dp"
-        android:layout_marginEnd="95dp"
-        app:backgroundTint="@color/purple"
-        app:borderWidth="4dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/secret"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="110dp"
+            android:text="@string/up_teeth"
+            android:textAlignment="center"
+            android:textColor="@color/colorTextDark"
+            android:textStyle="bold" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/q10"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/secret"
-        android:layout_alignStart="@+id/secret"
-        android:layout_marginTop="155dp"
-        android:layout_marginStart="95dp"
-        app:backgroundTint="@color/purple"
-        app:borderWidth="4dp" />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/q9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/secret"
+            android:layout_alignEnd="@+id/secret"
+            android:layout_marginTop="155dp"
+            android:layout_marginEnd="95dp"
+            app:backgroundTint="@color/purple"
+            app:borderWidth="4dp" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/q11"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/secret"
-        android:layout_alignEnd="@+id/secret"
-        android:layout_marginEnd="3dp"
-        android:layout_marginTop="360dp"
-        app:backgroundTint="@color/colorPrimaryDark"
-        app:borderWidth="4dp" />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/q10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/secret"
+            android:layout_alignStart="@+id/secret"
+            android:layout_marginStart="95dp"
+            android:layout_marginTop="155dp"
+            app:backgroundTint="@color/purple"
+            app:borderWidth="4dp" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/q12"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/secret"
-        android:layout_alignStart="@+id/secret"
-        android:layout_marginStart="3dp"
-        android:layout_marginTop="360dp"
-        app:backgroundTint="@color/colorPrimaryDark"
-        app:borderWidth="4dp" />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/q11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/secret"
+            android:layout_alignEnd="@+id/secret"
+            android:layout_marginTop="360dp"
+            android:layout_marginEnd="3dp"
+            app:backgroundTint="@color/colorPrimaryDark"
+            app:borderWidth="4dp" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/q13"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/secret"
-        android:layout_alignEnd="@+id/secret"
-        android:layout_marginTop="335dp"
-        android:layout_marginEnd="50dp"
-        app:backgroundTint="@color/colorPrimary"
-        app:borderWidth="4dp" />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/q12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/secret"
+            android:layout_alignStart="@+id/secret"
+            android:layout_marginStart="3dp"
+            android:layout_marginTop="360dp"
+            app:backgroundTint="@color/colorPrimaryDark"
+            app:borderWidth="4dp" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/q14"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/secret"
-        android:layout_alignStart="@+id/secret"
-        android:layout_marginTop="335dp"
-        android:layout_marginStart="50dp"
-        app:backgroundTint="@color/colorPrimary"
-        app:borderWidth="4dp" />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/q13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/secret"
+            android:layout_alignEnd="@+id/secret"
+            android:layout_marginTop="335dp"
+            android:layout_marginEnd="50dp"
+            app:backgroundTint="@color/colorPrimary"
+            app:borderWidth="4dp" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/q15"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/secret"
-        android:layout_alignEnd="@+id/secret"
-        android:layout_marginTop="295dp"
-        android:layout_marginEnd="80dp"
-        app:backgroundTint="@color/norm"
-        app:borderWidth="4dp" />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/q14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/secret"
+            android:layout_alignStart="@+id/secret"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="335dp"
+            app:backgroundTint="@color/colorPrimary"
+            app:borderWidth="4dp" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/q16"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/secret"
-        android:layout_alignStart="@+id/secret"
-        android:layout_marginTop="295dp"
-        android:layout_marginStart="80dp"
-        app:backgroundTint="@color/norm"
-        app:borderWidth="4dp" />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/q15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/secret"
+            android:layout_alignEnd="@+id/secret"
+            android:layout_marginTop="295dp"
+            android:layout_marginEnd="80dp"
+            app:backgroundTint="@color/norm"
+            app:borderWidth="4dp" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/q17"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/secret"
-        android:layout_alignEnd="@+id/secret"
-        android:layout_marginTop="250dp"
-        android:layout_marginEnd="90dp"
-        app:backgroundTint="@color/blue"
-        app:borderWidth="4dp" />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/q16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/secret"
+            android:layout_alignStart="@+id/secret"
+            android:layout_marginStart="80dp"
+            android:layout_marginTop="295dp"
+            app:backgroundTint="@color/norm"
+            app:borderWidth="4dp" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/q18"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/secret"
-        android:layout_alignStart="@+id/secret"
-        android:layout_marginTop="250dp"
-        android:layout_marginStart="90dp"
-        app:backgroundTint="@color/blue"
-        app:borderWidth="4dp" />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/q17"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/secret"
+            android:layout_alignEnd="@+id/secret"
+            android:layout_marginTop="250dp"
+            android:layout_marginEnd="90dp"
+            app:backgroundTint="@color/blue"
+            app:borderWidth="4dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/secret"
-        android:layout_centerHorizontal="true"
-        android:textStyle="bold"
-        android:layout_marginTop="275dp"
-        android:textColor="@color/colorTextDark"
-        android:textAlignment="center"
-        android:text="@string/down_teeth"/>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/q18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/secret"
+            android:layout_alignStart="@+id/secret"
+            android:layout_marginStart="90dp"
+            android:layout_marginTop="250dp"
+            app:backgroundTint="@color/blue"
+            app:borderWidth="4dp" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/q19"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/secret"
-        android:layout_alignEnd="@+id/secret"
-        android:layout_marginTop="205dp"
-        android:layout_marginEnd="95dp"
-        app:backgroundTint="@color/purple"
-        app:borderWidth="4dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/secret"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="275dp"
+            android:text="@string/down_teeth"
+            android:textAlignment="center"
+            android:textColor="@color/colorTextDark"
+            android:textStyle="bold" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/q20"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/secret"
-        android:layout_alignStart="@+id/secret"
-        android:layout_marginTop="205dp"
-        android:layout_marginStart="95dp"
-        app:backgroundTint="@color/purple"
-        app:borderWidth="4dp" />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/q19"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/secret"
+            android:layout_alignEnd="@+id/secret"
+            android:layout_marginTop="205dp"
+            android:layout_marginEnd="95dp"
+            app:backgroundTint="@color/purple"
+            app:borderWidth="4dp" />
 
-    <Button
-        android:id="@+id/addData"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@color/colorPrimaryDark"
-        android:text="@string/add"
-        android:textColor="@color/colorText" />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/q20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/secret"
+            android:layout_alignStart="@+id/secret"
+            android:layout_marginStart="95dp"
+            android:layout_marginTop="205dp"
+            app:backgroundTint="@color/purple"
+            app:borderWidth="4dp" />
 
-</RelativeLayout>
+        <Button
+            android:id="@+id/addData"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@color/colorPrimaryDark"
+            android:text="@string/add"
+            android:textColor="@color/colorText" />
+
+    </RelativeLayout>
+</ScrollView>
