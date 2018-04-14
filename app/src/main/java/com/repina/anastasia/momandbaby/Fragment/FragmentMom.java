@@ -293,6 +293,8 @@ public class FragmentMom extends Fragment {
             GridItem item = new GridItem(R.mipmap.cross, "R.mipmap.cross", getResources().getString(R.string.no_google_fit_data), null, null);
             if(!hasAnyData && !momArrayAdapter.hasEmptyItem())
                 momArrayAdapter.add(item);
+            if(hasAnyData)
+                momArrayAdapter.removeEmptyItem();
             listViewMom.setAdapter(momArrayAdapter);
         }
     };
