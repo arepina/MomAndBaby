@@ -56,7 +56,7 @@ public class DotsActivity extends IntroActivity {
         ParallaxPage newPage = ParallaxPage.newInstance();
         String lang = Locale.getDefault().getDisplayLanguage();
         int resourceId1, resourceId2, resourceId3;
-        if (lang.equals(getString(R.string.russian))) {
+        if (lang.toLowerCase().equals(getString(R.string.russian))) {
             resourceId1 = R.drawable.mother;
             resourceId2 = R.drawable.baby;
             resourceId3 = R.drawable.analytics;

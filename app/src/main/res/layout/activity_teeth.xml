@@ -158,6 +158,7 @@
             android:layout_alignEnd="@+id/secret"
             android:layout_marginTop="360dp"
             android:layout_marginEnd="3dp"
+            android:layout_marginBottom="@dimen/main_margin"
             app:backgroundTint="@color/colorPrimaryDark"
             app:borderWidth="4dp" />
 
@@ -169,6 +170,7 @@
             android:layout_alignStart="@+id/secret"
             android:layout_marginStart="3dp"
             android:layout_marginTop="360dp"
+            android:layout_marginBottom="@dimen/main_margin"
             app:backgroundTint="@color/colorPrimaryDark"
             app:borderWidth="4dp" />
 
@@ -275,6 +277,7 @@
             android:id="@+id/addData"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/q12"
             android:layout_alignParentBottom="true"
             android:background="@color/colorPrimaryDark"
             android:text="@string/add"

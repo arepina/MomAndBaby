@@ -284,7 +284,7 @@ public class GoogleFitService extends IntentService {
                 if (val != 0.0) {
                     DecimalFormat df = new DecimalFormat("0.00");
                     String lang = Locale.getDefault().getDisplayLanguage();
-                    if (lang.equals(getApplicationContext().getString(R.string.russian))) {
+                    if (lang.toLowerCase().equals(getApplicationContext().getString(R.string.russian))) {
                         result.append(TextProcessing.translateWord(wordValue[0])).append("=").append(df.format(val)).append(", ");
                     }else
                         result.append(wordValue[0]).append("=").append(df.format(val)).append(", ");

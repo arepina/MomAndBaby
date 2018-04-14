@@ -14,20 +14,17 @@
         android:paddingLeft="24dp"
         android:paddingRight="24dp"
         android:focusableInTouchMode="true"
-        android:paddingTop="56dp">
+        android:paddingTop="5dp">
 
         <ImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="24dp"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@drawable/ic_launcher"/>
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/main_margin"
-            android:layout_marginTop="@dimen/main_margin"
             android:textColorHint="@color/colorPrimaryDark">
 
             <EditText
@@ -42,8 +39,6 @@
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/main_margin"
-            android:layout_marginTop="@dimen/main_margin"
             android:textColorHint="@color/colorPrimaryDark">
 
             <EditText
@@ -59,8 +54,8 @@
             android:id="@+id/btn_login"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             android:background="@color/colorPrimaryDark"
             android:padding="12dp"
             android:text="@string/login" />
@@ -69,7 +64,7 @@
             android:id="@+id/link_signup"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
+            android:layout_marginBottom="5dp"
             android:gravity="center"
             android:text="@string/dont_have_account"
             android:textColor="@color/colorPrimaryDark"

@@ -143,6 +143,7 @@
     <string name="baby_has">You baby already has teeth:</string>
     <string name="month">months</string>
     <string name="bad_imt">Body mass index of your baby is not normal, you should visit the doctor</string>
+    <string name="no_google_fit_data">Google Fit is not synchronized with any wearables, so there is no data here</string>
 
     <string-array name="parametersBaby">
         <item>Height</item>

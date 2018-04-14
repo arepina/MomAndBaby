@@ -45,6 +45,14 @@ public class GridItemArrayAdapter extends ArrayAdapter<GridItem> {
         super.add(object);
     }
 
+    public boolean hasEmptyItem(){
+        for(int i = 0; i < itemList.size(); i++){
+            if(itemList.get(i).getItemDesc().equals(getContext().getString(R.string.no_google_fit_data)))
+                return true;
+        }
+        return false;
+    }
+
     @Override
     public int getCount() {
         return this.itemList.size();

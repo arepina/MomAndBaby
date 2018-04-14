@@ -1,104 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    android:orientation="vertical"
-    android:paddingLeft="24dp"
-    android:paddingRight="24dp"
-    android:paddingTop="56dp"
-    android:focusableInTouchMode="true"
-    android:weightSum="1">
+    android:fitsSystemWindows="true">
 
-    <ImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="24dp"
-        android:layout_weight="0.25"
-        android:src="@mipmap/ic_launcher" />
-
-    <android.support.design.widget.TextInputLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
-        android:textColorHint="@color/colorPrimaryDark">
+        android:background="@color/colorPrimary"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical"
+        android:paddingLeft="24dp"
+        android:paddingTop="5dp"
+        android:paddingRight="24dp"
+        android:weightSum="1">
 
-        <EditText
-            android:id="@+id/input_name"
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/ic_launcher" />
+
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/name"
-            android:inputType="textCapWords"
-            android:textColor="@color/colorPrimaryDark" />
-    </android.support.design.widget.TextInputLayout>
+            android:layout_marginTop="5dp"
+            android:textColorHint="@color/colorPrimaryDark">
 
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
-        android:textColorHint="@color/colorPrimaryDark">
+            <EditText
+                android:id="@+id/input_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/name"
+                android:inputType="textCapWords"
+                android:textColor="@color/colorPrimaryDark" />
+        </android.support.design.widget.TextInputLayout>
 
-        <EditText
-            android:id="@+id/input_email"
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/e_mail"
-            android:inputType="textEmailAddress"
-            android:textColor="@color/colorPrimaryDark" />
-    </android.support.design.widget.TextInputLayout>
+            android:layout_marginTop="5dp"
+            android:textColorHint="@color/colorPrimaryDark">
 
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
-        android:textColorHint="@color/colorPrimaryDark">
+            <EditText
+                android:id="@+id/input_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/e_mail"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/colorPrimaryDark" />
+        </android.support.design.widget.TextInputLayout>
 
-        <EditText
-            android:id="@+id/input_password"
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/password"
-            android:inputType="textPassword"
-            android:textColor="@color/colorPrimaryDark" />
-    </android.support.design.widget.TextInputLayout>
+            android:layout_marginTop="5dp"
+            android:textColorHint="@color/colorPrimaryDark">
 
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
-        android:textColorHint="@color/colorPrimaryDark">
+            <EditText
+                android:id="@+id/input_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/password"
+                android:inputType="textPassword"
+                android:textColor="@color/colorPrimaryDark" />
+        </android.support.design.widget.TextInputLayout>
 
-        <EditText
-            android:id="@+id/input_password_again"
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/password_again"
-            android:inputType="textPassword"
-            android:textColor="@color/colorPrimaryDark" />
-    </android.support.design.widget.TextInputLayout>
+            android:layout_marginTop="5dp"
+            android:textColorHint="@color/colorPrimaryDark">
 
-    <android.support.v7.widget.AppCompatButton
-        android:id="@+id/btn_signup"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/main_margin"
-        android:layout_marginTop="@dimen/main_margin"
-        android:background="@color/colorPrimaryDark"
-        android:text="@string/create_account" />
+            <EditText
+                android:id="@+id/input_password_again"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/password_again"
+                android:inputType="textPassword"
+                android:textColor="@color/colorPrimaryDark" />
+        </android.support.design.widget.TextInputLayout>
 
-    <TextView
-        android:id="@+id/link_login"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:gravity="center"
-        android:text="@string/already_registered"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="16dip" />
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_signup"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/main_margin"
+            android:layout_marginBottom="@dimen/main_margin"
+            android:background="@color/colorPrimaryDark"
+            android:text="@string/create_account" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/link_login"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:gravity="center"
+            android:text="@string/already_registered"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="16dip" />
+
+    </LinearLayout>
+</ScrollView>

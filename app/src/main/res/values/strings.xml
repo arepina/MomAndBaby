@@ -151,6 +151,7 @@
     <string name="baby_has">У Вашего малыша уже есть зубы:</string>
     <string name="month">месяца</string>
     <string name="bad_imt">Индекс массы тела Вашего малыша не соотвествует норме, следует обратиться к специалисту</string>
+    <string name="no_google_fit_data">Google Fit не синхронизирован с носимыми устройствами, поэтому данные отсутствуют</string>
 
     <string-array name="parametersBaby">
         <item>Рост</item>
@@ -187,15 +188,15 @@
 
     <string-array name="vaccinationsDates">
         <item>1 день\t\t\t\tI-Вирусный гепатит В</item>
-        <item>1 неделя\t\t\tТуберкулез</item>
+        <item>1 неделя\t\tТуберкулез</item>
         <item>1 месяц\t\t\tII-Вирусный гепатит В</item>
         <item>3 месяца\t\tI-Коклюш, столбняк, дифтерия</item>
         <item>\t\t\t\t\t\t\t\tI-полиомиелит</item>
         <item>\t\t\t\t\t\t\t\tI-гемофильная инфекция</item>
-        <item>5 месяцев\t\tII-Коклюш, столбняк, дифтерия</item>
+        <item>5 месяцев\tII-Коклюш, столбняк, дифтерия</item>
         <item>\t\t\t\t\t\t\t\tII-полиомиелит</item>
         <item>\t\t\t\t\t\t\t\tII-гемофильная инфекция</item>
-        <item>6 месяцев\t\tIII-Коклюш, столбняк, дифтерия</item>
+        <item>6 месяцев\tIII-Коклюш, столбняк, дифтерия</item>
         <item>\t\t\t\t\t\t\t\tIII-полиомиелит</item>
         <item>\t\t\t\t\t\t\t\tIII-гемофильная инфекция</item>
         <item>\t\t\t\t\t\t\t\tIII-Вирусный гепатит В</item>

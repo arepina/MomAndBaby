@@ -161,7 +161,7 @@ public class SendEmail {
                                                     reportStr = new StringBuilder(reportStr.substring(0, reportStr.length() - 2));
                                                     String dbName = singleSnapshot.getKey();
                                                     String lang = Locale.getDefault().getDisplayLanguage();
-                                                    if (lang.equals(context.getString(R.string.russian))) {
+                                                    if (lang.toLowerCase().equals(context.getString(R.string.russian))) {
                                                         dbName = dbNameToString(singleSnapshot.getKey());
                                                     }
                                                     report.append(dbName).append(" ").append(date).append(" ").append(reportStr).append("\n");

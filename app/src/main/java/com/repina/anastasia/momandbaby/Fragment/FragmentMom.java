@@ -247,11 +247,13 @@ public class FragmentMom extends Fragment {
         public void onReceive(Context context, Intent intent) {
             // Get extra data included in the Intent
             String date = intent.getStringExtra(HISTORY_DATE);
+            boolean hasAnyData = false;
             if (intent.hasExtra(HISTORY_EXTRA_STEPS_TODAY)) {
                 final int totalSteps = intent.getIntExtra(HISTORY_EXTRA_STEPS_TODAY, 0);
                 if(totalSteps != 0) {
                     GridItem item = new GridItem(R.mipmap.steps, "R.mipmap.steps", String.valueOf(totalSteps), date);
                     momArrayAdapter.add(item);
+                    hasAnyData = true;
                 }
             }
             if (intent.hasExtra(HISTORY_EXTRA_CALORIES_TODAY)) {
@@ -259,6 +261,7 @@ public class FragmentMom extends Fragment {
                 if(totalCalories != 0) {
                     GridItem item = new GridItem(R.mipmap.calories, "R.mipmap.calories", String.valueOf(totalCalories), date);
                     momArrayAdapter.add(item);
+                    hasAnyData = true;
                 }
             }
             if (intent.hasExtra(HISTORY_EXTRA_WEIGHT_TODAY)) {
@@ -266,6 +269,7 @@ public class FragmentMom extends Fragment {
                 if (totalWeight != 0) {
                     GridItem item = new GridItem(R.mipmap.weight, "R.mipmap.weight", String.valueOf(totalWeight), date);
                     momArrayAdapter.add(item);
+                    hasAnyData = true;
                 }
             }
             if (intent.hasExtra(HISTORY_EXTRA_NUTRITION_TODAY)) {
@@ -273,6 +277,7 @@ public class FragmentMom extends Fragment {
                 if (totalNutrition.length() != 0) {
                     GridItem item = new GridItem(R.mipmap.nutrition, "R.mipmap.nutrition", String.valueOf(totalNutrition), date);
                     momArrayAdapter.add(item);
+                    hasAnyData = true;
                 }
             }
             if (intent.hasExtra(HISTORY_EXTRA_SLEEP_TODAY)) {
@@ -282,8 +287,12 @@ public class FragmentMom extends Fragment {
                 if (totalSleep.length() != 0 && hours != 0) {
                     GridItem item = new GridItem(R.mipmap.sleep, "R.mipmap.sleep", String.valueOf(totalSleep), date);
                     momArrayAdapter.add(item);
+                    hasAnyData = true;
                 }
             }
+            GridItem item = new GridItem(R.mipmap.cross, "R.mipmap.cross", getResources().getString(R.string.no_google_fit_data), null, null);
+            if(!hasAnyData && !momArrayAdapter.hasEmptyItem())
+                momArrayAdapter.add(item);
             listViewMom.setAdapter(momArrayAdapter);
         }
     };

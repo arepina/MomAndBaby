@@ -38,7 +38,7 @@ public class TextProcessing {
             try {
                 double number = Double.parseDouble(val);
                 if (number != 0) {
-                    if (lang.equals(context.getString(R.string.russian))) {
+                    if (lang.toLowerCase().equals(context.getString(R.string.russian))) {
                         line.append(translateWord(entry.getKey())).append(": ").append(val);
                     }else
                         line.append(entry.getKey()).append(": ").append(val);
@@ -47,7 +47,7 @@ public class TextProcessing {
                 }
             } catch (NumberFormatException e) { // not a number
                 if (dbName.equals(DatabaseNames.TEETH)) return context.getString(R.string.new_teeth);
-                if (lang.equals(context.getString(R.string.russian))) {
+                if (lang.toLowerCase().equals(context.getString(R.string.russian))) {
                     line.append(translateWord(entry.getKey())).append(": ").append(val);
                 }else
                     line.append(entry.getKey()).append(": ").append(val);
@@ -80,7 +80,7 @@ public class TextProcessing {
                 StringBuilder translatedData = new StringBuilder();
                 for (String item : data.toString().split(", ")) {
                     String key = item.substring(0, item.indexOf("=")).replace(" ", "");
-                    if (lang.equals(context.getString(R.string.russian))) {
+                    if (lang.toLowerCase().equals(context.getString(R.string.russian))) {
                         key = translateWord(key);
                     }
                     String value = item.substring(item.indexOf("=") + 1, item.length()).replace(" ", "");
@@ -150,7 +150,7 @@ public class TextProcessing {
 
             String translation = key;
             //translate to russian id needed
-            if (lang.equals(context.getString(R.string.russian))) {
+            if (lang.toLowerCase().equals(context.getString(R.string.russian))) {
                 translation = TextProcessing.translateWord(key);
             }
             keys.set(i, translation);
@@ -161,7 +161,7 @@ public class TextProcessing {
         }
         line = new StringBuilder(line.toString().substring(0, line.length() - 2));
         String dbName = singleSnapshot.getKey();
-        if (lang.equals(context.getString(R.string.russian))) {
+        if (lang.toLowerCase().equals(context.getString(R.string.russian))) {
             dbName = dbNameToString(singleSnapshot.getKey());
         }
         return dbName + " " + dateValue + "; " + line + "\n";

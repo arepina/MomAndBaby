@@ -1,161 +1,168 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    android:baselineAligned="false"
-    android:orientation="vertical">
+    android:fitsSystemWindows="true">
 
-    <TextView
-        android:id="@+id/dateName"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/main_margin"
-        android:layout_marginRight="@dimen/main_margin"
-        android:layout_marginTop="@dimen/main_margin"
-        android:text="@string/choose_date"
-        android:textAlignment="center"
-        android:textColor="@color/colorText"
-        android:textSize="@dimen/text_size"
-        android:textStyle="bold" />
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
+        android:baselineAligned="false"
+        android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/dateName"
-        android:layout_marginLeft="@dimen/main_margin"
-        android:layout_marginRight="@dimen/main_margin"
-        android:layout_marginTop="@dimen/main_margin"
-        android:ems="10"
-        android:inputType="date"
-        android:textAlignment="center"
-        android:textColor="@color/colorText"
-        android:textSize="@dimen/text_size" />
+        <TextView
+            android:id="@+id/dateName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/main_margin"
+            android:layout_marginTop="@dimen/main_margin"
+            android:layout_marginRight="@dimen/main_margin"
+            android:text="@string/choose_date"
+            android:textAlignment="center"
+            android:textColor="@color/colorText"
+            android:textSize="@dimen/text_size"
+            android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/dataName1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/date"
-        android:layout_marginLeft="@dimen/main_margin"
-        android:layout_marginRight="@dimen/main_margin"
-        android:layout_marginTop="@dimen/main_margin"
-        android:textAlignment="center"
-        android:textColor="@color/colorText"
-        android:textSize="@dimen/text_size"
-        android:textStyle="bold"
-        android:visibility="gone" />
+        <EditText
+            android:id="@+id/date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/dateName"
+            android:layout_marginLeft="@dimen/main_margin"
+            android:layout_marginTop="@dimen/main_margin"
+            android:layout_marginRight="@dimen/main_margin"
+            android:ems="10"
+            android:inputType="date"
+            android:textAlignment="center"
+            android:textColor="@color/colorText"
+            android:textSize="@dimen/text_size" />
 
-    <Spinner
-        android:id="@+id/vaccinationsData"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/dataName1"
-        android:layout_marginLeft="@dimen/main_margin"
-        android:layout_marginRight="@dimen/main_margin"
-        android:layout_marginTop="@dimen/main_margin"
-        android:popupBackground="@color/colorPrimaryDark"
-        android:gravity="center_horizontal"
-        android:textAlignment="center"
-        android:textColor="@color/colorText"
-        android:visibility="gone" />
+        <TextView
+            android:id="@+id/dataName1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/date"
+            android:layout_marginLeft="@dimen/main_margin"
+            android:layout_marginTop="@dimen/main_margin"
+            android:layout_marginRight="@dimen/main_margin"
+            android:textAlignment="center"
+            android:textColor="@color/colorText"
+            android:textSize="@dimen/text_size"
+            android:textStyle="bold"
+            android:visibility="gone" />
 
-    <EditText
-        android:id="@+id/dataValue1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/vaccinationsData"
-        android:layout_marginLeft="@dimen/main_margin"
-        android:layout_marginRight="@dimen/main_margin"
-        android:layout_marginTop="@dimen/main_margin"
-        android:ems="10"
-        android:inputType="date"
-        android:textAlignment="center"
-        android:textColor="@color/colorText"
-        android:textSize="@dimen/text_size"
-        android:visibility="gone" />
+        <Spinner
+            android:id="@+id/vaccinationsData"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/dataName1"
+            android:layout_marginLeft="@dimen/main_margin"
+            android:layout_marginTop="@dimen/main_margin"
+            android:layout_marginRight="@dimen/main_margin"
+            android:gravity="center_horizontal"
+            android:popupBackground="@color/colorPrimaryDark"
+            android:textAlignment="center"
+            android:textColor="@color/colorText"
+            android:visibility="gone" />
 
-    <TextView
-        android:id="@+id/dataName2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/dataValue1"
-        android:layout_marginLeft="@dimen/main_margin"
-        android:layout_marginRight="@dimen/main_margin"
-        android:layout_marginTop="@dimen/main_margin"
-        android:textAlignment="center"
-        android:textColor="@color/colorText"
-        android:textSize="@dimen/text_size"
-        android:textStyle="bold"
-        android:visibility="gone" />
+        <EditText
+            android:id="@+id/dataValue1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/vaccinationsData"
+            android:layout_marginLeft="@dimen/main_margin"
+            android:layout_marginTop="@dimen/main_margin"
+            android:layout_marginRight="@dimen/main_margin"
+            android:ems="10"
+            android:inputType="date"
+            android:textAlignment="center"
+            android:textColor="@color/colorText"
+            android:textSize="@dimen/text_size"
+            android:visibility="gone" />
 
-    <EditText
-        android:id="@+id/dataValue2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/dataName2"
-        android:layout_marginLeft="@dimen/main_margin"
-        android:layout_marginRight="@dimen/main_margin"
-        android:layout_marginTop="@dimen/main_margin"
-        android:ems="10"
-        android:inputType="textMultiLine"
-        android:lines="4"
-        android:maxLines="4"
-        android:minLines="4"
-        android:textAlignment="center"
-        android:textColor="@color/colorText"
-        android:textSize="@dimen/text_size"
-        android:visibility="gone" />
+        <TextView
+            android:id="@+id/dataName2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/dataValue1"
+            android:layout_marginLeft="@dimen/main_margin"
+            android:layout_marginTop="@dimen/main_margin"
+            android:layout_marginRight="@dimen/main_margin"
+            android:textAlignment="center"
+            android:textColor="@color/colorText"
+            android:textSize="@dimen/text_size"
+            android:textStyle="bold"
+            android:visibility="gone" />
 
-    <RatingBar
-        android:id="@+id/ratingBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/dataValue2"
-        android:layout_centerHorizontal="true"
-        android:layout_marginLeft="@dimen/main_margin"
-        android:layout_marginRight="@dimen/main_margin"
-        android:layout_marginTop="@dimen/main_margin"
-        android:numStars="5"
-        android:stepSize="1.0"
-        android:visibility="gone" />
+        <EditText
+            android:id="@+id/dataValue2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/dataName2"
+            android:layout_marginLeft="@dimen/main_margin"
+            android:layout_marginTop="@dimen/main_margin"
+            android:layout_marginRight="@dimen/main_margin"
+            android:ems="10"
+            android:inputType="textMultiLine"
+            android:lines="4"
+            android:maxLines="4"
+            android:minLines="4"
+            android:textAlignment="center"
+            android:textColor="@color/colorText"
+            android:textSize="@dimen/text_size"
+            android:visibility="gone" />
 
-    <TextView
-        android:id="@+id/dataName3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/ratingBar"
-        android:layout_marginTop="@dimen/main_margin"
-        android:textAlignment="center"
-        android:textColor="@color/colorText"
-        android:textSize="@dimen/text_size"
-        android:textStyle="bold"
-        android:visibility="gone" />
+        <RatingBar
+            android:id="@+id/ratingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/dataValue2"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="@dimen/main_margin"
+            android:layout_marginTop="@dimen/main_margin"
+            android:layout_marginRight="@dimen/main_margin"
+            android:numStars="5"
+            android:stepSize="1.0"
+            android:visibility="gone" />
 
-    <EditText
-        android:id="@+id/dataValue3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/dataName3"
-        android:ems="10"
-        android:inputType="textMultiLine"
-        android:lines="4"
-        android:maxLines="4"
-        android:minLines="4"
-        android:textAlignment="center"
-        android:textColor="@color/colorText"
-        android:textSize="@dimen/text_size"
-        android:visibility="gone" />
+        <TextView
+            android:id="@+id/dataName3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ratingBar"
+            android:layout_marginTop="@dimen/main_margin"
+            android:textAlignment="center"
+            android:textColor="@color/colorText"
+            android:textSize="@dimen/text_size"
+            android:textStyle="bold"
+            android:visibility="gone" />
 
-    <Button
-        android:id="@+id/addData"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@color/colorPrimaryDark"
-        android:text="@string/add"
-        android:textColor="@color/colorText" />
+        <EditText
+            android:id="@+id/dataValue3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/dataName3"
+            android:ems="10"
+            android:inputType="textMultiLine"
+            android:lines="4"
+            android:maxLines="4"
+            android:minLines="4"
+            android:textAlignment="center"
+            android:textColor="@color/colorText"
+            android:textSize="@dimen/text_size"
+            android:visibility="gone" />
 
+        <Button
+            android:id="@+id/addData"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@color/colorPrimaryDark"
+            android:text="@string/add"
+            android:textColor="@color/colorText" />
 
-</RelativeLayout>
+    </RelativeLayout>
+</ScrollView>
