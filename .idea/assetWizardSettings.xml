@@ -18,6 +18,18 @@
                                 <PersistentState>
                                   <option name="children">
                                     <map>
+                                      <entry key="backgroundImage">
+                                        <value>
+                                          <PersistentState>
+                                            <option name="values">
+                                              <map>
+                                                <entry key="scalingPercent" value="0" />
+                                                <entry key="trimmed" value="true" />
+                                              </map>
+                                            </option>
+                                          </PersistentState>
+                                        </value>
+                                      </entry>
                                       <entry key="foregroundImage">
                                         <value>
                                           <PersistentState>
@@ -34,11 +46,8 @@
                                   <option name="values">
                                     <map>
                                       <entry key="backgroundAssetType" value="COLOR" />
-                                      <entry key="backgroundColor" value="ffffff" />
+                                      <entry key="backgroundColor" value="f8d473" />
                                       <entry key="foregroundImage" value="$PROJECT_DIR$/app/src/main/res/drawable/ic_launcher.png" />
-                                      <entry key="previewDensity" value="XXHIGH" />
-                                      <entry key="showSafeZone" value="false" />
-                                      <entry key="webIconShape" value="NONE" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -50,7 +59,6 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="iconShape" value="NONE" />
                                       <entry key="imageAsset" value="$PROJECT_DIR$/app/src/main/res/drawable/ic_launcher.png" />
                                     </map>
                                   </option>

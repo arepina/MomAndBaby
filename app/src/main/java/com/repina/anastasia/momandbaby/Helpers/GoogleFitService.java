@@ -1,17 +1,24 @@
 package com.repina.anastasia.momandbaby.Helpers;
 
+import android.app.Activity;
+import android.app.Application;
+import android.app.Dialog;
 import android.app.IntentService;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.util.Pair;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Scope;
@@ -25,6 +32,7 @@ import com.google.android.gms.fitness.request.DataReadRequest;
 import com.google.android.gms.fitness.result.DataReadResponse;
 import com.google.android.gms.fitness.result.DataReadResult;
 import com.repina.anastasia.momandbaby.Activity.ChartActivity;
+import com.repina.anastasia.momandbaby.Activity.TabsActivity;
 import com.repina.anastasia.momandbaby.Fragment.FragmentMom;
 import com.repina.anastasia.momandbaby.Fragment.FragmentSettings;
 import com.repina.anastasia.momandbaby.Processing.TextProcessing;
@@ -73,8 +81,8 @@ public class GoogleFitService extends IntentService {
     public static final String TAG = "GoogleFitService";
     public static GoogleApiClient mGoogleApiFitnessClient;
     private boolean mTryingToConnect = false;
-
     private static final int hours = 24;
+    private Activity activity;
 
     @Override
     public void onDestroy() {
@@ -96,6 +104,7 @@ public class GoogleFitService extends IntentService {
     public GoogleFitService() {
         super("GoogleFitService");
     }
+
 
     @Override
     protected void onHandleIntent(Intent intent) {
@@ -502,8 +511,16 @@ public class GoogleFitService extends IntentService {
                             // Called whenever the API client fails to connect.
                             @Override
                             public void onConnectionFailed(@NonNull ConnectionResult result) {
-                                mTryingToConnect = false;
+                                /*if (result.hasResolution()) {
+                                    try {
+                                        Activity activity = new Activity();
+                                        result.startResolutionForResult(activity, 9000);
+                                    } catch (IntentSender.SendIntentException e) {
+                                        mGoogleApiFitnessClient.connect();
+                                    }
+                                }*/
                                 notifyUiFailedConnection(result);
+                                mTryingToConnect = false;
                             }
                         }
                 )
