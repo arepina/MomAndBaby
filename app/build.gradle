@@ -22,7 +22,7 @@ android {
     }
     buildTypes {
         release {
-            debuggable true
+            debuggable false
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.config
@@ -31,6 +31,7 @@ android {
             signingConfig signingConfigs.config
         }
     }
+
 }
 
 dependencies {
