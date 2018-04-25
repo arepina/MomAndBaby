@@ -262,6 +262,8 @@ public class TextProcessing {
                 return "Сон";
             case DatabaseNames.OTHER:
                 return "Другое";
+            case DatabaseNames.TEETH:
+                return "Зубы";
             default:
                 return "";
         }
