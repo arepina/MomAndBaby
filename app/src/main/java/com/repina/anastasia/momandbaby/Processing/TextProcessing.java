@@ -28,7 +28,7 @@ public class TextProcessing {
      * @param dbName DB name
      * @return text of baby item
      */
-    public static String formBabyDescription(HashMap<String, String> value, String dbName, Context context) {
+    static String formBabyDescription(HashMap<String, String> value, String dbName, Context context) {
         StringBuilder line = new StringBuilder();
         value.remove("babyId");
         value.remove("date");
@@ -39,9 +39,13 @@ public class TextProcessing {
                 double number = Double.parseDouble(val);
                 if (number != 0) {
                     if (lang.toLowerCase().equals(context.getString(R.string.russian))) {
-                        line.append(translateWord(entry.getKey())).append(": ").append(val);
+                        if (dbName.equals(DatabaseNames.SLEEP) || dbName.equals(DatabaseNames.OUTDOOR))
+                            line.append(translateWord(entry.getKey())).append(": ").append(val).append(" мин");
+                        else line.append(translateWord(entry.getKey())).append(": ").append(val);
                     }else
-                        line.append(entry.getKey()).append(": ").append(val);
+                        if (dbName.equals(DatabaseNames.SLEEP) || dbName.equals(DatabaseNames.OUTDOOR))
+                            line.append(entry.getKey()).append(": ").append(val).append(" min");
+                        else line.append(entry.getKey()).append(": ").append(val);
                     if (!"\n".equals(String.valueOf(line.charAt(line.length() - 1))))
                         line.append("\n");
                 }
@@ -111,6 +115,7 @@ public class TextProcessing {
         ArrayList<String> keys = new ArrayList<>(map.keySet());
         ArrayList<String> values = new ArrayList<>(map.values());
         String lang = Locale.getDefault().getDisplayLanguage();
+        String min = lang.toLowerCase().equals(context.getString(R.string.russian)) ? " мин" : "min";
         for (int i = 0; i < keys.size(); i++) {
             String key = String.valueOf(keys.get(i));
             String value = String.valueOf(values.get(i));
@@ -157,13 +162,15 @@ public class TextProcessing {
         }
         StringBuilder line = new StringBuilder();
         for (int i = 0; i < keys.size(); i++) {
-            line.append(String.valueOf(keys.get(i))).append(": ").append(String.valueOf(values.get(i))).append("; ");
+            if (String.valueOf(keys.get(i)).equals("Длительность") || String.valueOf(keys.get(i)).equals("Duration"))
+                line.append(String.valueOf(keys.get(i))).append(": ").append(String.valueOf(values.get(i))).append(min).append("; ");
+            else
+                line.append(String.valueOf(keys.get(i))).append(": ").append(String.valueOf(values.get(i))).append("; ");
         }
         line = new StringBuilder(line.toString().substring(0, line.length() - 2));
         String dbName = singleSnapshot.getKey();
-        if (lang.toLowerCase().equals(context.getString(R.string.russian))) {
+        if (lang.toLowerCase().equals(context.getString(R.string.russian)))
             dbName = dbNameToString(singleSnapshot.getKey());
-        }
         return dbName + " " + dateValue + "; " + line + "\n";
     }
 

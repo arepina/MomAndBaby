@@ -91,7 +91,7 @@ public class FragmentMom extends Fragment {
         dialog.setIndeterminate(true);
         dialog.setCanceledOnTouchOutside(false);
 
-        fab = (FloatingActionButton) getActivity().findViewById(R.id.floatingActionButton);
+        fab = getActivity().findViewById(R.id.floatingActionButton);
         fab.setImageResource(R.mipmap.google_fit);
         fab.setVisibility(View.VISIBLE);
         fab.setEnabled(true);
@@ -108,7 +108,7 @@ public class FragmentMom extends Fragment {
             }
         });
 
-        listViewMom = (ListView) v.findViewById(R.id.listViewMom);
+        listViewMom = v.findViewById(R.id.listViewMom);
         momArrayAdapter = new GridItemArrayAdapter(getActivity().getApplicationContext(), R.layout.custom_row);
         GridItem item = new GridItem(R.mipmap.cross, "R.mipmap.cross", getResources().getString(R.string.need_to_sync), null, null);
         momArrayAdapter.add(item);
@@ -134,9 +134,9 @@ public class FragmentMom extends Fragment {
      * @param v View
      */
     private void initTodayAndTomorrow(View v) {
-        final TextView headerDate = (TextView) v.findViewById(R.id.headerMom);
+        final TextView headerDate = v.findViewById(R.id.headerMom);
 
-        TextView yesterday = (TextView) v.findViewById(R.id.yesterdayMom);
+        TextView yesterday = v.findViewById(R.id.yesterdayMom);
         yesterday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -164,7 +164,7 @@ public class FragmentMom extends Fragment {
             }
         });
 
-        TextView tomorrow = (TextView) v.findViewById(R.id.tomorrowMom);
+        TextView tomorrow = v.findViewById(R.id.tomorrowMom);
         tomorrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -250,7 +250,7 @@ public class FragmentMom extends Fragment {
             boolean hasAnyData = false;
             if (intent.hasExtra(HISTORY_EXTRA_STEPS_TODAY)) {
                 final int totalSteps = intent.getIntExtra(HISTORY_EXTRA_STEPS_TODAY, 0);
-                if(totalSteps != 0) {
+                if (totalSteps != 0) {
                     GridItem item = new GridItem(R.mipmap.steps, "R.mipmap.steps", String.valueOf(totalSteps), date);
                     momArrayAdapter.add(item);
                     hasAnyData = true;
@@ -362,9 +362,11 @@ public class FragmentMom extends Fragment {
                 requestFitConnection();
             } else {
                 try {
-                    authInProgress = true;
-                    mFitResultResolution.startResolutionForResult(getActivity(), REQUEST_OAUTH);
-                } catch (IntentSender.SendIntentException e) {
+                    if(mFitResultResolution != null) {
+                        authInProgress = true;
+                        mFitResultResolution.startResolutionForResult(getActivity(), REQUEST_OAUTH);
+                    }
+                } catch (Exception e) {
                     Log.e(TAG, "Activity Thread Google Fit Exception while starting resolution activity", e);
                 }
             }

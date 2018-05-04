@@ -58,7 +58,7 @@ public class TeethActivity extends AppCompatActivity {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         babyId = sp.getString(SharedConstants.BABY_ID_KEY, "");
 
-        Button addData = (Button) findViewById(R.id.addData);
+        Button addData = findViewById(R.id.addData);
         addData.setVisibility(View.VISIBLE);
         addData.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,7 +87,7 @@ public class TeethActivity extends AppCompatActivity {
 
         if (calling.equals(StatsActivity.class.toString())) // the user just watch the teeth
         {
-            TextView textView = (TextView) findViewById(R.id.task);
+            TextView textView = findViewById(R.id.task);
             textView.setText(getString(R.string.teeth_map));
             makeEnabledFalse();
             addData.setVisibility(View.GONE);
@@ -198,7 +198,7 @@ public class TeethActivity extends AppCompatActivity {
      */
     private void makeEnabledFalse() {
         for (int i = 1; i <= 20; i++) {
-            FloatingActionButton button = (FloatingActionButton) findViewById(getResources().getIdentifier("q" + i, "id",
+            FloatingActionButton button = findViewById(getResources().getIdentifier("q" + i, "id",
                     this.getPackageName()));
             button.setEnabled(false);
         }
@@ -208,7 +208,7 @@ public class TeethActivity extends AppCompatActivity {
      * Initialise red teeth
      */
     private void initRed() {
-        final FloatingActionButton q1 = (FloatingActionButton) findViewById(R.id.q1);
+        final FloatingActionButton q1 = findViewById(R.id.q1);
         q1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -223,7 +223,7 @@ public class TeethActivity extends AppCompatActivity {
             }
         });
 
-        final FloatingActionButton q2 = (FloatingActionButton) findViewById(R.id.q2);
+        final FloatingActionButton q2 = findViewById(R.id.q2);
         q2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -238,7 +238,7 @@ public class TeethActivity extends AppCompatActivity {
             }
         });
 
-        final FloatingActionButton q11 = (FloatingActionButton) findViewById(R.id.q11);
+        final FloatingActionButton q11 = findViewById(R.id.q11);
         q11.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -253,7 +253,7 @@ public class TeethActivity extends AppCompatActivity {
             }
         });
 
-        final FloatingActionButton q12 = (FloatingActionButton) findViewById(R.id.q12);
+        final FloatingActionButton q12 = findViewById(R.id.q12);
         q12.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -273,7 +273,7 @@ public class TeethActivity extends AppCompatActivity {
      * Initialise yellow teeth
      */
     private void initYellow() {
-        final FloatingActionButton q3 = (FloatingActionButton) findViewById(R.id.q3);
+        final FloatingActionButton q3 = findViewById(R.id.q3);
         q3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -288,7 +288,7 @@ public class TeethActivity extends AppCompatActivity {
             }
         });
 
-        final FloatingActionButton q4 = (FloatingActionButton) findViewById(R.id.q4);
+        final FloatingActionButton q4 = findViewById(R.id.q4);
         q4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -303,7 +303,7 @@ public class TeethActivity extends AppCompatActivity {
             }
         });
 
-        final FloatingActionButton q13 = (FloatingActionButton) findViewById(R.id.q13);
+        final FloatingActionButton q13 = findViewById(R.id.q13);
         q13.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -318,7 +318,7 @@ public class TeethActivity extends AppCompatActivity {
             }
         });
 
-        final FloatingActionButton q14 = (FloatingActionButton) findViewById(R.id.q14);
+        final FloatingActionButton q14 = findViewById(R.id.q14);
         q14.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -338,7 +338,7 @@ public class TeethActivity extends AppCompatActivity {
      * Initialise green teeth
      */
     private void initGreen() {
-        final FloatingActionButton q5 = (FloatingActionButton) findViewById(R.id.q5);
+        final FloatingActionButton q5 = findViewById(R.id.q5);
         q5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -353,7 +353,7 @@ public class TeethActivity extends AppCompatActivity {
             }
         });
 
-        final FloatingActionButton q6 = (FloatingActionButton) findViewById(R.id.q6);
+        final FloatingActionButton q6 = findViewById(R.id.q6);
         q6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -368,7 +368,7 @@ public class TeethActivity extends AppCompatActivity {
             }
         });
 
-        final FloatingActionButton q15 = (FloatingActionButton) findViewById(R.id.q15);
+        final FloatingActionButton q15 = findViewById(R.id.q15);
         q15.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -383,7 +383,7 @@ public class TeethActivity extends AppCompatActivity {
             }
         });
 
-        final FloatingActionButton q16 = (FloatingActionButton) findViewById(R.id.q16);
+        final FloatingActionButton q16 = findViewById(R.id.q16);
         q16.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -403,7 +403,7 @@ public class TeethActivity extends AppCompatActivity {
      * Initialise blue teeth
      */
     private void initBlue() {
-        final FloatingActionButton q7 = (FloatingActionButton) findViewById(R.id.q7);
+        final FloatingActionButton q7 = findViewById(R.id.q7);
         q7.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -418,7 +418,7 @@ public class TeethActivity extends AppCompatActivity {
             }
         });
 
-        final FloatingActionButton q8 = (FloatingActionButton) findViewById(R.id.q8);
+        final FloatingActionButton q8 = findViewById(R.id.q8);
         q8.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -433,7 +433,7 @@ public class TeethActivity extends AppCompatActivity {
             }
         });
 
-        final FloatingActionButton q17 = (FloatingActionButton) findViewById(R.id.q17);
+        final FloatingActionButton q17 = findViewById(R.id.q17);
         q17.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -448,7 +448,7 @@ public class TeethActivity extends AppCompatActivity {
             }
         });
 
-        final FloatingActionButton q18 = (FloatingActionButton) findViewById(R.id.q18);
+        final FloatingActionButton q18 = findViewById(R.id.q18);
         q18.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -468,7 +468,7 @@ public class TeethActivity extends AppCompatActivity {
      * Initialise purple teeth
      */
     private void initPurple() {
-        final FloatingActionButton q9 = (FloatingActionButton) findViewById(R.id.q9);
+        final FloatingActionButton q9 = findViewById(R.id.q9);
         q9.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -483,7 +483,7 @@ public class TeethActivity extends AppCompatActivity {
             }
         });
 
-        final FloatingActionButton q10 = (FloatingActionButton) findViewById(R.id.q10);
+        final FloatingActionButton q10 = findViewById(R.id.q10);
         q10.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -498,7 +498,7 @@ public class TeethActivity extends AppCompatActivity {
             }
         });
 
-        final FloatingActionButton q19 = (FloatingActionButton) findViewById(R.id.q19);
+        final FloatingActionButton q19 = findViewById(R.id.q19);
         q19.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -513,7 +513,7 @@ public class TeethActivity extends AppCompatActivity {
             }
         });
 
-        final FloatingActionButton q20 = (FloatingActionButton) findViewById(R.id.q20);
+        final FloatingActionButton q20 = findViewById(R.id.q20);
         q20.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -573,7 +573,7 @@ public class TeethActivity extends AppCompatActivity {
                             int number = 1;
                             for (Boolean have : teeth.getDoesHave()) {
                                 if (have) { // user should not change teeth which were already added
-                                    FloatingActionButton button = (FloatingActionButton) findViewById(getResources().getIdentifier("q" + number, "id",
+                                    FloatingActionButton button = findViewById(getResources().getIdentifier("q" + number, "id",
                                             getApplication().getPackageName()));
                                     int months = teeth.getWhenHave().get(number - 1);
                                     button.setImageBitmap(textAsBitmap(String.valueOf(months) + "M", 40, Color.WHITE));

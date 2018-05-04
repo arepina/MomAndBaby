@@ -403,9 +403,11 @@ public class FragmentSettings extends Fragment {
                 requestFitConnection();
             } else {
                 try {
-                    authInProgress = true;
-                    mFitResultResolution.startResolutionForResult(getActivity(), REQUEST_OAUTH);
-                } catch (IntentSender.SendIntentException e) {
+                    if(mFitResultResolution != null) {
+                        authInProgress = true;
+                        mFitResultResolution.startResolutionForResult(getActivity(), REQUEST_OAUTH);
+                    }
+                } catch (Exception e) {
                     Log.e(TAG, "Activity Thread Google Fit Exception while starting resolution activity", e);
                 }
             }

@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -58,6 +59,7 @@ public class NewFeatureActivity extends AppCompatActivity {
     private EditText dataValue1;
     private EditText dataValue2;
     private EditText dataValue3;
+    private TimePicker picker;
     private RatingBar ratingBar;
     private Spinner vaccinationsData;
 
@@ -69,18 +71,22 @@ public class NewFeatureActivity extends AppCompatActivity {
         featureName = Objects.requireNonNull(getIntent().getExtras()).getString("data");
         features = getResources().getStringArray(R.array.parametersBaby);
 
-        dataValue1 = (EditText) findViewById(R.id.dataValue1);
-        dataValue2 = (EditText) findViewById(R.id.dataValue2);
-        dataValue3 = (EditText) findViewById(R.id.dataValue3);
-        ratingBar = (RatingBar) findViewById(R.id.ratingBar);
+        dataValue1 = findViewById(R.id.dataValue1);
+        dataValue2 = findViewById(R.id.dataValue2);
+        dataValue3 = findViewById(R.id.dataValue3);
+        picker = findViewById(R.id.dataValue4);
+        ratingBar = findViewById(R.id.ratingBar);
         ratingBar.setNumStars(5);
-        vaccinationsData = (Spinner) findViewById(R.id.vaccinationsData);
+        vaccinationsData = findViewById(R.id.vaccinationsData);
 
         final Calendar dateAndTime = Calendar.getInstance();
 
-        date = (EditText) findViewById(R.id.date);
+        date = findViewById(R.id.date);
         date.setText(getFormattedDate(dateAndTime));
         fullDate = getFormattedDate(dateAndTime);
+        picker.setIs24HourView(true);
+        picker.setHour(0);
+        picker.setMinute(0);
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,7 +104,7 @@ public class NewFeatureActivity extends AppCompatActivity {
             }
         });
 
-        Button addData = (Button) findViewById(R.id.addData);
+        Button addData = findViewById(R.id.addData);
         addData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -168,8 +174,9 @@ public class NewFeatureActivity extends AppCompatActivity {
             databaseReference.push().setValue(f);
         }
         if (featureName.equals(features[6])) {
-            if (dataValue1.getText().length() != 0) {
-                double length = Double.parseDouble(dataValue1.getText().toString());
+            double length = picker.getHour() * 60 + picker.getMinute();
+            if (length != 0) {
+                //double length = Double.parseDouble(dataValue1.getText().toString());
                 Outdoor o = new Outdoor(babyId, currentDate, length);
                 databaseReference = database.getReference().child(DatabaseNames.OUTDOOR);
                 databaseReference.push().setValue(o);
@@ -177,8 +184,9 @@ public class NewFeatureActivity extends AppCompatActivity {
                 NotificationsShow.showToast(getApplicationContext(), getString(R.string.add_any_data));
         }
         if (featureName.equals(features[7])) {
-            if (dataValue1.getText().length() != 0) {
-                double length = Double.parseDouble(dataValue1.getText().toString());
+            double length = picker.getHour() * 60 + picker.getMinute();
+            if (length != 0) {
+                //double length = Double.parseDouble(dataValue1.getText().toString());
                 Sleep s = new Sleep(babyId, currentDate, length);
                 databaseReference = database.getReference().child(DatabaseNames.SLEEP);
                 databaseReference.push().setValue(s);
@@ -259,9 +267,9 @@ public class NewFeatureActivity extends AppCompatActivity {
      * @param data feature type
      */
     private void changeLayout(String data) {
-        TextView dataName1 = (TextView) findViewById(R.id.dataName1);
-        TextView dataName2 = (TextView) findViewById(R.id.dataName2);
-        TextView dataName3 = (TextView) findViewById(R.id.dataName3);
+        TextView dataName1 = findViewById(R.id.dataName1);
+        TextView dataName2 = findViewById(R.id.dataName2);
+        TextView dataName3 = findViewById(R.id.dataName3);
         if (data.equals(features[0])) {
             dataName1.setText(String.format(getString(R.string.add_new_data), getString(R.string.height)));
             dataName1.setVisibility(View.VISIBLE);
@@ -313,12 +321,12 @@ public class NewFeatureActivity extends AppCompatActivity {
         if (data.equals(features[6])) {
             dataName1.setText(String.format(getString(R.string.add_new_data), getString(R.string.outdoor_duration)));
             dataName1.setVisibility(View.VISIBLE);
-            dataValue1.setVisibility(View.VISIBLE);
+            picker.setVisibility(View.VISIBLE);
         }
         if (data.equals(features[7])) {
             dataName1.setText(String.format(getString(R.string.add_new_data), getString(R.string.sleep_duration)));
             dataName1.setVisibility(View.VISIBLE);
-            dataValue1.setVisibility(View.VISIBLE);
+            picker.setVisibility(View.VISIBLE);
         }
         if (data.equals(features[8])) {
             dataName1.setText(getString(R.string.add_new_other));

@@ -734,9 +734,11 @@ public class ChartActivity extends AppCompatActivity {
                 requestFitConnection();
             } else {
                 try {
-                    authInProgress = true;
-                    mFitResultResolution.startResolutionForResult(this, REQUEST_OAUTH);
-                } catch (IntentSender.SendIntentException e) {
+                    if(mFitResultResolution != null) {
+                        authInProgress = true;
+                        mFitResultResolution.startResolutionForResult(this, REQUEST_OAUTH);
+                    }
+                } catch (Exception e) {
                     Log.e(FragmentMom.TAG, "Activity Thread Google Fit Exception while starting resolution activity", e);
                 }
             }
