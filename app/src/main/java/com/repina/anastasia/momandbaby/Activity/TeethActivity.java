@@ -69,7 +69,7 @@ public class TeethActivity extends AppCompatActivity {
                     ArrayList<Boolean> doesHave = teeth.getDoesHave();
                     for(int i = 0; i < doesHave.size(); i++)
                     {
-                        if(!doesHave.get(i).equals(doesHaveOld.get(i))) {
+                        if(doesHaveOld == null || !doesHave.get(i).equals(doesHaveOld.get(i))) {
                             anyChanges = true;
                             break;
                         }
