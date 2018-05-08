@@ -154,7 +154,7 @@
         <item>Nutrition</item>
         <item>Outdoor</item>
         <item>Sleep</item>
-        <item>Other</item>
+        <item>Other/Plans</item>
         <item>Teeth</item>
     </string-array>
 
@@ -194,4 +194,5 @@
         <item>\t\t\t\t\t\t\tIII-Viral hepatitis B</item>
         <item>1 year\t\t\t\tEpidemic parotitis, Rubella, Measles</item>
     </string-array>
+    <string name="calendar_export">Google calendar synchronization</string>
 </resources>

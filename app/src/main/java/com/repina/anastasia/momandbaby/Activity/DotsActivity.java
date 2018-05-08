@@ -65,22 +65,28 @@ public class DotsActivity extends IntroActivity {
             resourceId2 = R.drawable.baby_eng;
             resourceId3 = R.drawable.analytics_eng;
         }
-        Bitmap mBitmap = BitmapFactory.decodeResource(getResources(), resourceId1);
-        newPage.setFrontImage(mBitmap);
-        pages.add(newPage);
+        try {
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = 2;
 
-        newPage = ParallaxPage.newInstance();
+            Bitmap mBitmap = BitmapFactory.decodeResource(getResources(), resourceId1, options);
+            newPage.setFrontImage(mBitmap);
+            pages.add(newPage);
 
-        mBitmap = BitmapFactory.decodeResource(getResources(), resourceId2);
-        newPage.setFrontImage(mBitmap);
-        pages.add(newPage);
+            newPage = ParallaxPage.newInstance();
 
-        newPage = ParallaxPage.newInstance();
+            mBitmap = BitmapFactory.decodeResource(getResources(), resourceId2, options);
+            newPage.setFrontImage(mBitmap);
+            pages.add(newPage);
 
-        mBitmap = BitmapFactory.decodeResource(getResources(), resourceId3);
-        newPage.setFrontImage(mBitmap);
-        pages.add(newPage);
+            newPage = ParallaxPage.newInstance();
 
+            mBitmap = BitmapFactory.decodeResource(getResources(), resourceId3, options);
+            newPage.setFrontImage(mBitmap);
+            pages.add(newPage);
+        } catch (Exception ignored) {
+
+        }
         return pages;
     }
 

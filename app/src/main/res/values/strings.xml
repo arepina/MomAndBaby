@@ -152,6 +152,7 @@
     <string name="month">месяца</string>
     <string name="bad_imt">Индекс массы тела Вашего малыша не соотвествует норме, следует обратиться к специалисту</string>
     <string name="no_google_fit_data">Google Fit не синхронизирован с носимыми устройствами, поэтому данные отсутствуют</string>
+    <string name="calendar_export">Синхронизация с Google календарем</string>
 
     <string-array name="parametersBaby">
         <item>Рост</item>
@@ -162,7 +163,7 @@
         <item>Питание</item>
         <item>Прогулки</item>
         <item>Сон</item>
-        <item>Другое</item>
+        <item>Другое/Планы</item>
         <item>Зубы</item>
     </string-array>
 

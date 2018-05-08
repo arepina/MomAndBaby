@@ -268,7 +268,7 @@ public class TextProcessing {
             case DatabaseNames.SLEEP:
                 return "Сон";
             case DatabaseNames.OTHER:
-                return "Другое";
+                return "Другое/Планы";
             case DatabaseNames.TEETH:
                 return "Зубы";
             default:

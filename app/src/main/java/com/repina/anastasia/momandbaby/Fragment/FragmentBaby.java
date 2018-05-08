@@ -55,7 +55,7 @@ public class FragmentBaby extends Fragment implements SwipeListView.SwipeListVie
     private View initBaby(LayoutInflater inflater, ViewGroup container) {
         final View v = inflater.inflate(R.layout.fragment_baby, container, false);
 
-        listViewBaby = (ListView) v.findViewById(R.id.listViewBaby);
+        listViewBaby = v.findViewById(R.id.listViewBaby);
         SwipeListView l = new SwipeListView(getContext(), this);
         l.exec();
 
@@ -69,7 +69,7 @@ public class FragmentBaby extends Fragment implements SwipeListView.SwipeListVie
             StatsProcessing.getBabyStats(babyArrayAdapter, calendar, getContext(), listViewBaby);
         }
 
-        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.floatingActionButton);
+        FloatingActionButton fab = getActivity().findViewById(R.id.floatingActionButton);
         fab.setImageResource(R.mipmap.plus);
         fab.setVisibility(View.VISIBLE);
         fab.setEnabled(true);
@@ -96,9 +96,9 @@ public class FragmentBaby extends Fragment implements SwipeListView.SwipeListVie
      * @param v View
      */
     private void initYesterdayAndTomorrow(View v) {
-        final TextView headerDate = (TextView) v.findViewById(R.id.headerBaby);
+        final TextView headerDate = v.findViewById(R.id.headerBaby);
 
-        TextView yesterday = (TextView) v.findViewById(R.id.yesterdayBaby);
+        TextView yesterday = v.findViewById(R.id.yesterdayBaby);
         yesterday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -126,7 +126,7 @@ public class FragmentBaby extends Fragment implements SwipeListView.SwipeListVie
             }
         });
 
-        TextView tomorrow = (TextView) v.findViewById(R.id.tomorrowBaby);
+        TextView tomorrow = v.findViewById(R.id.tomorrowBaby);
         tomorrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

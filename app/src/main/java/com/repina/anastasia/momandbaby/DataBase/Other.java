@@ -46,6 +46,6 @@ public class Other {
 
     @Override
     public String toString() {
-        return "Другое " + date + " " + R.string.сomment + " " + note + " " + R.string.rate_feature;
+        return "Другое/Планы " + date + " " + R.string.сomment + " " + note + " " + R.string.rate_feature;
     }
 }

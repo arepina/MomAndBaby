@@ -1,7 +1,10 @@
 package com.repina.anastasia.momandbaby.Activity;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,8 +26,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.repina.anastasia.momandbaby.Connectors.ConnectionDetector;
 import com.repina.anastasia.momandbaby.Connectors.FirebaseConnection;
-import com.repina.anastasia.momandbaby.DataBase.Baby;
 import com.repina.anastasia.momandbaby.DataBase.Other;
+import com.repina.anastasia.momandbaby.Helpers.GoogleCalendar;
 import com.repina.anastasia.momandbaby.Helpers.NotificationsShow;
 import com.repina.anastasia.momandbaby.Helpers.SharedConstants;
 import com.repina.anastasia.momandbaby.DataBase.DatabaseNames;
@@ -38,8 +41,6 @@ import com.repina.anastasia.momandbaby.DataBase.Vaccination;
 import com.repina.anastasia.momandbaby.R;
 
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 import static com.repina.anastasia.momandbaby.Activity.TeethActivity.getMonthBetween;
@@ -54,6 +55,7 @@ public class NewFeatureActivity extends AppCompatActivity {
     private String featureName;
 
     private String fullDate;
+    private Calendar dateAndTime;
 
     private EditText date;
     private EditText dataValue1;
@@ -79,7 +81,7 @@ public class NewFeatureActivity extends AppCompatActivity {
         ratingBar.setNumStars(5);
         vaccinationsData = findViewById(R.id.vaccinationsData);
 
-        final Calendar dateAndTime = Calendar.getInstance();
+        dateAndTime = Calendar.getInstance();
 
         date = findViewById(R.id.date);
         date.setText(getFormattedDate(dateAndTime));
@@ -199,6 +201,9 @@ public class NewFeatureActivity extends AppCompatActivity {
                 Other o = new Other(babyId, currentDate, desc);
                 databaseReference = database.getReference().child(DatabaseNames.OTHER);
                 databaseReference.push().setValue(o);
+                long begin = dateAndTime.getTimeInMillis();
+                long end = dateAndTime.getTimeInMillis();
+                addNewValueToGoogleCalendar(desc, begin, end);
             } else
                 NotificationsShow.showToast(getApplicationContext(), getString(R.string.add_any_data));
         }
@@ -333,6 +338,20 @@ public class NewFeatureActivity extends AppCompatActivity {
             dataName1.setVisibility(View.VISIBLE);
             dataValue1.setVisibility(View.VISIBLE);
             dataValue1.setInputType(InputType.TYPE_CLASS_TEXT);
+        }
+    }
+
+    private void addNewValueToGoogleCalendar(String desc, long begin, long end){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
+                getApplicationContext().checkSelfPermission(Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED)
+            requestPermissions(new String[]{Manifest.permission.READ_CALENDAR}, 0);
+        else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
+                    getApplicationContext().checkSelfPermission(Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED)
+                requestPermissions(new String[]{Manifest.permission.WRITE_CALENDAR}, 0);
+            else {
+                GoogleCalendar.insertEvent(getApplicationContext(), "1", "Mom&Baby", desc, begin, end);
+            }
         }
     }
 }

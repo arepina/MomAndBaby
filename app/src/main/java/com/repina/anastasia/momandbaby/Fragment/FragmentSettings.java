@@ -6,7 +6,6 @@ import android.app.ActivityManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -19,7 +18,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -41,16 +39,13 @@ import com.repina.anastasia.momandbaby.Helpers.FormattedDate;
 import com.repina.anastasia.momandbaby.Helpers.GoogleFitService;
 import com.repina.anastasia.momandbaby.Helpers.NotificationsShow;
 import com.repina.anastasia.momandbaby.Helpers.SendEmail;
-import com.repina.anastasia.momandbaby.Helpers.SharedConstants;
 import com.repina.anastasia.momandbaby.Processing.TextProcessing;
 import com.repina.anastasia.momandbaby.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 import static android.content.Context.ACTIVITY_SERVICE;
-import static android.content.Context.MODE_PRIVATE;
 import static com.repina.anastasia.momandbaby.Fragment.FragmentMom.AUTH_PENDING;
 import static com.repina.anastasia.momandbaby.Fragment.FragmentMom.REQUEST_OAUTH;
 import static com.repina.anastasia.momandbaby.Fragment.FragmentMom.TAG;
@@ -95,7 +90,7 @@ public class FragmentSettings extends Fragment {
     private View initSettings(LayoutInflater inflater, ViewGroup container) {
         View v = inflater.inflate(R.layout.fragment_settings, container, false);
 
-        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.floatingActionButton);
+        FloatingActionButton fab = getActivity().findViewById(R.id.floatingActionButton);
         fab.setVisibility(View.INVISIBLE);
 
         dialog = new ProgressDialog(getContext());
@@ -104,7 +99,7 @@ public class FragmentSettings extends Fragment {
         dialog.setIndeterminate(true);
         dialog.setCanceledOnTouchOutside(false);
 
-        Button exit = (Button) v.findViewById(R.id.exit);
+        Button exit = v.findViewById(R.id.exit);
         exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,7 +116,7 @@ public class FragmentSettings extends Fragment {
             }
         });
 
-        Button feedback = (Button) v.findViewById(R.id.feedback);
+        Button feedback = v.findViewById(R.id.feedback);
         feedback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -135,7 +130,7 @@ public class FragmentSettings extends Fragment {
             }
         });
 
-        Button appInfo = (Button) v.findViewById(R.id.appInfo);
+        Button appInfo = v.findViewById(R.id.appInfo);
         appInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -144,7 +139,7 @@ public class FragmentSettings extends Fragment {
             }
         });
 
-        Button sendReportBaby = (Button) v.findViewById(R.id.send_report_baby);
+        Button sendReportBaby = v.findViewById(R.id.send_report_baby);
         sendReportBaby.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -158,7 +153,7 @@ public class FragmentSettings extends Fragment {
             }
         });
 
-        Button sendReportMom = (Button) v.findViewById(R.id.send_report_mom);
+        Button sendReportMom = v.findViewById(R.id.send_report_mom);
         sendReportMom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -196,7 +191,7 @@ public class FragmentSettings extends Fragment {
         View view = getActivity().getLayoutInflater().inflate(R.layout.custom_alert_dialog, null);
         builder.setView(view);
         final AlertDialog alert = builder.create();
-        Button day = (Button) view.findViewById(R.id.day);
+        Button day = view.findViewById(R.id.day);
         day.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -209,7 +204,7 @@ public class FragmentSettings extends Fragment {
                         whoFlag, getActivity(), FragmentSettings.class.toString());
             }
         });
-        Button week = (Button) view.findViewById(R.id.week);
+        Button week = view.findViewById(R.id.week);
         week.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -223,7 +218,7 @@ public class FragmentSettings extends Fragment {
                         whoFlag, getActivity(), FragmentSettings.class.toString());
             }
         });
-        Button month = (Button) view.findViewById(R.id.month);
+        Button month = view.findViewById(R.id.month);
         month.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -237,7 +232,7 @@ public class FragmentSettings extends Fragment {
                         whoFlag, getActivity(), FragmentSettings.class.toString());
             }
         });
-        Button custom = (Button) view.findViewById(R.id.custom);
+        Button custom = view.findViewById(R.id.custom);
         custom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -245,16 +240,16 @@ public class FragmentSettings extends Fragment {
                 final View view = getActivity().getLayoutInflater().inflate(R.layout.custom_calendar, null);
                 final AlertDialog calendarAlert = calendarBuilder.setView(view).create();
                 calendarAlert.show();
-                Button submit = (Button) view.findViewById(R.id.submit);
+                Button submit = view.findViewById(R.id.submit);
                 submit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        DatePicker fromPicker = (DatePicker) view.findViewById(R.id.from);
+                        DatePicker fromPicker = view.findViewById(R.id.from);
                         from = Calendar.getInstance();
                         from.set(Calendar.YEAR, fromPicker.getYear());
                         from.set(Calendar.MONTH, fromPicker.getMonth());
                         from.set(Calendar.DATE, fromPicker.getDayOfMonth());
-                        DatePicker toPicker = (DatePicker) view.findViewById(R.id.to);
+                        DatePicker toPicker = view.findViewById(R.id.to);
                         to = Calendar.getInstance();
                         to.set(Calendar.YEAR, toPicker.getYear());
                         to.set(Calendar.MONTH, toPicker.getMonth());
@@ -333,7 +328,7 @@ public class FragmentSettings extends Fragment {
                 }
                 ActivityManager am = (ActivityManager) context.getSystemService(ACTIVITY_SERVICE);
                 Log.d(TAG, "CURRENT Activity ::" + am.getRunningTasks(1).get(0).topActivity.getClassName());
-                if(!am.getRunningTasks(1).get(0).topActivity.getClassName().equals("com.repina.anastasia.momandbaby.Activity.ChartActivity"))
+                if (!am.getRunningTasks(1).get(0).topActivity.getClassName().equals("com.repina.anastasia.momandbaby.Activity.ChartActivity"))
                     TextProcessing.formMomReport(sumData, context, fromStr, toStr);
             }
             if (dialog != null)
@@ -403,7 +398,7 @@ public class FragmentSettings extends Fragment {
                 requestFitConnection();
             } else {
                 try {
-                    if(mFitResultResolution != null) {
+                    if (mFitResultResolution != null) {
                         authInProgress = true;
                         mFitResultResolution.startResolutionForResult(getActivity(), REQUEST_OAUTH);
                     }
