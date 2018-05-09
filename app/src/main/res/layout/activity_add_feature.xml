@@ -166,12 +166,19 @@
             android:visibility="gone"
             android:timePickerMode="spinner"/>
 
+        <include layout="@layout/fragment_timepicker"
+            android:id="@+id/timepicker"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/dataName3"/>
+
         <Button
             android:id="@+id/addData"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_below="@+id/dataValue3"
+            android:layout_below="@+id/timepicker"
             android:background="@color/colorPrimaryDark"
             android:text="@string/add"
             android:textColor="@color/colorText" />

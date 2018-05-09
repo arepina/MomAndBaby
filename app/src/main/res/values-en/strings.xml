@@ -117,7 +117,7 @@
     <string name="outdoor_legend">Outdoor hours</string>
     <string name="sleep_legend">Sleep hours</string>
     <string name="stool_legend">Diapers rates</string>
-    <string name="add_new_other">Add the new activity information</string>
+    <string name="add_new_other">Add the new activity/plans information</string>
 
     <!--Custom report-->
     <string name="for_custom">Choose the period</string>

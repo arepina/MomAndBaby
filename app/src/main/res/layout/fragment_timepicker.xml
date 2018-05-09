@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:gravity="center_horizontal">
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/fromPicker"
+        android:layout_alignTop="@+id/fromPicker"
+        android:layout_marginLeft="@dimen/main_margin"
+        android:gravity="center_vertical"
+        android:text="@string/from"
+        android:textColor="@color/colorText" />
+
+    <TimePicker
+        android:id="@+id/fromPicker"
+        android:layout_width="@dimen/date_width"
+        android:layout_height="@dimen/date_height"
+        android:layout_marginLeft="@dimen/main_margin"
+        android:layout_marginTop="@dimen/main_margin"
+        android:layout_toEndOf="@+id/textView2"
+        android:timePickerMode="spinner"
+        android:theme="@style/MyDatePickerTheme" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/toPicker"
+        android:layout_alignStart="@+id/textView2"
+        android:layout_alignTop="@+id/toPicker"
+        android:layout_marginTop="@dimen/main_margin"
+        android:gravity="center_vertical"
+        android:text="@string/to"
+        android:textColor="@color/colorText" />
+
+    <TimePicker
+        android:id="@+id/toPicker"
+        android:layout_width="@dimen/date_width"
+        android:layout_height="@dimen/date_height"
+        android:layout_below="@id/fromPicker"
+        android:layout_marginTop="@dimen/main_margin"
+        android:layout_toEndOf="@+id/textView3"
+        android:calendarViewShown="false"
+        android:timePickerMode="spinner"
+        android:theme="@style/MyDatePickerTheme" />
+</RelativeLayout>

@@ -9,6 +9,7 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
+import android.text.Layout;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -27,8 +28,10 @@ import com.google.firebase.database.ValueEventListener;
 import com.repina.anastasia.momandbaby.Connectors.ConnectionDetector;
 import com.repina.anastasia.momandbaby.Connectors.FirebaseConnection;
 import com.repina.anastasia.momandbaby.DataBase.Other;
+import com.repina.anastasia.momandbaby.Fragment.FragmentSettings;
 import com.repina.anastasia.momandbaby.Helpers.GoogleCalendar;
 import com.repina.anastasia.momandbaby.Helpers.NotificationsShow;
+import com.repina.anastasia.momandbaby.Helpers.SendEmail;
 import com.repina.anastasia.momandbaby.Helpers.SharedConstants;
 import com.repina.anastasia.momandbaby.DataBase.DatabaseNames;
 import com.repina.anastasia.momandbaby.DataBase.Food;
@@ -62,6 +65,8 @@ public class NewFeatureActivity extends AppCompatActivity {
     private EditText dataValue2;
     private EditText dataValue3;
     private TimePicker picker;
+    private TimePicker pickerFrom;
+    private TimePicker pickerTo;
     private RatingBar ratingBar;
     private Spinner vaccinationsData;
 
@@ -77,6 +82,8 @@ public class NewFeatureActivity extends AppCompatActivity {
         dataValue2 = findViewById(R.id.dataValue2);
         dataValue3 = findViewById(R.id.dataValue3);
         picker = findViewById(R.id.dataValue4);
+        pickerFrom = findViewById(R.id.fromPicker);
+        pickerTo = findViewById(R.id.toPicker);
         ratingBar = findViewById(R.id.ratingBar);
         ratingBar.setNumStars(5);
         vaccinationsData = findViewById(R.id.vaccinationsData);
@@ -89,6 +96,13 @@ public class NewFeatureActivity extends AppCompatActivity {
         picker.setIs24HourView(true);
         picker.setHour(0);
         picker.setMinute(0);
+        picker.setIs24HourView(true);
+        pickerFrom.setHour(0);
+        pickerFrom.setMinute(0);
+        pickerFrom.setIs24HourView(true);
+        pickerTo.setHour(0);
+        pickerTo.setMinute(1);
+        pickerTo.setIs24HourView(true);
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -198,12 +212,30 @@ public class NewFeatureActivity extends AppCompatActivity {
         if (featureName.equals(features[8])) {
             if (dataValue1.getText().length() != 0) {
                 String desc = dataValue1.getText().toString().replace("\n", " ");
-                Other o = new Other(babyId, currentDate, desc);
-                databaseReference = database.getReference().child(DatabaseNames.OTHER);
-                databaseReference.push().setValue(o);
-                long begin = dateAndTime.getTimeInMillis();
-                long end = dateAndTime.getTimeInMillis();
-                addNewValueToGoogleCalendar(desc, begin, end);
+                TimePicker fromPicker = findViewById(R.id.fromPicker);
+                int hour = fromPicker.getHour();
+                int minute = fromPicker.getMinute();
+                TimePicker toPicker = findViewById(R.id.toPicker);
+                int hourTo = toPicker.getHour();
+                int minuteTo = toPicker.getMinute();
+                if (hour > hourTo || (hour == hourTo && minute > minuteTo))
+                    NotificationsShow.showToast(getApplicationContext(), getString(R.string.incorrect_dates));
+                else {
+                    Other o = new Other(babyId, currentDate, desc);
+                    databaseReference = database.getReference().child(DatabaseNames.OTHER);
+                    databaseReference.push().setValue(o);
+                    Calendar tempdateFrom = Calendar.getInstance();
+                    tempdateFrom.setTime(dateAndTime.getTime());
+                    tempdateFrom.set(Calendar.HOUR_OF_DAY, hour);
+                    tempdateFrom.set(Calendar.MINUTE, minute);
+                    Calendar tempdateTo = Calendar.getInstance();
+                    tempdateTo.setTime(dateAndTime.getTime());
+                    tempdateTo.set(Calendar.HOUR_OF_DAY, hourTo);
+                    tempdateTo.set(Calendar.MINUTE, minuteTo);
+                    long begin = tempdateFrom.getTimeInMillis();
+                    long end = tempdateTo.getTimeInMillis();
+                    addNewValueToGoogleCalendar(desc, begin, end);
+                }
             } else
                 NotificationsShow.showToast(getApplicationContext(), getString(R.string.add_any_data));
         }
@@ -223,7 +255,7 @@ public class NewFeatureActivity extends AppCompatActivity {
                             DataSnapshot latest = null;
                             DataSnapshot beforeLatestWeight = null, beforeLatestHeight = null;
                             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                                if(latest != null) {
+                                if (latest != null) {
                                     if (latest.getValue(Metrics.class).getHeight() == 0)
                                         beforeLatestWeight = latest;
                                     else
@@ -231,12 +263,12 @@ public class NewFeatureActivity extends AppCompatActivity {
                                 }
                                 latest = snapshot;
                             }
-                            if(beforeLatestHeight != null & height == 0 || beforeLatestWeight != null & weight == 0) // more then 1 entry in DB
+                            if (beforeLatestHeight != null & height == 0 || beforeLatestWeight != null & weight == 0) // more then 1 entry in DB
                             {
                                 double imt;
-                                if ((int)weight == 0) {
+                                if ((int) weight == 0) {
                                     imt = beforeLatestWeight.getValue(Metrics.class).getWeight() / Math.pow(height / 100, 2);
-                                }else {
+                                } else {
                                     imt = weight / Math.pow(beforeLatestHeight.getValue(Metrics.class).getHeight() / 100, 2);
                                 }
                                 int months = getMonthBetween(getApplicationContext());
@@ -337,21 +369,27 @@ public class NewFeatureActivity extends AppCompatActivity {
             dataName1.setText(getString(R.string.add_new_other));
             dataName1.setVisibility(View.VISIBLE);
             dataValue1.setVisibility(View.VISIBLE);
+            View timepicker = findViewById(R.id.timepicker);
+            timepicker.setVisibility(View.VISIBLE);
             dataValue1.setInputType(InputType.TYPE_CLASS_TEXT);
         }
     }
 
-    private void addNewValueToGoogleCalendar(String desc, long begin, long end){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
-                getApplicationContext().checkSelfPermission(Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED)
-            requestPermissions(new String[]{Manifest.permission.READ_CALENDAR}, 0);
-        else {
+    private void addNewValueToGoogleCalendar(String desc, long begin, long end) {
+        try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
-                    getApplicationContext().checkSelfPermission(Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED)
-                requestPermissions(new String[]{Manifest.permission.WRITE_CALENDAR}, 0);
+                    getApplicationContext().checkSelfPermission(Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED)
+                requestPermissions(new String[]{Manifest.permission.READ_CALENDAR}, 0);
             else {
-                GoogleCalendar.insertEvent(getApplicationContext(), "1", "Mom&Baby", desc, begin, end);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
+                        getApplicationContext().checkSelfPermission(Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED)
+                    requestPermissions(new String[]{Manifest.permission.WRITE_CALENDAR}, 0);
+                else {
+                    GoogleCalendar.insertEvent(getApplicationContext(), "1", "Mom&Baby", desc, begin, end);
+                }
             }
+        } catch (Exception e) {
+            e.fillInStackTrace();
         }
     }
 }

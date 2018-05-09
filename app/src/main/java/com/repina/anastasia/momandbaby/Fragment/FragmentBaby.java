@@ -106,22 +106,22 @@ public class FragmentBaby extends Fragment implements SwipeListView.SwipeListVie
                     babyArrayAdapter.clear();
                     calendar.add(Calendar.DAY_OF_MONTH, -1);
                     Calendar today = Calendar.getInstance();
-                    boolean isToday = false;
+                    //boolean isToday = false;
                     if (calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR)
                             && calendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR)) {
                         headerDate.setText(R.string.today);
-                        isToday = true;
+                        //isToday = true;
                     } else {
                         String date = FormattedDate.getTextDate(calendar);
                         headerDate.setText(date);
                     }
-                    if (Calendar.getInstance().after(calendar) || isToday)
+                    //if (Calendar.getInstance().after(calendar) || isToday)
                         StatsProcessing.getBabyStats(babyArrayAdapter, calendar, getContext(), listViewBaby);
-                    else {
+                   /* else {
                         GridItem item = new GridItem(R.mipmap.cross, "R.mipmap.cross", getResources().getString(R.string.no_data), null, null);
                         babyArrayAdapter.add(item);
                         listViewBaby.setAdapter(babyArrayAdapter);
-                    }
+                    }*/
                 }
             }
         });
@@ -134,22 +134,22 @@ public class FragmentBaby extends Fragment implements SwipeListView.SwipeListVie
                     babyArrayAdapter.clear();
                     calendar.add(Calendar.DAY_OF_MONTH, 1);
                     Calendar today = Calendar.getInstance();
-                    boolean isToday = false;
+                    //boolean isToday = false;
                     if (calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR)
                             && calendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR)) {
                         headerDate.setText(R.string.today);
-                        isToday = true;
+                        //isToday = true;
                     } else {
                         String date = FormattedDate.getTextDate(calendar);
                         headerDate.setText(date);
                     }
-                    if (Calendar.getInstance().after(calendar) || isToday)
+                    //if (Calendar.getInstance().after(calendar) || isToday)
                         StatsProcessing.getBabyStats(babyArrayAdapter, calendar, getContext(), listViewBaby);
-                    else {
+                   /* else {
                         GridItem item = new GridItem(R.mipmap.cross, "R.mipmap.cross", getResources().getString(R.string.no_data), null, null);
                         babyArrayAdapter.add(item);
                         listViewBaby.setAdapter(babyArrayAdapter);
-                    }
+                    }*/
                 }
 
             }
