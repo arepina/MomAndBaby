@@ -93,6 +93,7 @@ public class NewFeatureActivity extends AppCompatActivity {
         dateAndTime = Calendar.getInstance();
 
         date = findViewById(R.id.date);
+        date.setInputType(InputType.TYPE_NULL);
         date.setText(getFormattedDate(dateAndTime));
         fullDate = getFormattedDate(dateAndTime);
         picker.setIs24HourView(true);
@@ -165,7 +166,7 @@ public class NewFeatureActivity extends AppCompatActivity {
                 NotificationsShow.showToast(getApplicationContext(), getString(R.string.add_any_data));
         }
         if (featureName.equals(features[2])) {
-            Stool s = new Stool(babyId, currentDate, dataValue3.getText().toString().replace("\n", " "), ratingBar.getNumStars());
+            Stool s = new Stool(babyId, currentDate, dataValue3.getText().toString().replace("\n", " "), (int)ratingBar.getRating());
             databaseReference = database.getReference().child(DatabaseNames.STOOL);
             databaseReference.push().setValue(s);
         }
@@ -187,7 +188,7 @@ public class NewFeatureActivity extends AppCompatActivity {
                 NotificationsShow.showToast(getApplicationContext(), getString(R.string.add_any_data));
         }
         if (featureName.equals(features[5])) {
-            Food f = new Food(babyId, currentDate, dataValue3.getText().toString().replace("\n", " "), ratingBar.getNumStars());
+            Food f = new Food(babyId, currentDate, dataValue3.getText().toString().replace("\n", " "), (int)ratingBar.getRating());
             databaseReference = database.getReference().child(DatabaseNames.FOOD);
             databaseReference.push().setValue(f);
         }

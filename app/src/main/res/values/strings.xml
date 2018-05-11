@@ -428,18 +428,18 @@
     </string-array>
 
     <string-array name="feeding">
-        <item>Овощи\t\t6 месяцев</item>
-        <item>Каши\t\t6-7 месяцев</item>
-        <item>Растительное и сливочные масла\t\t6-7 месяцев</item>
-        <item>Фруктовое пюре\t\t8-9 месяцев</item>
-        <item>Мясное пюре\t\t8-9 месяцев</item>
-        <item>Желток\t\t8-9 месяцев</item>
-        <item>Субпродукты\t\t9-10 месяцев</item>
-        <item>Кисломолочные продукты\t\t9-10 месяцев</item>
-        <item>Печенье детское\t\t9-10 месяцев</item>
-        <item>Рыба\t\t10 месяцев</item>
-        <item>Фруктовые, ягодные, овощные соки\t\t10-12 месяцев</item>
-        <item>Пюре из ягод\t\t12 месяцев</item>
-        <item>Бульон на мясе\t\t12 месяцев</item>
+        <item>Овощи\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t6 месяцев</item>
+        <item>Каши\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t6-7 месяцев</item>
+        <item>Растительное и сливочные масла\t\t\t\t6-7 месяцев</item>
+        <item>Фруктовое пюре\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t8-9 месяцев</item>
+        <item>Мясное пюре\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t8-9 месяцев</item>
+        <item>Желток\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t8-9 месяцев</item>
+        <item>Субпродукты\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t9-10 месяцев</item>
+        <item>Кисломолочные продукты\t\t\t\t\t\t\t\t\t9-10 месяцев</item>
+        <item>Печенье детское\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t9-10 месяцев</item>
+        <item>Рыба\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t10 месяцев</item>
+        <item>Фруктовые, ягодные, овощные соки\t\t\t10-12 месяцев</item>
+        <item>Пюре из ягод\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t12 месяцев</item>
+        <item>Бульон на мясе\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t12 месяцев</item>
     </string-array>
 </resources>
