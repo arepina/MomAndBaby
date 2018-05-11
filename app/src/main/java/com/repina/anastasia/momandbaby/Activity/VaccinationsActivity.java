@@ -40,12 +40,12 @@ public class VaccinationsActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vaccination);
 
-        FloatingActionButton question = (FloatingActionButton) findViewById(R.id.question);
+        FloatingActionButton question = findViewById(R.id.question);
         question.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 View view = getLayoutInflater().inflate(R.layout.vaccinations_list, null);
-                ListView listView = (ListView) view.findViewById(R.id.vaccinationsList);
+                ListView listView = view.findViewById(R.id.vaccinationsList);
                 String[] dates = getResources().getStringArray(R.array.vaccinationsDates);
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(VaccinationsActivity.this,
                         R.layout.custom_dates_textview, dates);
@@ -97,7 +97,7 @@ public class VaccinationsActivity extends Activity {
                                     if (!has)
                                         items.add(new ListViewItem(item, 0));
                                 }
-                                ListView lv = (ListView) findViewById(R.id.vaccinations);
+                                ListView lv = findViewById(R.id.vaccinations);
                                 ListViewArrayAdapter adapter = new ListViewArrayAdapter(getApplicationContext(), items);
                                 lv.setAdapter(adapter);
                             }

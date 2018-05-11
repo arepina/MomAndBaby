@@ -2,10 +2,13 @@ package com.repina.anastasia.momandbaby.Activity;
 
 import android.Manifest;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
@@ -15,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -65,8 +69,6 @@ public class NewFeatureActivity extends AppCompatActivity {
     private EditText dataValue2;
     private EditText dataValue3;
     private TimePicker picker;
-    private TimePicker pickerFrom;
-    private TimePicker pickerTo;
     private RatingBar ratingBar;
     private Spinner vaccinationsData;
 
@@ -82,8 +84,8 @@ public class NewFeatureActivity extends AppCompatActivity {
         dataValue2 = findViewById(R.id.dataValue2);
         dataValue3 = findViewById(R.id.dataValue3);
         picker = findViewById(R.id.dataValue4);
-        pickerFrom = findViewById(R.id.fromPicker);
-        pickerTo = findViewById(R.id.toPicker);
+        TimePicker pickerFrom = findViewById(R.id.fromPicker);
+        TimePicker pickerTo = findViewById(R.id.toPicker);
         ratingBar = findViewById(R.id.ratingBar);
         ratingBar.setNumStars(5);
         vaccinationsData = findViewById(R.id.vaccinationsData);
@@ -348,6 +350,30 @@ public class NewFeatureActivity extends AppCompatActivity {
             dataValue3.setVisibility(View.VISIBLE);
         }
         if (data.equals(features[5])) {
+            FloatingActionButton fab = findViewById(R.id.questionFood);
+            fab.setVisibility(View.VISIBLE);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    View view = getLayoutInflater().inflate(R.layout.vaccinations_list, null);
+                    ListView listView = view.findViewById(R.id.vaccinationsList);
+                    String[] dates = getResources().getStringArray(R.array.feeding);
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(NewFeatureActivity.this,
+                            R.layout.custom_dates_textview, dates);
+                    listView.setAdapter(adapter);
+                    AlertDialog.Builder builder =
+                            new AlertDialog.Builder(NewFeatureActivity.this, R.style.AlertDialogCustom).
+                                    setTitle(R.string.feeding_time).
+                                    setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    }).
+                                    setView(view);
+                    builder.create().show();
+                }
+            });
             dataName2.setText(String.format(getString(R.string.rateValue), getString(R.string.food)));
             dataName2.setVisibility(View.VISIBLE);
             ratingBar.setVisibility(View.VISIBLE);

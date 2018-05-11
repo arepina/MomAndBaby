@@ -194,5 +194,22 @@
         <item>\t\t\t\t\t\t\tIII-Viral hepatitis B</item>
         <item>1 year\t\t\t\tEpidemic parotitis, Rubella, Measles</item>
     </string-array>
+
+    <string-array name="feeding">
+        <item>Vegetables\t\t6 months</item>
+        <item>Porridge\t\t6-7 months</item>
+        <item>Butter\t\t6-7 months</item>
+        <item>Fruit puree\t\t8-9 months</item>
+        <item>Meat puree\t\t8-9 months</item>
+        <item>Yolk\t\t8-9 months</item>
+        <item>By-products\t\t9-10 months</item>
+        <item>Dairy products\t\t9-10 months</item>
+        <item>Cookies for children\t\t9-10 months</item>
+        <item>Fish\t\t10 months</item>
+        <item>Fruit, berry, vegetable juices\t\t10-12 months</item>
+        <item>Berry puree\t\t12 months</item>
+        <item>Broth on meat\t\t12 months</item>
+    </string-array>
     <string name="calendar_export">Google calendar synchronization</string>
+    <string name="feeding_time">Baby feeding dates</string>
 </resources>

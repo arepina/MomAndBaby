@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorPrimary"
     android:fitsSystemWindows="true">
 
@@ -182,6 +183,20 @@
             android:background="@color/colorPrimaryDark"
             android:text="@string/add"
             android:textColor="@color/colorText" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/questionFood"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:clickable="true"
+            android:src="@mipmap/faq"
+            android:visibility="gone"
+            app:backgroundTint="@color/colorAccent"
+            android:layout_marginBottom="@dimen/main_margin"
+            android:layout_marginRight="@dimen/main_margin"
+            app:fabSize="normal" />
 
     </RelativeLayout>
 </ScrollView>

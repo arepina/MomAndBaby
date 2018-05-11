@@ -153,6 +153,7 @@
     <string name="bad_imt">Индекс массы тела Вашего малыша не соотвествует норме, следует обратиться к специалисту</string>
     <string name="no_google_fit_data">Google Fit не синхронизирован с носимыми устройствами, поэтому данные отсутствуют</string>
     <string name="calendar_export">Синхронизация с Google календарем</string>
+    <string name="feeding_time">Сроки прикорма</string>
 
     <string-array name="parametersBaby">
         <item>Рост</item>
@@ -424,5 +425,21 @@
         <item>17.2</item>
         <item>17.0</item>
         <item>16.9</item>
+    </string-array>
+
+    <string-array name="feeding">
+        <item>Овощи\t\t6 месяцев</item>
+        <item>Каши\t\t6-7 месяцев</item>
+        <item>Растительное и сливочные масла\t\t6-7 месяцев</item>
+        <item>Фруктовое пюре\t\t8-9 месяцев</item>
+        <item>Мясное пюре\t\t8-9 месяцев</item>
+        <item>Желток\t\t8-9 месяцев</item>
+        <item>Субпродукты\t\t9-10 месяцев</item>
+        <item>Кисломолочные продукты\t\t9-10 месяцев</item>
+        <item>Печенье детское\t\t9-10 месяцев</item>
+        <item>Рыба\t\t10 месяцев</item>
+        <item>Фруктовые, ягодные, овощные соки\t\t10-12 месяцев</item>
+        <item>Пюре из ягод\t\t12 месяцев</item>
+        <item>Бульон на мясе\t\t12 месяцев</item>
     </string-array>
 </resources>
