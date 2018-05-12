@@ -4,20 +4,26 @@
     android:background="@color/colorPrimary"
     android:layout_height="match_parent">
 
-    <Spinner
-        android:visibility="visible"
-        android:id="@+id/spinner"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/spinner_height"
-        android:background="@color/colorPrimary"
-        android:popupBackground="@color/colorPrimary" />
+        android:layout_height="wrap_content"
+        android:id="@+id/lay1"
+        android:background="@drawable/spinner_bg">
+        <Spinner
+            android:id="@+id/spinner"
+            style="@style/Base.Widget.AppCompat.Spinner.Underlined"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/SpinnerCustom"
+            android:spinnerMode="dropdown" />
+    </RelativeLayout>
 
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/graph"
         android:visibility="visible"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/spinner"
+        android:layout_below="@+id/lay1"
         android:background="@color/common_google_signin_btn_text_dark_default" />
 
 </RelativeLayout>

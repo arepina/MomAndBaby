@@ -245,57 +245,60 @@ public class FragmentMom extends Fragment {
     private BroadcastReceiver mFitDataReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            // Get extra data included in the Intent
-            String date = intent.getStringExtra(HISTORY_DATE);
-            boolean hasAnyData = false;
-            if (intent.hasExtra(HISTORY_EXTRA_STEPS_TODAY)) {
-                final int totalSteps = intent.getIntExtra(HISTORY_EXTRA_STEPS_TODAY, 0);
-                if (totalSteps != 0) {
-                    GridItem item = new GridItem(R.mipmap.steps, "R.mipmap.steps", String.valueOf(totalSteps), date);
-                    momArrayAdapter.add(item);
-                    hasAnyData = true;
+            try {
+                // Get extra data included in the Intent
+                String date = intent.getStringExtra(HISTORY_DATE);
+                boolean hasAnyData = false;
+                if (intent.hasExtra(HISTORY_EXTRA_STEPS_TODAY)) {
+                    final int totalSteps = intent.getIntExtra(HISTORY_EXTRA_STEPS_TODAY, 0);
+                    if (totalSteps != 0) {
+                        GridItem item = new GridItem(R.mipmap.steps, "R.mipmap.steps", String.valueOf(totalSteps), date);
+                        momArrayAdapter.add(item);
+                        hasAnyData = true;
+                    }
                 }
-            }
-            if (intent.hasExtra(HISTORY_EXTRA_CALORIES_TODAY)) {
-                final int totalCalories = (int) intent.getDoubleExtra(HISTORY_EXTRA_CALORIES_TODAY, 0);
-                if(totalCalories != 0) {
-                    GridItem item = new GridItem(R.mipmap.calories, "R.mipmap.calories", String.valueOf(totalCalories), date);
-                    momArrayAdapter.add(item);
-                    hasAnyData = true;
+                if (intent.hasExtra(HISTORY_EXTRA_CALORIES_TODAY)) {
+                    final int totalCalories = (int) intent.getDoubleExtra(HISTORY_EXTRA_CALORIES_TODAY, 0);
+                    if (totalCalories != 0) {
+                        GridItem item = new GridItem(R.mipmap.calories, "R.mipmap.calories", String.valueOf(totalCalories), date);
+                        momArrayAdapter.add(item);
+                        hasAnyData = true;
+                    }
                 }
-            }
-            if (intent.hasExtra(HISTORY_EXTRA_WEIGHT_TODAY)) {
-                final int totalWeight = (int) intent.getDoubleExtra(HISTORY_EXTRA_WEIGHT_TODAY, 0);
-                if (totalWeight != 0) {
-                    GridItem item = new GridItem(R.mipmap.weight, "R.mipmap.weight", String.valueOf(totalWeight), date);
-                    momArrayAdapter.add(item);
-                    hasAnyData = true;
+                if (intent.hasExtra(HISTORY_EXTRA_WEIGHT_TODAY)) {
+                    final int totalWeight = (int) intent.getDoubleExtra(HISTORY_EXTRA_WEIGHT_TODAY, 0);
+                    if (totalWeight != 0) {
+                        GridItem item = new GridItem(R.mipmap.weight, "R.mipmap.weight", String.valueOf(totalWeight), date);
+                        momArrayAdapter.add(item);
+                        hasAnyData = true;
+                    }
                 }
-            }
-            if (intent.hasExtra(HISTORY_EXTRA_NUTRITION_TODAY)) {
-                final String totalNutrition = intent.getStringExtra(HISTORY_EXTRA_NUTRITION_TODAY);
-                if (totalNutrition.length() != 0) {
-                    GridItem item = new GridItem(R.mipmap.nutrition, "R.mipmap.nutrition", String.valueOf(totalNutrition), date);
-                    momArrayAdapter.add(item);
-                    hasAnyData = true;
+                if (intent.hasExtra(HISTORY_EXTRA_NUTRITION_TODAY)) {
+                    final String totalNutrition = intent.getStringExtra(HISTORY_EXTRA_NUTRITION_TODAY);
+                    if (totalNutrition.length() != 0) {
+                        GridItem item = new GridItem(R.mipmap.nutrition, "R.mipmap.nutrition", String.valueOf(totalNutrition), date);
+                        momArrayAdapter.add(item);
+                        hasAnyData = true;
+                    }
                 }
-            }
-            if (intent.hasExtra(HISTORY_EXTRA_SLEEP_TODAY)) {
-                final String totalSleep = intent.getStringExtra(HISTORY_EXTRA_SLEEP_TODAY);
-                String temp = totalSleep.replace(getString(R.string.sleep_str), "").replace(getString(R.string.hours_str), "").replace(",", ".");
-                double hours = Double.parseDouble(temp);
-                if (totalSleep.length() != 0 && hours != 0) {
-                    GridItem item = new GridItem(R.mipmap.sleep, "R.mipmap.sleep", String.valueOf(totalSleep), date);
-                    momArrayAdapter.add(item);
-                    hasAnyData = true;
+                if (intent.hasExtra(HISTORY_EXTRA_SLEEP_TODAY)) {
+                    final String totalSleep = intent.getStringExtra(HISTORY_EXTRA_SLEEP_TODAY);
+                    String temp = totalSleep.replace(getString(R.string.sleep_str), "").replace(getString(R.string.hours_str), "").replace(",", ".");
+                    double hours = Double.parseDouble(temp);
+                    if (totalSleep.length() != 0 && hours != 0) {
+                        GridItem item = new GridItem(R.mipmap.sleep, "R.mipmap.sleep", String.valueOf(totalSleep), date);
+                        momArrayAdapter.add(item);
+                        hasAnyData = true;
+                    }
                 }
+                GridItem item = new GridItem(R.mipmap.cross, "R.mipmap.cross", getResources().getString(R.string.no_google_fit_data), null, null);
+                if (!hasAnyData && !momArrayAdapter.hasEmptyItem())
+                    momArrayAdapter.add(item);
+                if (hasAnyData)
+                    momArrayAdapter.removeEmptyItem();
+                listViewMom.setAdapter(momArrayAdapter);
+            } catch (Exception ignored) {
             }
-            GridItem item = new GridItem(R.mipmap.cross, "R.mipmap.cross", getResources().getString(R.string.no_google_fit_data), null, null);
-            if(!hasAnyData && !momArrayAdapter.hasEmptyItem())
-                momArrayAdapter.add(item);
-            if(hasAnyData)
-                momArrayAdapter.removeEmptyItem();
-            listViewMom.setAdapter(momArrayAdapter);
         }
     };
 
@@ -362,7 +365,7 @@ public class FragmentMom extends Fragment {
                 requestFitConnection();
             } else {
                 try {
-                    if(mFitResultResolution != null) {
+                    if (mFitResultResolution != null) {
                         authInProgress = true;
                         mFitResultResolution.startResolutionForResult(getActivity(), REQUEST_OAUTH);
                     }

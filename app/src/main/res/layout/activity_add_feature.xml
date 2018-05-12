@@ -55,8 +55,7 @@
             android:textStyle="bold"
             android:visibility="gone" />
 
-        <Spinner
-            android:id="@+id/vaccinationsData"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/dataName1"
@@ -64,16 +63,24 @@
             android:layout_marginTop="@dimen/main_margin"
             android:layout_marginRight="@dimen/main_margin"
             android:gravity="center_horizontal"
-            android:popupBackground="@color/colorPrimaryDark"
-            android:textAlignment="center"
-            android:textColor="@color/colorText"
-            android:visibility="gone" />
+            android:id="@+id/lay2"
+            android:background="@drawable/spinner_bg">
+            <Spinner
+                android:visibility="gone"
+                android:textAlignment="center"
+                android:id="@+id/vaccinationsData"
+                style="@style/Base.Widget.AppCompat.Spinner.Underlined"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/SpinnerCustom"
+                android:spinnerMode="dropdown" />
+        </RelativeLayout>
 
         <EditText
             android:id="@+id/dataValue1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/vaccinationsData"
+            android:layout_below="@+id/lay2"
             android:layout_marginLeft="@dimen/main_margin"
             android:layout_marginTop="@dimen/main_margin"
             android:layout_marginRight="@dimen/main_margin"

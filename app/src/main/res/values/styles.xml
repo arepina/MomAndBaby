@@ -21,6 +21,13 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <!--Spinner-->
+    <style name="SpinnerCustom" parent="@style/Theme.AppCompat">
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:textColor">@color/colorTextDark</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <!--Date picker-->
     <style name="MyDatePickerTheme" parent="@style/Theme.AppCompat">
         <item name="android:textColorPrimary">@color/colorPrimaryDark</item>

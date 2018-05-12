@@ -31,10 +31,10 @@ public class FragmentAnalytics extends Fragment {
     private View initAnalytics(LayoutInflater inflater, ViewGroup container) {
         View v = inflater.inflate(R.layout.fragment_analytics, container, false);
 
-        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.floatingActionButton);
+        FloatingActionButton fab = getActivity().findViewById(R.id.floatingActionButton);
         fab.setVisibility(View.INVISIBLE);
 
-        CardView cardViewMom = (CardView) v.findViewById(R.id.momAnalytics);
+        CardView cardViewMom = v.findViewById(R.id.momAnalytics);
         cardViewMom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -49,7 +49,7 @@ public class FragmentAnalytics extends Fragment {
             }
         });
 
-        CardView cardViewBaby = (CardView) v.findViewById(R.id.babyAnalytics);
+        CardView cardViewBaby = v.findViewById(R.id.babyAnalytics);
         cardViewBaby.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
