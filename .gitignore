@@ -6,6 +6,7 @@
 .DS_Store
 /build
 /captures
-/docs/Demo.mov
-/docs/NoHeader.mov
+/docs/Video/Demo.mov
+/docs/Video/NoHeaderSlow.mov
+/docs/Result.mov
 .externalNativeBuild
